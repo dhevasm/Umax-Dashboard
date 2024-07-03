@@ -1,0 +1,156 @@
+'use client'
+
+import React, { useState } from 'react';
+import { Link } from 'next/link';
+import { useFormik } from 'formik';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation'
+
+const Page = () => {
+    const navigate = useRouter();
+    const [error, setError] = useState(null);
+    const [passwordMatch, setPasswordMatch] = useState(true);
+
+    const toggleKonfirmasiPasswordVisibility = () => {
+        setShowKonfirmasiPassword(!showKonfirmasiPassword);
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showKonfirmasiPassword, setShowKonfirmasiPassword] = useState(false);
+
+    const formik = useFormik({
+        initialValues: {
+            token: '',
+            new_password: '',
+            konfirmasi_password: '',
+        },
+        onSubmit: (values) => {
+            // const { Token } = response.Data;
+            fetch(`https://umaxxnew-1-d6861606.deta.app/reset-password?`, {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(values).toString(),
+            })
+
+                .then(response => response.json())
+                .then(data => {
+                    const { Token } = data
+                    console.log("ini token", Token)
+                    console.log(data);
+                    localStorage.setItem('jwtToken', Token);
+
+                    // Tampilkan SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Password Berhasil Diperbarui silahkan login menggunakan password baru anda',
+                        confirmButtonColor: '#3D5FD9',
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Arahkan ke Dashboard untuk pengguna non-staff
+                            navigate.push('/');
+                        }
+                    });
+
+                })
+                .catch(error => {
+                    // Handle errors, e.g., network errors
+                    console.error(error);
+                });
+
+        },
+    });
+    return (
+        <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-center">
+            <div>
+                <img src="../assets/logo.png" alt="logo" className="mx-auto pb-2 w-20" />
+            </div>
+            <div className="flex flex-col items-center justify-center mt-5 sm:mt-0">
+                <form
+                    onSubmit={formik.handleSubmit}
+                    className="w-10/12 md:w-full  p-6 bg-white rounded-lg shadow-lg border-2"
+                >
+                    <input
+                        type="token"
+                        name="token"
+                        id="token"
+                        placeholder="Token"
+                        className="w-full h-9 rounded-[10px] pl-5 border border-blue mt-2 focus:outline-none focus:ring-1"
+                        onChange={formik.handleChange}
+                        value={formik.values.token}
+                    />
+                    <input
+                        type="new_password"
+                        name="new_password"
+                        id="new_password"
+                        placeholder="New Password"
+                        className="w-full h-9 rounded-[10px] pl-5 border border-blue mt-2 focus:outline-none focus:ring-1"
+                        onChange={formik.handleChange}
+                        value={formik.values.new_password}
+                    />
+                    {/* <div
+                        className="absolute top-3 right-2  cursor-pointer"
+                        onClick={togglePasswordVisibility} irm
+                    >
+                        {showPassword ? (
+                            <AiOutlineEye size={15} />
+                        ) : (
+                            <AiOutlineEyeInvisible size={15} />
+                        )}
+
+                    </div> */}
+                    <input
+                        type="konfirmasi_password"
+                        name="konfirmasi_password"
+                        id="konfirmasi_password"
+                        placeholder="Konfirmasi Password"
+                        className="w-full h-9 rounded-[10px] pl-5 border border-blue mt-2 focus:outline-none focus:ring-1"
+                        onChange={formik.handleChange}
+                        value={formik.values.konfirmasi_password}
+                    />
+                    {/* <div
+                        className="absolute top-3 right-2  cursor-pointer flex items-center"
+                        onClick={toggleKonfirmasiPasswordVisibility} irm
+                    >
+                        {showKonfirmasiPassword ? (
+                            <AiOutlineEye size={15} />
+                        ) : (
+                            <AiOutlineEyeInvisible size={15} />
+                        )}
+
+                    </div> */}
+                    {/* {!passwordMatch && (
+                        <span className="text-red-500 text-sm relative bottom-0 left-0 mb-2 ml-2">
+                            Password tidak sama!
+                        </span>
+                    )} */}
+
+                    <button
+                        type="submit"
+                        className="w-full h-10 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
+                    >
+                        OK
+                    </button>
+                    {/* <Link
+                to="/register"
+                className="mt-3 text-[#5473E3] hover:text-[#2347C5] hover:underline"
+              >
+                <p className="text-[#5473E3] mb-5">Don't have an account? Sign up</p>
+              </Link> */}
+                </form>
+            </div>
+        </div>
+    );
+    
+}
+
+export default Page
