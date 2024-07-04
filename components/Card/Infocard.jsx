@@ -11,11 +11,11 @@ export default function Infocard({Color, Title, Value, Desc}){
    const [text, setText] = useState("")
 
     useEffect(() => {
-        if(Color == "success"){
+        if(Color == "Success"){
             setBordercolor("border-green-500")
             setBackground("bg-green-100")
             setText("text-green-500")
-        }else if(Color == "warning"){
+        }else if(Color == "Warning"){
             setBordercolor("border-yellow-500")
             setBackground("bg-yellow-100")
             setText("text-yellow-500")

@@ -8,10 +8,10 @@ export default function SuggestionCard({Title, Desc, Value, Target, Message, Col
     const [icon, setIcon] = useState("")
 
     useEffect(() => {
-        if(Color == "success"){
+        if(Color == "Success"){
             setBackground("bg-green-200")
             setIcon("Success")
-        }else if(Color == "warning"){
+        }else if(Color == "Warning"){
             setBackground("bg-yellow-200")
             setIcon("Warning")
         }else{

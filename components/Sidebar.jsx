@@ -3,11 +3,17 @@
 import { useState, useRef, useEffect, useContext } from "react"
 import { SidebarContext } from "@/app/Dashboard/page"
 import SidebarCard from "./Card/SidebarCard"
+import axios from "axios"
 
-export default function Sidebar(){
+export default function Sidebar({ onCampaignIDChange }){
 
+    const [campaigns, setCampaigns] = useState([]);
     const sidebar = useRef(null)
+    const [status, setStatus] = useState(0);
+    const [searchTerm, setSearchTerm] = useState('');
     const [sidebarHide, setSidebarHide] = useContext(SidebarContext)
+    const [campaignID, setCampaignID] = useContext(SidebarContext)
+    const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     // Sidebar Hide Handle start
     function hideHandle(){
@@ -23,11 +29,48 @@ export default function Sidebar(){
     }
     // Sidebar Link active end
 
+    // fetch Campaign
+    const fetchCampaigns = async () => {
+        try {
+            const response = await axios.get(`${umaxUrl}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                }
+            });
+            setCampaigns(response.data.Data);
+            console.log(response.data.Data)
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCampaigns();
+    }, [status]);
+
+    const filteredCampaigns = campaigns.filter(campaign => {
+        if (status === 0) {
+            return campaign.campaign_name.toLowerCase().includes(searchTerm.toLowerCase());
+        } else {
+            return (
+                campaign.campaign_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                campaign.campaign_status === status
+            );
+        }
+    });
+
+    const handleClick = (newStatus, newLink) => {
+        setStatus(newStatus);
+        SetActiveLink(newLink);
+    };
+
 
     return (   
         <>
         {/* Sidebar */}
-            <div className="fixed mt-20 m-3 left-0 w-[300px] h-screen bg-white rounded-lg flex flex-col items-center px-3 z-10 transition-transform shadow-md" ref={sidebar}>
+            <div className="fixed mt-20 m-3 left-0 w-[300px] h-screen bg-white rounded-lg flex flex-col items-center px-3 z-10 transition-transform shadow-md pb-28" ref={sidebar}>
                 {/* Campaing Status Filter */}
                 <div className="m-3 mt-5 px-3 w-full bg-gray-300 p-1 rounded-lg flex justify-between items-center text-md hover:cursor-pointer font-bold">
                     <style jsx>
@@ -39,22 +82,31 @@ export default function Sidebar(){
                             }`
                         }
                     </style>
-                    <p className="SidebarFilterActive" id="all" onClick={() => SetActiveLink("all")}>All</p>
-                    <p id="draft" onClick={() => SetActiveLink("draft")}>Draft</p>
-                    <p id="active" onClick={() => SetActiveLink("active")}>Active</p>
-                    <p id="complete" onClick={() => SetActiveLink("complete")}>Complete</p>
+                    <p className="SidebarFilterActive" id="all" onClick={() => handleClick(0, 'all')}>All</p>
+                    <p id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
+                    <p id="active" onClick={() => handleClick(1, 'active')}>Active</p>
+                    <p id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
                 </div>
 
                 {/* Search Bar */}
                 <div>
-                    <input className="text-black m-2 p-2 rounded-lg border border-gray-300" type="text" placeholder="Search" />
+                    <input className="text-black m-2 p-2 rounded-lg border border-gray-300" type="text" placeholder="Search" onChange={(event) => setSearchTerm(event.target.value)}/>
                 </div>
                 
                 {/* Campaign Cards */}
                 <div className="w-full overflow-y-auto">
                     {/* Campaing Card */}
-                    <SidebarCard platform="Facebook" name="Campaign 1" status="active" amountspend="$1000" reach="1000" startdate="10/10/2022"/>
-                    <SidebarCard platform="Tiktok" name="Campaign 2" status="complete" amountspend="$1000" reach="1000" startdate="10/10/2022"/>
+                    {filteredCampaigns.map((campaign, index) =>(
+                        <SidebarCard 
+                            platform={campaign.campaign_platform} 
+                            name={campaign.campaign_name} status={campaign.status} 
+                            amountspend={campaign.amountspent} 
+                            reach={campaign.reach} 
+                            startdate={campaign.start_date} 
+                            id={campaign.campaign_id}
+                            onCardClick={onCampaignIDChange}
+                        />
+                    ))}
                 </div>
                 {/* Sidebar Hide Button */}
                 <button onClick={hideHandle} className="absolute top-10 -right-10 -z-10 bg-green-400 rounded-e-full w-10 h-10 text-center hover:cursor-pointer">
