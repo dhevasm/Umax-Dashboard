@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useFormik } from 'formik'
 import Link from 'next/link'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation'
 const Page = () => {
   const [error, setError] = useState()
   const router = useRouter()
+
+  const loading = useRef(null)
 
   const formik = useFormik({
     initialValues: {
@@ -144,17 +146,23 @@ const Page = () => {
             <button
               type="submit"
               className="w-full h-12 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
+              onClick={() => loading.current.classList.toggle('hidden')}
             >
               SIGN IN
             </button>
+            <div className='flex justify-between items-center'>
             <Link
               href="/forgotpassword"
               className="mt-3 text-[#5473E3] hover:text-[#2347C5] hover:underline"
             >
               <p className="text-[#5473E3] mb-2 mt-2">Forgot Password?</p>
             </Link>
+            <img src="../assets/loading.gif" alt="Loading" className="w-10 hidden" ref={loading} />
+            </div>
           </form>
         </div>
+        
+        
       </div>
     </div>
   )

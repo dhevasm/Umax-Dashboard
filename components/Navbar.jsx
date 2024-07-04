@@ -3,6 +3,7 @@ import { IconContext } from "react-icons"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+
 export default function Navbar() {
 
     const router = useRouter();
@@ -68,7 +69,7 @@ export default function Navbar() {
                             <a href="/">Notification 1</a>
                             <a href="/">Notification 3</a>
                             <a href="/">Notification 3</a>
-                        </div>
+                        </div>  
                     </div>
                     </div>
                     <div className="text-black me-5 hover:cursor-pointer">
