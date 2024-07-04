@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 import { CiGlobe, CiEdit } from 'react-icons/ci';
-import axios from 'axios';
+import axios from 'axios';  
 import { MdOutlinePermContactCalendar, MdOutlineAccessTime, MdOutlineEmail } from 'react-icons/md';
 import { VscSymbolEnum } from 'react-icons/vsc';
 import { LiaMoneyBillWaveAltSolid } from 'react-icons/lia';
@@ -119,8 +119,14 @@ const Page = () => {
                                 </div>
                                 <div className='flex gap-2 items-center'>
                                     <CiGlobe size={18} className='text-blue-500'/><h1>Language: </h1>
-                                    <img src={`${language == 'id' ? '../assets/indonesia.png' : language == 'us' ? '../assets/us.png' : language == 'ja' ? '../assets/japan.jpg' : null}`} className='w-4 h-4 object-cover'/>
-                                    <h1>{language == 'id' ? 'Indonesia' : language == 'us' ? 'English' : language == 'ja' ? 'Japan' : null}</h1>
+                                    <img src={`${language == 'id' ? '../assets/indonesia.png'
+                                    : language == 'us' ? '../assets/us.png'
+                                    : language == 'ja' ? '../assets/japan.jpg' 
+                                    : null}`} className='w-4 h-4 object-cover'/>
+                                    <h1>{language == 'id' ? 'Indonesia'
+                                    : language == 'us' ? 'English' 
+                                    : language == 'ja' ? 'Japan' 
+                                    : null}</h1>
                                 </div>
                                 <div className='md:hidden flex gap-2 items-center'>
                                     <MdOutlineAccessTime size={18} className='text-cyan-500'/><h1>Timezone: {timezone_name}</h1>
