@@ -1,7 +1,7 @@
 'use client'
 
 import axios from "axios"
-import { useState, useEffect, useRef, createContext, useMemo } from "react"
+import { useState, useEffect, useRef, createContext, useMemo, use } from "react"
 
 // Components
 import Navbar from "@/components/Navbar"
@@ -15,15 +15,19 @@ import Setting from "@/components/Dashboard-content/Setting"
 
 
 export const SidebarContext = createContext()
+// export const campaignIDContext = createContext()
 
 export default function Dashboard() {
 
     // expanse card start
     const Card = useRef(null)
+    const [campaignID, setCampaignID] = useState('');
     const [SidebarHide, setSidebarHide] = useState(false)
     const sidebarContext = (() => ({
         SidebarHide,
         setSidebarHide,
+        campaignID,
+        setCampaignID,
     }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {
@@ -35,6 +39,9 @@ export default function Dashboard() {
     }, [SidebarHide])
     // expnase card end
 
+    const handleCampaignIDChange = (id) => {
+        setCampaignID(id);
+    };
 
     // Dashborad Change Content Start
     const [activeContent, setActiveContent] = useState("performance")
@@ -48,15 +55,13 @@ export default function Dashboard() {
     }
     // Dashboard Link active end
 
-    
-
-
     return (
         <>
         {/* Header */}
+        
         <SidebarContext.Provider value={sidebarContext}>
             <Navbar />
-            <Sidebar/>
+            <Sidebar onCampaignIDChange={handleCampaignIDChange}r/>
         </SidebarContext.Provider>
 
         {/* Dashboard Container */}
@@ -102,7 +107,7 @@ export default function Dashboard() {
 
                 {/* Content */}
                 <div className="m-10">
-                    {activeContent === "performance" && <Performance/>}
+                    {activeContent === "performance" && <Performance id={campaignID}/>}
                     {activeContent === "metrics" && <Metrics/>}
                     {activeContent === "history" && <History/>}
                     {activeContent === "setting" && <Setting/>}
