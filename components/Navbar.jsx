@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
+
 export default function Navbar() {
 
     const pathName = usePathname()
@@ -71,7 +72,7 @@ export default function Navbar() {
                             <a href="/">Notification 1</a>
                             <a href="/">Notification 3</a>
                             <a href="/">Notification 3</a>
-                        </div>
+                        </div>  
                     </div>
                     </div>
                     <div className="text-black me-5 hover:cursor-pointer">

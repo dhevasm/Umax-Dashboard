@@ -5,6 +5,7 @@ import { useState,useEffect } from "react"
 import AdminNavbar from "@/components/Admin-component/AdminNavbar"
 import AdminSidebar from "@/components/Admin-component/AdminSidebar"
 import CountCard from "@/components/Admin-component/CountCard"
+import TenantTable from "@/components/Admin-component/TenantTable"
 
 export default function AdminDashboard(){
 
@@ -24,13 +25,8 @@ export default function AdminDashboard(){
         setUserData(response.data.Data[0])
     }
 
-    async function getAllData(){
-        const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-        setTenantsCount(getTenants.data.Data.length)
+    async function getUserCampaignCount(){
+        
         const getUsers = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -45,10 +41,20 @@ export default function AdminDashboard(){
         setCampaignsCount(getCampaigns.data.Data.length)
     }
 
+    async function getTenantsCount(){
+        const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            }
+        })
+        setTenantsCount(getTenants.data.Data.length)
+    }
+
     useEffect(() => {
         getUserData()
-        getAllData()
+        getUserCampaignCount()
     }, [])
+    
 
     return(
         <>
@@ -59,9 +65,18 @@ export default function AdminDashboard(){
             <div className="w-full h-full flex justify-end">
                 <div className="w-[75%] mt-20 border border-gray-300 rounded-md p-5 me-5 shadow-xl">
                     <div className="flex flex-wrap justify-evenly">
-                        <CountCard color="blue" title="Total Tenants" value={tenantsCount ? tenantsCount : <div>Loading....</div>}/>    
-                        <CountCard color="green" title="Users" value={usersCount ? usersCount : "Loading..."}/>    
-                        <CountCard color="yellow" title="Campaign" value={campaignsCount ? campaignsCount : "Loading..."}/>    
+                        {
+                            userData.roles == 'sadmin' ?
+                                getTenantsCount() &&
+                                <CountCard color="blue" title="Total Tenants" value={tenantsCount ? tenantsCount : <div className="animate-pulse">Loading....</div>}/>
+                                :
+                                <CountCard color="blue" title="Company" value={userData.company_name ? <div className="text-center text-xl">{userData.company_name}</div> : <div className="animate-pulse">Loading....</div>}/>
+                        }
+                        <CountCard color="green" title="Total Users" value={usersCount ? usersCount : <div className="animate-pulse">Loading....</div>}/>    
+                        <CountCard color="yellow" title="Total Campaigns" value={campaignsCount ? campaignsCount : <div className="animate-pulse">Loading....</div>}/>    
+                    </div>
+                    <div>
+                        <TenantTable/>
                     </div>
                 </div>
             </div>
