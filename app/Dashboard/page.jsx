@@ -61,7 +61,7 @@ export default function Dashboard() {
         
         <SidebarContext.Provider value={sidebarContext}>
             <Navbar />
-            <Sidebar onCampaignIDChange={handleCampaignIDChange}r/>
+            <Sidebar onCampaignIDChange={handleCampaignIDChange}/>
         </SidebarContext.Provider>
 
         {/* Dashboard Container */}
@@ -107,9 +107,9 @@ export default function Dashboard() {
 
                 {/* Content */}
                 <div className="m-10">
-                    {activeContent === "performance" && <Performance id={campaignID}/>}
-                    {activeContent === "metrics" && <Metrics/>}
-                    {activeContent === "history" && <History/>}
+                    {activeContent === "performance" && <Performance key={campaignID} id={campaignID}/>}
+                    {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID}/>}
+                    {activeContent === "history" && <History key={campaignID} id={campaignID}/>}
                     {activeContent === "setting" && <Setting/>}
                 </div>
             </div>

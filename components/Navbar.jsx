@@ -2,18 +2,21 @@
 import { IconContext } from "react-icons"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
 
+    const pathName = usePathname()
     const router = useRouter();
+    const [activeLink, setActiveLink] = useState(pathName);
 
-    // Active Link start
-    function SetActiveLink(Link){
-        document.querySelector(".ActiveLink").classList?.remove("ActiveLink");
-        document.getElementById(Link).classList?.add("ActiveLink");
-    }
-    // Active Link end
+    console.log(pathName)
 
+    const handleClick = (link) => {
+        setActiveLink(link);
+        router.push(link);
+    };
 
     function handleLogout(){
         localStorage.removeItem('jwtToken');
@@ -46,10 +49,10 @@ export default function Navbar() {
                                     `
                                 }
                             </style>
-                            <li className="ActiveLink" id="dashboard" onClick={() => SetActiveLink("dashboard")}>Dashboard</li>
-                            <li id="campaign" onClick={() => SetActiveLink("campaign")}>Campaigns</li>
-                            <li id="account" onClick={() => SetActiveLink("account")}>Accounts</li>
-                            <li id="clients" onClick={() => SetActiveLink("clients")}>Clients</li>
+                            <li className={activeLink === "/dashboard" ? "ActiveLink" : ""} onClick={() => handleClick("/dashboard")}>Dashboard</li>
+                            <li className={activeLink === "/campaigns" ? "ActiveLink" : ""} onClick={() => handleClick("/campaigns")}>Campaigns</li>
+                            <li className={activeLink === "/accounts" ? "ActiveLink" : ""} onClick={() => handleClick("/accounts")}>Accounts</li>
+                            <li className={activeLink === "/clients" ? "ActiveLink" : ""} onClick={() => handleClick("/clients")}>Clients</li>
                         </ul>
                     </div>
 
@@ -80,7 +83,7 @@ export default function Navbar() {
                             </h1>
                         <div className="profile-dropdown flex hidden absolute z-10 mt-2 p-5 right-5 bg-white rounded-lg shadow-lg flex-col gap-3 w-[200px]">
                             <Link href="/profile">Profile</Link>
-                            <a href="/profile">User</a>
+                            <a href="/users">User</a>
                             <a href="/settings">Tenant</a>
                             <div className="border border-gray-300"></div>
                             <a onClick={handleLogout}>Logout</a>
