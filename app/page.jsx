@@ -48,21 +48,30 @@ const Page = () => {
           return response.json();
         })
         .then(data => {
+          // console.log(data)
           const { Token } = data
           localStorage.setItem('jwtToken', Token);
 
           // Arahkan ke Dashboard untuk pengguna non-staff
-          router.push('/Dashboard');
+
+          const roles = data.Data.roles;
+
+          if (roles == 'sadmin' || roles == "admin") {  
+            router.push('/admin-dashboard');
+          }else{
+            router.push('/dashboard');
+          }
+          
 
         })
         .catch(error => {
           // // Handle network errors
-          // if (error.message.includes('ERR_NAME_NOT_RESOLVED')) {
-          //   setError('Network error. Please check your internet connection and try again.');
-          // } else {
-          //   // Handle other types of errors
-          //   setError('Login failed. Please check your email and password.');
-          // }
+          if (error.message.includes('ERR_NAME_NOT_RESOLVED')) {
+            setError('Network error. Please check your internet connection and try again.');
+          } else {
+            // Handle other types of errors
+            setError('Login failed. Please check your email and password.');
+          }
           console.log(error)
         });
     },
@@ -139,7 +148,7 @@ const Page = () => {
               SIGN IN
             </button>
             <Link
-              href="/ForgotPassword"
+              href="/forgotpassword"
               className="mt-3 text-[#5473E3] hover:text-[#2347C5] hover:underline"
             >
               <p className="text-[#5473E3] mb-2 mt-2">Forgot Password?</p>

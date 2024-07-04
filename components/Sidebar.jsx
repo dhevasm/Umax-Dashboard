@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useContext } from "react"
-import { SidebarContext } from "@/app/Dashboard/page"
+import { SidebarContext } from "@/app/dashboard/page"
 import SidebarCard from "./Card/SidebarCard"
 import axios from "axios"
 
@@ -79,6 +79,7 @@ export default function Sidebar({ onCampaignIDChange }){
                                 background-color: blue;
                                 padding: 5px 10px;
                                 border-radius: 10px;
+                                color: white;
                             }`
                         }
                     </style>

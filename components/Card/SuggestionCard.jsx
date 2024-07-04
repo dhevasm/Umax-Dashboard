@@ -23,7 +23,7 @@ export default function SuggestionCard({Title, Desc, Value, Target, Message, Col
     return (
         <>
         {/* Suggestion Card */}
-            <div className={`w-full p-7 rounded-lg shadow-lg ${background} mt-5`}>
+            <div className={`w-full p-7 rounded-lg shadow-lg ${background} mt-5 transition-all`}>
                 <div className="flex gap-10">
                     {/* Icon */}
                     <div>

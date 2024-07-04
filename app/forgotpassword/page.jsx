@@ -45,7 +45,7 @@ const ForgotPassword = () => {
                     confirmButtonText: 'OK',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate.push('/ResetPassword');
+                        navigate.push('/resetpassword');
                     }
                 });
             } catch (error) {

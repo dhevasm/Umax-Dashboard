@@ -7,9 +7,12 @@ export default function History(){
         <div className="w-full">
             {/* Content */}
             <div className="w-full">
-                <p>History</p>
+                <div className="border border-gray-300 rounded-md min-h-[50vh]">
+
+                </div>
+                
             </div>
         </div>
-        </>
+        </> 
     )
 }
