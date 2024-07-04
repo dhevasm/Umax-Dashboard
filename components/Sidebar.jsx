@@ -40,7 +40,6 @@ export default function Sidebar({ onCampaignIDChange }){
                 }
             });
             setCampaigns(response.data.Data);
-            console.log(response.data.Data)
         } catch (error) {
             console.error(error);
         }
@@ -66,13 +65,12 @@ export default function Sidebar({ onCampaignIDChange }){
         SetActiveLink(newLink);
     };
 
-
     return (   
         <>
         {/* Sidebar */}
             <div className="fixed mt-20 m-3 left-0 w-[300px] h-screen bg-white rounded-lg flex flex-col items-center px-3 z-10 transition-transform shadow-md pb-28" ref={sidebar}>
                 {/* Campaing Status Filter */}
-                <div className="m-3 mt-5 px-3 w-full bg-gray-300 p-1 rounded-lg flex justify-between items-center text-md hover:cursor-pointer font-bold">
+                <div className="m-3 mt-5 px-3 w-full bg-gray-200 p-1 rounded-xl flex justify-between items-center text-md hover:cursor-pointer font-bold">
                     <style jsx>
                         {
                             `.SidebarFilterActive{
@@ -83,15 +81,15 @@ export default function Sidebar({ onCampaignIDChange }){
                             }`
                         }
                     </style>
-                    <p className="SidebarFilterActive" id="all" onClick={() => handleClick(0, 'all')}>All</p>
-                    <p id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
-                    <p id="active" onClick={() => handleClick(1, 'active')}>Active</p>
-                    <p id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
+                    <p className="SidebarFilterActive text-gray-600" id="all" onClick={() => handleClick(0, 'all')}>All</p>
+                    <p className="text-gray-600" id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
+                    <p className="text-gray-600" id="active" onClick={() => handleClick(1, 'active')}>Active</p>
+                    <p className="text-gray-600" id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
                 </div>
 
                 {/* Search Bar */}
-                <div>
-                    <input className="text-black m-2 p-2 rounded-lg border border-gray-300" type="text" placeholder="Search" onChange={(event) => setSearchTerm(event.target.value)}/>
+                <div className="w-full flex justify-center">
+                    <input className="text-black m-2 p-2 rounded-lg border w-full border-gray-300 focus:outline-blue-400" type="text" placeholder="Search" onChange={(event) => setSearchTerm(event.target.value)}/>
                 </div>
                 
                 {/* Campaign Cards */}
@@ -99,6 +97,7 @@ export default function Sidebar({ onCampaignIDChange }){
                     {/* Campaing Card */}
                     {filteredCampaigns.map((campaign, index) =>(
                         <SidebarCard 
+                            key={index}
                             platform={campaign.campaign_platform} 
                             name={campaign.campaign_name} status={campaign.status} 
                             amountspend={campaign.amountspent} 

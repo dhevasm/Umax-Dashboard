@@ -39,7 +39,7 @@ export default function Metrics({id}){
             {/* Metrics */}
             <div className="flex flex-wrap gap-10">
                 {data.map((item) => (
-                    <div className="flex flex-wrap gap-10">  
+                    <div className="flex flex-wrap justify-center gap-10">  
                         <MetricCard Value={item.amountspent} Title={'Amout Spent'} />
                         <MetricCard Value={item.reach} Title={'Reach'} />
                         <MetricCard Value={item.impressions} Title={'Impression'} />

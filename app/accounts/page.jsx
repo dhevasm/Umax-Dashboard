@@ -5,14 +5,14 @@ import AccountTable from '@/components/Table/AccountTable'
 
 const page = () => {
   return (
-    <>
-        <Navbar />
-        <div className="w-full mt-16 h-screen pb-10">
-            <div className="w-full h-full p-10 bg-white">
-                <AccountTable/>
-            </div>
+    <div className='w-full h-screen bg-white'>
+      <Navbar />
+      <div className="w-full mt-16 h-fit">
+        <div className="w-full h-full md:p-10 p-5 bg-white">
+          <AccountTable />
         </div>
-    </> 
+      </div>
+    </div> 
   )
 }
 

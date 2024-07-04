@@ -3,7 +3,7 @@
 export default function MetricCard({Title, Value}){
     return (
         <>
-            <div className="bg-white rounded-lg shadow-lg p-3">
+            <div className="bg-white rounded-lg shadow-lg p-3 w-[30%]">
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col justify-center items-center gap-3">
                         <p className="text-lg font-medium">{Title}</p>

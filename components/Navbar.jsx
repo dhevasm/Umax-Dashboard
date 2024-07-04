@@ -27,9 +27,9 @@ export default function Navbar() {
         <>
         {/* Navbar */}
             <nav className="fixed top-0 z-50 w-screen p-3 bg-white shadow-lg">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center h-10">
                     {/* Logo */}
-                    <img src="assets/logo.png" alt="Logo" className="ms-5"/>
+                    <img src="assets/logo.png" alt="Logo" className="ms-5 w-[100px]"/>
 
                     {/* Nav Links */}
                     <div>

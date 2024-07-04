@@ -15,7 +15,7 @@ export default function SidebarCard({ platform, name, status, amountspend, reach
 
   return (
     <>
-      <div className="text-sm text-black border-b-2 border-gray-300 hover:cursor-pointer hover:bg-cyan-300 p-5" onClick={() => onCardClick(id)}>
+      <div className="text-sm text-black border-b-2 border-gray-300 hover:cursor-pointer hover:bg-cyan-300 p-5" onClick={() => onCardClick(id, name, platform)}>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img src={`../assets/${platform == 1 ? 'meta.svg' : platform == 2 ? 'google.svg' : platform == 3 ? 'tiktok.svg' : null}`} className="w-[25px]" alt="" />

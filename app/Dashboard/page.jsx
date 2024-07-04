@@ -22,12 +22,16 @@ export default function Dashboard() {
     // expanse card start
     const Card = useRef(null)
     const [campaignID, setCampaignID] = useState('');
+    const [name, setName] = useState('');
+    const [platform, setPlatform] = useState('');
     const [SidebarHide, setSidebarHide] = useState(false)
     const sidebarContext = (() => ({
         SidebarHide,
         setSidebarHide,
         campaignID,
         setCampaignID,
+        name,
+        setName
     }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {
@@ -39,8 +43,10 @@ export default function Dashboard() {
     }, [SidebarHide])
     // expnase card end
 
-    const handleCampaignIDChange = (id) => {
+    const handleCampaignIDChange = (id, name, platform) => {
         setCampaignID(id);
+        setName(name);
+        setPlatform(platform);
     };
 
     // Dashborad Change Content Start
@@ -70,7 +76,10 @@ export default function Dashboard() {
             <div className="w-[75%] min-h-screen bg-white rounded-xl mt-20 me-3 ms-5 text-black transition-transform" ref={Card}>
                 {/* header */}
                 <div className="m-10">
-                    <h1 className="text-2xl">Title</h1>
+                    <div className="flex gap-3 items-center md:flex-row flex-col">
+                        <img src={`../assets/${platform == 1 ? 'meta.svg' : platform == 2 ? 'google.svg' : platform == 3 ? 'tiktok.svg' : null}`} className="w-[50px]" alt="" />
+                        <p className="text-2xl font-semibold">{name}</p>
+                    </div>
 
                     {/* Dashboard Nav Link */}
                     <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300">
