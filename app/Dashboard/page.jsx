@@ -2,6 +2,7 @@
 
 import axios from "axios"
 import { useState, useEffect, useRef, createContext, useMemo, use } from "react"
+import { Suspense } from "react"
 
 // Components
 import Navbar from "@/components/Navbar"
@@ -12,6 +13,7 @@ import Performance from "@/components/Dashboard-content/Performance"
 import Metrics from "@/components/Dashboard-content/Metrics"
 import History from "@/components/Dashboard-content/History"
 import Setting from "@/components/Dashboard-content/Setting"
+import PerformenceNavLoading from "@/components/Loading/PerformenceNavLoading"
 
 export const SidebarContext = createContext()
 // export const campaignIDContext = createContext()
@@ -75,10 +77,14 @@ export default function Dashboard() {
             <div className="w-[75%] min-h-screen bg-white rounded-xl mt-20 me-3 ms-5 text-black transition-transform" ref={Card}>
                 {/* header */}
                 <div className="m-10">
-                    <div className="flex gap-3 items-center md:flex-row flex-col">
-                        <img src={`../assets/${platform == 1 ? 'meta.svg' : platform == 2 ? 'google.svg' : platform == 3 ? 'tiktok.svg' : null}`} className="w-[50px]" alt="" />
-                        <p className="text-2xl font-semibold">{name}</p>
-                    </div>
+                    {campaignID === '' ? (
+                        <PerformenceNavLoading/>
+                    ) : (
+                        <div className="flex gap-3 items-center md:flex-row flex-col">
+                            <img src={`../assets/${platform == 1 ? 'meta.svg' : platform == 2 ? 'google.svg' : platform == 3 ? 'tiktok.svg' : null}`} className="w-[50px]" alt="" />
+                            <p className="text-2xl font-semibold">{name}</p>
+                        </div>  
+                    )}  
 
                     {/* Dashboard Nav Link */}
                     <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300">
@@ -89,9 +95,10 @@ export default function Dashboard() {
                                     color : blue;
                                     padding-bottom: 10px;
                                     border-bottom: 3px solid blue;
+                                    transition: background-color 0.3s, color 0.3s;
                                 }
                                 .DashboardLink:hover{
-                                    cursor:pointer;
+                                    cursor: pointer;
                                 }
                                 `
                             }

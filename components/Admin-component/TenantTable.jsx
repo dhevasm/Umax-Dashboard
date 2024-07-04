@@ -162,12 +162,12 @@ export default function TenantTable() {
                     <h1 className="text-3xl font-bold">Tenants</h1>
                     <div className="flex gap-5 items-center mt-5">
                         <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <AiOutlineFilePdf />
                                 </IconContext.Provider>
                             </button>
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={onDownload}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <FaFileExcel />
                                 </IconContext.Provider>
@@ -216,7 +216,7 @@ export default function TenantTable() {
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                                              <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a></td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                                               <a className="text-blue-500" href={`tel:${tenant.contact}`}>{tenant.contact}</a> </td>
+                                               <a className="text-blue-500" href={`tel:${tenant.contact}`}>{String(tenant.contact)}</a> </td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
                                                 <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(tenant._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>

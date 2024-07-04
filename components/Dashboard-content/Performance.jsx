@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Infocard from "../Card/Infocard";
 import SuggestionCard from "../Card/SuggestionCard";
 import axios from "axios";
+import SuggestionLoding from "../Loading/SuggestionLoding";
 
 export default function Performance({ id }) {
     // Variabel for Metrics
@@ -115,12 +116,20 @@ export default function Performance({ id }) {
                     {/* Suggestion */}
                     <div className="w-full h-0.5 bg-white my-5"></div>
                     <h1>Suggestions</h1>
-                    <SuggestionCard Title={srar.title} Desc={srar.msg} Color={srar.color} Value={srar.value} Target={srar.target} Message={srar.message} />
-                    <SuggestionCard Title={sroas.title} Desc={sroas.msg} Color={sroas.color} Value={sroas.value} Target={sroas.target} Message={sroas.message} />
-                    <SuggestionCard Title={scpr.title} Desc={scpr.msg} Color={scpr.color} Value={scpr.value} Target={scpr.target} Message={scpr.message} />
-                    <SuggestionCard Title={scpc.title} Desc={scpc.msg} Color={scpc.color} Value={scpc.value} Target={scpc.target} Message={scpc.message} />
-                    <SuggestionCard Title={soclp.title} Desc={soclp.msg} Color={soclp.color} Value={soclp.value} Target={soclp.target} Message={soclp.message} />
-                    <SuggestionCard Title={sctr.title} Desc={sctr.msg} Color={sctr.color} Value={sctr.value} Target={sctr.target} Message={sctr.message} />
+                    {id == '' ? 
+                    <>
+                        <SuggestionLoding/>
+                    </>
+                    : 
+                        <>
+                            <SuggestionCard Title={srar.title} Desc={srar.msg} Color={srar.color} Value={srar.value} Target={srar.target} Message={srar.message} />
+                            <SuggestionCard Title={sroas.title} Desc={sroas.msg} Color={sroas.color} Value={sroas.value} Target={sroas.target} Message={sroas.message} />
+                            <SuggestionCard Title={scpr.title} Desc={scpr.msg} Color={scpr.color} Value={scpr.value} Target={scpr.target} Message={scpr.message} />
+                            <SuggestionCard Title={scpc.title} Desc={scpc.msg} Color={scpc.color} Value={scpc.value} Target={scpc.target} Message={scpc.message} />
+                            <SuggestionCard Title={soclp.title} Desc={soclp.msg} Color={soclp.color} Value={soclp.value} Target={soclp.target} Message={soclp.message} />
+                            <SuggestionCard Title={sctr.title} Desc={sctr.msg} Color={sctr.color} Value={sctr.value} Target={sctr.target} Message={sctr.message} />
+                        </>
+                    }
                 </div>
             </div>
         </>

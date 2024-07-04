@@ -34,26 +34,40 @@ export default function Navbar() {
 
                     {/* Nav Links */}
                     <div>
-                        <ul className="hidden md:flex text-black gap-5">
+                        <ul className="hidden md:flex p-2 text-black gap-5">
                             <style jsx>
-                                {
-                                    `
-                                    .ActiveLink{
-                                        background-color: blue;
-                                        padding: 5px 10px;
-                                        border-radius: 10px;
-                                        color: white;
-                                    }
-                                    ul li:hover{
-                                        cursor:pointer;
-                                    }
-                                    `
+                                {`
+                                .active-link {
+                                    background-color: blue;
+                                    padding: 9px 16px;
+                                    border-radius: 25px;
+                                    color: white;
+                                    transition: background-color 0.3s, color 0.3s;
                                 }
+                                ul li {
+                                    padding: 9px 16px;
+                                    border-radius: 25px;
+                                    transition: background-color 0.3s, color 0.3s;
+                                }
+                                ul li:hover {
+                                    cursor: pointer;
+                                    background-color: rgba(0, 0, 255, 0.1);
+                                    color: blue;
+                                }
+                                `}
                             </style>
-                            <li className={activeLink === "/dashboard" ? "ActiveLink" : ""} onClick={() => handleClick("/dashboard")}>Dashboard</li>
-                            <li className={activeLink === "/campaigns" ? "ActiveLink" : ""} onClick={() => handleClick("/campaigns")}>Campaigns</li>
-                            <li className={activeLink === "/accounts" ? "ActiveLink" : ""} onClick={() => handleClick("/accounts")}>Accounts</li>
-                            <li className={activeLink === "/clients" ? "ActiveLink" : ""} onClick={() => handleClick("/clients")}>Clients</li>
+                            <li className={`font-semibold ${activeLink === "/dashboard" ? "active-link" : ""}`} onClick={() => handleClick("/dashboard")}>
+                                Dashboard
+                            </li>
+                            <li className={`font-semibold ${activeLink === "/campaigns" ? "active-link" : ""}`} onClick={() => handleClick("/campaigns")}>
+                                Campaigns
+                            </li>
+                            <li className={`font-semibold ${activeLink === "/accounts" ? "active-link" : ""}`} onClick={() => handleClick("/accounts")}>
+                                Accounts
+                            </li>
+                            <li className={`font-semibold ${activeLink === "/clients" ? "active-link" : ""}`} onClick={() => handleClick("/clients")}>
+                                Clients
+                            </li>
                         </ul>
                     </div>
 

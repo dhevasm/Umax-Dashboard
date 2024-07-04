@@ -34,22 +34,22 @@ export default function History({ id }) {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentData = data.slice(indexOfFirstItem, indexOfLastItem);
 
-    const totalPages = Math.ceil(data.length / itemsPerPage);
+    // const totalPages = Math.ceil(data.length / itemsPerPage);
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    const getPaginationGroup = () => {
-        let start = Math.floor((currentPage - 1) / 5) * 5;
-        return new Array(5).fill().map((_, idx) => start + idx + 1).filter(page => page <= totalPages);
-    };
+    // const getPaginationGroup = () => {
+    //     let start = Math.floor((currentPage - 1) / 5) * 5;
+    //     return new Array(5).fill().map((_, idx) => start + idx + 1).filter(page => page <= totalPages);
+    // };
 
-    const goToNextPage = () => {
-        setCurrentPage((page) => Math.min(page + 1, totalPages));
-    };
+    // const goToNextPage = () => {
+    //     setCurrentPage((page) => Math.min(page + 1, totalPages));
+    // };
 
-    const goToPreviousPage = () => {
-        setCurrentPage((page) => Math.max(page - 1, 1));
-    };
+    // const goToPreviousPage = () => {
+    //     setCurrentPage((page) => Math.max(page - 1, 1));
+    // };
 
     return (
         <>
@@ -104,7 +104,8 @@ export default function History({ id }) {
                                 </tbody>
                             </table>
                         </div>
-                        <nav aria-label="Page navigation example">
+
+                        {/* <nav aria-label="Page navigation example">
                             <ul className="flex items-center justify-end -space-x-px h-10 text-base mt-5">
                                 <li>
                                     <a
@@ -166,7 +167,8 @@ export default function History({ id }) {
                                     </a>
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> */}
+
                     </div>
                 </div>
             </div>
