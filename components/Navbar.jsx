@@ -1,7 +1,11 @@
 'use client'
 import { IconContext } from "react-icons"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+
+    const router = useRouter();
 
     // Active Link start
     function SetActiveLink(Link){
@@ -9,6 +13,12 @@ export default function Navbar() {
         document.getElementById(Link).classList?.add("ActiveLink");
     }
     // Active Link end
+
+
+    function handleLogout(){
+        localStorage.removeItem('jwtToken');
+        router.push('/');
+    }
 
     return (
         <>
@@ -52,7 +62,7 @@ export default function Navbar() {
                                 document.querySelector(".notif-dropdown").classList.toggle("hidden");
                                 e.stopPropagation();
                             }}>
-                                H
+                                N
                             </h1>
                         <div className="notif-dropdown flex hidden absolute z-10 mt-2 p-5 right-5 bg-white rounded-lg shadow-lg flex-col gap-3 w-[200px]">
                             <a href="/">Notification 1</a>
@@ -69,11 +79,11 @@ export default function Navbar() {
                                 Profile <span className="text-blue-500">▼</span>
                             </h1>
                         <div className="profile-dropdown flex hidden absolute z-10 mt-2 p-5 right-5 bg-white rounded-lg shadow-lg flex-col gap-3 w-[200px]">
-                            <a href="/profile">Profile</a>
+                            <Link href="/profile">Profile</Link>
                             <a href="/profile">User</a>
                             <a href="/settings">Tenant</a>
                             <div className="border border-gray-300"></div>
-                            <a href="/logout">Logout</a>
+                            <a onClick={handleLogout}>Logout</a>
                         </div>
                     </div>
                     </div>

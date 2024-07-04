@@ -1,6 +1,6 @@
 'use client'
 
-import Infocard from "../Card/Infocard"
+import InfoCard from "../Card/InfoCard"
 import SuggestionCard from "../Card/SuggestionCard"
 export default function Performance(){
 
@@ -19,14 +19,14 @@ export default function Performance(){
             {/* Content */}
             <div className="w-full mt-5">
 
-                {/* Infocard & Chart */}
+                {/* InfoCard & Chart */}
                 <div className="flex flex-col md:flex-row justify-between gap-5">
-                    {/* Infocard */}
+                    {/* InfoCard */}
                     <div className="md:w-[40%]  flex flex-col gap-5 ">
-                    <Infocard Color="success" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
-                    <Infocard Color="warning" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
-                    <Infocard Color="blue" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
-                    <Infocard Color="yellow" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
+                    <InfoCard Color="success" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
+                    <InfoCard Color="warning" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
+                    <InfoCard Color="blue" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
+                    <InfoCard Color="yellow" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns"/>
                     </div>
                     {/* Chart */}
                     <div className="md:w-[60%] flex flex-col justify-end">
@@ -34,10 +34,10 @@ export default function Performance(){
 
                         {/* Inforcard 2 */}
                         <div className="flex flex-col md:flex-row gap-5">
-                            <Infocard Color="success" Title="Amount" Value="2000" Desc="Total Campaigns"/>
-                            <Infocard Color="green" Title="Amount" Value="2000" Desc="Total Campaigns"/>
-                            <Infocard Color="warning" Title="Amount" Value="2000" Desc="Total Campaigns"/>
-                            <Infocard Color="yellow" Title="Amount" Value="2000" Desc="Total Campaigns"/>
+                            <InfoCard Color="success" Title="Amount" Value="2000" Desc="Total Campaigns"/>
+                            <InfoCard Color="green" Title="Amount" Value="2000" Desc="Total Campaigns"/>
+                            <InfoCard Color="warning" Title="Amount" Value="2000" Desc="Total Campaigns"/>
+                            <InfoCard Color="yellow" Title="Amount" Value="2000" Desc="Total Campaigns"/>
                         </div>
                     </div>
                 </div>

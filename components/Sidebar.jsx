@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useContext } from "react"
-import { SidebarContext } from "@/app/Dashboard/page"
+import { SidebarContext } from "@/app/dashboard/page"
 import SidebarCard from "./Card/SidebarCard"
 
 export default function Sidebar(){
@@ -36,6 +36,7 @@ export default function Sidebar(){
                                 background-color: blue;
                                 padding: 5px 10px;
                                 border-radius: 10px;
+                                color: white;
                             }`
                         }
                     </style>
