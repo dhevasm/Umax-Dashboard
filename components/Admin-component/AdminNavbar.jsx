@@ -1,5 +1,7 @@
 'use client'
 import { useEffect, useState } from "react"
+import { IconContext } from "react-icons";
+import { FaBars } from "react-icons/fa";
 
 export default function AdminNavbar({userData}){
 
@@ -10,7 +12,9 @@ export default function AdminNavbar({userData}){
                     <div className="w-[300px] h-full bg-slate-200 flex justify-center items-center">
                         <img src="assets/logo.png" alt="Logo"/>
                     </div>
-                    <button>=</button>
+                    <button>
+                        <FaBars className="text-2xl" />
+                    </button>
                 </div>
 
                 <div className="me-10 text-xs flex gap-3">
@@ -21,7 +25,10 @@ export default function AdminNavbar({userData}){
                         <h1 className="font-bold">{userData.name}</h1>
                         <p>{userData.roles}</p>
                     </div>
+                    
                 </div>
+                {/* Dropdown */}
+               
             </nav>
         </>
     )
