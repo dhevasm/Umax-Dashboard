@@ -29,7 +29,7 @@ export default function InfoCard({Color, Title, Value, Desc}){
     return (
         <>
         {/* card */}
-            <div className={`border ${bordercolor} ${background} p-4 rounded-lg w-full transition-all`}>
+            <div className={`border ${bordercolor} ${background} p-5 rounded-lg w-full transition-all`}>
                 <p className={`text-sm ${text} text-nowrap`}>{Title}</p>
                 <div className="flex justify-between items-center">
                     <h1 className={`text-2xl ${text} text-nowrap`}>{Value}</h1>

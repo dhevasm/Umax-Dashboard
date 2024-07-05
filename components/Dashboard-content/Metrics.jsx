@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import MetricCard from "../Card/MetricCard"
 import axios from "axios";
+import MetricsLoading from "../Loading/MetricsLoading";
 
 export default function Metrics({id}){
     const [data, setData] = useState([]);
@@ -34,11 +35,15 @@ export default function Metrics({id}){
         <div className="w-full">
             {/* Content */}
             <div className="w-full">
-                <p>Metrics</p>
-
             {/* Metrics */}
             <div className="flex flex-wrap gap-10">
-                {data.map((item) => (
+                {id == '' 
+                ? 
+                    Array(12).fill(0).map((item, index) => (
+                        <MetricsLoading key={index} />
+                    ))
+                :
+                data.map((item) => (
                     <div className="flex flex-wrap justify-center gap-10">  
                         <MetricCard Value={item.amountspent} Title={'Amout Spent'} />
                         <MetricCard Value={item.reach} Title={'Reach'} />
@@ -53,7 +58,8 @@ export default function Metrics({id}){
                         <MetricCard Value={item.roas} Title={'ROAS'} />
                         <MetricCard Value={item.realroas} Title={'Real ROAS'} />
                     </div>
-                ))}
+                ))
+                }
             </div>
 
             </div>

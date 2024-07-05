@@ -5,6 +5,7 @@ import Infocard from "../Card/Infocard";
 import SuggestionCard from "../Card/SuggestionCard";
 import axios from "axios";
 import SuggestionLoding from "../Loading/SuggestionLoding";
+import InfoCardLoading from "../Loading/InfoCardLoading";
 
 export default function Performance({ id }) {
     // Variabel for Metrics
@@ -23,6 +24,8 @@ export default function Performance({ id }) {
     const [scpc, setsCpc] = useState({})
     const [soclp, setsOclp] = useState({})
     const [sctr, setsCtr] = useState({})
+
+    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 1000);
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     const fetchMetrics = async () => {
@@ -53,6 +56,15 @@ export default function Performance({ id }) {
     useEffect(() => {
         fetchMetrics();
     }, [id]);
+
+    const checkDeviceWidth = () => {
+        setIsWideScreen(window.innerWidth >= 1000);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", checkDeviceWidth);
+        return () => window.removeEventListener("resize", checkDeviceWidth);
+    }, []);
 
     const fetchSuggestions = async () => {
         try {
@@ -93,33 +105,51 @@ export default function Performance({ id }) {
                 {/* Content */}
                 <div className="w-full mt-5">
                     {/* Infocard & Chart */}
-                    <div className="flex flex-col md:flex-row justify-between gap-5">
+                    <div className={`flex ${isWideScreen ? 'flex-row' : 'flex-col'} justify-between gap-5`}>
                         {/* Infocard */}
-                        <div className="md:w-[40%]  flex flex-col gap-5">
-                            <Infocard Color="success" Title="Amount Spend" Value="Rp. 2000.000" Desc="Total Campaigns" />
-                            <Infocard Color={rar.color} Title={'RAR'} Value={rar.value} Desc={rar.target} />
-                            <Infocard Color={oclp.color} Title={'OCLP'} Value={oclp.value} Desc={oclp.target} />
-                            <Infocard Color={cpr.color} Title={'CPR'} Value={cpr.value} Desc={cpr.target} />
+                        <div className={`${isWideScreen ? 'w-[40%]' : 'w-full'}  flex flex-col gap-5`}>
+                            {id == '' 
+                            ? 
+                            Array(4).fill(0).map((_, i) => (
+                                <InfoCardLoading key={i} />
+                            ))
+                            : 
+                            <>
+                                <Infocard Color={rar.color} Title={'RAR'} Value={rar.value} Desc={rar.target} />
+                                <Infocard Color={oclp.color} Title={'OCLP'} Value={oclp.value} Desc={oclp.target} />
+                                <Infocard Color={cpr.color} Title={'CPR'} Value={cpr.value} Desc={cpr.target} />
+                                <Infocard Color={cpc.color} Title={'CPC'} Value={cpc.value} Desc={cpc.target} />
+                            </>
+                            }
                         </div>
                         {/* Chart */}
-                        <div className="md:w-[60%] flex flex-col justify-end">
+                        <div className={`${isWideScreen ? 'w-[60%]' : 'w-full'} flex flex-col justify-end flex-wrap`}>
                             Lokasi Chart
                             {/* Inforcard 2 */}
-                            <div className="flex flex-col md:flex-row gap-5">
-                                <Infocard Color={cpc.color} Title={'CPC'} Value={cpc.value} Desc={cpc.target} />
-                                <Infocard Color={roas.color} Title={'ROAS'} Value={roas.value} Desc={roas.target} />
-                                <Infocard Color={ctr.color} Title={'CTR'} Value={ctr.value} Desc={ctr.target} />
-                                <Infocard Color={r_roas.color} Title={'Real ROAS'} Value={r_roas.value} Desc={r_roas.target} />
+                            <div className={`flex ${isWideScreen ? 'flex-row' : 'flex-col'} gap-5`}>
+                                {id == '' 
+                                ? 
+                                Array(4).fill(0).map((_, i) => (
+                                    <InfoCardLoading key={i} />
+                                ))
+                                : 
+                                <>
+                                    <Infocard Color={cpc.color} Title={'CPC'} Value={cpc.value} Desc={cpc.target} />
+                                    <Infocard Color={roas.color} Title={'ROAS'} Value={roas.value} Desc={roas.target} />
+                                    <Infocard Color={ctr.color} Title={'CTR'} Value={ctr.value} Desc={ctr.target} />
+                                    <Infocard Color={r_roas.color} Title={'Real ROAS'} Value={r_roas.value} Desc={r_roas.target} />
+                                </>
+                                }
                             </div>
                         </div>
                     </div>
                     {/* Suggestion */}
                     <div className="w-full h-0.5 bg-white my-5"></div>
-                    <h1>Suggestions</h1>
+                    <h1 className="text-xl font-medium font-semibold">Suggestions</h1>
                     {id == '' ? 
-                    <>
-                        <SuggestionLoding/>
-                    </>
+                    Array(3).fill(0).map((_, i) => (
+                        <SuggestionLoding key={i}/>
+                    ))
                     : 
                         <>
                             <SuggestionCard Title={srar.title} Desc={srar.msg} Color={srar.color} Value={srar.value} Target={srar.target} Message={srar.message} />

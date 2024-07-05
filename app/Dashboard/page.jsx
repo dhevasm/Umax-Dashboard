@@ -95,7 +95,7 @@ export default function Dashboard() {
                                     color : blue;
                                     padding-bottom: 10px;
                                     border-bottom: 3px solid blue;
-                                    transition: background-color 0.3s, color 0.3s;
+                                    transition: background-color 0.5s, color 0.5s;
                                 }
                                 .DashboardLink:hover{
                                     cursor: pointer;
@@ -103,10 +103,10 @@ export default function Dashboard() {
                                 `
                             }
                         </style>
-                        <p className="dashboardActive DashboardLink" id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
-                        <p className="DashboardLink" id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
-                        <p className="DashboardLink" id="history" onClick={() => SetActiveLink("history")}>History</p>
-                        <p className="DashboardLink" id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
+                        <p className="dashboardActive DashboardLink font-semibold text-gray-300 text-[15px]" id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
+                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
+                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="history" onClick={() => SetActiveLink("history")}>History</p>
+                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
                     </div>
                 </div>
 
