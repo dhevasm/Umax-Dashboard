@@ -115,10 +115,10 @@ export default function Performance({ id }) {
                             ))
                             : 
                             <>
-                                <Infocard Color={rar.color} Title={'RAR'} Value={rar.value} Desc={rar.target} />
+                                <Infocard Color='' Title={'Amount Spent' }Value='Rp 2000.000' Desc='Desc' />
+                                <Infocard Color={rar.color} Title={'Reach Amount Spent Ratio'} Value={rar.value} Desc={rar.target} />
+                                <Infocard Color={ctr.color} Title={'CTR'} Value={ctr.value} Desc={ctr.target} />
                                 <Infocard Color={oclp.color} Title={'OCLP'} Value={oclp.value} Desc={oclp.target} />
-                                <Infocard Color={cpr.color} Title={'CPR'} Value={cpr.value} Desc={cpr.target} />
-                                <Infocard Color={cpc.color} Title={'CPC'} Value={cpc.value} Desc={cpc.target} />
                             </>
                             }
                         </div>
@@ -134,9 +134,9 @@ export default function Performance({ id }) {
                                 ))
                                 : 
                                 <>
-                                    <Infocard Color={cpc.color} Title={'CPC'} Value={cpc.value} Desc={cpc.target} />
+                                    <Infocard Color={cpr.color} Title={'CPC'} Value={cpr.value} Desc={cpr.target} />
+                                    <Infocard Color='' Title={'ATC'} Value={'180%'} Desc={'Decs'} />
                                     <Infocard Color={roas.color} Title={'ROAS'} Value={roas.value} Desc={roas.target} />
-                                    <Infocard Color={ctr.color} Title={'CTR'} Value={ctr.value} Desc={ctr.target} />
                                     <Infocard Color={r_roas.color} Title={'Real ROAS'} Value={r_roas.value} Desc={r_roas.target} />
                                 </>
                                 }
@@ -145,7 +145,7 @@ export default function Performance({ id }) {
                     </div>
                     {/* Suggestion */}
                     <div className="w-full h-0.5 bg-white my-5"></div>
-                    <h1 className="text-xl font-medium font-semibold">Suggestions</h1>
+                    <h1 className="text-xl font-semibold">Suggestions</h1>
                     {id == '' ? 
                     Array(3).fill(0).map((_, i) => (
                         <SuggestionLoding key={i}/>

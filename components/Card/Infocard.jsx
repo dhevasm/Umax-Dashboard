@@ -32,7 +32,7 @@ export default function InfoCard({Color, Title, Value, Desc}){
             <div className={`border ${bordercolor} ${background} p-5 rounded-lg w-full transition-all`}>
                 <p className={`text-sm ${text} text-nowrap`}>{Title}</p>
                 <div className="flex justify-between items-center">
-                    <h1 className={`text-2xl ${text} text-nowrap`}>{Value}</h1>
+                    <h1 className={`text-xl font-semibold ${text} text-nowrap`}>{Value}</h1>
                     <button className="relative bottom-7" onClick={() => setShowDropdown(!showDropdown)}>
                         <i className="fas fa-info-circle text-xs text-gray-500"><svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></i>
                         {showDropdown && (
