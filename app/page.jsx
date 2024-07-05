@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation'
 
-
 const Page = () => {
+  
   const [error, setError] = useState()
   const router = useRouter()
 
