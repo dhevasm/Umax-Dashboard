@@ -2,19 +2,22 @@
 import { IconContext } from "react-icons"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 
 export default function Navbar() {
-
+    
+    const pathName = usePathname()
     const router = useRouter();
+    const [activeLink, setActiveLink] = useState(pathName);
 
-    // Active Link start
-    function SetActiveLink(Link){
-        document.querySelector(".ActiveLink").classList?.remove("ActiveLink");
-        document.getElementById(Link).classList?.add("ActiveLink");
-    }
-    // Active Link end
+    console.log(pathName)
 
+    const handleClick = (link) => {
+        setActiveLink(link);
+        router.push(link);
+    };
 
     function handleLogout(){
         localStorage.removeItem('jwtToken');
@@ -24,33 +27,47 @@ export default function Navbar() {
     return (
         <>
         {/* Navbar */}
-            <nav className="fixed top-0 z-50 w-screen p-3 bg-white shadow-lg">
-                <div className="flex justify-between items-center">
+            <nav className="fixed top-0 z-50 w-full p-3 bg-white shadow-lg">
+                <div className="flex justify-between items-center h-10">
                     {/* Logo */}
-                    <img src="assets/logo.png" alt="Logo" className="ms-5"/>
+                    <img src="assets/logo.png" alt="Logo" className="ms-5 w-[100px]"/>
 
                     {/* Nav Links */}
                     <div>
-                        <ul className="hidden md:flex text-black gap-5">
+                        <ul className="hidden md:flex p-2 text-black gap-5">
                             <style jsx>
-                                {
-                                    `
-                                    .ActiveLink{
-                                        background-color: blue;
-                                        padding: 5px 10px;
-                                        border-radius: 10px;
-                                        color: white;
-                                    }
-                                    ul li:hover{
-                                        cursor:pointer;
-                                    }
-                                    `
+                                {`
+                                .active-link {
+                                    background-color: blue;
+                                    padding: 9px 16px;
+                                    border-radius: 25px;
+                                    color: white;
+                                    transition: background-color 0.3s, color 0.3s;
                                 }
+                                ul li {
+                                    padding: 9px 16px;
+                                    border-radius: 25px;
+                                    transition: background-color 0.3s, color 0.3s;
+                                }
+                                ul li:hover {
+                                    cursor: pointer;
+                                    background-color: rgba(0, 0, 255, 0.1);
+                                    color: blue;
+                                }
+                                `}
                             </style>
-                            <li className="ActiveLink" id="dashboard" onClick={() => SetActiveLink("dashboard")}>Dashboard</li>
-                            <li id="campaign" onClick={() => SetActiveLink("campaign")}>Campaigns</li>
-                            <li id="account" onClick={() => SetActiveLink("account")}>Accounts</li>
-                            <li id="clients" onClick={() => SetActiveLink("clients")}>Clients</li>
+                            <li className={`font-semibold ${activeLink === "/dashboard" ? "active-link" : ""}`} onClick={() => handleClick("/dashboard")}>
+                                Dashboard
+                            </li>
+                            <li className={`font-semibold ${activeLink === "/campaigns" ? "active-link" : ""}`} onClick={() => handleClick("/campaigns")}>
+                                Campaigns
+                            </li>
+                            <li className={`font-semibold ${activeLink === "/accounts" ? "active-link" : ""}`} onClick={() => handleClick("/accounts")}>
+                                Accounts
+                            </li>
+                            <li className={`font-semibold ${activeLink === "/clients" ? "active-link" : ""}`} onClick={() => handleClick("/clients")}>
+                                Clients
+                            </li>
                         </ul>
                     </div>
 
@@ -81,7 +98,7 @@ export default function Navbar() {
                             </h1>
                         <div className="profile-dropdown flex hidden absolute z-10 mt-2 p-5 right-5 bg-white rounded-lg shadow-lg flex-col gap-3 w-[200px]">
                             <Link href="/profile">Profile</Link>
-                            <a href="/profile">User</a>
+                            <a href="/users">User</a>
                             <a href="/settings">Tenant</a>
                             <div className="border border-gray-300"></div>
                             <a onClick={handleLogout}>Logout</a>

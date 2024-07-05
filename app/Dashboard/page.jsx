@@ -2,6 +2,7 @@
 
 import axios from "axios"
 import { useState, useEffect, useRef, createContext, useMemo, use } from "react"
+import { Suspense } from "react"
 
 // Components
 import Navbar from "@/components/Navbar"
@@ -12,6 +13,7 @@ import Performance from "@/components/Dashboard-content/Performance"
 import Metrics from "@/components/Dashboard-content/Metrics"
 import History from "@/components/Dashboard-content/History"
 import Setting from "@/components/Dashboard-content/Setting"
+import PerformenceNavLoading from "@/components/Loading/PerformenceNavLoading"
 
 export const SidebarContext = createContext()
 // export const campaignIDContext = createContext()
@@ -21,12 +23,16 @@ export default function Dashboard() {
     // expanse card start
     const Card = useRef(null)
     const [campaignID, setCampaignID] = useState('');
+    const [name, setName] = useState('');
+    const [platform, setPlatform] = useState('');
     const [SidebarHide, setSidebarHide] = useState(false)
     const sidebarContext = (() => ({
         SidebarHide,
         setSidebarHide,
         campaignID,
         setCampaignID,
+        name,
+        setName
     }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {
@@ -38,8 +44,10 @@ export default function Dashboard() {
     }, [SidebarHide])
     // expnase card end
 
-    const handleCampaignIDChange = (id) => {
+    const handleCampaignIDChange = (id, name, platform) => {
         setCampaignID(id);
+        setName(name);
+        setPlatform(platform);
     };
 
     // Dashborad Change Content Start
@@ -60,7 +68,7 @@ export default function Dashboard() {
         
         <SidebarContext.Provider value={sidebarContext}>
             <Navbar />
-            <Sidebar onCampaignIDChange={handleCampaignIDChange}r/>
+            <Sidebar onCampaignIDChange={handleCampaignIDChange}/>
         </SidebarContext.Provider>
 
         {/* Dashboard Container */}
@@ -69,7 +77,14 @@ export default function Dashboard() {
             <div className="w-[75%] min-h-screen bg-white rounded-xl mt-20 me-3 ms-5 text-black transition-transform" ref={Card}>
                 {/* header */}
                 <div className="m-10">
-                    <h1 className="text-2xl">Title</h1>
+                    {campaignID === '' ? (
+                        <PerformenceNavLoading/>
+                    ) : (
+                        <div className="flex gap-3 items-center md:flex-row flex-col">
+                            <img src={`../assets/${platform == 1 ? 'meta.svg' : platform == 2 ? 'google.svg' : platform == 3 ? 'tiktok.svg' : null}`} className="w-[50px]" alt="" />
+                            <p className="text-2xl font-semibold">{name}</p>
+                        </div>  
+                    )}  
 
                     {/* Dashboard Nav Link */}
                     <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300">
@@ -80,17 +95,18 @@ export default function Dashboard() {
                                     color : blue;
                                     padding-bottom: 10px;
                                     border-bottom: 3px solid blue;
+                                    transition: background-color 0.5s, color 0.5s;
                                 }
                                 .DashboardLink:hover{
-                                    cursor:pointer;
+                                    cursor: pointer;
                                 }
                                 `
                             }
                         </style>
-                        <p className="dashboardActive DashboardLink" id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
-                        <p className="DashboardLink" id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
-                        <p className="DashboardLink" id="history" onClick={() => SetActiveLink("history")}>History</p>
-                        <p className="DashboardLink" id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
+                        <p className="dashboardActive DashboardLink font-semibold text-gray-300 text-[15px]" id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
+                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
+                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="history" onClick={() => SetActiveLink("history")}>History</p>
+                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
                     </div>
                 </div>
 
@@ -106,9 +122,9 @@ export default function Dashboard() {
 
                 {/* Content */}
                 <div className="m-10">
-                    {activeContent === "performance" && <Performance id={campaignID}/>}
-                    {activeContent === "metrics" && <Metrics/>}
-                    {activeContent === "history" && <History/>}
+                    {activeContent === "performance" && <Performance key={campaignID} id={campaignID}/>}
+                    {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID}/>}
+                    {activeContent === "history" && <History key={campaignID} id={campaignID}/>}
                     {activeContent === "setting" && <Setting/>}
                 </div>
             </div>
