@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import Navbar from "@/components/Navbar"
 import AccountTable from '@/components/Table/AccountTable'
+import TableLoading from '@/components/Loading/TableLoading'
 
 const page = () => {
   return (
@@ -9,7 +10,9 @@ const page = () => {
       <Navbar />
       <div className="w-full mt-16 h-fit">
         <div className="w-full h-full md:p-10 p-5 bg-white">
-          <AccountTable />
+          <Suspense fallback={<TableLoading/>}>
+            <AccountTable/>
+          </Suspense>
         </div>
       </div>
     </div> 

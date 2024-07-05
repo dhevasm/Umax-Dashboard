@@ -95,6 +95,7 @@ export default function Dashboard() {
                                     color : blue;
                                     padding-bottom: 10px;
                                     border-bottom: 3px solid blue;
+                                    font-weight: 800;
                                     transition: background-color 0.5s, color 0.5s;
                                 }
                                 .DashboardLink:hover{
