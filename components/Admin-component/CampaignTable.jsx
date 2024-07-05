@@ -14,12 +14,11 @@ import { FaPlus } from "react-icons/fa"
 import { FaPen } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaEye } from "react-icons/fa"
-export default function TenantTable() {
+export default function CampaignTable() {
 
-    const [tenants, setTenants] = useState([])
-    const [tenantMemo, setTenantMemo] = useState([])
-    const [editTenant, setEditTenant] = useState([])
-
+    const [Campaign, setCampaign] = useState([])
+    const [CampaignMemo, setCampaignMemo] = useState([])
+    const [editCampaign, seteditCampaign] = useState([])
 
     const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
 
@@ -29,9 +28,9 @@ export default function TenantTable() {
     function showModal(mode, tenant_id = null ){
         setModeModal(mode)
         if(mode == "Edit"){
-            const filteredTenant = tenantMemo.filter(tenant => tenant._id === tenant_id);
+            const filteredTenant = CampaignMemo.filter(tenant => tenant._id === tenant_id);
             if(filteredTenant.length > 0){
-                setEditTenant(filteredTenant[0]);
+                seteditCampaign(filteredTenant[0]);
             } else {
                 Swal.fire("Tenant not found");
             }
@@ -41,10 +40,6 @@ export default function TenantTable() {
     function closeModal(){
         addModal.current.classList.add("hidden")
     }
-
-    useEffect(() => {
-        console.log(editTenant)
-    }, [editTenant])
 
     function handleDelete(tenant_id){
         Swal.fire({
@@ -67,15 +62,14 @@ export default function TenantTable() {
           });
     }
 
-    const deleteTenant = async (tenant_id) => {
-        console.log(tenant_id)
+    const deleteTenant = async (campaign_id) => {
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
+            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/campaign-delete?campaign_id=${campaign_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
-            getTenants()
+            getCampaign()
             setUpdateCard(true)
             
         } catch (error) {
@@ -96,13 +90,13 @@ export default function TenantTable() {
         doc.text('Data Tenant Umax Dashboard', 10, 10);
         doc.autoTable({
             head: [['Name', 'Address', 'Contact', "Email"]],
-            body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
+            body: Campaign.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
         });
         doc.save('DataTenant.pdf');
     };
 
     function handleDetail(tenant_id){
-        const filteredTenant = tenants.filter(tenant => tenant._id === tenant_id);
+        const filteredTenant = Campaign.filter(tenant => tenant._id === tenant_id);
         if(filteredTenant.length > 0) {
             const [tenant] = filteredTenant;
             Swal.fire(`<p>
@@ -113,18 +107,18 @@ export default function TenantTable() {
         }
     }
 
-    async function getTenants(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+    async function getCampaign(){
+        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/campaign-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
-        setTenants(response.data.Data)
-        setTenantMemo(response.data.Data)
+        setCampaign(response.data.Data)
+        setCampaignMemo(response.data.Data)
     }
 
     useEffect(() => {
-        getTenants()
+        getCampaign()
     }, [])
 
     async function createTenant(){
@@ -156,7 +150,7 @@ export default function TenantTable() {
         })
 
         if(response.data.Output == "Registration Successfully"){
-            getTenants()
+            getCampaign()
             closeModal()
             setUpdateCard(true)
             document.getElementById('name').value = null
@@ -170,38 +164,11 @@ export default function TenantTable() {
     }
 
 
-    const [timezone, setTimezone] = useState([])
-    const [currency, setCurrency] = useState([])
-    const [culture, setCulture] = useState([])
-
-    async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
-            setTimezone(response.data)
-        })
-
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
-            setCurrency(response.data)
-        })
-
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
-            setCulture(response.data)
-        })
-    }
-
-    useEffect(() => {
-        getSelectFrontend()
-    }, [])
-
-    useEffect(() => {
-        console.log(culture)
-    }, [culture])
-
-
     return (
         <>
             <div className="w-full pb-20 mt-10">
-                <div className=" flex flex-row justify-between items-center w-full">
-                    <h1 className="text-3xl font-bold">Tenants</h1>
+                <div className=" flex flex-row justify-between items-center">
+                    <h1 className="text-3xl font-bold">Campaign</h1>
                     <div className="flex gap-5 items-center mt-5">
                         <div>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
@@ -211,7 +178,7 @@ export default function TenantTable() {
                             </button>
                             <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={onDownload}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
-                                    <FaFileExcel />
+                                    <FaFileExcel/>
                                 </IconContext.Provider>
                             </button>
                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => showModal("Create")}>
@@ -224,10 +191,10 @@ export default function TenantTable() {
                             <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search Tenant" 
                             onChange={(e) => {
                                 const search = e.target.value.toLowerCase();
-                                const filteredData = tenantMemo.filter((tenant) =>
+                                const filteredData = CampaignMemo.filter((tenant) =>
                                 tenant.company.toLowerCase().includes(search)
                                 );
-                                search === "" ? setTenants(tenantMemo) : setTenants(filteredData);
+                                search === "" ? setCampaign(CampaignMemo) : setCampaign(filteredData);
                             }}/>
                             <span className="absolute inset-y-0 right-0 flex items-center pr-3">
                                 <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -237,40 +204,49 @@ export default function TenantTable() {
                 </div>
                 <div className="rounded-md mt-5 shadow-xl overflow-auto">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-white uppercase bg-blue-500">
+                        <thead className="text-xs text-white uppercase bg-yellow-500">
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
+                                <th scope="col" className="px-6 py-3">Name</th>
+                                <th scope="col" className="px-6 py-3">Client</th>
+                                <th scope="col" className="px-6 py-3">Account</th>
+                                <th scope="col" className="px-6 py-3">Platform</th>
+                                <th scope="col" className="px-6 py-3">Objective</th>
+                                <th scope="col" className="px-6 py-3">Status</th>
                                 <th scope="col" className="px-6 py-3">Company</th>
-                                <th scope="col" className="px-6 py-3">Address</th>
-                                <th scope="col" className="px-6 py-3">Email</th>
-                                <th scope="col" className="px-6 py-3">Contact</th>
                                 <th scope="col" className="px-6 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                tenants.length > 0 ? tenants.map((tenant, index) => {
+                                Campaign.length > 0 ? Campaign.map((campaign, index) => {
                                     return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer">
+                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-yellow-200 hover:cursor-pointer">
                                             <td  scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.company}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.address}</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{campaign.name}</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{campaign.client_name}</td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                                             <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a></td>
+                                             {campaign.account_name}</td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                                               <a className="text-blue-500" href={`tel:${tenant.contact}`}>{tenant.contact}</a> </td>
+                                               {campaign.platform == "1" ? "Meta Ads" : campaign.platform == "2" ? "Tiktok Ads" : "Google Ads"}</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                                               {campaign.objective == "1" ? "Awareness" : campaign.objective == "2" ? "Conversion" : "Consideration"}</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                                               {campaign.status == "1" ? "Active" : campaign.status == "3" ? "Complete" : "Draft" }</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                                               {campaign.company_name}</td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
-                                                <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(tenant._id)}>
+                                                <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(campaign._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaEye />
                                                     </IconContext.Provider>
                                                 </button>
-                                                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
+                                                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md" onClick={() => showModal("Edit", campaign._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaPen />
                                                     </IconContext.Provider>
                                                 </button>
-                                                <button className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-red-500 py-2 px-4 rounded-md" onClick={() => handleDelete(tenant._id)}>
+                                                <button className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-red-500 py-2 px-4 rounded-md" onClick={() => handleDelete(campaign._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaTrash />
                                                     </IconContext.Provider>
@@ -278,7 +254,7 @@ export default function TenantTable() {
                                             </td>
                                         </tr>
                                     )
-                                }): <div className="animation-pulse text-center"> Loading ...</div>
+                                }) : <div className="text-center animate-pulse">Loading...</div>
                             }
                         </tbody>
                     </table>
@@ -326,37 +302,33 @@ export default function TenantTable() {
                         <label for="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
                         <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                             <option value="en">English</option>
+                            <option value="usa">Usa</option>
+                            <option value="jp">Japan</option>
                             <option value="id">Indonesia</option>
                         </select>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
                         <label for="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
-                        <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                            {
-                                culture.length > 0 ? culture.map((item) => (
-                                    <option value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
-                                )) : <option disabled>Loading</option>
-                            }
+                        <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                            <option value="en_EN">English</option>
+                            <option value="en_US">Usa</option>
+                            <option value="jp_JP">Japan</option>
+                            <option value="id_ID">Indonesia</option>
                         </select>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
                         <label for="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
                         <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                        {
-                                timezone.length > 0 ? timezone.map((item) => (
-                                    <option value={item.timezone}>{item.timezone}</option>
-                                )) : <option disabled>Loading</option>
-                            }
+                            <option value="asia/jakarta">asia/jakarta</option>
                         </select>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
                         <label for="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
                         <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                        {
-                                currency.length > 0 ? currency.map((item) => (
-                                    <option value={item.currency}>{item.currency}</option>
-                                )) : <option disabled>Loading</option>
-                            }
+                            <option value="USD">USD</option>
+                            <option value="YEN">YEN</option>
+                            <option value="EUR">EUR</option>
+                            <option value="IDR">IDR</option>
                         </select>
                     </div>
                     
@@ -375,7 +347,6 @@ export default function TenantTable() {
         </div>
     </div>
 </div> 
-
         </>
     )
 }

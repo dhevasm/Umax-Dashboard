@@ -100,7 +100,8 @@ export default function Sidebar({ onCampaignIDChange }){
                     {filteredCampaigns.map((campaign, index) =>(
                         <SidebarCard 
                             platform={campaign.campaign_platform} 
-                            name={campaign.campaign_name} status={campaign.status} 
+                            name={campaign.campaign_name} 
+                            status={campaign.Status === 3 ? "active" : "complete"} 
                             amountspend={campaign.amountspent} 
                             reach={campaign.reach} 
                             startdate={campaign.start_date} 

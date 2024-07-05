@@ -4,9 +4,9 @@ export default function SidebarCard({ platform, name, status, amountspend, reach
   const [Status, setStatus] = useState("");
 
   useEffect(() => {
-    if (status == 2) {
+    if (status == "active") {
       setStatus("bg-green-500");
-    } else if (status == 3) {
+    } else if (status == "complete") {
       setStatus("bg-yellow-500");
     } else {
       setStatus("bg-gray-500");
