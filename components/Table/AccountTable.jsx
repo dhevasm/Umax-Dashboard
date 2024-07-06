@@ -4,13 +4,14 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { AiOutlineFilePdf } from 'react-icons/ai';
 import { RiFileExcel2Line } from 'react-icons/ri';
+import LoadingCircle from '../Loading/LoadingCircle';
 
 const AccountTable = () => {
     const [tableData, setTableData] = useState([]);
     const [selectedPlatform, setSelectedPlatform] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [isWideScreen, setIsWideScreen] = useState(false); // Set default to false
+    const [isWideScreen, setIsWideScreen] = useState(true); // Set default to false
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     const fetchData = async () => {
@@ -151,19 +152,29 @@ const AccountTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredData.map((data, index) => (
-                                <tr key={index} className='border text-center'>
-                                    <td className='px-4 py-2 border text-nowrap'>{data.username}</td>
-                                    <td className='px-4 py-2 border text-nowrap'>{data.client_name}</td>
-                                    <td className='px-4 py-2 border text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
-                                    <td className='px-4 py-2 border text-nowrap'>{data.email}</td>
-                                    <td className='px-4 py-2 border text-nowrap'><StatusBadge status={data.status} /></td>
-                                    <td className='px-4 py-2 border text-nowrap'>
-                                        <button className='bg-blue-500 text-white px-4 py-2 rounded me-1'>Edit</button>
-                                        <button className='bg-red-500 text-white px-4 py-2 rounded'>Delete</button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {filteredData.length > 0 ? (
+                                filteredData.map((data, index) => (
+                                    <tr key={index} className='border text-center'>
+                                        <td className='px-4 py-2 border text-nowrap'>{data.username}</td>
+                                        <td className='px-4 py-2 border text-nowrap'>{data.client_name}</td>
+                                        <td className='px-4 py-2 border text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
+                                        <td className='px-4 py-2 border text-nowrap'>{data.email}</td>
+                                        <td className='px-4 py-2 border text-nowrap'><StatusBadge status={data.status} /></td>
+                                        <td className='px-4 py-2 border text-nowrap'>
+                                            <button className='bg-blue-500 text-white px-4 py-2 rounded me-1'>Edit</button>
+                                            <button className='bg-red-500 text-white px-4 py-2 rounded'>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )
+                                : (
+                                    <tr>
+                                        <td colSpan="6" className="text-center">
+                                            <LoadingCircle />
+                                        </td>
+                                    </tr>
+                                )
+                            }
                         </tbody>
                     </table>
                 </div>

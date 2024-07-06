@@ -2,12 +2,13 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import LoadingCircle from '../Loading/LoadingCircle';
 
 const ClientTable = () => {
     const [tableData, setTableData] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');    
     const [searchTerm, setSearchTerm] = useState('');
-    const [isWideScreen, setIsWideScreen] = useState(false);
+    const [isWideScreen, setIsWideScreen] = useState(true);
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     const fetchData = async () => {
@@ -138,19 +139,29 @@ const ClientTable = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredData.map((data, index) => (
-                                    <tr key={index} className='text-center'>
-                                        <td className='px-4 py-2 border'>{data.name}</td>
-                                        <td className='px-4 py-2 border'>{data.address}</td>
-                                        <td className='px-4 py-2 border'>{data.contact}</td>
-                                        <td className='px-4 py-2 border'>{data.email}</td>
-                                        <td className='px-4 py-2 border'><StatusBadge status={data.status} /></td>
-                                        <td className='px-4 py-2 border flex gap-1'>
-                                            <button className='bg-blue-500 text-white px-4 py-2 rounded me-1'>Edit</button>
-                                            <button className='bg-red-500 text-white px-4 py-2 rounded'>Delete</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filteredData.length > 0 ? (
+                                    filteredData.map((data, index) => (
+                                        <tr key={index} className='text-center'>
+                                            <td className='px-4 py-2 border'>{data.name}</td>
+                                            <td className='px-4 py-2 border'>{data.address}</td>
+                                            <td className='px-4 py-2 border'>{data.contact}</td>
+                                            <td className='px-4 py-2 border'>{data.email}</td>
+                                            <td className='px-4 py-2 border'><StatusBadge status={data.status} /></td>
+                                            <td className='px-4 py-2 border flex gap-1'>
+                                                <button className='bg-blue-500 text-white px-4 py-2 rounded me-1'>Edit</button>
+                                                <button className='bg-red-500 text-white px-4 py-2 rounded'>Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) :
+                                    (
+                                        <tr>
+                                            <td colSpan={6} className='px-4 py-2 border'>
+                                                <LoadingCircle />
+                                            </td>
+                                        </tr>
+                                    )
+                                }
                             </tbody>
                         </table>
                     </div>

@@ -7,6 +7,7 @@ import { RiFileExcel2Line } from "react-icons/ri";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
 import { AiOutlineFilePdf } from "react-icons/ai";
+import LoadingCircle from "../Loading/LoadingCircle";
 
 const CampaignTable = () => {
     const tableRef = useRef(null);
@@ -14,7 +15,7 @@ const CampaignTable = () => {
     const [selectedPlatform, setSelectedPlatform] = useState("");
     const [selectedObjective, setSelectedObjective] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [isWideScreen, setIsWideScreen] = useState(false);
+    const [isWideScreen, setIsWideScreen] = useState(true);
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
 
     const { onDownload } = useDownloadExcel({
@@ -156,8 +157,8 @@ const CampaignTable = () => {
             </div>
             <div className="bg-white border border-gray-300 rounded-lg p-5" style={{ width: "100%" }}>
                     <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
-                    <div className={`mb-4 flex flex-row items-start gap-4`}>
-                        {/* {'Filter starts here'} */}
+                        <div className={`mb-4 flex flex-row items-start gap-4`}>
+                            {/* {'Filter starts here'} */}
                             <input
                                 className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 text-[15px] text-semibold py-2`}
                                 // style={{ width: "200px" }}
@@ -192,8 +193,8 @@ const CampaignTable = () => {
                                 <option value="2">Concervation</option>
                                 <option value="3">Consideration</option>
                             </select>
-                        {/* {'Filter ends here'} */}
-                    </div>
+                            {/* {'Filter ends here'} */}
+                        </div>
                         <div className="w-full flex gap-3 justify-end pb-5">
                             <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
                             <button className="float-right border border-gray-300 rounded-lg px-4 py-2" >
@@ -219,51 +220,61 @@ const CampaignTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredData.map((data, index) => (
-                            <tr key={index} className="text-center">
-                                <td className="px-2 py-2 border text-nowrap">
-                                    <button className="text-blue-500">
-                                        <p className="underline">
-                                            {data.name}
-                                        </p>
+                            {filteredData.length > 0 ? (
+                                filteredData.map((data, index) => (
+                                <tr key={index} className="text-center">
+                                    <td className="px-2 py-2 border text-nowrap">
+                                        <button className="text-blue-500">
+                                            <p className="underline">
+                                                {data.name}
+                                            </p>
+                                        </button>
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.client_name}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.platform === 1
+                                        ? "Meta Ads"
+                                        : data.platform === 2
+                                        ? "Google Ads"
+                                        : "Tiktok Ads"}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.account_name}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.objective === 1
+                                        ? "Awareness"
+                                        : data.objective === 2
+                                        ? "Concervation"
+                                        : "Consideration"}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.start_date}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                        <StatusBadge status={data.status} />
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap flex">
+                                    <button className="bg-blue-500 text-white px-4 py-2 rounded me-1">
+                                        Edit
                                     </button>
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.client_name}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.platform === 1
-                                    ? "Meta Ads"
-                                    : data.platform === 2
-                                    ? "Google Ads"
-                                    : "Tiktok Ads"}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.account_name}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.objective === 1
-                                    ? "Awareness"
-                                    : data.objective === 2
-                                    ? "Concervation"
-                                    : "Consideration"}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.start_date}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                    <StatusBadge status={data.status} />
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap flex">
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded me-1">
-                                    Edit
-                                </button>
-                                <button className="bg-red-500 text-white px-4 py-2 rounded">
-                                    Delete
-                                </button>
-                                </td>
-                            </tr>
-                            ))}
+                                    <button className="bg-red-500 text-white px-4 py-2 rounded">
+                                        Delete
+                                    </button>
+                                    </td>
+                                </tr>
+                                ))
+                            )
+                            :   (
+                                <tr>
+                                    <td colSpan="7" className="text-center">
+                                        <LoadingCircle />
+                                    </td>
+                                </tr>
+                                )
+                            }
                         </tbody>
                     </table>
 

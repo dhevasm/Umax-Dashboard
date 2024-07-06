@@ -82,7 +82,7 @@ export default function Sidebar({ onCampaignIDChange }) {
             {/* Sidebar */}
             <div className="fixed mt-[100px] m-3 left-0 w-[348px] h-screen bg-white rounded-lg flex flex-col items-center px-3 z-10 transition-transform shadow-md md:pb-28" ref={sidebar}>
                 {/* Campaign Status Filter */}
-                <div className="m-3 mt-5 px-3 w-full bg-gray-200 p-2 rounded-full flex justify-between items-center text-md hover:cursor-pointer font-bold">
+                <div className="m-3 mt-5 px-5 w-full bg-gray-200 p-2 rounded-full flex justify-between items-center text-md hover:cursor-pointer font-bold">
                     <style jsx>
                         {`
                         .SidebarFilterActive {
@@ -100,10 +100,10 @@ export default function Sidebar({ onCampaignIDChange }) {
                         }
                         `}
                     </style>
-                    <p className="SidebarFilterActive hover:bg-slate-500 text-gray-600" id="all" onClick={() => handleClick(0, 'all')}>All</p>
-                    <p className="text-gray-600" id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
-                    <p className="text-gray-600" id="active" onClick={() => handleClick(1, 'active')}>Active</p>
-                    <p className="text-gray-600" id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
+                    <p className="SidebarFilterActive hover:bg-slate-500 text-gray-600 text-[17px]" id="all" onClick={() => handleClick(0, 'all')}>All</p>
+                    <p className="text-gray-600 text-[17px]" id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
+                    <p className="text-gray-600 text-[17px]" id="active" onClick={() => handleClick(1, 'active')}>Active</p>
+                    <p className="text-gray-600 text-[17px]" id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
                 </div>
 
                 {/* Search Bar */}
