@@ -8,7 +8,7 @@ import TableLoading from '@/components/Loading/TableLoading'
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
-const page = () => {
+const Page = () => {
 
   const router = useRouter();
   useEffect(() => {
@@ -23,7 +23,7 @@ const page = () => {
   return (
     <div className='w-full h-screen bg-white'>
       <Navbar />
-      <div className="w-full mt-16 h-fit">
+      <div className="w-full mt-20 h-fit">
         <div className="w-full h-full md:p-10 p-5 bg-white">
           <Suspense fallback={<TableLoading/>}>
             <AccountTable/>
@@ -34,4 +34,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

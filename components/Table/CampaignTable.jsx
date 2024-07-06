@@ -14,7 +14,7 @@ const CampaignTable = () => {
     const [selectedPlatform, setSelectedPlatform] = useState("");
     const [selectedObjective, setSelectedObjective] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 947);
+    const [isWideScreen, setIsWideScreen] = useState(false);
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
 
     const { onDownload } = useDownloadExcel({
@@ -48,6 +48,55 @@ const CampaignTable = () => {
     
         doc.save('campaigns.pdf');
     };
+
+    // Status Badge
+    function StatusBadge({ status }) {
+        let statusStyle = {}; // Objek gaya status
+
+        switch (status) {
+        case 1:
+            statusStyle = {
+            backgroundColor: "#DFFFDF",
+            color: '#00A600',
+            border: '0.3px solid #00CA00',
+            padding: '5px 13px',
+            fontSize: "12px",
+            borderRadius: '6px',
+            fontWeight: '500',
+            };
+            return (
+            <span style={statusStyle}>Active</span>
+            );
+        case 2:
+            statusStyle = {
+            backgroundColor: "#DCDCDC",
+            color: '#6F6F6F',
+            border: '0.3px solid #868686',
+            padding: '5px 15px',
+            fontSize: "12px",
+            borderRadius: '6px',
+            fontWeight: '500',
+            };
+            return (
+            <span style={statusStyle}>Draft</span>
+            );
+        case 3:
+            statusStyle = {
+            backgroundColor: "#FFF2D1",
+            color: '#E29117',
+            border: '0.3px solid #FF6B00',
+            padding: '4px 10px',
+            fontSize: "12px",
+            borderRadius: '7px',
+            fontWeight: '500',
+            };
+            return (
+            <span style={statusStyle}>Completed</span>
+            );
+        default:
+            return "Unknown";
+        }
+    }
 
     const fetchData = async () => {
         try {
@@ -95,6 +144,7 @@ const CampaignTable = () => {
     };
 
     useEffect(() => {
+        checkDeviceWidth();
         window.addEventListener("resize", checkDeviceWidth);
         return () => window.removeEventListener("resize", checkDeviceWidth);
     }, []);
@@ -105,7 +155,7 @@ const CampaignTable = () => {
                 <h1>Campaigns</h1>
             </div>
             <div className="bg-white border border-gray-300 rounded-lg p-5" style={{ width: "100%" }}>
-                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
+                    <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
                     <div className={`mb-4 flex flex-row items-start gap-4`}>
                         {/* {'Filter starts here'} */}
                             <input
@@ -144,16 +194,16 @@ const CampaignTable = () => {
                             </select>
                         {/* {'Filter ends here'} */}
                     </div>
-                    <div className="w-full flex gap-3 justify-end pb-5">
-                        <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
-                        <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={onDownload}>
-                            <RiFileExcel2Line className="relative font-medium text-lg" />
-                        </button>
-                        <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={generatePDF}>
-                            <AiOutlineFilePdf className="relative font-medium text-lg" />
-                        </button>
+                        <div className="w-full flex gap-3 justify-end pb-5">
+                            <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
+                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" >
+                                <RiFileExcel2Line className="relative font-medium text-lg" />
+                            </button>
+                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2">
+                                <AiOutlineFilePdf className="relative font-medium text-lg" />
+                            </button>
+                        </div>
                     </div>
-                </div>
                 <div className="overflow-x-auto rounded-md">
                     <table className="w-full border">
                         <thead className="bg-white">
@@ -202,11 +252,7 @@ const CampaignTable = () => {
                                 {data.start_date}
                                 </td>
                                 <td className="px-2 py-2 border text-nowrap">
-                                {data.status === 1
-                                    ? "Active"
-                                    : data.status === 2
-                                    ? "Draft"
-                                    : "Competed"}
+                                    <StatusBadge status={data.status} />
                                 </td>
                                 <td className="px-2 py-2 border text-nowrap flex">
                                 <button className="bg-blue-500 text-white px-4 py-2 rounded me-1">

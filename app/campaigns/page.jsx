@@ -7,7 +7,7 @@ import { Suspense, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
-const page = () => {
+const Page = () => {
     const Card = useRef(null);
     const router = useRouter();
     useEffect(() => {
@@ -22,7 +22,7 @@ const page = () => {
   return (
     <div className="w-full h-full bg-white">
       <Navbar />
-      <div className="w-full mt-16 h-full">
+      <div className="w-full mt-20 h-full">
         <div className="w-full h-[60%] md:p-10 p-5 bg-white">
           <Suspense fallback={<TableLoading/>}>
             <CampaignTable/>
@@ -33,4 +33,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

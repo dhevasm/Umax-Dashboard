@@ -284,8 +284,8 @@ export default function UserTable() {
                         <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
                         <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
                             {
-                                culture.length > 0 ? culture.map((item) => (
-                                    <option value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
+                                culture.length > 0 ? culture.map((item, index) => (
+                                    <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
                                 )) : <option disabled>Loading</option>
                             }
                         </select>
@@ -294,8 +294,8 @@ export default function UserTable() {
                         <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
                         <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                             {
-                                timezone.length > 0 ? timezone.map((item) => (
-                                    <option value={item.timezone}>{item.timezone}</option>
+                                timezone.length > 0 ? timezone.map((item, index) => (
+                                    <option key={index} value={item.timezone}>{item.timezone}</option>
                                 )) : <option disabled>Loading</option>
                             }
                         </select>
@@ -304,8 +304,8 @@ export default function UserTable() {
                         <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
                         <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                             {
-                                currency.length > 0 ? currency.map((item) => (
-                                    <option value={item.currency}>{item.currency}</option>
+                                currency.length > 0 ? currency.map((item, index) => (
+                                    <option key={index} value={item.currency}>{item.currency}</option>
                                 )) : <option disabled>Loading</option>
                             }
                         </select>

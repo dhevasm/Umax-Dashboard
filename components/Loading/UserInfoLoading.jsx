@@ -6,8 +6,8 @@ const UserInfoLoading = () => {
         <div className="flex items-center">
             <div className="w-8 h-8 rounded-full mr-2 bg-gray-300 animate-pulse"></div>
             <div className="flex flex-col">
-                <div className="text-sm font-medium bg-gray-300 text-transparent rounded-md animate-pulse w-20 h-4"></div>
-                <div className="text-xs text-gray-500 bg-gray-300 text-transparent rounded-md animate-pulse h-3 w-20 mt-1"></div>
+                <div className="text-sm font-medium bg-gray-300 text-transparent rounded-md animate-pulse w-24 h-4"></div>
+                <div className="text-xs text-gray-500 bg-gray-300 text-transparent rounded-md animate-pulse h-3 w-24 mt-1"></div>
             </div>
         </div>
         <div className="profile-dropdown hidden absolute z-10 mt-3 -right-7 p-3 bg-white border border-gray-100 shadow-md w-48 transition-all duration-3000">

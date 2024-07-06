@@ -26,7 +26,7 @@ export default function Performance({ id }) {
     const [soclp, setsOclp] = useState({})
     const [sctr, setsCtr] = useState({})
 
-    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 1000);
+    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth >= 1060);
     const [selected, setSelected] = useState('week');
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
@@ -60,9 +60,8 @@ export default function Performance({ id }) {
     }, [id]);
 
     const checkDeviceWidth = () => {
-        setIsWideScreen(window.innerWidth >= 1000);
+        setIsWideScreen(window.innerWidth >= 1060);
     };
-
 
     useEffect(() => {
         window.addEventListener("resize", checkDeviceWidth);
@@ -167,12 +166,12 @@ export default function Performance({ id }) {
                     ))
                     : 
                         <>
-                            <SuggestionCard Title={srar.title || ''} Desc={srar.msg} Color={srar.color || ''} Value={srar.value || ''} Target={srar.target | ''} Message={srar.message || ''} />
-                            <SuggestionCard Title={sroas.title || ''} Desc={sroas.msg} Color={sroas.color || ''} Value={sroas.value || ''} Target={sroas.target | ''} Message={sroas.message || ''} />
-                            <SuggestionCard Title={scpr.title || ''} Desc={scpr.msg} Color={scpr.color || ''} Value={scpr.value || ''} Target={scpr.target | ''} Message={scpr.message || ''} />
-                            <SuggestionCard Title={scpc.title || ''} Desc={scpc.msg} Color={scpc.color || ''} Value={scpc.value || ''} Target={scpc.target | ''} Message={scpc.message || ''} />
-                            <SuggestionCard Title={soclp.title || ''} Desc={soclp.msg} Color={soclp.color || ''} Value={soclp.value || ''} Target={soclp.target | ''} Message={soclp.message || ''} />
-                            <SuggestionCard Title={sctr.title || ''} Desc={sctr.msg} Color={sctr.color || ''} Value={sctr.value || ''} Target={sctr.target | ''} Message={sctr.message || ''} />
+                            <SuggestionCard Title={srar.title || ''} Desc={srar.msg} Color={srar.color || ''} Value={srar.value || ''} Target={srar.target || ''} Message={srar.message || ''} />
+                            <SuggestionCard Title={sroas.title || ''} Desc={sroas.msg} Color={sroas.color || ''} Value={sroas.value || ''} Target={sroas.target || ''} Message={sroas.message || ''} />
+                            <SuggestionCard Title={scpr.title || ''} Desc={scpr.msg} Color={scpr.color || ''} Value={scpr.value || ''} Target={scpr.target || ''} Message={scpr.message || ''} />
+                            <SuggestionCard Title={scpc.title || ''} Desc={scpc.msg} Color={scpc.color || ''} Value={scpc.value || ''} Target={scpc.target || ''} Message={scpc.message || ''} />
+                            <SuggestionCard Title={soclp.title || ''} Desc={soclp.msg} Color={soclp.color || ''} Value={soclp.value || ''} Target={soclp.target || ''} Message={soclp.message} />
+                            <SuggestionCard Title={sctr.title || ''} Desc={sctr.msg} Color={sctr.color || ''} Value={sctr.value || ''} Target={sctr.target || ''} Message={sctr.message || ''} />
                         </>
                     }
                 </div>

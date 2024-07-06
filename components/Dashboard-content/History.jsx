@@ -5,7 +5,6 @@ import axios from "axios";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { AiOutlineFilePdf } from "react-icons/ai";
 import TableLoading from "../Loading/TableLoading";
-import LoadingDots from "../Loading/LoadingDots";
 import LoadingCircle from "../Loading/LoadingCircle";
 
 export default function History({ id }) {
