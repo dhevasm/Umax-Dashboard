@@ -15,6 +15,11 @@ const Chart = ({ campaignID, time }) => {
 
     useEffect(() => {
         const getMetricByCampaign = async () => {
+        if (!campaignID) {
+            console.warn("No campaign ID provided");
+            return;
+        }
+
         try {
             const token = localStorage.getItem("jwtToken");
             if (selected === "week") {
