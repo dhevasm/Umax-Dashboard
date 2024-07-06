@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useEffect } from 'react'
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 import { CiGlobe, CiEdit } from 'react-icons/ci';
@@ -10,6 +10,8 @@ import { VscSymbolEnum } from 'react-icons/vsc';
 import { LiaMoneyBillWaveAltSolid } from 'react-icons/lia';
 import { GiGlobe } from 'react-icons/gi'
 import { FaUsersCog } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 const Page = () => {
     const [name, setName] = useState('')
@@ -21,6 +23,16 @@ const Page = () => {
     const [language, setlanguage] = useState('')
     const [timezone_name, settimezone_name] = useState('')
     const [culture, setculture] = useState('')
+
+    const router = useRouter();
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+        Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+            router.push('/');
+        });
+        }
+    }, [router]);
 
 
 

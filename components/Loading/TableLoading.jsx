@@ -1,9 +1,13 @@
 import React from 'react'
+import { usePathname } from 'next/navigation'
 
 const TableLoading = () => {
+
   return (
     <div className="w-full h-full bg-white">
-      <div className="w-32 h-11 rounded-full bg-gray-300 animate-pulse mb-10"></div>
+      {!usePathname().includes('/dashboard') && (
+        <div className="w-32 h-11 rounded-full bg-gray-300 animate-pulse mb-10"></div>
+      )}
       <div className="bg-white rounded-lg shadow-lg p-3 overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">

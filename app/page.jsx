@@ -5,13 +5,14 @@ import { useFormik } from 'formik'
 import Link from 'next/link'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useRouter } from 'next/navigation'
+import Swal from 'sweetalert2'
 
 const Page = () => {
   
   const [error, setError] = useState()
   const router = useRouter()
 
-  const loading = useRef(null)
+  const [loading, setLoading] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -24,14 +25,19 @@ const Page = () => {
       // Cek apakah email dan password kosong
       if (!values.email && !values.password) {
         setError('Please fill in all fields');
+        setLoading(false);
         return;
       } else if(!values.email) {
         setError('Email is required');
+        setLoading(false);
         return;
       } else if(!values.password) {
         setError('Password is required');
+        setLoading(false);
         return;
       }
+
+      setLoading(true);
 
       // const { Token } = response.Data;
       fetch(`https://umaxxnew-1-d6861606.deta.app/login`, {
@@ -68,16 +74,27 @@ const Page = () => {
         })
         .catch(error => {
           // // Handle network errors
+          setLoading(false);
           if (error.message.includes('ERR_NAME_NOT_RESOLVED')) {
             setError('Network error. Please check your internet connection and try again.');
           } else {
             // Handle other types of errors
-            setError('Login failed. Please check your email and password.');
+            setError('Please check your email and password.');
           }
           console.log(error)
         });
     },
   });
+
+  const LoadingCircle = () => {
+    return (
+        <div className="flex justify-center items-center h-8">
+          <div className="relative">
+            <div className="w-7 h-7 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
+          </div>
+        </div>
+      );
+  };
 
   // set Timeout error
   useEffect(() => {
@@ -96,6 +113,15 @@ const Page = () => {
     setShowPassword(!showPassword);
   };
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      Swal.fire('Already logged in', 'Welcome back!', 'warning').then(() => {
+        router.push('/dashboard');
+      });
+    }
+  }, [router]);
 
 
   return (
@@ -136,7 +162,7 @@ const Page = () => {
             </div>
             {error && (
               <div
-                className="w-full mt-2 bg-red-200 h-12 p-3 rounded-md border-2 border-red-400 animate-pulse transition-all duration-200"
+                className="w-full mt-2 text-[15px] md:text-base bg-red-200 h-12 p-3 rounded-md border-2 border-red-400 animate-pulse transition-all duration-200"
                 style={{ opacity: 1 }}
                 onAnimationEnd={() => setError(null)}
               >
@@ -146,9 +172,9 @@ const Page = () => {
             <button
               type="submit"
               className="w-full h-12 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
-              onClick={() => loading.current.classList.toggle('hidden')}
+              // onClick={() => setLoading(true)}
             >
-              SIGN IN
+              {loading ? <LoadingCircle /> : 'Sign In'}
             </button>
             <div className='flex justify-between items-center'>
             <Link
@@ -157,7 +183,7 @@ const Page = () => {
             >
               <p className="text-[#5473E3] mb-2 mt-2">Forgot Password?</p>
             </Link>
-            <img src="../assets/loading.gif" alt="Loading" className="w-10 hidden" ref={loading} />
+            {/* <img src="../assets/loading.gif" alt="Loading" className="w-10 hidden" ref={loading} /> */}
             </div>
           </form>
         </div>

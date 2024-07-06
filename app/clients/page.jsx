@@ -1,10 +1,26 @@
-import React, { Suspense } from 'react'
+'use client'
+
+import React, { Suspense, useEffect } from 'react'
 
 import Navbar from "@/components/Navbar"
 import ClientTable from '@/components/Table/ClientTable'
 import TableLoading from '@/components/Loading/TableLoading'
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const page = () => {
+
+  const router = useRouter();
+  useEffect(() => {
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+      Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+          router.push('/');
+      });
+      }
+  }, [router]);
+
+
   return (
     <div className='w-full h-screen bg-white'>
       <Navbar />

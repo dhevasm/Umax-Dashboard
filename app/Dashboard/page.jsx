@@ -3,6 +3,8 @@
 import axios from "axios"
 import { useState, useEffect, useRef, createContext, useMemo, use } from "react"
 import { Suspense } from "react"
+import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
 
 // Components
 import Navbar from "@/components/Navbar"
@@ -22,6 +24,7 @@ export default function Dashboard() {
 
     // expanse card start
     const Card = useRef(null)
+    const router = useRouter()
     const [campaignID, setCampaignID] = useState('');
     const [name, setName] = useState('');
     const [platform, setPlatform] = useState('');
@@ -61,6 +64,16 @@ export default function Dashboard() {
         setActiveContent(Link)
     }
     // Dashboard Link active end
+
+    // Check if user is already logged in
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+        Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+            router.push('/');
+        });
+        }
+    }, [router]);
 
     return (
         <>
@@ -126,7 +139,7 @@ export default function Dashboard() {
                     {activeContent === "performance" && <Performance key={campaignID} id={campaignID}/>}
                     {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID}/>}
                     {activeContent === "history" && <History key={campaignID} id={campaignID}/>}
-                    {activeContent === "setting" && <Setting/>}
+                    {activeContent === "setting" && <Setting key={campaignID} id={campaignID}/>}
                 </div>
             </div>
         </div>

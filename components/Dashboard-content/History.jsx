@@ -5,6 +5,8 @@ import axios from "axios";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { AiOutlineFilePdf } from "react-icons/ai";
 import TableLoading from "../Loading/TableLoading";
+import LoadingDots from "../Loading/LoadingDots";
+import LoadingCircle from "../Loading/LoadingCircle";
 
 export default function History({ id }) {
     const [data, setData] = useState([]);
@@ -47,7 +49,6 @@ export default function History({ id }) {
                         </Suspense>
                     ) : (
                         <>
-                            <h1 className="text-2xl font-semibold mb-3">History</h1>
                             <div className="w-full flex gap-3 justify-end pb-5">
                                 <button className="float-right border border-gray-300 rounded-lg px-3 py-2">
                                     <RiFileExcel2Line className="relative font-medium text-lg" />
@@ -56,43 +57,76 @@ export default function History({ id }) {
                                     <AiOutlineFilePdf className="relative font-medium text-lg" />
                                 </button>
                             </div>
-                            <div className='overflow-x-auto'>
+                            <div className={`overflow-x-auto ${currentData.length > 0 ? 'shadow-md' : 'shadow-lg'}`}>
                                 <table className='w-full border-collapse'>
-                                    <thead className='bg-white'>
-                                        <tr className='text-left'>
-                                            <th className='px-4 py-2 border text-nowrap'>Last Update</th>
-                                            <th className='px-4 py-2 border text-nowrap'>Amount Spent</th>
-                                            <th className='px-4 py-2 border text-nowrap'>Reach</th>
-                                            <th className='px-4 py-2 border text-nowrap'>Impression</th>
-                                            <th className='px-4 py-2 border text-nowrap'>Frequency</th>
-                                            <th className='px-4 py-2 border text-nowrap'>RAR</th>
-                                            <th className='px-4 py-2 border text-nowrap'>CPC</th>
-                                            <th className='px-4 py-2 border text-nowrap'>CTR</th>
-                                            <th className='px-4 py-2 border text-nowrap'>OCLP</th>
-                                            <th className='px-4 py-2 border text-nowrap'>CPR</th>
-                                            <th className='px-4 py-2 border text-nowrap'>ATC</th>
-                                            <th className='px-4 py-2 border text-nowrap'>ROAS</th>
-                                            <th className='px-4 py-2 border text-nowrap'>Real ROAS</th>
-                                        </tr>
+                                    <thead className={currentData.length > 0 ? 'bg-blue-100' : 'bg-gray-100 rounded-md'}>
+                                        {currentData.length > 0 ? (
+                                            <tr>
+                                                <th className='px-4 py-2 border text-nowrap'>Date</th>
+                                                <th className='px-4 py-2 border text-nowrap'>Amount Spent</th>
+                                                <th className='px-4 py-2 border text-nowrap'>Platform</th>
+                                                <th className='px-4 py-2 border text-nowrap'>Impressions</th>
+                                                <th className='px-4 py-2 border text-nowrap'>Frequency</th>
+                                                <th className='px-4 py-2 border text-nowrap'>RAR</th>
+                                                <th className='px-4 py-2 border text-nowrap'>CPC</th>
+                                                <th className='px-4 py-2 border text-nowrap'>CTR</th>
+                                                <th className='px-4 py-2 border text-nowrap'>OCLP</th>
+                                                <th className='px-4 py-2 border text-nowrap'>CPR</th>
+                                                <th className='px-4 py-2 border text-nowrap'>ATC</th>
+                                                <th className='px-4 py-2 border text-nowrap'>ROAS</th>
+                                                <th className='px-4 py-2 border text-nowrap'>Real ROAS</th>
+                                            </tr>
+                                        ) : (  
+                                            <tr>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <span className="bg-gray-300 text-nowrap w-20 text-transparent h-10 rounded-full animate-pulse">lorem ipsum</span>
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <span className="bg-gray-300 text-nowrap w-20 text-transparent h-10 rounded-full animate-pulse">lorem ipsum</span>
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <span className="bg-gray-300 text-nowrap w-20 text-transparent h-10 rounded-full animate-pulse">lorem ipsum</span>
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <span className="bg-gray-300 text-nowrap w-20 text-transparent h-10 rounded-full animate-pulse">lorem ipsum</span>
+                                                </th>
+                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <span className="bg-gray-300 text-nowrap w-20 text-transparent h-10 rounded-full animate-pulse">lorem ipsum</span>
+                                                </th>
+                                            </tr>
+                                        )}
                                     </thead>
                                     <tbody>
-                                        {currentData.map((data, index) => (
-                                            <tr key={index} className='border text-center'>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.timestamp_update}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.amountspent}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.reach === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.impressions}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.frequency}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.rar}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.cpc}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.ctr}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.oclp}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.cpr}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.atc}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.roas}</td>
-                                                <td className='px-4 py-2 border text-nowrap'>{data.realroas}</td>
-                                            </tr>
-                                        ))}
+                                        {currentData.length > 0 ? (
+                                            currentData.map((data, index) => (
+                                                <>
+                                                    <tr key={index} className='border text-center'>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.timestamp_update}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.amountspent}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.reach === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.impressions}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.frequency}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.rar}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.cpc}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.ctr}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.oclp}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.cpr}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.atc}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.roas}</td>
+                                                        <td className='px-4 py-2 border text-nowrap'>{data.realroas}</td>
+                                                    </tr>
+                                                </>
+                                            ))
+                                        )
+                                        :
+                                            (
+                                                <tr>
+                                                    <td className='px-4 py-2 border text-center' colSpan='13'>
+                                                        <LoadingCircle />
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
                                     </tbody>
                                 </table>
                             </div>

@@ -1,154 +1,146 @@
-'use client'
-import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import SettingLoading from '../Loading/SettingLoading';
+import { RiRefreshLine } from 'react-icons/ri';
 
-const Setting = ({ campaign_id }) => {
+const Setting = ({ id }) => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
-  async function getData() {
-    await axios
-      .get(
-        `https://umaxxnew-1-d6861606.deta.app/side-cart?campaign_id=${campaign_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        setData(res.data.Data);
-        // console.log(res.data.Data)
-      })
-      .catch((err) => {
-        console.log(err);
+  const getMetricByCampaign = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('jwtToken');
+      const response = await axios.get(`${umaxUrl}/metrics-settings-by?campaign_id=${id}&tenantId=${localStorage.getItem('tenantId')}`, {
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Bearer ${token}`,
+        },
       });
-  }
+      setData([response.data.Data[0]]);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    getData();
-  }, [campaign_id]);
+    getMetricByCampaign();
+  }, []);
+
+  const handleChange = (index, field, value) => {
+    const newData = [...data];
+    newData[index][field] = value;
+    setData(newData);
+  };
+
+  const handleRefresh = () => {
+    getMetricByCampaign();
+  };
 
   return (
-    <>
-      {data.length !== 0 ? (
-        <div className="w-full md:w-1/2">
-          <div className="ms-16 mt-7 flex flex-col md:flex-row md:justify-between gap-2">
-            <div>
-              <label htmlFor="rar">React Amount Ratio (RAR)</label>
-              <p className="font-thin">
-                {"Recomended value " + data[0].rar.target}
-              </p>
-            </div>
-            <div className="w-2/3 md:w-1/5 flex items-center rounded">
-              <input
-                type="text"
-                className="border border-gray-400  py-2 px-4 rounded-s-lg"
-                value={data[0].rar.value}
-              />
-              <h1 className=" text-xl bg-blue-500 text-white px-3 py-2 rounded-e-lg">
-                %
-              </h1>
-            </div>
-          </div>
-          <div className="ms-16 mt-7 flex flex-col md:flex-row md:justify-between gap-2">
-            <div>
-              <label htmlFor="rar">Click Throught Rate (CTR)</label>
-              <p className="font-thin">
-                {"Recomended value " + data[5].ctr.target}
-              </p>
-            </div>
-            <div className="w-2/3 md:w-1/5 flex items-center rounded">
-              <input
-                type="text"
-                className="border border-gray-400  py-2 px-4 rounded-s-lg"
-                value={data[5].ctr.value}
-              />
-              <h1 className=" text-xl bg-blue-500 text-white px-3 py-2 rounded-e-lg">
-                %
-              </h1>
-            </div>
-          </div>
-          <div className="ms-16 mt-7 flex flex-col md:flex-row md:justify-between gap-2">
-            <div>
-              <label htmlFor="rar">Outbont Click Landing Page (OCLP)</label>
-              <p className="font-thin">
-                {"Recomended value " + data[1].oclp.target}
-              </p>
-            </div>
-            <div className="w-2/3 md:w-1/5 flex items-center rounded">
-              <input
-                type="text"
-                className="border border-gray-400  py-2 px-4 rounded-s-lg"
-                value={data[1].oclp.value}
-              />
-              <h1 className=" text-xl bg-blue-500 text-white px-3 py-2 rounded-e-lg">
-                %
-              </h1>
-            </div>
-          </div>
-          <div className="ms-16 mt-7 flex flex-col md:flex-row md:justify-between gap-2">
-            <div>
-              <label htmlFor="rar">Return on AD Spent (ROAS)</label>
-              <p className="font-thin">
-                {"Recomended value " + data[4].roas.target}
-              </p>
-            </div>
-            <div className="w-2/3 md:w-1/5 flex items-center rounded">
-              <input
-                type="text"
-                className="border border-gray-400  py-2 px-4 rounded-s-lg"
-                value={data[4].roas.value}
-              />
-              <h1 className=" text-xl bg-blue-500 text-white px-3 py-2 rounded-e-lg">
-                %
-              </h1>
-            </div>
-          </div>
-          <div className="ms-16 mt-7 flex flex-col md:flex-row md:justify-between gap-2">
-            <div>
-              <label htmlFor="rar">Cost per Result (CPR)</label>
-              <p className="font-thin">
-                {"Recomended value " + data[2].cpr.target}
-              </p>
-            </div>
-            <div className="w-2/3 md:w-1/5 flex items-center rounded">
-              <h1 className=" text-xl bg-blue-500 text-white px-3 py-2 rounded-s-lg">
-                Rp
-              </h1>
-              <input
-                type="text"
-                className="border border-gray-400  py-2 px-4 rounded-e-lg"
-                value={data[2].cpr.value}
-              />
-            </div>
-          </div>
-          <div className="ms-16 mt-7 flex flex-col md:flex-row md:justify-between gap-2">
-            <div>
-              <label htmlFor="rar">Cost per Click (CPC)</label>
-              <p className="font-thin">
-                {"Recomended value " + data[3].cpc.target}
-              </p>
-            </div>
-            <div className="w-2/3 md:w-1/5 flex items-center rounded">
-              <h1 className=" text-xl bg-blue-500 text-white px-3 py-2 rounded-s-lg">
-                Rp
-              </h1>
-              <input
-                type="text"
-                className="border border-gray-400  py-2 px-4 rounded-e-lg"
-                value={data[3].cpc.value}
-              />
-            </div>
-          </div>
-
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute right-0 bottom-5 mt-5 me-20">
-            Save
-          </button>
-        </div>
+    <div className=''>
+      {id === '' ? (
+        <SettingLoading />
       ) : (
-        "Pilih Campaign Terlebih Dahulu"
+        <div className='h-screen w-full flex flex-col bg-white'>
+          <div className='w-full float-right h-2 flex justify-end mb-3 items-center'>
+            <button
+              className='transition duration-300'
+              onClick={handleRefresh}
+              disabled={loading}
+              title='Refresh'
+            >
+              <RiRefreshLine size={24} className='me-7'/>
+            </button>
+          </div>
+          {data.map((item, index) => (
+            <div key={index} className='p-6 mb-8 bg-white rounded-lg'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-10 mb-8'>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700'>
+                    Reach Amount Ratio (RAR)
+                  </label>
+                  <p className='text-xs text-gray-500'>Recommended value &gt; 5%</p>
+                  <input
+                    type="text"
+                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    value={item.rar}
+                    onChange={(e) => handleChange(index, 'rar', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700'>
+                    Click Through Rate (CTR)
+                  </label>
+                  <p className='text-xs text-gray-500'>Recommended value &gt; 1.5%</p>
+                  <input
+                    type="text"
+                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    value={item.ctr}
+                    onChange={(e) => handleChange(index, 'ctr', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700'>
+                    Outbound Click Landing Page (OCLP)
+                  </label>
+                  <p className='text-xs text-gray-500'>Recommended value &gt; 80%</p>
+                  <input
+                    type="text"
+                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    value={item.oclp}
+                    onChange={(e) => handleChange(index, 'oclp', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700'>
+                    Return on AD Spent (ROAS)
+                  </label>
+                  <p className='text-xs text-gray-500'>Recommended value &gt; 3.0x</p>
+                  <input
+                    type="text"
+                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    value={item.roas}
+                    onChange={(e) => handleChange(index, 'roas', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700'>
+                    Cost per Result (CPR)
+                  </label>
+                  <p className='text-xs text-gray-500'>Recommended value &lt; Rp. 5000</p>
+                  <input
+                    type="text"
+                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    value={item.cpr}
+                    onChange={(e) => handleChange(index, 'cpr', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700'>
+                    Cost per Click (CPC)
+                  </label>
+                  <p className='text-xs text-gray-500'>Recommended value &lt; Rp. 1000</p>
+                  <input
+                    type="number"
+                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    value={item.cpc}
+                    onChange={(e) => handleChange(index, 'cpc', e.target.value)}
+                  />
+                </div>
+              </div>
+              <button className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'>
+                Save
+              </button>
+            </div>
+          ))}
+        </div>
       )}
-    </>
+    </div>
   );
 };
 
