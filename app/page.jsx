@@ -23,12 +23,15 @@ const Page = () => {
 
       // Cek apakah email dan password kosong
       if (!values.email && !values.password) {
+        loading.current.classList.add('hidden')
         setError('Please fill in all fields');
         return;
       } else if(!values.email) {
+        loading.current.classList.add('hidden')
         setError('Email is required');
         return;
       } else if(!values.password) {
+        loading.current.classList.add('hidden')
         setError('Password is required');
         return;
       }
@@ -45,6 +48,7 @@ const Page = () => {
 
         .then(response => {
           if (!response.ok) {
+            loading.current.classList.add('hidden')
             throw new Error('Login failed');
           }
           return response.json();
@@ -146,7 +150,7 @@ const Page = () => {
             <button
               type="submit"
               className="w-full h-12 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
-              onClick={() => loading.current.classList.toggle('hidden')}
+              onClick={() => loading.current.classList.remove('hidden')}
             >
               SIGN IN
             </button>

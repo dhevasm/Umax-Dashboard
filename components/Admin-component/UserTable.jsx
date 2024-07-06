@@ -14,6 +14,7 @@ import { FaPlus } from "react-icons/fa"
 import { FaPen } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaEye } from "react-icons/fa"
+import { FaTimes } from "react-icons/fa"
 export default function UserTable() {
 
     const [Users, setUsers] = useState([])
@@ -166,7 +167,7 @@ export default function UserTable() {
                                     <FaFileExcel />
                                 </IconContext.Provider>
                             </button>
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded opacity-30" onClick={() => showModal("Create")} disabled>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded opacity-30" onClick={() => showModal("Create")}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <FaPlus />
                                 </IconContext.Provider>
@@ -230,7 +231,7 @@ export default function UserTable() {
                                             </td>
                                         </tr>
                                     )
-                                }) : <div className="animation-pulse text-center">Loading...</div>
+                                }) : <tr className="text-center animate-pulse"><td>Loading...</td></tr>
                             }
                         </tbody>
                     </table>
@@ -248,41 +249,39 @@ export default function UserTable() {
                 <h3 className="text-lg font-semibold text-gray-900 ">
                     {`${modeModal} User`}
                 </h3>
-                <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
-                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
+                <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                    <FaTimes/>
                 </button>
             </div>
             {/* <!-- Modal body --> */}
             <div className="p-4 md:p-5">
                 <div className="grid gap-4 mb-4 grid-cols-2">
                     <div className="col-span-2">
-                        <label for="name" className="block mb-2 text-sm font-medium text-gray-900 ">Company Name</label>
+                        <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Company Name</label>
                         <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company name here"
                         required/>
                     </div>
                     <div className="col-span-2">
-                        <label for="address" className="block mb-2 text-sm font-medium text-gray-900 ">Company Address</label>
+                        <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Company Address</label>
                         <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company adress here" required/>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
-                        <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
+                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
                         <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required/>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
-                        <label for="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact</label>
+                        <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact</label>
                         <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required/>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
-                        <label for="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
+                        <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
                         <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                             <option value="en">English</option>
                             <option value="id">Indonesia</option>
                         </select>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
-                        <label for="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
+                        <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
                         <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
                             {
                                 culture.length > 0 ? culture.map((item) => (
@@ -292,7 +291,7 @@ export default function UserTable() {
                         </select>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
-                        <label for="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
+                        <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
                         <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                             {
                                 timezone.length > 0 ? timezone.map((item) => (
@@ -302,7 +301,7 @@ export default function UserTable() {
                         </select>
                     </div>
                     <div className="col-span-2 sm:col-span-1">
-                        <label for="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
+                        <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
                         <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                             {
                                 currency.length > 0 ? currency.map((item) => (
@@ -314,7 +313,7 @@ export default function UserTable() {
                     
                 </div>
                     <div className="col-span-2 sm:col-span-1">
-                        <label for="currentposition" className="block mb-2 text-sm font-medium text-gray-900">Current Position</label>
+                        <label htmlFor="currentposition" className="block mb-2 text-sm font-medium text-gray-900">Current Position</label>
                         <div className="flex items-center gap-20 justify-between">
                             <select id="currentposition" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                 <option value="true">True</option>

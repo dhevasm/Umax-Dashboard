@@ -9,17 +9,17 @@ import jsPDF from "jspdf"
 import 'jspdf-autotable'
 import { IconContext } from "react-icons"
 import { AiOutlineFilePdf } from "react-icons/ai"
-import { FaFileExcel } from "react-icons/fa"
+import { FaArrowLeft, FaArrowRight, FaFileExcel } from "react-icons/fa"
 import { FaPlus } from "react-icons/fa"
 import { FaPen } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaEye } from "react-icons/fa"
+import { FaTimes } from "react-icons/fa"
 export default function TenantTable() {
 
     const [tenants, setTenants] = useState([])
     const [tenantMemo, setTenantMemo] = useState([])
-    const [editTenant, setEditTenant] = useState([])
-
+    const [EditTenantId, setEditTenantId] = useState(null)
 
     const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
 
@@ -31,21 +31,33 @@ export default function TenantTable() {
         if(mode == "Edit"){
             const filteredTenant = tenantMemo.filter(tenant => tenant._id === tenant_id);
             if(filteredTenant.length > 0){
-                setEditTenant(filteredTenant[0]);
-            } else {
+                console.log(filteredTenant[0])
+                setEditTenantId(tenant_id)
+                document.getElementById('name').value = filteredTenant[0].company
+                document.getElementById('address').value = filteredTenant[0].address
+                document.getElementById('contact').value = filteredTenant[0].contact.slice(1)
+                document.getElementById('email').value = filteredTenant[0].email
+                document.getElementById('language').value = filteredTenant[0].language
+                document.getElementById('culture').value = filteredTenant[0].culture
+                document.getElementById('currency').value = filteredTenant[0].currency
+                document.getElementById('input_timezone').value = filteredTenant[0].timezone_name
+                document.getElementById('currencyposition').value = filteredTenant[0].currency_position
+                
+            } else{
                 Swal.fire("Tenant not found");
             }
+        }else if(mode == "Create") {
+            document.getElementById('name').value = null
+            document.getElementById('address').value = null
+            document.getElementById('contact').value = null
+            document.getElementById('email').value = null  
         }
         addModal.current.classList.remove("hidden")
     }
     function closeModal(){
         addModal.current.classList.add("hidden")
     }
-
-    useEffect(() => {
-        console.log(editTenant)
-    }, [editTenant])
-
+    
     function handleDelete(tenant_id){
         Swal.fire({
             title: "Are you sure?",
@@ -121,6 +133,9 @@ export default function TenantTable() {
         })
         setTenants(response.data.Data)
         setTenantMemo(response.data.Data)
+        setTotalPages(Math.ceil(tenants.length / itemsPerPage));
+        setFirstPage(0);
+        setLastPage(itemsPerPage);
     }
 
     useEffect(() => {
@@ -130,13 +145,13 @@ export default function TenantTable() {
     async function createTenant(){
         const company = document.getElementById('name').value
         const address = document.getElementById('address').value
-        const contact = document.getElementById('contact').value
+        const contact = `+${document.getElementById('contact').value}`
         const email = document.getElementById('email').value
         const language = document.getElementById('language').value
         const culture = document.getElementById('culture').value
         const currency = document.getElementById('currency').value
         const timezone = document.getElementById('input_timezone').value
-        const currentposition = document.getElementById('currentposition').value
+        const currencyposition = document.getElementById('currencyposition').value
 
         const formData = new FormData();
         formData.append('company', company);
@@ -147,7 +162,7 @@ export default function TenantTable() {
         formData.append('culture', culture);
         formData.append('currency', currency);
         formData.append('input_timezone', timezone);
-        formData.append('currency_position', currentposition);
+        formData.append('currency_position', currencyposition);
 
         const response = await axios.post('https://umaxxnew-1-d6861606.deta.app/tenant-create', formData, {
             headers: {
@@ -165,7 +180,49 @@ export default function TenantTable() {
             document.getElementById('email').value = null
             Swal.fire("Success", "Tenant created successfully", "success")
         }else{
-            Swal.fire("Error", response.data.Message, "error")
+            Swal.fire("Error", response.detail, "error")
+        }
+    }
+
+    async function updateTenant(){
+        if(EditTenantId !== null) {
+            const company = document.getElementById('name').value
+            const address = document.getElementById('address').value
+            const contact = `+${document.getElementById('contact').value}`
+            const email = document.getElementById('email').value
+            const language = document.getElementById('language').value
+            const culture = document.getElementById('culture').value
+            const currency = document.getElementById('currency').value
+            const timezone = document.getElementById('input_timezone').value
+            const currencyposition = document.getElementById('currencyposition').value
+            const formData = new FormData();
+            formData.append('company', company);
+            formData.append('address', address);
+            formData.append('email', email);
+            formData.append('contact', contact);
+            formData.append('language', language);
+            formData.append('culture', culture);
+            formData.append('currency', currency);
+            formData.append('input_timezone', timezone);
+            formData.append('currency_position', currencyposition);
+    
+            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/tenant-edit?tenantId=${EditTenantId}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            })
+    
+            if(response.data.Output == "Data Updated Successfully"){
+                getTenants()
+                closeModal()
+                document.getElementById('name').value = null
+                document.getElementById('address').value = null
+                document.getElementById('contact').value = null
+                document.getElementById('email').value = null
+                Swal.fire("Success", "Tenant Updated", "success")
+            }else{
+                Swal.fire("Error", response.detail.ErrMsg, "error")
+            }
         }
     }
 
@@ -192,17 +249,79 @@ export default function TenantTable() {
         getSelectFrontend()
     }, [])
 
-    useEffect(() => {
-        console.log(culture)
-    }, [culture])
 
+    // Pagination
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
+    const [firstPage, setFirstPage] = useState(0);
+    const [lastPage, setLastPage] = useState(10);
+
+    useEffect(() => {
+        setCurrentPage(1);
+        setTotalPages(Math.ceil(tenants.length / itemsPerPage));
+        setFirstPage(0);
+        setLastPage(itemsPerPage);
+    }, [tenants, itemsPerPage]);
+
+    const firstPageButton = useRef(null);
+    const previousButton = useRef(null);
+    const nextButton = useRef(null);
+    const lastPageButton = useRef(null);
+
+    useEffect(() => {
+        setFirstPage((currentPage - 1) * itemsPerPage);
+        setLastPage(currentPage * itemsPerPage);
+        if(currentPage == 1){
+            firstPageButton.current.classList.add("paginDisable");
+            previousButton.current.classList.add("paginDisable");
+            nextButton.current.classList.remove("paginDisable");
+            lastPageButton.current.classList.remove("paginDisable");
+        }else if(currentPage == totalPages){
+            nextButton.current.classList.add("paginDisable");
+            lastPageButton.current.classList.add("paginDisable");
+            firstPageButton.current.classList.remove("paginDisable");
+            previousButton.current.classList.remove("paginDisable");
+        }else{
+            firstPageButton.current.classList.remove("paginDisable");
+            previousButton.current.classList.remove("paginDisable");
+            nextButton.current.classList.remove("paginDisable");
+            lastPageButton.current.classList.remove("paginDisable");
+        }
+    }, [currentPage]);
+
+    function handleNextButton(){
+        if(currentPage < totalPages){
+            setCurrentPage(currentPage + 1);
+        }
+    }
+
+    function handlePreviousButton(){
+        if(currentPage > 1){
+            setCurrentPage(currentPage - 1);
+        }
+    }
+
+    function handleFristPageButton(){
+        if(currentPage > 1){
+            setCurrentPage(1);
+        }
+    }
+
+    function handleLastPageButton(){
+        if(currentPage < totalPages){
+            setCurrentPage(totalPages);
+        }
+    }
 
     return (
         <>
-            <div className="w-full pb-20 mt-10">
-                <div className=" flex flex-row justify-between items-center w-full">
+            <div className="w-full pb-20">
+                <div className="border-t border-gray-300 my-5"></div>
+                <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
                     <h1 className="text-3xl font-bold">Tenants</h1>
-                    <div className="flex gap-5 items-center mt-5">
+                    <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
                         <div>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
@@ -236,7 +355,7 @@ export default function TenantTable() {
                     </div>
                 </div>
                 <div className="rounded-md mt-5 shadow-xl overflow-auto">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" ref={tableRef}>
+                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
                         <thead className="text-xs text-white uppercase bg-blue-500">
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
@@ -278,103 +397,133 @@ export default function TenantTable() {
                                             </td>
                                         </tr>
                                     )
-                                }): <div className="animation-pulse text-center"> Loading ...</div>
+                            }).slice(firstPage, lastPage) : <tr className="text-center animate-pulse"><td>Loading...</td></tr>
                             }
                         </tbody>
                     </table>
                 </div>
-            </div>
+                <style jsx>
+                    {
+                        `
+                            .paginDisable{
+                                opacity:0.5;
+                            }
+                        `
+                    }
 
-{/* <!-- Main modal --> */}
-<div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-
-    <div className="relative p-4 w-full max-w-md max-h-full ">
-        {/* <!-- Modal content --> */}
-        <div className="relative bg-white rounded-lg shadow">
-            {/* <!-- Modal header --> */}
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                <h3 className="text-lg font-semibold text-gray-900 ">
-                    {`${modeModal} Tenant`}
-                </h3>
-                <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
-                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                </button>
-            </div>
-            {/* <!-- Modal body --> */}
-            <div className="p-4 md:p-5">
-                <div className="grid gap-4 mb-4 grid-cols-2">
-                    <div className="col-span-2">
-                        <label for="name" className="block mb-2 text-sm font-medium text-gray-900 ">Company Name</label>
-                        <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company name here"
-                        required/>
-                    </div>
-                    <div className="col-span-2">
-                        <label for="address" className="block mb-2 text-sm font-medium text-gray-900 ">Company Address</label>
-                        <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company adress here" required/>
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                        <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                        <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required/>
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                        <label for="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact</label>
-                        <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required/>
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                        <label for="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
-                        <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                            <option value="en">English</option>
-                            <option value="id">Indonesia</option>
-                        </select>
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                        <label for="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
-                        <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                            {
-                                culture.length > 0 ? culture.map((item) => (
-                                    <option value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
-                                )) : <option disabled>Loading</option>
-                            }
-                        </select>
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                        <label for="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
-                        <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                        {
-                                timezone.length > 0 ? timezone.map((item) => (
-                                    <option value={item.timezone}>{item.timezone}</option>
-                                )) : <option disabled>Loading</option>
-                            }
-                        </select>
-                    </div>
-                    <div className="col-span-2 sm:col-span-1">
-                        <label for="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
-                        <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                        {
-                                currency.length > 0 ? currency.map((item) => (
-                                    <option value={item.currency}>{item.currency}</option>
-                                )) : <option disabled>Loading</option>
-                            }
-                        </select>
-                    </div>
-                    
-                </div>
-                    <div className="col-span-2 sm:col-span-1">
-                        <label for="currentposition" className="block mb-2 text-sm font-medium text-gray-900">Current Position</label>
-                        <div className="flex items-center gap-20 justify-between">
-                            <select id="currentposition" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                <option value="true">True</option>
-                                <option value="false">False</option>
-                            </select>
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={createTenant}>Submit</button>
+                </style>
+                    <div className="mt-5 flex  gap-3 items-center w-full justify-end">
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
+                            {"<<"}
+                        </button>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
+                            {"<"}   
+                        </button>
+                        <div>
+                            <p>Showing page {currentPage} from {totalPages}</p>
                         </div>
-                    </div>  
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
+                            {">"}
+                        </button>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
+                           {">>"}
+                        </button>
+                    </div>
             </div>
-        </div>
-    </div>
-</div> 
+
+            {/* <!-- Main modal --> */}
+            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+
+                <div className="relative p-4 w-full max-w-md max-h-full ">
+                    {/* <!-- Modal content --> */}
+                    <div className="relative bg-white rounded-lg shadow">
+                        {/* <!-- Modal header --> */}
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+                            <h3 className="text-lg font-semibold text-gray-900 ">
+                                {`${modeModal} Tenant`}
+                            </h3>
+                            <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                                <FaTimes />
+                            </button>
+                        </div>
+                        {/* <!-- Modal body --> */}
+                        <div className="p-4 md:p-5">
+                            <div className="grid gap-4 mb-4 grid-cols-2">
+                                <div className="col-span-2">
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Company Name</label>
+                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company name here"
+                                    required/>
+                                </div>
+                                <div className="col-span-2">
+                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Company Address</label>
+                                    <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                    required/>
+                                </div>
+                                
+                                <div className="col-span-1">
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required/>
+                                </div>
+                                <div className="col-span-1">
+                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact</label>
+                                    <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required/>
+                                </div>
+                                <div className="col-span-1">
+                                    <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
+                                    <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                        <option value="en">English</option>
+                                        <option value="id">Indonesia</option>
+                                    </select>
+                                </div>
+                                <div className="col-span-1">
+                                    <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
+                                    <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                        {
+                                            culture.length > 0 ? culture.map((item, index) => (
+                                                <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
+                                            )) : <option disabled>Loading</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div className="col-span-1">
+                                    <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
+                                    <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    {
+                                            timezone.length > 0 ? timezone.map((item, index) => (
+                                                <option key={index} value={item.timezone}>{item.timezone}</option>
+                                            )) : <option disabled>Loading</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div className="col-span-1">
+                                    <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
+                                    <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    {
+                                            currency.length > 0 ? currency.map((item, index) => (
+                                                <option key={index} value={item.currency}>{item.currency}</option>
+                                            )) : <option disabled>Loading</option>
+                                        }
+                                    </select>
+                                </div>
+                                
+                            </div>
+                                <div className="flex justify-between items-end">
+                                    <div>
+                                    <label htmlFor="currencyposition" className="block mb-2 text-sm font-medium text-gray-900">Currency Position</label>
+                                        <select id="currencyposition" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                            <option value="true">True</option>
+                                            <option value="false">False</option>
+                                        </select>
+                                    </div>
+                                        {
+                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createTenant}>Submit</button>
+                                        }
+                                        
+                                </div>  
+                        </div>
+                    </div>
+                </div>
+            </div> 
 
         </>
     )
