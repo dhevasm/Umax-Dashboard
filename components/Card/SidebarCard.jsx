@@ -6,7 +6,7 @@ export default function SidebarCard({ platform, name, status, amountspend, reach
   useEffect(() => {
     if (status == 1) {
       setStatus("bg-green-500");
-    } else if (status == "complete") {
+    } else if (status == 3 ) {
       setStatus("bg-yellow-500");
     } else {
       setStatus("bg-gray-500");

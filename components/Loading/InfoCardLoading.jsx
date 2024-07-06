@@ -2,7 +2,7 @@ import React from 'react'
 
 const InfoCardLoading = () => {
   return (
-    <div className={`bg-gray-100 p-4 rounded-lg w-full transition-all shadow-lg animate-pulse`}>
+    <div className={`bg-gray-100 p-4 pt-5 pb-5 rounded-lg w-full transition-all shadow-lg animate-pulse`}>
         <p className={`text-sm text-gray-300 text-nowrap`}>
             <span className="w-20 h-2 bg-gray-300 rounded-lg animate-pulse-slow">span</span>
         </p>

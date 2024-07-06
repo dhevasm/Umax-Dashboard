@@ -8,7 +8,7 @@ const AccountTable = () => {
     const [selectedPlatform, setSelectedPlatform] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth >= 760);
+    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 947);
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     const fetchData = async () => {
@@ -50,7 +50,7 @@ const AccountTable = () => {
     });
 
     const checkDeviceWidth = () => {
-        setIsWideScreen(window.innerWidth >= 760);
+        setIsWideScreen(window.innerWidth >= 947);
     };
 
     useEffect(() => {
@@ -64,26 +64,40 @@ const AccountTable = () => {
             <h1>Account</h1>
         </div>
         <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-5">
-            <div className={`mb-4 flex ${isWideScreen ? "flex-row" : "flex-col"} items-start gap-4`}>
-                {/* {'Filter Starts Here'} */}
-                <div>
-                    <input className="border border-gray-300 rounded-lg px-4 py-2" style={{width: '200px'}} type="text" placeholder="Search" value={searchTerm} onChange={handleSearchChange} />
+                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
+                    <div className={`mb-4 flex flex-row items-start gap-4`}>
+                        {/* {'Filter starts here'} */}
+                            <input
+                                className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 text-[15px] text-semibold py-2`}
+                                // style={{ width: "200px" }}
+                                type="text"
+                                placeholder="Search"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                            />
+                            <select name="" className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2`} id="" onChange={handlePlatformChange}>
+                                <option value="">Platform</option>
+                                <option value="1">Meta Ads</option>
+                                <option value="2">Google Ads</option>
+                                <option value="3">Tiktok Ads</option>
+                            </select>
+                            <select name="" className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2`} id="" onChange={handleStatusChange}>
+                                <option value="">Status</option>
+                                <option value="1">Active</option>
+                                <option value="2">Deactive Ads</option>
+                            </select>
+                        {/* {'Filter ends here'} */}
+                    </div>
+                    <div className="w-full flex gap-3 justify-end pb-5">
+                        <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
+                        <button className="float-right border border-gray-300 rounded-lg px-4 py-2" >
+                            {/* <RiFileExcel2Line className="relative font-medium text-lg" /> */}
+                        </button>
+                        <button className="float-right border border-gray-300 rounded-lg px-4 py-2">
+                            {/* <AiOutlineFilePdf className="relative font-medium text-lg" /> */}
+                        </button>
+                    </div>
                 </div>
-                <div className='flex gap-4'>
-                    <select name="" className="border border-gray-300 rounded-lg px-4 py-2" style={{width: '200px'}} id="" onChange={handlePlatformChange}>
-                        <option value="">Platform</option>
-                        <option value="1">Meta Ads</option>
-                        <option value="2">Google Ads</option>
-                        <option value="3">Tiktok Ads</option>
-                    </select>
-                    <select name="" className="border border-gray-300 rounded-lg px-4 py-2" style={{width: '200px'}} id="" onChange={handleStatusChange}>
-                        <option value="">Status</option>
-                        <option value="1">Active</option>
-                        <option value="2">Deactive Ads</option>
-                    </select>
-                </div>
-                {/* {'Filter Ends Here'} */}
-            </div>
             <div className='overflow-x-auto'>
                 <table className='w-full border-collapse'>
                     <thead className='bg-white'>

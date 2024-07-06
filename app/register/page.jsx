@@ -15,6 +15,16 @@ const Page = () => {  // Component name should be capitalized
   const navigate = useRouter();
   const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
+  const router = useRouter();
+  useEffect(() => {
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+      Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+          router.push('/');
+      });
+      }
+  }, [router]);
+
   const formik = useFormik({
     initialValues: {
       name: '',
