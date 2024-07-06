@@ -10,6 +10,7 @@ import { navbar } from "@material-tailwind/react"
 import TenantTable from "@/components/Admin-component/TenantTable"
 import UserTable from "@/components/Admin-component/UserTable"
 import CampaignTable from "@/components/Admin-component/CampaignTable"
+import TenantProfile from "@/components/Admin-component/TenantProfile"
 
 export const AdminDashboardContext = createContext()
 export default function AdminDashboard(){
@@ -72,6 +73,12 @@ export default function AdminDashboard(){
         getUserCampaignCount()
     }, [])
 
+    useEffect(() => {
+        if(userData.roles == 'admin'){
+            setChangeTable("company")   
+        }
+    }, [userData])
+
     const MainCard = useRef(null)
     
     useEffect(() => {
@@ -86,20 +93,15 @@ export default function AdminDashboard(){
         }
     }, [updateCard])
 
-    function test(){
-        alert("test")
-    }
-
     return(
         <>
             <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
-                <AdminNavbar userData={userData} test={test} />
-                <AdminSidebar/>
-           
-                
+                    <AdminNavbar userData={userData}/>
+                    <AdminSidebar />
+
             {/* main content */}
-            <div className="w-full h-full flex justify-end px-5">
-                <div className="w-[75%] mt-20 border border-gray-300 rounded-md p-5 shadow-xl transition-transform" ref={MainCard}>
+            <div className="flex w-full min-h-full justify-end px-5 bg-gray-100">
+                <div className="w-[75%] mt-20 rounded-md p-5 shadow-xl bg-white" ref={MainCard}>
                     <div className="flex flex-wrap justify-evenly">
                         {
                             userData.roles == 'sadmin' ?
@@ -107,14 +109,15 @@ export default function AdminDashboard(){
                                 <CountCard color="blue" handleClick="tenants" title="Total Tenants" value={tenantsCount ? tenantsCount : <div className="animate-pulse">Loading....</div>}/>
                                 :
                                 <CountCard color="blue" handleClick="company" title="Company" value={userData.company_name ? <div className="text-center text-xl">{userData.company_name}</div> : <div className="animate-pulse">Loading....</div>}/>
-                        }
+                        }       
                         <CountCard color="green" title="Total Users" handleClick="users" value={usersCount ? usersCount : <div className="animate-pulse">Loading....</div>}/>    
                         <CountCard color="yellow" title="Total Campaigns" handleClick="campaigns" value={campaignsCount ? campaignsCount : <div className="animate-pulse">Loading....</div>}/>    
                     </div>
                     <div>  
                        {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
-                       {changeTable == "users" && <UserTable />}
-                        {changeTable == "campaigns" && <CampaignTable />}
+                       {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
+                       {changeTable == "users" && <UserTable/>}
+                        {changeTable == "campaigns" && <CampaignTable/>}
                     </div>
                 </div>
             </div>

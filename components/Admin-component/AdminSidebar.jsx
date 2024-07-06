@@ -9,6 +9,7 @@ import { FaTable } from "react-icons/fa"
 
 import { useRef } from "react"
 import Sidebar from "../Sidebar";
+import { jsx } from "react/jsx-runtime"
 
 export default function AdminSidebar(){
 
@@ -26,6 +27,7 @@ export default function AdminSidebar(){
         }
     }, [sidebarHide])
 
+
     function handleSidebarLink(){
         setMinimizedSidebar(!minimizedSidebar)
         sidebarLink.current.classList.toggle('hidden')
@@ -33,7 +35,7 @@ export default function AdminSidebar(){
 
     return(
         <>
-            <div className="fixed z-10 bg-slate-200 w-[300px] h-screen text-black transition-transform" ref={sideBar}>
+            <div className="fixed z-10 bg-slate-200 w-[300px] h-screen text-black transition-transform " ref={sideBar}>
                 <ul className="pt-20 ms-5">
                     <li className="mb-4">
                         <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-200 focus:outline-none focus:bg-gray-200" onClick={handleSidebarLink}>
@@ -54,7 +56,7 @@ export default function AdminSidebar(){
                                     Table Tenants
                                 </button>}
                                 {
-                                  userData.roles == "admin" && <button className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 flex gap-2 items-center">
+                                  userData.roles == "admin" && <button className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 flex gap-2 items-center" onClick={() => setChangeTable("company")}>
                                    <IconContext.Provider value={{ className: "text-md" }}>
                                        <FaBuilding />
                                    </IconContext.Provider>
@@ -66,14 +68,14 @@ export default function AdminSidebar(){
                                 <button onClick={() => setChangeTable("users")} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 flex gap-2 items-center">
                                 <IconContext.Provider value={{ className: "text-md" }}>
                                         <FaTable />
-                                    </IconContext.Provider>
+                                </IconContext.Provider>
                                 Table Users</button>
                             </li>
                             <li>
                                 <button onClick={() => setChangeTable("campaigns")} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 flex gap-2 items-center">
                                 <IconContext.Provider value={{ className: "text-md" }}>
                                         <FaTable />
-                                    </IconContext.Provider>
+                                </IconContext.Provider>
                                     Table Campaigns</button>
                             </li>
                             <li>
@@ -88,7 +90,8 @@ export default function AdminSidebar(){
                                 <IconContext.Provider value={{ className: "text-md" }}>
                                         <FaTable />
                                     </IconContext.Provider>
-                                    Table Campaigns</button>
+                                    Table Clients
+                                </button>
                             </li>
                         </ul>
                     </li>

@@ -2,7 +2,8 @@
 import { AdminDashboardContext, SidebarContext } from "@/app/admin-dashboard/page";
 import { useEffect, useState, useContext, useRef } from "react"
 import { IconContext } from "react-icons";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaSignOutAlt } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 export default function AdminNavbar({userData}){
 
@@ -15,13 +16,22 @@ export default function AdminNavbar({userData}){
         navbarBrand.current.classList.toggle("hidden")
     }
 
+    const checkIsMobile = () => {
+        if (window.innerWidth <= 640) {
+            hideHandle()
+            navbarBrand.current.classList.add("hidden")
+        } 
+    }
     useEffect(() => {
-        if (sidebarHide) {
-            document.querySelector("body").classList.add("overflow-hidden")
-        } else {
-            document.querySelector("body").classList.remove("overflow-hidden")
-        }
-    }, [sidebarHide])
+        checkIsMobile()
+    }, [])
+
+    const Router = useRouter()
+
+    function handleLogout(){
+        localStorage.clear()
+        Router.push('/')
+    }
 
     return (
         <>
@@ -30,14 +40,29 @@ export default function AdminNavbar({userData}){
                     <div className="w-[300px] h-full bg-slate-200 flex justify-center items-center transition-transform" ref={navbarBrand}>
                         <img src="assets/logo.png" alt="Logo"/>
                     </div>
-                    <button onClick={hideHandle} className="ms-5">
+                    <button onClick={hideHandle} className="mx-5">
                         <FaBars className="text-2xl" />
                     </button>
                 </div>
 
-                <div className="me-10 text-xs flex gap-3">
+                <div className="me-10 text-xs flex gap-3 cursor-pointer" onClick={() => {
+                    document.querySelector("#profileDropDown").classList?.toggle("hidden")
+                }}>
+                    <div className="hidden absolute top-16 right-10 p-5 bg-white rounded-lg shadow-lg" id="profileDropDown">
+                         {userData.image ?  <img src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-20 h-20 bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p> }
+                         <h1 className="font-bold text-lg">{userData.name}</h1><p className="text-md">{userData.roles}</p>
+                         <div className="w-full h-0.5 bg-gray-400 my-5 px-5"></div>
+                         <button className="text-md flex items-center gap-2" onClick={handleLogout} >
+                            <FaSignOutAlt/> 
+                            Log Out
+                        </button>
+                    </div>
+                    
                     <div>
-                        <img  src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-7 h-7 bg-slate-200 rounded-full" />
+                        {
+                            userData.image ?  <img  src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-7 h-7 bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p> 
+                        }
+                       
                     </div>
                     <div>
                         <h1 className="font-bold">{userData.name}</h1>

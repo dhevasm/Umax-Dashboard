@@ -24,14 +24,17 @@ const Page = () => {
 
       // Cek apakah email dan password kosong
       if (!values.email && !values.password) {
+        loading.current.classList.add('hidden')
         setError('Please fill in all fields');
         setLoading(false);
         return;
       } else if(!values.email) {
+        loading.current.classList.add('hidden')
         setError('Email is required');
         setLoading(false);
         return;
       } else if(!values.password) {
+        loading.current.classList.add('hidden')
         setError('Password is required');
         setLoading(false);
         return;
@@ -51,6 +54,7 @@ const Page = () => {
 
         .then(response => {
           if (!response.ok) {
+            loading.current.classList.add('hidden')
             throw new Error('Login failed');
           }
           return response.json();
@@ -172,7 +176,6 @@ const Page = () => {
             <button
               type="submit"
               className="w-full h-12 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
-              // onClick={() => setLoading(true)}
             >
               {loading ? <LoadingCircle /> : 'Sign In'}
             </button>
