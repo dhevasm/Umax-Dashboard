@@ -20,16 +20,16 @@ const Page = () => {
     }, [router]);
 
   return (
-    <div className="w-full h-screen bg-white">
+    <div className='w-full h-screen bg-white'>
       <Navbar />
-      <div className="w-full mt-20 h-full">
+      <div className="w-full mt-20 h-fit">
         <div className="w-full h-full md:p-10 p-5 bg-white">
           <Suspense fallback={<TableLoading/>}>
             <CampaignTable/>
           </Suspense>
         </div>
       </div>
-    </div>
+    </div> 
   );
 };
 

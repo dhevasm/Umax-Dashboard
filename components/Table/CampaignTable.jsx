@@ -8,6 +8,9 @@ import jsPDF from "jspdf";
 import 'jspdf-autotable';
 import { AiOutlineFilePdf } from "react-icons/ai";
 import LoadingCircle from "../Loading/LoadingCircle";
+import Swal from "sweetalert2";
+import { BiEdit } from "react-icons/bi";
+import { MdDeleteForever } from "react-icons/md";
 
 const CampaignTable = () => {
     const tableRef = useRef(null);
@@ -16,11 +19,21 @@ const CampaignTable = () => {
     const [selectedObjective, setSelectedObjective] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [isWideScreen, setIsWideScreen] = useState(true);
+    const date = new Date();
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
+    const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+        .toISOString()
+        .split("T")[0] +
+        " " +
+        (date.getHours().toString().padStart(2, "0")) +
+        ":" +
+        (date.getMinutes().toString().padStart(2, "0")) +
+        ":" +
+        (date.getSeconds().toString().padStart(2, "0"));
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
-        filename: "DataCampaigns",
+        filename: `Campaigns ${dateWithTime}`,
         sheet: "DataCampaigns",
     });
 
@@ -47,7 +60,62 @@ const CampaignTable = () => {
           startY: 20,
         });
     
-        doc.save('campaigns.pdf');
+        doc.save(`Campaigns ${dateWithTime}.pdf`);
+    };
+
+    const handleDelete = async (_id) => {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'Cancel',
+          cancelButtonColor: '#d33',
+          confirmButtonColor: '#3085d6',
+          customClass: {
+            confirmButton: 'custom-confirm-button-class',
+            cancelButton: 'custom-cancel-button-class',
+          },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const token = localStorage.getItem('jwtToken');
+              const response = await axios.delete(
+                `${umaxUrl}/campaign-delete?campaign_id=${_id}`,
+                {
+                  headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                  },
+                }
+              );
+    
+              if (response.status === 200) {
+                fetchData();
+                Swal.fire({
+                  title: 'Success!',
+                  text: 'Data has been deleted.',
+                  icon: 'success',
+                  customClass: {
+                    confirmButton: 'custom-ok-button-class',
+                  },
+                });
+              } else {
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Maaf Anda Tidak Dapat Menghapus Data.',
+                  icon: 'error',
+                  customClass: {
+                    confirmButton: 'custom-error-button-class',
+                  },
+                });
+              }
+            } catch (error) {
+              Swal.fire('Error', 'Terjadi kesalahan saat menghapus data.', 'error');
+            }
+          }
+        });
     };
 
     // Status Badge
@@ -96,6 +164,53 @@ const CampaignTable = () => {
             );
         default:
             return "Unknown";
+        }
+    }
+
+    function ConfirmationModal(name) {
+        if (name === 'pdf') {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "File will be downloaded!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, download it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    generatePDF();
+                    Swal.fire({
+                        title: 'Downloaded!',
+                        text: 'Your file has been downloaded.',
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                    });
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+        } else if (name === 'excel') {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "File will be downloaded!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, download it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    onDownload();
+                    Swal.fire(
+                        'Downloaded!',
+                        'Your file has been downloaded.',
+                        'success'
+                    );
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
         }
     }
 
@@ -197,10 +312,10 @@ const CampaignTable = () => {
                         </div>
                         <div className="w-full flex gap-3 justify-end pb-5">
                             <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
-                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" >
+                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
                                 <RiFileExcel2Line className="relative font-medium text-lg" />
                             </button>
-                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2">
+                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('pdf')}>
                                 <AiOutlineFilePdf className="relative font-medium text-lg" />
                             </button>
                         </div>
@@ -256,23 +371,29 @@ const CampaignTable = () => {
                                     <td className="px-2 py-2 border text-nowrap">
                                         <StatusBadge status={data.status} />
                                     </td>
-                                    <td className="px-2 py-2 border text-nowrap flex">
-                                    <button className="bg-blue-500 text-white px-4 py-2 rounded me-1">
-                                        Edit
-                                    </button>
-                                    <button className="bg-red-500 text-white px-4 py-2 rounded">
-                                        Delete
-                                    </button>
+                                    <td className="px-2 py-2 border text-nowrap flex gap-1 justify-center">
+                                        <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
+                                            <BiEdit size={25}/>
+                                        </button>
+                                        <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
+                                            <MdDeleteForever size={25}/>
+                                        </button>
                                     </td>
                                 </tr>
                                 ))
                             )
-                            :   (
+                            :   tableData.length > 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="text-center">
-                                        <LoadingCircle />
+                                    <td colSpan="8" className="text-center py-4 border">
+                                        Data Not Found
                                     </td>
                                 </tr>
+                                ) : (
+                                    <tr>
+                                        <td colSpan="6" className="text-center">
+                                            <LoadingCircle />
+                                        </td>
+                                    </tr>
                                 )
                             }
                         </tbody>

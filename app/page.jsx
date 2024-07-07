@@ -11,7 +11,6 @@ const Page = () => {
   
   const [error, setError] = useState()
   const router = useRouter()
-  const [roles, setRoles] = useState('')
 
   const [loading, setLoading] = useState(false)
 
@@ -63,11 +62,12 @@ const Page = () => {
         .then(data => {
           // console.log(data)
           const { Token } = data
-          localStorage.setItem('jwtToken', Token);
-
-          // Arahkan ke Dashboard untuk pengguna non-staff
-
+          const tenantID = data.Data.tenant_id;
           const roles = data.Data.roles;
+
+          // setitem on local storage
+          localStorage.setItem('jwtToken', Token);
+          localStorage.setItem('tenantId', tenantID);
           localStorage.setItem('roles', roles);
 
           if (roles == 'sadmin' || roles == "admin") {  
