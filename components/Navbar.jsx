@@ -130,9 +130,11 @@ export default function Navbar() {
                                 }
                                 `}
                             </style>
-                            <li className={`font-semibold flex gap-1 items-center ${activeLink === "/dashboard" ? "active-link" : ""}`} onClick={() => handleClick("/dashboard")}>
-                                <span><MdDashboard size={20} /></span>Dashboard
-                            </li>
+                            {role == 'client' &&
+                                <li className={`font-semibold flex gap-1 items-center ${activeLink === "/dashboard" ? "active-link" : ""}`} onClick={() => handleClick("/dashboard")}>
+                                    <span><MdDashboard size={20} /></span>Dashboard
+                                </li> 
+                            }
                             <li className={`font-semibold flex gap-1 items-center ${activeLink === "/campaigns" ? "active-link" : ""}`} onClick={() => handleClick("/campaigns")}>
                                 <span><BiSolidMegaphone size={20} /></span>Campaigns
                             </li>
