@@ -15,42 +15,57 @@ import { FaPen } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
-export default function TenantTable() {
+import { IoMdEye } from "react-icons/io"
+import { IoMdEyeOff } from "react-icons/io"
+export default function ClientTable() {
 
-    const [tenants, setTenants] = useState([])
-    const [tenantMemo, setTenantMemo] = useState([])
-    const [EditTenantId, setEditTenantId] = useState(null)
+    const [client, setclient] = useState([])
+    const [clientMemo, setclientMemo] = useState([])
+    const [EditclientId, setEditclientId] = useState(null)
+    const [showPassword, setShowPassword] = useState(false)
+
+    function handleShowPassword() {
+        setShowPassword(!showPassword)
+    }
 
     const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
 
-    function showModal(mode, tenant_id = null ){
+    const passwordInput = useRef(null)
+    const passwordverifyInput = useRef(null)
+    const tenantInput = useRef(null)
+
+    function showModal(mode, client_id = null ){
         setModeModal(mode)
         if(mode == "Edit"){
-            const filteredTenant = tenantMemo.filter(tenant => tenant._id === tenant_id);
-            if(filteredTenant.length > 0){
-                console.log(filteredTenant[0])
-                setEditTenantId(tenant_id)
-                document.getElementById('name').value = filteredTenant[0].company
-                document.getElementById('address').value = filteredTenant[0].address
-                document.getElementById('contact').value = filteredTenant[0].contact.slice(1)
-                document.getElementById('email').value = filteredTenant[0].email
-                document.getElementById('language').value = filteredTenant[0].language
-                document.getElementById('culture').value = filteredTenant[0].culture
-                document.getElementById('currency').value = filteredTenant[0].currency
-                document.getElementById('input_timezone').value = filteredTenant[0].timezone_name
-                document.getElementById('currencyposition').value = filteredTenant[0].currency_position
-                
+            const filteredclient = client.filter(client => client._id === client_id);
+            if(filteredclient.length > 0){
+                // console.log(filteredCampaing[0])
+                setEditclientId(client_id)
+                document.getElementById('name').value = filteredclient[0].name
+                document.getElementById('address').value = filteredclient[0].address
+                document.getElementById('contact').value = filteredclient[0].contact.slice(1)
+                document.getElementById('email').value = filteredclient[0].email
+                document.getElementById('status').value = filteredclient[0].status
+                passwordInput.current.classList.add("hidden")
+                passwordverifyInput.current.classList.add("hidden")
+                tenantInput.current.classList.add("hidden")
+                // console.log(client_id)
             } else{
-                Swal.fire("Tenant not found");
+                Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
             document.getElementById('email').value = null  
+            document.getElementById('password').value = null  
+            document.getElementById('passwordverify').value = null 
+            passwordInput.current.classList.remove("hidden")
+            passwordverifyInput.current.classList.remove("hidden") 
+            tenantInput.current.classList.remove("hidden")
         }
         addModal.current.classList.remove("hidden")
     }
@@ -58,7 +73,7 @@ export default function TenantTable() {
         addModal.current.classList.add("hidden")
     }
     
-    function handleDelete(tenant_id){
+    function handleDelete(client_id){
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -69,7 +84,7 @@ export default function TenantTable() {
             confirmButtonText: "Yes, delete it!"
           }).then((result) => {
             if (result.isConfirmed) {
-            deleteTenant(tenant_id)
+            deleteclient(client_id)
             Swal.fire({
                 title: "Deleted!",
                 text: "Your file has been deleted.",
@@ -79,15 +94,14 @@ export default function TenantTable() {
           });
     }
 
-    const deleteTenant = async (tenant_id) => {
-        console.log(tenant_id)
+    const deleteclient = async (client_id) => {
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
+            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/client-delete?client_id=${client_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
-            getTenants()
+            getclient()
             setUpdateCard(true)
             
         } catch (error) {
@@ -101,7 +115,7 @@ export default function TenantTable() {
         const backupLastPage = lastPage;
         const backupFirstPage = firstPage;
         setFirstPage(0);
-        setLastPage(tenants.length);
+        setLastPage(client.length);
         setTimeout(() => {
             onDownload();
             setFirstPage(backupFirstPage);
@@ -111,127 +125,122 @@ export default function TenantTable() {
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
-        filename: "DataTenant",
-        sheet: "DataTenant",
+        filename: "Dataclient",
+        sheet: "Dataclient",
       });
 
     const generatePDF = () => {
         const doc = new jsPDF();
-        doc.text('Data Tenant Umax Dashboard', 10, 10);
+        doc.text('Data client Umax Dashboard', 10, 10);
         doc.autoTable({
-            head: [['Name', 'Address', 'Contact', "Email"]],
-            body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
+            head: [['Name', 'Address', 'Contact', "Email", "Status"]],
+            body: client.map((client) => [client.name, client.address, client.contact, client.email, client.status == 1 ? "Active" : "Inactive"]),
         });
-        doc.save('DataTenant.pdf');
+        doc.save('Dataclient.pdf');
     };
 
-    function handleDetail(tenant_id){
-        const filteredTenant = tenants.filter(tenant => tenant._id === tenant_id);
-        if(filteredTenant.length > 0) {
-            const [tenant] = filteredTenant;
+    function handleDetail(client_id){
+        const filteredclient = client.filter(client => client._id === client_id);
+        if(filteredclient.length > 0) {
+            const [client] = filteredclient;
             Swal.fire(`<p>
-                ${tenant.company}\nAddress: ${tenant.address}\nContact: ${tenant.contact}\nEmail: ${tenant.email}
+                ${client.name}\nAddress: ${client.address}\nContact: ${client.contact}\nEmail: ${client.email}
                 </p>`);
         } else {
-            Swal.fire("Tenant not found");
+            Swal.fire("client not found");
         }
     }
 
-    async function getTenants(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+    async function getclient(){
+        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/client-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
-        setTenants(response.data.Data)
-        setTenantMemo(response.data.Data)
-        setTotalPages(Math.ceil(tenants.length / itemsPerPage));
+        setclient(response.data.Data)
+        setclientMemo(response.data.Data)
+        setTotalPages(Math.ceil(client.length / itemsPerPage));
         setFirstPage(0);
         setLastPage(itemsPerPage);
     }
 
     useEffect(() => {
-        getTenants()
+        getclient()
     }, [])
 
-    async function createTenant(){
-        const company = document.getElementById('name').value
+    useEffect(() => {
+    }, [client])
+
+    async function createClient(){
+        const name = document.getElementById('name').value
         const address = document.getElementById('address').value
         const contact = `+${document.getElementById('contact').value}`
         const email = document.getElementById('email').value
-        const language = document.getElementById('language').value
-        const culture = document.getElementById('culture').value
-        const currency = document.getElementById('currency').value
-        const timezone = document.getElementById('input_timezone').value
-        const currencyposition = document.getElementById('currencyposition').value
+        const status = document.getElementById('status').value
+        const password = document.getElementById('password').value
+        const passwordverify = document.getElementById('passwordverify').value
+        const tenant_id = document.getElementById('tenant').value
 
         const formData = new FormData();
-        formData.append('company', company);
+        formData.append('name', name);
         formData.append('address', address);
         formData.append('email', email);
         formData.append('contact', contact);
-        formData.append('language', language);
-        formData.append('culture', culture);
-        formData.append('currency', currency);
-        formData.append('input_timezone', timezone);
-        formData.append('currency_position', currencyposition);
+        formData.append('status', status);
+        formData.append('password', password);
+        formData.append('confirm_password', passwordverify);
+        formData.append('notes', 'notes')
 
-        const response = await axios.post('https://umaxxnew-1-d6861606.deta.app/tenant-create', formData, {
+        const response = await axios.post(`https://umaxxnew-1-d6861606.deta.app/client-create?tenantId=${tenant_id}`, formData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
 
-        if(response.data.Output == "Registration Successfully"){
-            getTenants()
+        if(response.data.Output == "Create Client Successfully"){
+            getclient()
             closeModal()
             setUpdateCard(true)
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
             document.getElementById('email').value = null
-            Swal.fire("Success", "Tenant created successfully", "success")
+            document.getElementById('password').value = null
+            document.getElementById('passwordverify').value = null
+            Swal.fire("Success", "Campaing created successfully", "success")
         }else{
             Swal.fire("Error", response.detail, "error")
         }
     }
 
-    async function updateTenant(){
-        if(EditTenantId !== null) {
-            const company = document.getElementById('name').value
+    async function updateClient(){
+        if(EditclientId !== null) {
+            const name = document.getElementById('name').value
             const address = document.getElementById('address').value
             const contact = `+${document.getElementById('contact').value}`
             const email = document.getElementById('email').value
-            const language = document.getElementById('language').value
-            const culture = document.getElementById('culture').value
-            const currency = document.getElementById('currency').value
-            const timezone = document.getElementById('input_timezone').value
-            const currencyposition = document.getElementById('currencyposition').value
+            const status = document.getElementById('status').value
             const formData = new FormData();
-            formData.append('company', company);
+            formData.append('name', name);
             formData.append('address', address);
             formData.append('email', email);
             formData.append('contact', contact);
-            formData.append('language', language);
-            formData.append('culture', culture);
-            formData.append('currency', currency);
-            formData.append('input_timezone', timezone);
-            formData.append('currency_position', currencyposition);
+            formData.append('status', status);  
     
-            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/tenant-edit?tenantId=${EditTenantId}`, formData, {
+            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/client-edit?client_id=${EditclientId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
     
             if(response.data.Output == "Data Updated Successfully"){
-                getTenants()
+                getclient()
                 closeModal()
                 document.getElementById('name').value = null
                 document.getElementById('address').value = null
                 document.getElementById('contact').value = null
                 document.getElementById('email').value = null
-                Swal.fire("Success", "Tenant Updated", "success")
+                Swal.fire("Success", "Client Updated", "success")
             }else{
                 Swal.fire("Error", response.detail.ErrMsg, "error")
             }
@@ -242,6 +251,7 @@ export default function TenantTable() {
     const [timezone, setTimezone] = useState([])
     const [currency, setCurrency] = useState([])
     const [culture, setCulture] = useState([])
+    const [tenants, setTenants] = useState([])
 
     async function getSelectFrontend(){
         await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
@@ -254,6 +264,14 @@ export default function TenantTable() {
 
         await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
             setCulture(response.data)
+        })
+
+        await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+            headers : {
+                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            }
+        }).then((response) => {
+            setTenants(response.data.Data)
         })
     }
 
@@ -272,10 +290,10 @@ export default function TenantTable() {
 
     useEffect(() => {
         setCurrentPage(1);
-        setTotalPages(Math.ceil(tenants.length / itemsPerPage));
+        setTotalPages(Math.ceil(client.length / itemsPerPage));
         setFirstPage(0);
         setLastPage(itemsPerPage);
-    }, [tenants, itemsPerPage]);
+    }, [client, itemsPerPage]);
 
     const firstPageButton = useRef(null);
     const previousButton = useRef(null);
@@ -332,7 +350,7 @@ export default function TenantTable() {
             <div className="w-full pb-20">
                 <div className="border-t border-gray-300 my-5"></div>
                 <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
-                    <h1 className="text-3xl font-bold">Tenants</h1>
+                    <h1 className="text-3xl font-bold">clients</h1>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
                         <div>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
@@ -352,13 +370,13 @@ export default function TenantTable() {
                             </button>
                         </div>
                         <div className="relative">
-                            <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search Tenant" 
+                            <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search Client" 
                             onChange={(e) => {
                                 const search = e.target.value.toLowerCase();
-                                const filteredData = tenantMemo.filter((tenant) =>
-                                tenant.company.toLowerCase().includes(search)
+                                const filteredData = clientMemo.filter((client) =>
+                                client.name.toLowerCase().includes(search)
                                 );
-                                search === "" ? setTenants(tenantMemo) : setTenants(filteredData);
+                                search === "" ? setclient(clientMemo) : setclient(filteredData);
                             }} id="search"/>
                             <span className="absolute inset-y-0 right-0 flex items-center pr-3">
                                 <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -368,40 +386,40 @@ export default function TenantTable() {
                 </div>
                 <div className="rounded-md mt-5 shadow-xl overflow-auto">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-white uppercase bg-blue-500">
+                        <thead className="text-xs text-white uppercase bg-gray-500">
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
-                                <th scope="col" className="px-6 py-3">Company</th>
+                                <th scope="col" className="px-6 py-3">Name</th>
                                 <th scope="col" className="px-6 py-3">Address</th>
-                                <th scope="col" className="px-6 py-3">Email</th>
                                 <th scope="col" className="px-6 py-3">Contact</th>
+                                <th scope="col" className="px-6 py-3">Email</th>
+                                <th scope="col" className="px-6 py-3">Status</th>
                                 <th scope="col" className="px-6 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                tenants.length > 0 ? tenants.map((tenant, index) => {
+                                client.length > 0 ? client.map((client, index) => {
                                     return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer">
+                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-slate-100 hover:cursor-pointer">
                                             <td  scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.company}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.address}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                                             <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a></td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                                               <a className="text-blue-500" href={`tel:${tenant.contact}`}>{String(tenant.contact)}</a> </td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.name}</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.address}</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.contact}</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.email }</td>
+                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.status == 1 ? "Active" : "Inactive"}</td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
-                                                <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(tenant._id)}>
+                                                <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(client._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaEye />
                                                     </IconContext.Provider>
                                                 </button>
-                                                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
+                                                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md" onClick={() => showModal("Edit", client._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaPen />
                                                     </IconContext.Provider>
                                                 </button>
-                                                <button className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-red-500 py-2 px-4 rounded-md" onClick={() => handleDelete(tenant._id)}>
+                                                <button className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-red-500 py-2 px-4 rounded-md" onClick={() => handleDelete(client._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaTrash />
                                                     </IconContext.Provider>
@@ -452,7 +470,7 @@ export default function TenantTable() {
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                             <h3 className="text-lg font-semibold text-gray-900 ">
-                                {`${modeModal} Tenant`}
+                                {`${modeModal} Campaing`}
                             </h3>
                             <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
@@ -462,13 +480,13 @@ export default function TenantTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Company Name</label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company name here"
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">client Name</label>
+                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
                                     required/>
                                 </div>
                                 <div className="col-span-2">
-                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Company Address</label>
-                                    <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Address</label>
+                                    <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client address here"
                                     required/>
                                 </div>
                                 
@@ -480,55 +498,49 @@ export default function TenantTable() {
                                     <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact</label>
                                     <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required/>
                                 </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
-                                    <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                        <option value="en">English</option>
-                                        <option value="id">Indonesia</option>
-                                    </select>
-                                </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
-                                    <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                                        {
-                                            culture.length > 0 ? culture.map((item, index) => (
-                                                <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
-                                            )) : <option disabled>Loading</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
-                                    <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                    {
-                                            timezone.length > 0 ? timezone.map((item, index) => (
-                                                <option key={index} value={item.timezone}>{item.timezone}</option>
-                                            )) : <option disabled>Loading</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
-                                    <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                    {
-                                            currency.length > 0 ? currency.map((item, index) => (
-                                                <option key={index} value={item.currency}>{item.currency}</option>
-                                            )) : <option disabled>Loading</option>
-                                        }
-                                    </select>
-                                </div>
-                                
-                            </div>
-                                <div className="flex justify-between items-end">
-                                    <div>
-                                    <label htmlFor="currencyposition" className="block mb-2 text-sm font-medium text-gray-900">Currency Position</label>
-                                        <select id="currencyposition" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                            <option value="true">True</option>
-                                            <option value="false">False</option>
-                                        </select>
+                                <div className="col-span-1" ref={passwordInput}>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
+                                    <div className="relative">
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required/>
+                                        <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
+                                            {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
+                                        </button>
                                     </div>
+                                </div>
+                                <div className="col-span-1" ref={passwordverifyInput}>
+                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-gray-900 ">Confirm Password</label>
+                                    <div className="relative">
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required/>
+                                        <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
+                                            {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="col-span-1">
+                                    <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900">Status</label>
+                                    <select id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                        <option value="1">Active</option>
+                                        <option value="2">Inactive</option>
+                                    </select>
+                                </div>
+                                <div className="col-span-1" ref={tenantInput}>
+                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant</label>
+                                    <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                         {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createTenant}>Submit</button>
+                                            tenants.length > 0 ? tenants.map((tenant, index) => {
+                                                return (
+                                                    <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                )
+                                            }) : <option key={0} value={0}>Loading..</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            
+                                <div className="flex justify-between items-end">
+                                <div></div>
+                                        {
+                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>Submit</button>
                                         }
                                         
                                 </div>  

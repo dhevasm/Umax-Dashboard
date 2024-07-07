@@ -124,7 +124,6 @@ const Page = () => {
     const token = localStorage.getItem('jwtToken');
     const roles = localStorage.getItem('roles');
     if (token) {
-      Swal.fire('Already logged in', 'Welcome back!', 'warning').then(() => {
         if (roles === 'sadmin' || roles === 'admin') {
           router.push('/admin-dashboard');
         } else {

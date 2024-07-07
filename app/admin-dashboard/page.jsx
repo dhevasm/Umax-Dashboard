@@ -9,6 +9,8 @@ import TenantTable from "@/components/Admin-component/TenantTable"
 import UserTable from "@/components/Admin-component/UserTable"
 import CampaignTable from "@/components/Admin-component/CampaignTable"
 import TenantProfile from "@/components/Admin-component/TenantProfile"
+import AccountTable from "@/components/Admin-component/AccountTable"
+import ClientTable from "@/components/Admin-component/ClientTable"
 
 export const AdminDashboardContext = createContext()
 export default function AdminDashboard(){
@@ -21,7 +23,7 @@ export default function AdminDashboard(){
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
-    const [changeTable, setChangeTable] = useState("tenants")
+    const [changeTable, setChangeTable] = useState("campaigns")
 
     const AdminDashboardContextValue = (() => {
         sidebarHide,
@@ -57,7 +59,7 @@ export default function AdminDashboard(){
         setCampaignsCount(getCampaigns.data.Data.length)
     }
 
-    async function getTenantsCount(){
+    async function getTenantsCount(){   
         const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -81,6 +83,7 @@ export default function AdminDashboard(){
     
     useEffect(() => {
         MainCard.current.classList.toggle("w-full")
+        MainCard.current.classList.toggle("me-3")
     }, [sidebarHide])
 
     useEffect(() => {
@@ -98,8 +101,8 @@ export default function AdminDashboard(){
                     <AdminSidebar />
 
             {/* main content */}
-            <div className="flex w-full min-h-full justify-end px-5 bg-gray-100">
-                <div className="w-[75%] mt-20 rounded-md p-5 shadow-xl bg-white" ref={MainCard}>
+            <div className="flex w-full min-h-full justify-end px-3  bg-gray-100">
+                <div className="w-[75%] mt-20 rounded-md p-5 me-3 shadow-xl bg-white" ref={MainCard}>
                     <div className="flex flex-wrap justify-evenly">
                         {
                             userData.roles == 'sadmin' ?
@@ -116,6 +119,8 @@ export default function AdminDashboard(){
                        {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
                        {changeTable == "users" && <UserTable/>}
                         {changeTable == "campaigns" && <CampaignTable/>}
+                        {changeTable == "accounts" && <AccountTable/>}
+                        {changeTable == "clients" && <ClientTable/>}
                     </div>
                 </div>
             </div>
