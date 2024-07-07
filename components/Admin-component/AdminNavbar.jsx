@@ -2,7 +2,7 @@
 import { AdminDashboardContext, SidebarContext } from "@/app/admin-dashboard/page";
 import { useEffect, useState, useContext, useRef } from "react"
 import { IconContext } from "react-icons";
-import { FaBars, FaSignOutAlt } from "react-icons/fa";
+import { FaBars, FaPersonBooth, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 export default function AdminNavbar({userData}){
@@ -51,7 +51,12 @@ export default function AdminNavbar({userData}){
                     <div className="hidden absolute top-16 right-10 p-5 bg-white rounded-lg shadow-lg" id="profileDropDown">
                          {userData.image ?  <img src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-20 h-20 bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p> }
                          <h1 className="font-bold text-lg">{userData.name}</h1><p className="text-md">{userData.roles}</p>
-                         <div className="w-full h-0.5 bg-gray-400 my-5 px-5"></div>
+                         <div className="w-full h-0.5 bg-gray-400 my-3 px-5"></div>
+                         <button className="text-md flex items-center gap-2" onClick={() => Router.push('/profile')} >
+                            <FaUser/> 
+                            Profile
+                        </button>
+                         <div className="w-full h-0.5 bg-gray-400 my-3 px-5"></div>
                          <button className="text-md flex items-center gap-2" onClick={handleLogout} >
                             <FaSignOutAlt/> 
                             Log Out

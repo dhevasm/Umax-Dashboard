@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { IconContext } from "react-icons"
 import axios from "axios"
-import { FaBuilding, FaDollarSign, FaDolly, FaEnvelope, FaFlag, FaHome, FaPhone } from "react-icons/fa"
+import { FaBuilding, FaDollarSign, FaDolly, FaEnvelope, FaFlag, FaHome, FaPen, FaPhone } from "react-icons/fa"
 
 export default function TenantProfile({tenant_id}){
 
@@ -33,12 +33,15 @@ export default function TenantProfile({tenant_id}){
             <div className="w-full h-full">
                 <h1 className="text-3xl  m-3">Tenant Profile</h1>
                 <div className="rouneded-lg shadow-xl">
-                    <div className="w-full h-20 bg-gray-400 flex items-end px-5 py-3 rounded-t-md">
+                    <div className="w-full flex justify-between h-20 bg-gray-400 items-end px-5 py-3 rounded-t-md">
                         {
                             tenant.company ? (
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
                             ) : "Loading ..."
                         }
+                        <div className="self-center">
+                            <FaPen className="text-white hover:cursor-pointer"/>
+                        </div>
                     </div>
                     <div className="p-5">
                         {

@@ -23,7 +23,7 @@ export default function AdminDashboard(){
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
-    const [changeTable, setChangeTable] = useState("campaigns")
+    const [changeTable, setChangeTable] = useState("tenants")
 
     const AdminDashboardContextValue = (() => {
         sidebarHide,
@@ -60,12 +60,14 @@ export default function AdminDashboard(){
     }
 
     async function getTenantsCount(){   
-        const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-        setTenantsCount(getTenants.data.Data.length)
+        if(userData.roles == 'sadmin'){
+            const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            })
+            setTenantsCount(getTenants.data.Data.length)
+        }
     }
 
     useEffect(() => {

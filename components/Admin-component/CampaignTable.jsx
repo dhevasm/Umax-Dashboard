@@ -21,7 +21,7 @@ export default function CampaignTable() {
     const [campaignMemo, setCampaignMemo] = useState([])
     const [EditCampaignId, setEditCampaignId] = useState(null)
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
+    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData] = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -93,15 +93,33 @@ export default function CampaignTable() {
     const tableRef = useRef(null);
 
     function generateExcel(){
-        const backupLastPage = lastPage;
-        const backupFirstPage = firstPage;
-        setFirstPage(0);
-        setLastPage(campaigns.length);
-        setTimeout(() => {
-            onDownload();
-            setFirstPage(backupFirstPage);
-            setLastPage(backupLastPage);
-        }, 100);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download excel file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const backupLastPage = lastPage;
+                const backupFirstPage = firstPage;
+                setFirstPage(0);
+                setLastPage(campaigns.length);
+                setTimeout(() => {
+                    onDownload();
+                    setFirstPage(backupFirstPage);
+                    setLastPage(backupLastPage);
+                }, 100);
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
+        
     }
 
     const { onDownload } = useDownloadExcel({
@@ -111,13 +129,30 @@ export default function CampaignTable() {
       });
 
     const generatePDF = () => {
-        const doc = new jsPDF();
-        doc.text('Data Campaign Umax Dashboard', 10, 10);
-        doc.autoTable({
-            head: [['Name', 'Client', 'Account', 'Platorm', "Objective", "Status", "Company"]],
-            body: campaigns.map((campaign) => [campaign.name, campaign.client_name, campaign.account_name, campaign.platform, campaign.objective, campaign.status, campaign.company_name]),
-        });
-        doc.save('DataCampaign.pdf');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download pdf file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const doc = new jsPDF();
+                doc.text('Data Campaign Umax Dashboard', 10, 10);
+                doc.autoTable({
+                    head: [['Name', 'Client', 'Account', 'Platorm', "Objective", "Status", "Company"]],
+                    body: campaigns.map((campaign) => [campaign.name, campaign.client_name, campaign.account_name, campaign.platform, campaign.objective, campaign.status, campaign.company_name]),
+                });
+                doc.save('DataCampaign.pdf');
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
     };
 
     function handleDetail(campaign_id){
@@ -173,7 +208,15 @@ export default function CampaignTable() {
         formData.append('notes', "notes")
         
 
-        const response = await axios.post(`https://umaxxnew-1-d6861606.deta.app/campaign-create?tenantId=${tenant}`, formData, {
+        let url = ""
+
+        if(userData.roles == "sadmin"){
+            url = `https://umaxxnew-1-d6861606.deta.app/campaign-create?tenantId=${tenant}`
+        }else if(userData.roles == "admin"){
+            url = `https://umaxxnew-1-d6861606.deta.app/campaign-create`
+        }
+
+        const response = await axios.post(url, formData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -257,17 +300,28 @@ export default function CampaignTable() {
             setAccount(response.data.Data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        }).then((response) => {
-            setTenant(response.data.Data)
-        })
+        if(userData.roles == "sadmin"){
+            await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            }).then((response) => {
+                setTenant(response.data.Data)
+            })
+        }
+
     }
+
+    const tenantInput = useRef(null)
 
     useEffect(() => {
         getSelectFrontend()
+        if(userData.roles == "sadmin"){
+            tenantInput.current.classList.remove("hidden")
+        }
+        if(userData.roles == "admin"){
+            tenantInput.current.classList.add("hidden")
+        }
     }, [])
 
 
@@ -489,7 +543,7 @@ export default function CampaignTable() {
                                         }
                                     </select>
                                 </div>
-                                <div className="col-span-1">
+                                <div className="col-span-1" ref={tenantInput}>
                                     <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant</label>
                                     <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                         {

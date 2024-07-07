@@ -21,7 +21,7 @@ export default function TenantTable() {
     const [tenantMemo, setTenantMemo] = useState([])
     const [EditTenantId, setEditTenantId] = useState(null)
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
+    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData] = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -98,15 +98,32 @@ export default function TenantTable() {
     const tableRef = useRef(null);
 
     function generateExcel(){
-        const backupLastPage = lastPage;
-        const backupFirstPage = firstPage;
-        setFirstPage(0);
-        setLastPage(tenants.length);
-        setTimeout(() => {
-            onDownload();
-            setFirstPage(backupFirstPage);
-            setLastPage(backupLastPage);
-        }, 100);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download excel file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const backupLastPage = lastPage;
+                const backupFirstPage = firstPage;
+                setFirstPage(0);
+                setLastPage(tenants.length);
+                setTimeout(() => {
+                    onDownload();
+                    setFirstPage(backupFirstPage);
+                    setLastPage(backupLastPage);
+                }, 100);
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
     }
 
     const { onDownload } = useDownloadExcel({
@@ -116,13 +133,30 @@ export default function TenantTable() {
       });
 
     const generatePDF = () => {
-        const doc = new jsPDF();
-        doc.text('Data Tenant Umax Dashboard', 10, 10);
-        doc.autoTable({
-            head: [['Name', 'Address', 'Contact', "Email"]],
-            body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
-        });
-        doc.save('DataTenant.pdf');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download pdf file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const doc = new jsPDF();
+                doc.text('Data Tenant Umax Dashboard', 10, 10);
+                doc.autoTable({
+                    head: [['Name', 'Address', 'Contact', "Email"]],
+                    body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
+                });
+                doc.save('DataTenant.pdf');
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
     };
 
     function handleDetail(tenant_id){
@@ -463,7 +497,7 @@ export default function TenantTable() {
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
                                     <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Company Name</label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company name here"
+                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
                                     required/>
                                 </div>
                                 <div className="col-span-2">
