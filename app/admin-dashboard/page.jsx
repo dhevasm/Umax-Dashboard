@@ -96,6 +96,20 @@ export default function AdminDashboard(){
         }
     }, [updateCard])
 
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        const role = localStorage.getItem('roles');
+        if (!token) {
+            Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+                router.push('/');
+            });
+        } else if (role !== 'admin' && role !== 'sadmin') {
+            Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
+                router.push('/dashboard');
+            });
+        }
+    }, [router]);
+
     return(
         <>
             <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
