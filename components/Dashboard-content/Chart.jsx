@@ -15,6 +15,11 @@ const Chart = ({ campaignID, time }) => {
 
     useEffect(() => {
         const getMetricByCampaign = async () => {
+        if (!campaignID) {
+            console.warn("No campaign ID provided");
+            return;
+        }
+
         try {
             const token = localStorage.getItem("jwtToken");
             if (selected === "week") {
@@ -46,7 +51,7 @@ const Chart = ({ campaignID, time }) => {
         getMetricByCampaign();
     }, [selected, campaignID]);
 
-    const dummyData = {
+    const Data = {
         series: [
         {
             name: "AmountSpent",
@@ -76,7 +81,7 @@ const Chart = ({ campaignID, time }) => {
         curve: "smooth",
         },
         xaxis: {
-        categories: dummyData.categories,
+        categories: Data.categories,
         },
         colors: ["#FF5733", "#33FF57", "#3357FF", "#F39C12"],
     };
@@ -84,7 +89,7 @@ const Chart = ({ campaignID, time }) => {
     return (
         <div>
             <div id="chart">
-                <ApexChart options={options} series={dummyData.series} type="area" height={350} />
+                <ApexChart options={options} series={Data.series} type="area" height={350} />
             </div>
 
         </div>

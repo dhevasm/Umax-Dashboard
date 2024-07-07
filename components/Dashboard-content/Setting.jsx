@@ -9,6 +9,11 @@ const Setting = ({ id }) => {
   const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
   const getMetricByCampaign = async () => {
+    if (!id) {
+      console.warn('No campaign ID provided');
+      return;
+    }
+
     try {
       setLoading(true);
       const token = localStorage.getItem('jwtToken');

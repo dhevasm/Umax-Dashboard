@@ -5,7 +5,6 @@ import axios from "axios";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { AiOutlineFilePdf } from "react-icons/ai";
 import TableLoading from "../Loading/TableLoading";
-import LoadingDots from "../Loading/LoadingDots";
 import LoadingCircle from "../Loading/LoadingCircle";
 
 export default function History({ id }) {
@@ -15,6 +14,11 @@ export default function History({ id }) {
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     const getMetricByCampaign = useCallback(async () => {
+        if (id == '') {
+            console.warn("No campaign ID provided");
+            return;
+        }
+
         try {
             const token = localStorage.getItem('jwtToken');
             const response = await axios.get(`${umaxUrl}/history?campaign_id=${id}&tenantId=${localStorage.getItem('tenant_id')}&page=${currentPage}&limit=${itemsPerPage}`, {
@@ -25,7 +29,6 @@ export default function History({ id }) {
                 },
             });
             setData(response.data.Data);
-            console.log(response.data.Data);
         } catch (error) {
             console.error("Error fetching data:", error.message);
         }
