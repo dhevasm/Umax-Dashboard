@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 import { CiGlobe, CiEdit } from 'react-icons/ci';
@@ -85,9 +85,9 @@ const Page = () => {
                 <div className='w-full h-fit shadow-md'>
                     <div className='w-full h-52 flex flex-col bg-gradient-to-l from-blue-400 to-blue-500 rounded-b-3xl'>
                         <div className='w-full h-[25%] flex justify-between items-center p-3'>
-                            <Link href="/dashboard">
+                            <button onClick={() => router.back()}>
                                 <IoIosArrowBack className='text-gray-50/90 cursor-pointer hover:text-white h-6 w-6'/>
-                            </Link>
+                            </button>
                             <h1 className='font-semibold text-lg text-gray-50/90 cursor-pointer hover:text-white h-6 w-6'>Profile</h1>
                             <Link href="">
                                 <CiEdit className='text-gray-50/90 cursor-pointer hover:text-white h-6 w-6'/>

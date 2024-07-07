@@ -122,7 +122,7 @@ const Page = () => {
     const token = localStorage.getItem('jwtToken');
     if (token) {
       Swal.fire('Already logged in', 'Welcome back!', 'warning').then(() => {
-        router.push("/");
+        router.push("/dashboard");
       });
     }
   }, [router]);

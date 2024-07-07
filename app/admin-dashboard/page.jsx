@@ -25,7 +25,7 @@ export default function AdminDashboard(){
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
-    const [changeTable, setChangeTable] = useState("campaigns")
+    const [changeTable, setChangeTable] = useState("tenants")
 
     const AdminDashboardContextValue = (() => {
         sidebarHide,

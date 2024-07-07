@@ -207,7 +207,7 @@ export default function ClientTable() {
             document.getElementById('email').value = null
             document.getElementById('password').value = null
             document.getElementById('passwordverify').value = null
-            Swal.fire("Success", "Campaing created successfully", "success")
+            Swal.fire("Success", "Client created successfully", "success")
         }else{
             Swal.fire("Error", response.detail, "error")
         }
@@ -350,7 +350,7 @@ export default function ClientTable() {
             <div className="w-full pb-20">
                 <div className="border-t border-gray-300 my-5"></div>
                 <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
-                    <h1 className="text-3xl font-bold">clients</h1>
+                    <h1 className="text-3xl font-bold">Clients</h1>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
                         <div>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
