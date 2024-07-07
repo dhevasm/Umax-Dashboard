@@ -28,7 +28,7 @@ export default function ClientTable() {
         setShowPassword(!showPassword)
     }
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
+    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData] = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -36,6 +36,50 @@ export default function ClientTable() {
     const passwordInput = useRef(null)
     const passwordverifyInput = useRef(null)
     const tenantInput = useRef(null)
+
+    // validasi form
+    const [values, setValues] = useState({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
+    const [error, setError] = useState({
+        name: '',
+        address: '',
+        contact: '',
+        email: '',
+        password: '',
+        passwordverify: ''
+    })
+    const [isvalid, setIsvalid] = useState(false)
+
+    function validateForm(){
+        let errors = {}
+        if(values.name == ''){
+            errors.name = 'Name is required'
+        }
+        if(values.address == ''){
+            errors.address = 'Address is required'
+        }
+        if(values.contact == ''){
+            errors.contact = 'Contact is required'
+        }
+        if(values.email == ''){
+            errors.email = 'Email is required'
+        }
+        if(values.password != values.passwordverify){
+            errors.password = 'Password not match'
+            errors.passwordverify = 'Password not match'
+        }
+        if(values.password == ''){
+            errors.password = 'Password is required'
+        }
+        if(values.passwordverify == ''){
+            errors.passwordverify = 'Password verify is required'
+        }
+        setError(errors)
+        setIsvalid(Object.keys(error).length === 0)
+    }
+
+    useEffect(() => {
+        validateForm()
+    }, [values])
 
     function showModal(mode, client_id = null ){
         setModeModal(mode)
@@ -57,6 +101,7 @@ export default function ClientTable() {
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
+            setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
@@ -65,7 +110,12 @@ export default function ClientTable() {
             document.getElementById('passwordverify').value = null 
             passwordInput.current.classList.remove("hidden")
             passwordverifyInput.current.classList.remove("hidden") 
-            tenantInput.current.classList.remove("hidden")
+            if(userData.roles == "sadmin"){
+                tenantInput.current.classList.remove("hidden")
+            }
+            if(userData.roles == "admin"){
+                tenantInput.current.classList.add("hidden")
+            }
         }
         addModal.current.classList.remove("hidden")
     }
@@ -112,15 +162,32 @@ export default function ClientTable() {
     const tableRef = useRef(null);
 
     function generateExcel(){
-        const backupLastPage = lastPage;
-        const backupFirstPage = firstPage;
-        setFirstPage(0);
-        setLastPage(client.length);
-        setTimeout(() => {
-            onDownload();
-            setFirstPage(backupFirstPage);
-            setLastPage(backupLastPage);
-        }, 100);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download excel file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const backupLastPage = lastPage;
+                const backupFirstPage = firstPage;
+                setFirstPage(0);
+                setLastPage(client.length);
+                setTimeout(() => {
+                    onDownload();
+                    setFirstPage(backupFirstPage);
+                    setLastPage(backupLastPage);
+                }, 100);
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
     }
 
     const { onDownload } = useDownloadExcel({
@@ -130,13 +197,30 @@ export default function ClientTable() {
       });
 
     const generatePDF = () => {
-        const doc = new jsPDF();
-        doc.text('Data client Umax Dashboard', 10, 10);
-        doc.autoTable({
-            head: [['Name', 'Address', 'Contact', "Email", "Status"]],
-            body: client.map((client) => [client.name, client.address, client.contact, client.email, client.status == 1 ? "Active" : "Inactive"]),
-        });
-        doc.save('Dataclient.pdf');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download pdf file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const doc = new jsPDF();
+                doc.text('Data client Umax Dashboard', 10, 10);
+                doc.autoTable({
+                    head: [['Name', 'Address', 'Contact', "Email", "Status"]],
+                    body: client.map((client) => [client.name, client.address, client.contact, client.email, client.status == 1 ? "Active" : "Inactive"]),
+                });
+                doc.save('Dataclient.pdf');
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
     };
 
     function handleDetail(client_id){
@@ -171,46 +255,66 @@ export default function ClientTable() {
     useEffect(() => {
     }, [client])
 
+    
     async function createClient(){
-        const name = document.getElementById('name').value
-        const address = document.getElementById('address').value
-        const contact = `+${document.getElementById('contact').value}`
-        const email = document.getElementById('email').value
-        const status = document.getElementById('status').value
-        const password = document.getElementById('password').value
-        const passwordverify = document.getElementById('passwordverify').value
-        const tenant_id = document.getElementById('tenant').value
+        if(isvalid){
+            const name = document.getElementById('name').value
+            const address = document.getElementById('address').value
+            const contact = `+${document.getElementById('contact').value}`
+            const email = document.getElementById('email').value
+            const status = document.getElementById('status').value
+            const password = document.getElementById('password').value
+            const passwordverify = document.getElementById('passwordverify').value
+            const tenant_id = document.getElementById('tenant').value
 
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('address', address);
-        formData.append('email', email);
-        formData.append('contact', contact);
-        formData.append('status', status);
-        formData.append('password', password);
-        formData.append('confirm_password', passwordverify);
-        formData.append('notes', 'notes')
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('address', address);
+            formData.append('email', email);
+            formData.append('contact', contact);
+            formData.append('status', status);
+            formData.append('password', password);
+            formData.append('confirm_password', passwordverify);
+            formData.append('notes', 'notes')
 
-        const response = await axios.post(`https://umaxxnew-1-d6861606.deta.app/client-create?tenantId=${tenant_id}`, formData, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            let url = ""
+
+            if(userData.roles == "sadmin"){
+                url = `https://umaxxnew-1-d6861606.deta.app/client-create?tenantId=${tenant_id}`
+            }else if(userData.roles == "admin"){
+                url = `https://umaxxnew-1-d6861606.deta.app/client-create`
             }
-        })
 
-        if(response.data.Output == "Create Client Successfully"){
-            getclient()
-            closeModal()
-            setUpdateCard(true)
-            document.getElementById('name').value = null
-            document.getElementById('address').value = null
-            document.getElementById('contact').value = null
-            document.getElementById('email').value = null
-            document.getElementById('password').value = null
-            document.getElementById('passwordverify').value = null
-            Swal.fire("Success", "Client created successfully", "success")
+            const response = await axios.post(url, formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            })
+
+            if(response.data.Output == "Create Client Successfully"){
+                getclient()
+                closeModal()
+                setUpdateCard(true)
+                document.getElementById('name').value = null
+                document.getElementById('address').value = null
+                document.getElementById('contact').value = null
+                document.getElementById('email').value = null
+                document.getElementById('password').value = null
+                document.getElementById('passwordverify').value = null
+                Swal.fire("Success", "Client created successfully", "success")
+            }else{
+                Swal.fire("Error", response.detail, "error")
+            }
         }else{
-            Swal.fire("Error", response.detail, "error")
+            Swal.fire({
+                title: "Error!",
+                text: "Please Fill The Blank!",
+                icon: "error"
+              });
+              validateForm()
+            
         }
+        
     }
 
     async function updateClient(){
@@ -266,13 +370,15 @@ export default function ClientTable() {
             setCulture(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
-            headers : {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        }).then((response) => {
-            setTenants(response.data.Data)
-        })
+        if(userData.roles == "sadmin"){
+            await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+                headers : {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            }).then((response) => {
+                setTenants(response.data.Data)
+            })
+        }
     }
 
     useEffect(() => {
@@ -470,61 +576,84 @@ export default function ClientTable() {
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                             <h3 className="text-lg font-semibold text-gray-900 ">
-                                {`${modeModal} Campaing`}
+                                {`${modeModal} Client`}
                             </h3>
                             <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
-                                <FaTimes />
+                                <FaTimes/>
                             </button>
                         </div>
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">client Name</label>
+                                <div className="col-span-1 ">
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">client Name <span className="text-red-500">*</span> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
-                                    required/>
+                                    required
+                                    onChange={(e) => setValues({...values, name: e.target.value})}/>
+                                    {
+                                        error.name && <p className="text-red-500 text-sm">{error.name}</p>
+                                    }
                                 </div>
-                                <div className="col-span-2">
-                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Address</label>
+                                <div className="col-span-1">
+                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Address <span className="text-red-500">*</span> </label>
                                     <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client address here"
-                                    required/>
+                                    required
+                                    onChange={(e) => setValues({...values, address: e.target.value})}/>
+                                    {
+                                        error.address && <p className="text-red-500 text-sm">{error.address}</p>
+                                    }
                                 </div>
                                 
                                 <div className="col-span-1">
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required/>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email <span className="text-red-500">*</span> </label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required
+                                    onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    {
+                                        error.email && <p className="text-red-500 text-sm">{error.email}</p>
+                                    }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact</label>
-                                    <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required/>
+                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact <span className="text-red-500">*</span> </label>
+                                    <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required
+                                    onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                    {
+                                        error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
+                                    }
                                 </div>
                                 <div className="col-span-1" ref={passwordInput}>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password <span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required/>
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required 
+                                        onChange={(e)=> setValues({...values, password: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
+                                    {
+                                        error.password && <p className="text-red-500 text-sm">{error.password}</p>
+                                    }
                                 </div>
                                 <div className="col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-gray-900 ">Confirm Password</label>
+                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-gray-900 ">Confirm Password <span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required/>
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
+                                    {
+                                        error.passwordverify && <p className="text-red-500 text-sm">{error.passwordverify}</p>
+                                    }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900">Status</label>
+                                    <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900">Status <span className="text-red-500">*</span> </label>
                                     <select id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                         <option value="1">Active</option>
                                         <option value="2">Inactive</option>
                                     </select>
                                 </div>
                                 <div className="col-span-1" ref={tenantInput}>
-                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant</label>
+                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant <span className="text-red-500">*</span> </label>
                                     <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                         {
                                             tenants.length > 0 ? tenants.map((tenant, index) => {

@@ -7,6 +7,10 @@ import { RiFileExcel2Line } from "react-icons/ri";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
 import { AiOutlineFilePdf } from "react-icons/ai";
+import LoadingCircle from "../Loading/LoadingCircle";
+import Swal from "sweetalert2";
+import { BiEdit } from "react-icons/bi";
+import { MdDeleteForever } from "react-icons/md";
 
 const CampaignTable = () => {
     const tableRef = useRef(null);
@@ -14,12 +18,22 @@ const CampaignTable = () => {
     const [selectedPlatform, setSelectedPlatform] = useState("");
     const [selectedObjective, setSelectedObjective] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 947);
+    const [isWideScreen, setIsWideScreen] = useState(true);
+    const date = new Date();
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
+    const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+        .toISOString()
+        .split("T")[0] +
+        " " +
+        (date.getHours().toString().padStart(2, "0")) +
+        ":" +
+        (date.getMinutes().toString().padStart(2, "0")) +
+        ":" +
+        (date.getSeconds().toString().padStart(2, "0"));
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
-        filename: "DataCampaigns",
+        filename: `Campaigns ${dateWithTime}`,
         sheet: "DataCampaigns",
     });
 
@@ -46,8 +60,159 @@ const CampaignTable = () => {
           startY: 20,
         });
     
-        doc.save('campaigns.pdf');
+        doc.save(`Campaigns ${dateWithTime}.pdf`);
     };
+
+    const handleDelete = async (_id) => {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'Cancel',
+          cancelButtonColor: '#d33',
+          confirmButtonColor: '#3085d6',
+          customClass: {
+            confirmButton: 'custom-confirm-button-class',
+            cancelButton: 'custom-cancel-button-class',
+          },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const token = localStorage.getItem('jwtToken');
+              const response = await axios.delete(
+                `${umaxUrl}/campaign-delete?campaign_id=${_id}`,
+                {
+                  headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                  },
+                }
+              );
+    
+              if (response.status === 200) {
+                fetchData();
+                Swal.fire({
+                  title: 'Success!',
+                  text: 'Data has been deleted.',
+                  icon: 'success',
+                  customClass: {
+                    confirmButton: 'custom-ok-button-class',
+                  },
+                });
+              } else {
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Maaf Anda Tidak Dapat Menghapus Data.',
+                  icon: 'error',
+                  customClass: {
+                    confirmButton: 'custom-error-button-class',
+                  },
+                });
+              }
+            } catch (error) {
+              Swal.fire('Error', 'Terjadi kesalahan saat menghapus data.', 'error');
+            }
+          }
+        });
+    };
+
+    // Status Badge
+    function StatusBadge({ status }) {
+        let statusStyle = {}; // Objek gaya status
+
+        switch (status) {
+        case 1:
+            statusStyle = {
+            backgroundColor: "#DFFFDF",
+            color: '#00A600',
+            border: '0.3px solid #00CA00',
+            padding: '5px 13px',
+            fontSize: "12px",
+            borderRadius: '6px',
+            fontWeight: '500',
+            };
+            return (
+            <span style={statusStyle}>Active</span>
+            );
+        case 2:
+            statusStyle = {
+            backgroundColor: "#DCDCDC",
+            color: '#6F6F6F',
+            border: '0.3px solid #868686',
+            padding: '5px 15px',
+            fontSize: "12px",
+            borderRadius: '6px',
+            fontWeight: '500',
+            };
+            return (
+            <span style={statusStyle}>Draft</span>
+            );
+        case 3:
+            statusStyle = {
+            backgroundColor: "#FFF2D1",
+            color: '#E29117',
+            border: '0.3px solid #FF6B00',
+            padding: '4px 10px',
+            fontSize: "12px",
+            borderRadius: '7px',
+            fontWeight: '500',
+            };
+            return (
+            <span style={statusStyle}>Completed</span>
+            );
+        default:
+            return "Unknown";
+        }
+    }
+
+    function ConfirmationModal(name) {
+        if (name === 'pdf') {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "File will be downloaded!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, download it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    generatePDF();
+                    Swal.fire({
+                        title: 'Downloaded!',
+                        text: 'Your file has been downloaded.',
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                    });
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+        } else if (name === 'excel') {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "File will be downloaded!",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, download it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    onDownload();
+                    Swal.fire(
+                        'Downloaded!',
+                        'Your file has been downloaded.',
+                        'success'
+                    );
+                }
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    }
 
     const fetchData = async () => {
         try {
@@ -95,6 +260,7 @@ const CampaignTable = () => {
     };
 
     useEffect(() => {
+        checkDeviceWidth();
         window.addEventListener("resize", checkDeviceWidth);
         return () => window.removeEventListener("resize", checkDeviceWidth);
     }, []);
@@ -105,9 +271,9 @@ const CampaignTable = () => {
                 <h1>Campaigns</h1>
             </div>
             <div className="bg-white border border-gray-300 rounded-lg p-5" style={{ width: "100%" }}>
-                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
-                    <div className={`mb-4 flex flex-row items-start gap-4`}>
-                        {/* {'Filter starts here'} */}
+                    <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
+                        <div className={`mb-4 flex flex-row items-start gap-4`}>
+                            {/* {'Filter starts here'} */}
                             <input
                                 className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 text-[15px] text-semibold py-2`}
                                 // style={{ width: "200px" }}
@@ -142,18 +308,18 @@ const CampaignTable = () => {
                                 <option value="2">Concervation</option>
                                 <option value="3">Consideration</option>
                             </select>
-                        {/* {'Filter ends here'} */}
+                            {/* {'Filter ends here'} */}
+                        </div>
+                        <div className="w-full flex gap-3 justify-end pb-5">
+                            <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
+                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
+                                <RiFileExcel2Line className="relative font-medium text-lg" />
+                            </button>
+                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('pdf')}>
+                                <AiOutlineFilePdf className="relative font-medium text-lg" />
+                            </button>
+                        </div>
                     </div>
-                    <div className="w-full flex gap-3 justify-end pb-5">
-                        <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
-                        <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={onDownload}>
-                            <RiFileExcel2Line className="relative font-medium text-lg" />
-                        </button>
-                        <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={generatePDF}>
-                            <AiOutlineFilePdf className="relative font-medium text-lg" />
-                        </button>
-                    </div>
-                </div>
                 <div className="overflow-x-auto rounded-md">
                     <table className="w-full border">
                         <thead className="bg-white">
@@ -169,55 +335,67 @@ const CampaignTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredData.map((data, index) => (
-                            <tr key={index} className="text-center">
-                                <td className="px-2 py-2 border text-nowrap">
-                                    <button className="text-blue-500">
-                                        <p className="underline">
-                                            {data.name}
-                                        </p>
-                                    </button>
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.client_name}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.platform === 1
-                                    ? "Meta Ads"
-                                    : data.platform === 2
-                                    ? "Google Ads"
-                                    : "Tiktok Ads"}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.account_name}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.objective === 1
-                                    ? "Awareness"
-                                    : data.objective === 2
-                                    ? "Concervation"
-                                    : "Consideration"}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.start_date}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap">
-                                {data.status === 1
-                                    ? "Active"
-                                    : data.status === 2
-                                    ? "Draft"
-                                    : "Competed"}
-                                </td>
-                                <td className="px-2 py-2 border text-nowrap flex">
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded me-1">
-                                    Edit
-                                </button>
-                                <button className="bg-red-500 text-white px-4 py-2 rounded">
-                                    Delete
-                                </button>
-                                </td>
-                            </tr>
-                            ))}
+                            {filteredData.length > 0 ? (
+                                filteredData.map((data, index) => (
+                                <tr key={index} className="text-center">
+                                    <td className="px-2 py-2 border text-nowrap">
+                                        <button className="text-blue-500">
+                                            <p className="underline">
+                                                {data.name}
+                                            </p>
+                                        </button>
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.client_name}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.platform === 1
+                                        ? "Meta Ads"
+                                        : data.platform === 2
+                                        ? "Google Ads"
+                                        : "Tiktok Ads"}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.account_name}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.objective === 1
+                                        ? "Awareness"
+                                        : data.objective === 2
+                                        ? "Concervation"
+                                        : "Consideration"}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                    {data.start_date}
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap">
+                                        <StatusBadge status={data.status} />
+                                    </td>
+                                    <td className="px-2 py-2 border text-nowrap flex gap-1 justify-center">
+                                        <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
+                                            <BiEdit size={25}/>
+                                        </button>
+                                        <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
+                                            <MdDeleteForever size={25}/>
+                                        </button>
+                                    </td>
+                                </tr>
+                                ))
+                            )
+                            :   tableData.length > 0 ? (
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4 border">
+                                        Data Not Found
+                                    </td>
+                                </tr>
+                                ) : (
+                                    <tr>
+                                        <td colSpan="6" className="text-center">
+                                            <LoadingCircle />
+                                        </td>
+                                    </tr>
+                                )
+                            }
                         </tbody>
                     </table>
 

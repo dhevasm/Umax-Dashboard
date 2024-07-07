@@ -88,7 +88,7 @@ export default function AdminSidebar(){
                                 <IconContext.Provider value={{ className: "text-md" }}>
                                         <FaTable />
                                     </IconContext.Provider>
-                                    Table Ads Account</button>
+                                    Table Accounts</button>
                             </li>
                             <li>
                                 <button onClick={() => setChangeTable("clients")} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 flex gap-2 items-center">

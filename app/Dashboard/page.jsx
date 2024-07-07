@@ -5,13 +5,14 @@ import { useState, useEffect, useRef, createContext, useMemo, use } from "react"
 import { Suspense } from "react"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
+import dynamic from "next/dynamic"
 
 // Components
 import Navbar from "@/components/Navbar"
 import Sidebar from "@/components/Sidebar"
 
 // Dashboard Content
-import Performance from "@/components/Dashboard-content/Performance"
+const Performance = dynamic(() => import('@/components/Dashboard-content/Performance'))
 import Metrics from "@/components/Dashboard-content/Metrics"
 import History from "@/components/Dashboard-content/History"
 import Setting from "@/components/Dashboard-content/Setting"
@@ -20,7 +21,7 @@ import PerformenceNavLoading from "@/components/Loading/PerformenceNavLoading"
 export const SidebarContext = createContext()
 // export const campaignIDContext = createContext()
 
-export default function Dashboard() {
+function Dashboard() {
 
     // expanse card start
     const Card = useRef(null)
@@ -39,12 +40,28 @@ export default function Dashboard() {
     }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {
-        if (SidebarHide) {
-            Card.current.classList.add("w-full")
+      const handleResize = () => {
+        // setWidth(window.innerWidth);
+        if (window.innerWidth > 1420) {
+          if (SidebarHide) {
+            Card.current.classList.add('w-full');
+          } else {
+            Card.current.classList.remove('w-full');
+          }
         } else {
-            Card.current.classList.remove("w-full")
+          Card.current.classList.add('w-full');
         }
-    }, [SidebarHide])
+      };
+  
+      // Initial call and event listener setup
+      handleResize();
+      window.addEventListener('resize', handleResize);
+  
+      // Cleanup on component unmount
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [SidebarHide]);
     // expnase card end
 
     const handleCampaignIDChange = (id, name, platform) => {
@@ -87,7 +104,7 @@ export default function Dashboard() {
         {/* Dashboard Container */}
         <div className="flex w-full min-h-full justify-end items-center bg-gray-100">
             {/* Dashboard Card */}
-            <div className="w-[75%] min-h-screen bg-white rounded-xl mt-20 me-3 ms-5 text-black transition-transform" ref={Card}>
+            <div className="w-[75%] min-h-screen bg-white rounded-xl mt-[100px] md:me-3 ms-5 text-black transition-transform" ref={Card}>
                 {/* header */}
                 <div className="m-10">
                     {campaignID === '' ? (
@@ -147,3 +164,4 @@ export default function Dashboard() {
     )
 }
 
+export default dynamic(() => Promise.resolve(Dashboard), { ssr: false });

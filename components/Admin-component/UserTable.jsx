@@ -94,15 +94,32 @@ export default function UserTable() {
     const tableRef = useRef(null);
 
     function generateExcel(){
-        const backupLastPage = lastPage;
-        const backupFirstPage = firstPage;
-        setFirstPage(0);
-        setLastPage(users.length);
-        setTimeout(() => {
-            onDownload();
-            setFirstPage(backupFirstPage);
-            setLastPage(backupLastPage);
-        }, 100);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download excel file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const backupLastPage = lastPage;
+                const backupFirstPage = firstPage;
+                setFirstPage(0);
+                setLastPage(users.length);
+                setTimeout(() => {
+                    onDownload();
+                    setFirstPage(backupFirstPage);
+                    setLastPage(backupLastPage);
+                }, 100);
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
     }
 
     const { onDownload } = useDownloadExcel({
@@ -112,13 +129,31 @@ export default function UserTable() {
       });
 
     const generatePDF = () => {
-        const doc = new jsPDF();
-        doc.text('Data Users Umax Dashboard', 10, 10);
-        doc.autoTable({
-            head: [['Name', 'Role', 'Email', "Company"]],
-            body: users.map((user) => [user.name, user.roles, user.email, user.company_name]),
-        });
-        doc.save('DataUsers.pdf');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to download pdf file?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, download it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const doc = new jsPDF();
+                doc.text('Data Users Umax Dashboard', 10, 10);
+                doc.autoTable({
+                    head: [['Name', 'Role', 'Email', "Company"]],
+                    body: users.map((user) => [user.name, user.roles, user.email, user.company_name]),
+                });
+                doc.save('DataUsers.pdf');
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
+            }
+          });
+       
     };
 
     function handleDetail(user_id){
@@ -469,6 +504,7 @@ export default function UserTable() {
                                         
                                 </div>  
                         </div>
+
                     </div>
                 </div>
             </div> 

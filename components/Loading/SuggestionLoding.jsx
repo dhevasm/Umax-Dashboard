@@ -11,7 +11,7 @@ const SuggestionLoding = () => {
             {/* Title */}
             <div>
                 <div className="w-40 h-5 bg-gray-300 rounded animate-pulse"></div>
-                <div className="w-52 md:60 h-3 bg-gray-300 rounded my-2 animate-pulse"></div>
+                <div className="w-44 md:60 h-3 bg-gray-300 rounded my-2 animate-pulse"></div>
             </div>
         </div>
         <div className="w-full h-0.5 bg-gray-300 my-3"></div>

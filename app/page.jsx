@@ -62,11 +62,13 @@ const Page = () => {
         .then(data => {
           // console.log(data)
           const { Token } = data
-          localStorage.setItem('jwtToken', Token);
-
-          // Arahkan ke Dashboard untuk pengguna non-staff
-
+          const tenantID = data.Data.tenant_id;
           const roles = data.Data.roles;
+
+          // setitem on local storage
+          localStorage.setItem('jwtToken', Token);
+          localStorage.setItem('tenantId', tenantID);
+          localStorage.setItem('roles', roles);
 
           if (roles == 'sadmin' || roles == "admin") {  
             router.push('/admin-dashboard');
@@ -120,10 +122,13 @@ const Page = () => {
   // Check if user is already logged in
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
+    const roles = localStorage.getItem('roles');
     if (token) {
-      Swal.fire('Already logged in', 'Welcome back!', 'warning').then(() => {
-        router.push("/dashboard");
-      });
+        if (roles === 'sadmin' || roles === 'admin') {
+          router.push('/admin-dashboard');
+        } else {
+          router.push('/dashboard');  
+        }
     }
   }, [router]);
 

@@ -5,8 +5,6 @@ import { useState,useEffect, createContext, useRef } from "react"
 import AdminNavbar from "@/components/Admin-component/AdminNavbar"
 import AdminSidebar from "@/components/Admin-component/AdminSidebar"
 import CountCard from "@/components/Admin-component/CountCard"
-import { Main } from "next/document"
-import { navbar } from "@material-tailwind/react"
 import TenantTable from "@/components/Admin-component/TenantTable"
 import UserTable from "@/components/Admin-component/UserTable"
 import CampaignTable from "@/components/Admin-component/CampaignTable"
@@ -62,12 +60,14 @@ export default function AdminDashboard(){
     }
 
     async function getTenantsCount(){   
-        const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-        setTenantsCount(getTenants.data.Data.length)
+        if(userData.roles == 'sadmin'){
+            const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            })
+            setTenantsCount(getTenants.data.Data.length)
+        }
     }
 
     useEffect(() => {

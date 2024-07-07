@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
+import { FiAlertOctagon, FiAlertTriangle, FiCheckCircle } from "react-icons/fi";
 
 export default function SuggestionCard({Title, Desc, Value, Target, Message, Color}){
 
@@ -10,10 +11,10 @@ export default function SuggestionCard({Title, Desc, Value, Target, Message, Col
     useEffect(() => {
         if(Color == "Success"){
             setBackground("bg-green-200")
-            setIcon("Success")
+            setIcon(<FiCheckCircle className="text-green-500" size={30}/>)
         }else if(Color == "Warning"){
             setBackground("bg-yellow-200")
-            setIcon("Warning")
+            setIcon(<FiAlertTriangle className="text-yellow-500" size={30}/>)
         }else{
             setBackground("bg-blue-200")
             setIcon("No Icon")

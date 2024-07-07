@@ -12,6 +12,7 @@ import { GiGlobe } from 'react-icons/gi'
 import { FaUsersCog } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
+import dynamic from 'next/dynamic';
 
 const Page = () => {
     const [name, setName] = useState('')
@@ -163,4 +164,4 @@ const Page = () => {
     )
 }
 
-export default Page
+export default dynamic(() => Promise.resolve(Page), { ssr: false });
