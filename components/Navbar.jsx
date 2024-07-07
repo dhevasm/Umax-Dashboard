@@ -139,9 +139,11 @@ export default function Navbar() {
                             <li className={`font-semibold flex gap-1 items-center ${activeLink === "/accounts" ? "active-link" : ""}`} onClick={() => handleClick("/accounts")}>
                                 <span><AiOutlineUser size={20} /></span>Accounts
                             </li>
-                            <li className={`font-semibold flex gap-1 items-center ${activeLink === "/clients" ? "active-link" : ""}`} onClick={() => handleClick("/clients")}>
-                                <span><BiGroup size={20} /></span>Clients
-                            </li>
+                            {role != 'client' &&
+                                <li className={`font-semibold flex gap-1 items-center ${activeLink === "/clients" ? "active-link" : ""}`} onClick={() => handleClick("/clients")}>
+                                    <span><BiGroup size={20} /></span>Clients
+                                </li>
+                            }
                         </ul>
                     </div>
 
