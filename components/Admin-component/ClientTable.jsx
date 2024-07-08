@@ -74,12 +74,13 @@ export default function ClientTable() {
             errors.passwordverify = 'Password verify is required'
         }
         setError(errors)
-        setIsvalid(Object.keys(error).length === 0)
-    }
+        setIsvalid(Object.keys(errors).length === 0)
+        }
 
     useEffect(() => {
         validateForm()
     }, [values])
+
 
     function showModal(mode, client_id = null ){
         setModeModal(mode)
@@ -101,7 +102,7 @@ export default function ClientTable() {
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
-            setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
+            // setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
@@ -311,7 +312,7 @@ export default function ClientTable() {
                 text: "Please Fill The Blank!",
                 icon: "error"
               });
-              validateForm()
+            //   validateForm()
             
         }
         
