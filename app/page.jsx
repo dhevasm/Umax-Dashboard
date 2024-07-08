@@ -74,7 +74,9 @@ const Page = () => {
 
           if (roles == 'sadmin' || roles == "admin") {  
             router.push('/admin-dashboard');
-          }else{
+          } else if(roles === 'staff'){
+            router.push('campaigns')
+          } else{
             router.push('/dashboard');
           }
           

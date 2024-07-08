@@ -80,7 +80,7 @@ export default function Sidebar({ onCampaignIDChange }) {
     return (
         <>
             {/* Sidebar */}
-            <div className="fixed mt-[100px] mb-3 me-3 md:ms-3 left-0 md:w-[348px] w-[300px] h-screen bg-white rounded-lg flex flex-col items-center px-3 z-10 transition-transform shadow-md md:pb-28" ref={sidebar}>
+            <div className="fixed mt-[100px] mb-3 me-3 md:ms-3 left-0 md:w-[348px] w-[300px] h-screen bg-white rounded-xl flex flex-col items-center px-3 z-10 transition-transform shadow-md md:pb-28" ref={sidebar}>
                 {/* Campaign Status Filter */}
                 <div className="m-3 mt-5 px-4 md:px-5 w-full bg-gray-200 p-2 rounded-full flex justify-between items-center text-md hover:cursor-pointer font-bold">
                     <style jsx>
