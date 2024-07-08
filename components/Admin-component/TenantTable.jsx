@@ -15,6 +15,8 @@ import { FaPen } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
+import { Switch } from "@material-tailwind/react"
+import { indonesia } from "@/public/assets"
 export default function TenantTable() {
 
     const [tenants, setTenants] = useState([])
@@ -25,28 +27,50 @@ export default function TenantTable() {
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
+    const deleteButton = useRef(null)
+
+    const [timezone, setTimezone] = useState([])
+    const [currency, setCurrency] = useState([])
+    const [culture, setCulture] = useState([])
+    const [Country, setCountry] = useState([])
+    const [City, setCity] = useState([])
+    const [alldial, setDial] = useState([])
+    const [DialCountry, setDialCountry] = useState([])
 
     function showModal(mode, tenant_id = null ){
         setModeModal(mode)
         if(mode == "Edit"){
+            deleteButton.current.classList.remove("hidden")
             const filteredTenant = tenantMemo.filter(tenant => tenant._id === tenant_id);
             if(filteredTenant.length > 0){
-                console.log(filteredTenant[0])
+                // console.log(filteredTenant[0])
+                
+                let isFullAdress = false;
                 setEditTenantId(tenant_id)
                 document.getElementById('name').value = filteredTenant[0].company
                 document.getElementById('address').value = filteredTenant[0].address
-                document.getElementById('contact').value = filteredTenant[0].contact.slice(1)
                 document.getElementById('email').value = filteredTenant[0].email
                 document.getElementById('language').value = filteredTenant[0].language
                 document.getElementById('culture').value = filteredTenant[0].culture
                 document.getElementById('currency').value = filteredTenant[0].currency
                 document.getElementById('input_timezone').value = filteredTenant[0].timezone_name
-                document.getElementById('currencyposition').value = filteredTenant[0].currency_position
+                document.getElementById('currencyposition').checked = filteredTenant[0].currency_position
+                setValues({name: filteredTenant[0].company, address: filteredTenant[0].address, contact: filteredTenant[0].contact, email: filteredTenant[0].email})
+                setError({name: '', address: '', contact: '', email: ''})
+                document.getElementById('country').value = filteredTenant[0].address.split(" - ")[2]
+                handleCityList(filteredTenant[0].address.split(" - ")[2])
+                setTimeout(() => {
+                    document.getElementById('city').value = filteredTenant[0].address.split(" - ")[1]
+                    document.getElementById('contact').value = filteredTenant[0].contact.slice(1)
+                }, 300);
                 
             } else{
                 Swal.fire("Tenant not found");
             }
         }else if(mode == "Create") {
+            setValues({name: '', address: '', contact: '', email: ''})
+            setError({name: '', address: '', contact: '', email: ''})
+            deleteButton.current.classList.add("hidden")
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
@@ -57,6 +81,40 @@ export default function TenantTable() {
     function closeModal(){
         addModal.current.classList.add("hidden")
     }
+
+    // Validasi Form 
+    const [values, setValues] = useState({name: '', address: '', contact: '', email: ''})
+    const [error, setError] = useState({
+        name: '',
+        address: '',
+        contact: '',
+        email: '',
+    })
+    const [isvalid, setIsvalid] = useState(false)
+
+    function validateForm(){
+        let errors = {}
+        if(values.name == ''){
+            errors.name = 'Name is required'
+        }
+        if(values.address == ''){
+            errors.address = 'Address is required'
+        }
+        if(values.contact == ''){
+            errors.contact = 'Contact is required'
+        }
+        if(values.email == ''){
+            errors.email = 'Email is required'
+        }
+        setError(errors)
+        setIsvalid(Object.keys(errors).length === 0)
+        }
+
+    useEffect(() => {
+        validateForm()
+    }, [values])
+    
+
     
     function handleDelete(tenant_id){
         Swal.fire({
@@ -70,6 +128,7 @@ export default function TenantTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteTenant(tenant_id)
+            closeModal()
             Swal.fire({
                 title: "Deleted!",
                 text: "Your file has been deleted.",
@@ -80,7 +139,7 @@ export default function TenantTable() {
     }
 
     const deleteTenant = async (tenant_id) => {
-        console.log(tenant_id)
+        // console.log(tenant_id)
         try {
             const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
                 headers: {
@@ -89,7 +148,6 @@ export default function TenantTable() {
             })
             getTenants()
             setUpdateCard(true)
-            
         } catch (error) {
             console.log(error)
         }
@@ -189,49 +247,59 @@ export default function TenantTable() {
     }, [])
 
     async function createTenant(){
-        const company = document.getElementById('name').value
-        const address = document.getElementById('address').value
-        const contact = `+${document.getElementById('contact').value}`
-        const email = document.getElementById('email').value
-        const language = document.getElementById('language').value
-        const culture = document.getElementById('culture').value
-        const currency = document.getElementById('currency').value
-        const timezone = document.getElementById('input_timezone').value
-        const currencyposition = document.getElementById('currencyposition').value
-
-        const formData = new FormData();
-        formData.append('company', company);
-        formData.append('address', address);
-        formData.append('email', email);
-        formData.append('contact', contact);
-        formData.append('language', language);
-        formData.append('culture', culture);
-        formData.append('currency', currency);
-        formData.append('input_timezone', timezone);
-        formData.append('currency_position', currencyposition);
-
-        const response = await axios.post('https://umaxxnew-1-d6861606.deta.app/tenant-create', formData, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+        if(isvalid){
+            const company = document.getElementById('name').value
+            const address = document.getElementById('address').value
+            const country = document.getElementById('country').value
+            const city = document.getElementById('city').value
+    
+            const fulladdress = `${address} - ${city} - ${country}`
+            
+            const contact = `+${document.getElementById('contact').value}`
+            const email = document.getElementById('email').value
+            const language = document.getElementById('language').value
+            const culture = document.getElementById('culture').value
+            const currency = document.getElementById('currency').value
+            const timezone = document.getElementById('input_timezone').value
+            const currencyposition = document.getElementById('currencyposition').checked
+    
+            const formData = new FormData();
+            formData.append('company', company);
+            formData.append('address', fulladdress);
+            formData.append('email', email);
+            formData.append('contact', contact);
+            formData.append('language', language);
+            formData.append('culture', culture);
+            formData.append('currency', currency);
+            formData.append('input_timezone', timezone);
+            formData.append('currency_position', currencyposition);
+    
+            const response = await axios.post('https://umaxxnew-1-d6861606.deta.app/tenant-create', formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            })
+    
+            if(response.data.Output == "Registration Successfully"){
+                getTenants()
+                closeModal()
+                setUpdateCard(true)
+                document.getElementById('name').value = null
+                document.getElementById('address').value = null
+                document.getElementById('contact').value = null
+                document.getElementById('email').value = null
+                Swal.fire("Success", "Tenant created successfully", "success")
+            }else{
+                Swal.fire("Error", response.detail, "error")
             }
-        })
-
-        if(response.data.Output == "Registration Successfully"){
-            getTenants()
-            closeModal()
-            setUpdateCard(true)
-            document.getElementById('name').value = null
-            document.getElementById('address').value = null
-            document.getElementById('contact').value = null
-            document.getElementById('email').value = null
-            Swal.fire("Success", "Tenant created successfully", "success")
         }else{
-            Swal.fire("Error", response.detail, "error")
+            Swal.fire("Failed!","Please fill all required fields!", "error")
         }
     }
 
     async function updateTenant(){
         if(EditTenantId !== null) {
+            if(isvalid){
             const company = document.getElementById('name').value
             const address = document.getElementById('address').value
             const contact = `+${document.getElementById('contact').value}`
@@ -240,10 +308,16 @@ export default function TenantTable() {
             const culture = document.getElementById('culture').value
             const currency = document.getElementById('currency').value
             const timezone = document.getElementById('input_timezone').value
-            const currencyposition = document.getElementById('currencyposition').value
+            const currencyposition = document.getElementById('currencyposition').checked
+            const city = document.getElementById('city').value
+            const country = document.getElementById('country').value
+            const filteraddress = address.split(' - ')
+            // console.log(filteraddress)
+            const fulladdress = `${filteraddress[0]} - ${city} - ${country}`
+
             const formData = new FormData();
             formData.append('company', company);
-            formData.append('address', address);
+            formData.append('address', fulladdress);
             formData.append('email', email);
             formData.append('contact', contact);
             formData.append('language', language);
@@ -269,13 +343,15 @@ export default function TenantTable() {
             }else{
                 Swal.fire("Error", response.detail.ErrMsg, "error")
             }
+            }else{
+                Swal.fire("Failed!","Please fill all required fields!", "error")
+            }
+            
         }
     }
 
 
-    const [timezone, setTimezone] = useState([])
-    const [currency, setCurrency] = useState([])
-    const [culture, setCulture] = useState([])
+
 
     async function getSelectFrontend(){
         await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
@@ -289,7 +365,38 @@ export default function TenantTable() {
         await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
             setCulture(response.data)
         })
+
+        await axios.get("https://countriesnow.space/api/v0.1/countries").then((response) => {
+            setCountry(response.data.data)
+
+        })
+        await axios.get("https://countriesnow.space/api/v0.1/countries/codes").then((response) => {
+            setDial(response.data.data)
+        })
+
+
     }
+
+    async function handleCityList(countryname){
+        let citylist = []
+        Country.map((item) => {
+            if(item.country == countryname){
+                citylist= item.cities
+            }
+        })
+        alldial.map((item) => {
+            if(item.name == countryname){
+                setDialCountry(item.dial_code)
+                // console.log(item.dial_code)
+            }
+        })
+
+        setCity(citylist)
+    }
+
+    useEffect(() => {
+        document.getElementById("contact").value = DialCountry.slice(1)
+    }, [DialCountry])   
 
     useEffect(() => {
         getSelectFrontend()
@@ -409,14 +516,13 @@ export default function TenantTable() {
                                 <th scope="col" className="px-6 py-3">Address</th>
                                 <th scope="col" className="px-6 py-3">Email</th>
                                 <th scope="col" className="px-6 py-3">Contact</th>
-                                <th scope="col" className="px-6 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 tenants.length > 0 ? tenants.map((tenant, index) => {
                                     return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer">
+                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer" onClick={() => showModal("Edit", tenant._id)}>
                                             <td  scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.company}</td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.address}</td>
@@ -424,23 +530,7 @@ export default function TenantTable() {
                                              <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a></td>
                                             <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                                                <a className="text-blue-500" href={`tel:${tenant.contact}`}>{String(tenant.contact)}</a> </td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
-                                                <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(tenant._id)}>
-                                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                                        <FaEye />
-                                                    </IconContext.Provider>
-                                                </button>
-                                                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
-                                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                                        <FaPen />
-                                                    </IconContext.Provider>
-                                                </button>
-                                                <button className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-red-500 py-2 px-4 rounded-md" onClick={() => handleDelete(tenant._id)}>
-                                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                                        <FaTrash />
-                                                    </IconContext.Provider>
-                                                </button>
-                                            </td>
+                                            
                                         </tr>
                                     )
                             }).slice(firstPage, lastPage) : <tr className="text-center animate-pulse"><td>Loading...</td></tr>
@@ -453,7 +543,7 @@ export default function TenantTable() {
                         `
                             .paginDisable{
                                 opacity:0.5;
-                            }
+                            }   
                         `
                     }
 
@@ -480,50 +570,116 @@ export default function TenantTable() {
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
 
-                <div className="relative p-4 w-full max-w-md max-h-full ">
+                <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                            <h3 className="text-lg font-semibold text-gray-900 ">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white ">
+                            <h3 className="text-xl font-semibold">
                                 {`${modeModal} Tenant`}
                             </h3>
-                            <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            
+                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
-                            <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Company Name</label>
+                            <div className="flex justify-between items-center">
+                            <div className="text-xl font-semibold text-blue-500">General</div>
+
+                            <div className="flex gap-2 items-center">
+                            {
+                                modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded" onClick={createTenant}>Add Tenant</button>
+                            }
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1.5 px-4 rounded" ref={deleteButton} onClick={() => handleDelete(EditTenantId)}>
+                                <FaTrash className="text-xl"/>
+                            </button>
+                            </div>
+                            
+                            </div>
+                        
+                        <div className="w-full h-0.5 my-3 bg-gray-300"></div>
+                       
+                            <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen overflow-y-auto pb-52 md:pb-3">
+                                <div className="col-span-2 md:col-span-1">
+                                    <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Company Name {
+                                        error.name && <p className="text-red-500 text-sm">*</p>
+                                    }</label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
-                                    required/>
+                                    required onChange={(e) => setValues({...values, name: e.target.value})}/>
+                                    
                                 </div>
-                                <div className="col-span-2">
-                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Company Address</label>
+                                <div className="col-span-2 md:col-span-1">
+                                    <label htmlFor="address" className="mb-2 text-sm font-medium text-gray-900 flex">Company Address {
+                                        error.address && <p className="text-red-500 text-sm">*</p>
+                                    }</label>
                                     <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
-                                    required/>
+                                    required onChange={(e) => setValues({...values, address: e.target.value})}/>
                                 </div>
-                                
-                                <div className="col-span-1">
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required/>
+
+                                <div className="col-span-2 md:col-span-1">
+                                    <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-900">Country</label>
+                                    <select id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
+                                        <option value="0" key={0} disabled hidden>Select Country</option>
+                                        {
+                                            Country.length > 0 ? Country.map((item, index) => (
+                                                <option key={index} value={item.country}>{item.country}</option>
+                                            )) : <option disabled>Loading</option>
+                                        }
+                                    </select>
                                 </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact</label>
-                                    <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required/>
+
+                                <div className="col-span-2 md:col-span-1">
+                                    <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900">City</label>
+                                    <select id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                        {
+                                            City.length > 0 ? City.map((item, index) => (
+                                                <option key={index} value={item}>{item}</option>
+                                            )) : <option disabled hidden>Please Select Country   </option>
+                                        }
+                                    </select>
                                 </div>
-                                <div className="col-span-1">
+
+                                <div className="col-span-2 md:col-span-1">
+                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email{
+                                        error.email && <p className="text-red-500 text-sm">*</p>
+                                    }</label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                </div>
+
+                                <div className="col-span-2 md:col-span-1">
+                                    <label htmlFor="contact" className="flex mb-2 text-sm font-medium text-gray-900 ">Contact {
+                                        error.contact && <p className="text-red-500 text-sm">*</p>
+                                    }</label>
+                                    <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                </div>
+
+                                <div className="
+                                col-span-2">
+                                    <div className="flex justify-between items-center">
+                                    <div className="text-xl font-semibold text-blue-500 ">Format</div>
+                                    <div className="flex items-center gap-1">
+                                        <input id="currencyposition" type="checkbox"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
+                                        <label htmlFor="currencyposition" className="w-full py-3 ms-2 text-sm    text-gray-900">Currency Position</label>
+                                    </div>
+                                    </div>
+                                <div className="w-full h-0.5 my-1 bg-gray-300"></div>
+                                </div>
+
+                                <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
-                                    <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                        <option value={null} index={0} disabled hidden>Select Language</option>
                                         <option value="en">English</option>
                                         <option value="id">Indonesia</option>
                                     </select>
                                 </div>
-                                <div className="col-span-1">
+
+                                <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
-                                    <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                    <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                    <option value={null} index={0} disabled hidden>Select Culture</option>
                                         {
                                             culture.length > 0 ? culture.map((item, index) => (
                                                 <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
@@ -531,9 +687,10 @@ export default function TenantTable() {
                                         }
                                     </select>
                                 </div>
-                                <div className="col-span-1">
+                                <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
-                                    <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                    <option value={null} index={0} disabled hidden>Select Timezone</option>
                                     {
                                             timezone.length > 0 ? timezone.map((item, index) => (
                                                 <option key={index} value={item.timezone}>{item.timezone}</option>
@@ -541,36 +698,22 @@ export default function TenantTable() {
                                         }
                                     </select>
                                 </div>
-                                <div className="col-span-1">
+                                <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
-                                    <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                    <option value={null} index={0} disabled hidden>Select Currency</option>
                                     {
                                             currency.length > 0 ? currency.map((item, index) => (
-                                                <option key={index} value={item.currency}>{item.currency}</option>
+                                                <option key={index} value={item.currency.split(" ")[0]}>{item.currency}</option>
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
-                                </div>
-                                
-                            </div>
-                                <div className="flex justify-between items-end">
-                                    <div>
-                                    <label htmlFor="currencyposition" className="block mb-2 text-sm font-medium text-gray-900">Currency Position</label>
-                                        <select id="currencyposition" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                            <option value="true">True</option>
-                                            <option value="false">False</option>
-                                        </select>
                                     </div>
-                                        {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createTenant}>Submit</button>
-                                        }
-                                        
-                                </div>  
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div> 
-
         </>
     )
 }

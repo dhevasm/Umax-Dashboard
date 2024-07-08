@@ -24,6 +24,7 @@ export default function ClientTable() {
     const [EditclientId, setEditclientId] = useState(null)
     const [showPassword, setShowPassword] = useState(false)
 
+
     function handleShowPassword() {
         setShowPassword(!showPassword)
     }
@@ -102,7 +103,7 @@ export default function ClientTable() {
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
-            // setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
+            setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
@@ -672,7 +673,6 @@ export default function ClientTable() {
                                         {
                                             modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>Submit</button>
                                         }
-                                        
                                 </div>  
                         </div>
                     </div>
