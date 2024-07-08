@@ -76,7 +76,7 @@ export default function ClientTable() {
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
-        }
+    }
 
     useEffect(() => {
         validateForm()

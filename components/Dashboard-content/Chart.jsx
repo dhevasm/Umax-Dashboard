@@ -88,9 +88,15 @@ const Chart = ({ campaignID, time }) => {
 
     return (
         <div>
+            {campaignID != '' ? 
             <div id="chart">
                 <ApexChart options={options} series={Data.series} type="area" height={350} />
             </div>
+            :
+            <div className="w-full h-full flex justify-center items-center pb-10">
+                <img src="/assets/NotFound.png" className="h-80 w-80 animate-pulse"/>
+            </div>
+            }
 
         </div>
     );

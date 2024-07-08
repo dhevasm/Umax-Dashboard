@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SettingLoading from '../Loading/SettingLoading';
 import { RiRefreshLine } from 'react-icons/ri';
+import Swal from 'sweetalert2';
 
 const Setting = ({ id }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
+
+  useEffect(() => {
+    getMetricByCampaign();
+  }, []);
 
   const getMetricByCampaign = async () => {
     if (!id) {
@@ -32,14 +37,52 @@ const Setting = ({ id }) => {
     }
   };
 
-  useEffect(() => {
-    getMetricByCampaign();
-  }, []);
-
   const handleChange = (index, field, value) => {
-    const newData = [...data];
-    newData[index][field] = value;
-    setData(newData);
+    const newData = [...data]; // Create a copy of the data array
+    newData[index][field] = value; // Update the specific field at the given index
+    setData(newData); // Update the state with the modified data array
+  };  
+  
+
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      const convertedValues = data.map(item => ({
+        rar: parseInt(item.rar),
+        ctr: parseInt(item.ctr),
+        oclp: parseInt(item.oclp),
+        roas: parseFloat(item.roas),
+        cpr: parseInt(item.cpr),
+        cpc: parseInt(item.cpc),
+      }));
+
+      await axios.put(
+        `${umaxUrl}/metrics-settings?campaign_id=${id}`,
+        convertedValues[0], // Assuming there's only one item in data array
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      );
+      
+      // Show success message using Swal
+      Swal.fire({
+        icon: 'success',
+        title: 'Data Berhasil Disimpan',
+        showConfirmButton: true,
+        confirmButtonText: 'OK',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // window.location.reload(); // Reload the page if needed
+        }
+      });
+    } catch (error) {
+      console.error('Error updating:', error);
+      // Handle error display if necessary
+    }
   };
 
   const handleRefresh = () => {
@@ -65,13 +108,13 @@ const Setting = ({ id }) => {
           {data.map((item, index) => (
             <div key={index} className='p-6 mb-8 bg-white rounded-lg'>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-10 mb-8'>
-                <div>
+              <div>
                   <label className='block text-sm font-medium text-gray-700'>
                     Reach Amount Ratio (RAR)
                   </label>
                   <p className='text-xs text-gray-500'>Recommended value &gt; 5%</p>
                   <input
-                    type="text"
+                    type="number"
                     className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
                     value={item.rar}
                     onChange={(e) => handleChange(index, 'rar', e.target.value)}
@@ -83,7 +126,7 @@ const Setting = ({ id }) => {
                   </label>
                   <p className='text-xs text-gray-500'>Recommended value &gt; 1.5%</p>
                   <input
-                    type="text"
+                    type="number"
                     className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
                     value={item.ctr}
                     onChange={(e) => handleChange(index, 'ctr', e.target.value)}
@@ -95,7 +138,7 @@ const Setting = ({ id }) => {
                   </label>
                   <p className='text-xs text-gray-500'>Recommended value &gt; 80%</p>
                   <input
-                    type="text"
+                    type="number"
                     className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
                     value={item.oclp}
                     onChange={(e) => handleChange(index, 'oclp', e.target.value)}
@@ -107,7 +150,7 @@ const Setting = ({ id }) => {
                   </label>
                   <p className='text-xs text-gray-500'>Recommended value &gt; 3.0x</p>
                   <input
-                    type="text"
+                    type="number"
                     className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
                     value={item.roas}
                     onChange={(e) => handleChange(index, 'roas', e.target.value)}
@@ -119,7 +162,7 @@ const Setting = ({ id }) => {
                   </label>
                   <p className='text-xs text-gray-500'>Recommended value &lt; Rp. 5000</p>
                   <input
-                    type="text"
+                    type="number"
                     className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
                     value={item.cpr}
                     onChange={(e) => handleChange(index, 'cpr', e.target.value)}
@@ -138,7 +181,10 @@ const Setting = ({ id }) => {
                   />
                 </div>
               </div>
-              <button className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'>
+              <button 
+                className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'
+                onClick={handleSubmit} // Call handleSubmit on Save button click
+              >
                 Save
               </button>
             </div>

@@ -20,6 +20,8 @@ export default function AdminDashboard(){
 
     const [userData, setUserData] = useState([])
 
+    const router = useRouter()
+
     const [tenantsCount, setTenantsCount] = useState ("")
     const [usersCount, setUsersCount] = useState("")
     const [campaignsCount, setCampaignsCount] = useState("")

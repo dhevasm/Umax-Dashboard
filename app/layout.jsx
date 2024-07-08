@@ -10,12 +10,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
   return (
     <html lang="en" className="bg-gray-100">
-        <body className={inter.className}>
-            {children}
-        </body>
+      <head>
+        <link
+          rel="icon"
+          href="/assets/icon.png"
+        />
+      </head>
+      <body className={inter.className}>
+        {children}
+      </body>
     </html>
   );
 }
+

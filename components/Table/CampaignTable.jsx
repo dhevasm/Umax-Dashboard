@@ -9,9 +9,10 @@ import 'jspdf-autotable';
 import { AiOutlineFilePdf } from "react-icons/ai";
 import LoadingCircle from "../Loading/LoadingCircle";
 import Swal from "sweetalert2";
-import { BiEdit } from "react-icons/bi";
-import { MdDeleteForever } from "react-icons/md";
+import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from "react-icons/bi";
+import { MdDeleteForever} from "react-icons/md";
 import CreateCampaign from "../Create/CreateCampaign";
+import CampaignDetail from "../Detail/CampaignDetail";
 
 const CampaignTable = () => {
     const tableRef = useRef(null);
@@ -21,8 +22,11 @@ const CampaignTable = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isWideScreen, setIsWideScreen] = useState(true);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const date = new Date();
+    const [selectedCampaign, setSelectedCampaign] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const dataPerPage = 10;
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
+    const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
         .split("T")[0] +
@@ -43,14 +47,15 @@ const CampaignTable = () => {
         const doc = new jsPDF();
         doc.text('Campaign Data', 14, 15);
     
-        const filteredData = tableData.map((row) => ({
-          Name: row.name,
-          Client: row.client,
-          Platform: row.platform,
-          Account: row.account,
-          Objective: row.objective,
-          'Start Date': row.startdate,
-          Status: String(row.status),
+        const filteredData = tableData.map((row, index) => ({
+            No: index + 1,
+            Name: row.name,
+            Client: row.client,
+            Platform: row.platform,
+            Account: row.account,
+            Objective: row.objective,
+            'Start Date': row.startdate,
+            Status: String(row.status),
         }));
     
         const tableColumnNames = Object.keys(filteredData[0]);
@@ -279,13 +284,116 @@ const CampaignTable = () => {
         return () => window.removeEventListener("resize", checkDeviceWidth);
     }, []);
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (campaign) => {
+        setSelectedCampaign(campaign);
         setModalIsOpen(true);
     };
 
     const handleCloseModal = () => {
         setModalIsOpen(false);
+        setSelectedCampaign(null);
     };
+
+    // Calculate total number of pages
+    const totalPages = Math.ceil(filteredData.length / dataPerPage);
+
+    // Function to change current page
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
+    const renderPagination = () => {
+        const pageButtons = [];
+        const maxButtons = 3; // Maximum number of buttons to show
+    
+        // Previous button
+        pageButtons.push(
+            <button
+                key="first"
+                className={`px-3 py-1 border ${
+                    currentPage === 1 ? "bg-gray-200 border-gray-300 border cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(1)}
+                disabled={currentPage === 1}
+            >
+                <BiFirstPage />
+            </button>
+        );
+    
+        // Previous button
+        pageButtons.push(
+            <button
+                key="prev"
+                className={`px-3 py-1 border ${
+                    currentPage === 1 ? "bg-gray-200 border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+            >
+                <BiSolidArrowToLeft />
+            </button>
+        );
+    
+        // Render page buttons
+        for (let i = 1; i <= totalPages; i++) {
+            // Show only maxButtons buttons around the current page
+            if (
+                (i >= currentPage - Math.floor(maxButtons / 2) &&
+                    i <= currentPage + Math.floor(maxButtons / 2))
+            ) {
+                pageButtons.push(
+                    <button
+                        key={i}
+                        className={`px-3 py-1 border ${
+                            i === currentPage ? "bg-gray-100 border-gray-300" : "bg-white hover:bg-gray-100"
+                        } rounded-md`}
+                        onClick={() => goToPage(i)}
+                    >
+                        {i}
+                    </button>
+                );
+            } 
+        }
+    
+        // Next button
+        pageButtons.push(
+            <button
+                key="next"
+                className={`px-3 py-1 border ${
+                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+            >
+                <BiSolidArrowToRight />
+            </button>
+        );
+    
+        // Next button
+        pageButtons.push(
+            <button
+                key="last"
+                className={`px-3 py-1 border ${
+                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(totalPages)}
+                disabled={currentPage === totalPages}
+            >
+                <BiLastPage />
+            </button>
+        );
+    
+        return (
+            <div className="flex justify-center gap-2 mt-4">
+                {pageButtons}
+            </div>
+        );
+    };
+    
+    
+    const indexOfLastCampaign = currentPage * dataPerPage;
+    const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
+    const currentCampaigns = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign);
 
     return (
         <>
@@ -346,22 +454,24 @@ const CampaignTable = () => {
                     <table className="w-full border">
                         <thead className="bg-white">
                             <tr className="text-left">
-                            <th className="px-2 py-2 border">Name</th>
-                            <th className="px-2 py-2 border">Client</th>
-                            <th className="px-2 py-2 border">Platform</th>
-                            <th className="px-2 py-2 border">Account</th>
-                            <th className="px-2 py-2 border">Objective</th>
-                            <th className="px-2 py-2 border">Start Date</th>
-                            <th className="px-2 py-2 border">Status</th>
-                            <th className="px-2 py-2 border hidden">Action</th>
+                                <th className="px-2 py-2 border">No. </th>
+                                <th className="px-2 py-2 border">Name</th>
+                                <th className="px-2 py-2 border">Client</th>
+                                <th className="px-2 py-2 border">Platform</th>
+                                <th className="px-2 py-2 border">Account</th>
+                                <th className="px-2 py-2 border">Objective</th>
+                                <th className="px-2 py-2 border">Start Date</th>
+                                <th className="px-2 py-2 border">Status</th>
+                                <th className="px-2 py-2 border hidden">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredData.length > 0 ? (
-                                filteredData.map((data, index) => (
+                            {currentCampaigns.length > 0 ? (
+                                currentCampaigns.map((data, index) => (
                                 <tr key={index} className="text-center">
+                                    <td className="px-2 py-2 border text-nowrap text-left">{index + 1}.</td>
                                     <td className="px-2 py-2 border text-nowrap">
-                                        <button className="text-blue-500">
+                                        <button className="text-gray-500 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>
                                             <p className="underline">
                                                 {data.name}
                                             </p>
@@ -421,10 +531,15 @@ const CampaignTable = () => {
                         </tbody>
                     </table>
 
+                    <div className="flex justify-end mt-4">
+                        {renderPagination()}
+                    </div>
+
                     {/* table for ekspor */}
                     <table className="w-full border hidden" ref={tableRef}>
                         <thead className="bg-white">
                             <tr className="text-left">
+                            <th className="px-4 py-2 border">No. </th>
                             <th className="px-4 py-2 border">Name</th>
                             <th className="px-4 py-2 border">Client</th>
                             <th className="px-4 py-2 border">Platform</th>
@@ -437,6 +552,7 @@ const CampaignTable = () => {
                         <tbody>
                             {filteredData.map((data, index) => (
                             <tr key={index} className="text-center">
+                                <td className="px-4 py-2 border text-nowrap text-left">{index + 1}.</td>
                                 <td className="px-4 py-2 border text-nowrap">{data.name}</td>
                                 <td className="px-4 py-2 border text-nowrap">
                                 {data.client_name}
@@ -475,7 +591,9 @@ const CampaignTable = () => {
                 </div>
             </div>
 
-            <CreateCampaign isOpen={modalIsOpen} onClose={handleCloseModal}/>
+            {selectedCampaign && (
+                <CampaignDetail isOpen={modalIsOpen} onClose={handleCloseModal} data={selectedCampaign} />
+            )}
         </>
     )
 }
