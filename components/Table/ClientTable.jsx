@@ -9,9 +9,10 @@ import Swal from "sweetalert2";
 import { useDownloadExcel } from "react-export-table-to-excel";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
-import { BiEdit } from 'react-icons/bi';
 import { MdDeleteForever } from 'react-icons/md';
 import CreateClient from '../Create/CreateClient';
+import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from 'react-icons/bi';
+import ClientDetail from '../Detail/ClientDetail';
 
 const ClientTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -19,6 +20,9 @@ const ClientTable = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isWideScreen, setIsWideScreen] = useState(true);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const dataPerPage = 10;
+    const [selectedClient, setSelectedClient] = useState(null);
     const tableRef = useRef(null);
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -59,7 +63,8 @@ const ClientTable = () => {
         doc.text('Client Data', 14, 15);
     
         // FUNGSI FILTER SELECT
-        const filteredData = tableData.map((row) => ({
+        const filteredData = tableData.map((row, index) => ({
+          No: index + 1,  
           Name: row.name,
           Address: row.address,
           Contact: row.contact,
@@ -253,13 +258,116 @@ const ClientTable = () => {
         }
     }
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (client) => {
+        setSelectedClient(client);
         setModalIsOpen(true);
     };
 
     const handleCloseModal = () => {
         setModalIsOpen(false);
+        setSelectedClient(null);
     };
+
+    // Calculate total number of pages
+    const totalPages = Math.ceil(filteredData.length / dataPerPage);
+
+    // Function to change current page
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
+    const renderPagination = () => {
+        const pageButtons = [];
+        const maxButtons = 3; // Maximum number of buttons to show
+    
+        // Previous button
+        pageButtons.push(
+            <button
+                key="first"
+                className={`px-3 py-1 border ${
+                    currentPage === 1 ? "bg-gray-200 border-gray-300 border cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(1)}
+                disabled={currentPage === 1}
+            >
+                <BiFirstPage />
+            </button>
+        );
+    
+        // Previous button
+        pageButtons.push(
+            <button
+                key="prev"
+                className={`px-3 py-1 border ${
+                    currentPage === 1 ? "bg-gray-200 border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+            >
+                <BiSolidArrowToLeft />
+            </button>
+        );
+    
+        // Render page buttons
+        for (let i = 1; i <= totalPages; i++) {
+            // Show only maxButtons buttons around the current page
+            if (
+                (i >= currentPage - Math.floor(maxButtons / 2) &&
+                    i <= currentPage + Math.floor(maxButtons / 2))
+            ) {
+                pageButtons.push(
+                    <button
+                        key={i}
+                        className={`px-3 py-1 border ${
+                            i === currentPage ? "bg-gray-100 border-gray-300" : "bg-white hover:bg-gray-100"
+                        } rounded-md`}
+                        onClick={() => goToPage(i)}
+                    >
+                        {i}
+                    </button>
+                );
+            } 
+        }
+    
+        // Next button
+        pageButtons.push(
+            <button
+                key="next"
+                className={`px-3 py-1 border ${
+                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+            >
+                <BiSolidArrowToRight />
+            </button>
+        );
+    
+        // Next button
+        pageButtons.push(
+            <button
+                key="last"
+                className={`px-3 py-1 border ${
+                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(totalPages)}
+                disabled={currentPage === totalPages}
+            >
+                <BiLastPage />
+            </button>
+        );
+    
+        return (
+            <div className="flex justify-center gap-2 mt-4">
+                {pageButtons}
+            </div>
+        );
+    };
+    
+    
+    const indexOfLastCampaign = currentPage * dataPerPage;
+    const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
+    const currentClients = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign);
 
     return (
         <>
@@ -299,6 +407,7 @@ const ClientTable = () => {
                         <table className='w-full border'>
                             <thead className='bg-white'>
                                 <tr className='text-left'>
+                                    <th className='px-4 py-2 border text-left'>No.</th>
                                     <th className='px-4 py-2 border'>Name</th>
                                     <th className='px-4 py-2 border'>Address</th>
                                     <th className='px-4 py-2 border'>Contact</th>
@@ -308,13 +417,20 @@ const ClientTable = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredData.length > 0 ? (
-                                    filteredData.map((data, index) => (
+                                {currentClients.length > 0 ? (
+                                    currentClients.map((data, index) => (
                                         <tr key={index} className='text-center'>
-                                            <td className='px-4 py-2 border text-nowrap'>{data.name}</td>
+                                            <td className='px-4 py-2 border text-nowrap'>{index + 1}.</td>
+                                            <td className='px-4 py-2 border text-nowrap'>
+                                                <button className="text-gray-500 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>{data.name}</button>
+                                            </td>
                                             <td className='px-4 py-2 border text-nowrap'>{data.address}</td>
-                                            <td className='px-4 py-2 border text-nowrap'>{data.contact}</td>
-                                            <td className='px-4 py-2 border text-nowrap'>{data.email}</td>
+                                            <td className='px-4 py-2 border text-blue-500 underline text-nowrap'>
+                                                <a href={`tel:${data.contact}`}>{data.contact}</a>
+                                            </td>
+                                            <td className='px-4 py-2 border text-blue-500 underline text-nowrap'>
+                                                <a href={`mailto:${data.email}`}>{data.email}</a>
+                                            </td>
                                             <td className='px-4 py-2 border text-nowrap'><StatusBadge status={data.status} /></td>
                                             <td className='px-4 py-2 border text-nowrap hidden justify-center gap-1'>
                                                 <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
@@ -344,10 +460,15 @@ const ClientTable = () => {
                             </tbody>
                         </table>
 
+                        <div className="flex justify-end mt-4">
+                            {renderPagination()}
+                        </div>
+
                         {/* Table for eksport */}
                         <table className='w-full border hidden' ref={tableRef}>
                             <thead className='bg-white'>
                                 <tr className='text-left'>
+                                    <th className='px-4 py-2 border'>No.</th>
                                     <th className='px-4 py-2 border'>Name</th>
                                     <th className='px-4 py-2 border'>Address</th>
                                     <th className='px-4 py-2 border'>Contact</th>
@@ -358,10 +479,15 @@ const ClientTable = () => {
                             <tbody>
                                 {filteredData.map((data, index) => (
                                         <tr key={index} className='text-center'>
+                                            <td className='px-4 py-2 border'>{index + 1}.</td>
                                             <td className='px-4 py-2 border'>{data.name}</td>
                                             <td className='px-4 py-2 border'>{data.address}</td>
-                                            <td className='px-4 py-2 border'>{data.contact}</td>
-                                            <td className='px-4 py-2 border'>{data.email}</td>
+                                            <td className='px-4 py-2 border text-blue-500 underline text-nowrap'>
+                                                <a href={`tel:${data.contact}`}>{data.contact}</a>
+                                            </td>
+                                            <td className='px-4 py-2 border text-blue-500 underline text-nowrap'>
+                                                <a href={`mailto:${data.email}`}>{data.email}</a>
+                                            </td>
                                             <td className='px-4 py-2 border'>{data.status == 1 ? 'Active' : data.status == 2 ? 'Deactive' : ''}</td>
                                         </tr>
                                 ))}
@@ -370,7 +496,9 @@ const ClientTable = () => {
                     </div>
             </div>
 
-            <CreateClient isOpen={modalIsOpen} onClose={handleCloseModal} />
+            {selectedClient && (
+                <ClientDetail isOpen={modalIsOpen} onClose={handleCloseModal} data={selectedClient} />
+            )}
         </>
     )
 }

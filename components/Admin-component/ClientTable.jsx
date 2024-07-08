@@ -74,7 +74,7 @@ export default function ClientTable() {
             errors.passwordverify = 'Password verify is required'
         }
         setError(errors)
-        setIsvalid(Object.keys(error).length === 0)
+        setIsvalid(Object.keys(errors).length === 0)
     }
 
     useEffect(() => {

@@ -7,9 +7,9 @@ import Swal from "sweetalert2";
 import { useDownloadExcel } from "react-export-table-to-excel";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
-import { BiEdit } from 'react-icons/bi';
+import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from 'react-icons/bi';
 import { MdDeleteForever } from 'react-icons/md';
-import CreateAccount from '../Create/CreateCampaign';
+import AccountDetail from '../Detail/AccountDetail';
 
 const AccountTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -18,6 +18,9 @@ const AccountTable = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isWideScreen, setIsWideScreen] = useState(true); // Set default to true
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [selectedAccount, setSelectedAccount] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const dataPerPage = 10;
     const tableRef = useRef(null);
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -59,7 +62,8 @@ const AccountTable = () => {
         const doc = new jsPDF();
         doc.text('Account Data', 14, 15);
     
-        const filteredData = tableData.map((row) => ({
+        const filteredData = tableData.map((row, index) => ({
+            No: index + 1,
             Name: row.username,
             Client: row.client_name,
             Platform: row.platform === 1 ? 'Meta Ads' : row.platform === 2 ? 'Google Ads' : row.platform === 3 ? 'Tiktok Ads' : '',
@@ -272,13 +276,116 @@ const AccountTable = () => {
         }
     }
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (account) => {
+        setSelectedAccount(account);
         setModalIsOpen(true);
     };
 
     const handleCloseModal = () => {
         setModalIsOpen(false);
+        setSelectedAccount(null);
     };
+
+    // Calculate total number of pages
+    const totalPages = Math.ceil(filteredData.length / dataPerPage);
+
+    // Function to change current page
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
+    const renderPagination = () => {
+        const pageButtons = [];
+        const maxButtons = 3; // Maximum number of buttons to show
+    
+        // Previous button
+        pageButtons.push(
+            <button
+                key="first"
+                className={`px-3 py-1 border ${
+                    currentPage === 1 ? "bg-gray-200 border-gray-300 border cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(1)}
+                disabled={currentPage === 1}
+            >
+                <BiFirstPage />
+            </button>
+        );
+    
+        // Previous button
+        pageButtons.push(
+            <button
+                key="prev"
+                className={`px-3 py-1 border ${
+                    currentPage === 1 ? "bg-gray-200 border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+            >
+                <BiSolidArrowToLeft />
+            </button>
+        );
+    
+        // Render page buttons
+        for (let i = 1; i <= totalPages; i++) {
+            // Show only maxButtons buttons around the current page
+            if (
+                (i >= currentPage - Math.floor(maxButtons / 2) &&
+                    i <= currentPage + Math.floor(maxButtons / 2))
+            ) {
+                pageButtons.push(
+                    <button
+                        key={i}
+                        className={`px-3 py-1 border ${
+                            i === currentPage ? "bg-gray-100 border-gray-300" : "bg-white hover:bg-gray-100"
+                        } rounded-md`}
+                        onClick={() => goToPage(i)}
+                    >
+                        {i}
+                    </button>
+                );
+            } 
+        }
+    
+        // Next button
+        pageButtons.push(
+            <button
+                key="next"
+                className={`px-3 py-1 border ${
+                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+            >
+                <BiSolidArrowToRight />
+            </button>
+        );
+    
+        // Next button
+        pageButtons.push(
+            <button
+                key="last"
+                className={`px-3 py-1 border ${
+                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                } rounded-md`}
+                onClick={() => goToPage(totalPages)}
+                disabled={currentPage === totalPages}
+            >
+                <BiLastPage />
+            </button>
+        );
+    
+        return (
+            <div className="flex justify-center gap-2 mt-4">
+                {pageButtons}
+            </div>
+        );
+    };
+    
+    
+    const indexOfLastCampaign = currentPage * dataPerPage;
+    const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
+    const currentAccounts = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign);
 
     return (
         <>
@@ -321,6 +428,7 @@ const AccountTable = () => {
                     <table className='w-full border-collapse'>
                         <thead className='bg-white'>
                             <tr className='text-left'>
+                                <th className='px-4 py-2 border'>No. </th>
                                 <th className='px-4 py-2 border'>Name</th>
                                 <th className='px-4 py-2 border'>Client</th>
                                 <th className='px-4 py-2 border'>Platform</th>
@@ -330,13 +438,20 @@ const AccountTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredData.length > 0 ? (
-                                filteredData.map((data, index) => (
+                            {currentAccounts.length > 0 ? (
+                                currentAccounts.map((data, index) => (
                                     <tr key={index} className='border text-center'>
-                                        <td className='px-4 py-2 border text-nowrap'>{data.username}</td>
+                                        <td className='px-4 py-2 border text-nowrap text-left'>{index + 1}.</td>
+                                        <td className='px-4 py-2 border text-nowrap'>
+                                            <button className="text-gray-500 underline" title={`Detail of ${data.username}`} onClick={() => handleOpenModal(data)}>
+                                                {data.username}
+                                            </button>
+                                        </td>
                                         <td className='px-4 py-2 border text-nowrap'>{data.client_name}</td>
                                         <td className='px-4 py-2 border text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
-                                        <td className='px-4 py-2 border text-nowrap'>{data.email}</td>
+                                        <td className='px-4 py-2 border text-nowrap'>
+                                            <a href={`mailto:${data.email}`} className="text-blue-500 underline">{data.email}</a>
+                                        </td>
                                         <td className='px-4 py-2 border text-nowrap'><StatusBadge status={data.status} /></td>
                                         <td className='px-4 py-2 border text-nowrap hidden gap-1 justify-center'>
                                             <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
@@ -366,9 +481,14 @@ const AccountTable = () => {
                         </tbody>
                     </table>
 
+                    <div className="flex justify-end mt-4">
+                        {renderPagination()}
+                    </div>
+
                     <table className='w-full border-collapse hidden' ref={tableRef}>
                         <thead className='bg-white'>
                             <tr className='text-left'>
+                                <th className='px-4 py-2 border'>No. </th>
                                 <th className='px-4 py-2 border'>Name</th>
                                 <th className='px-4 py-2 border'>Client</th>
                                 <th className='px-4 py-2 border'>Platform</th>
@@ -379,6 +499,7 @@ const AccountTable = () => {
                         <tbody>
                             {filteredData.map((data, index) => (
                                 <tr key={index} className='border text-center'>
+                                    <td className='px-4 py-2 border text-nowrap text-left'>{index + 1}.</td>
                                     <td className='px-4 py-2 border text-nowrap'>{data.username}</td>
                                     <td className='px-4 py-2 border text-nowrap'>{data.client_name}</td>
                                     <td className='px-4 py-2 border text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
@@ -391,7 +512,9 @@ const AccountTable = () => {
                 </div>
             </div>
 
-            <CreateAccount isOpen={modalIsOpen} onClose={handleCloseModal} />
+            {selectedAccount && (
+                <AccountDetail isOpen={modalIsOpen} onClose={handleCloseModal} data={selectedAccount} />
+            )}
         </>
     )
 }

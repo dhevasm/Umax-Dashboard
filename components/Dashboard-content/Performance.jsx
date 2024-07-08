@@ -129,10 +129,10 @@ export default function Performance({ id }) {
                             ))
                             : 
                             <>
-                                <Infocard Color='' Title={'Amount Spent' }Value='Rp 2000.000' Desc='Desc' />
-                                <Infocard Color={rar.color} Title={'Reach Amount Spent Ratio'} Value={rar.value} Desc={rar.target} />
-                                <Infocard Color={cpr.color} Title={'CPR'} Value={cpr.value} Desc={cpr.target} />
-                                <Infocard Color={oclp.color} Title={'OCLP'} Value={oclp.value} Desc={oclp.target} />
+                                <Infocard Color='' Title={'Amount Spent' }Value='Rp 2000.000' Desc='Jumlah total biaya yang kita keluarkan untuk pemasangan iklan' />
+                                <Infocard Color={rar.color} Title={'Reach Amount Spent Ratio'} Value={rar.value} Desc={'Mengukur hubungan antara jumlah orang yang melihat iklan dengan jumlah uang yang dihabiskan untuk iklan tersebut'} />
+                                <Infocard Color={cpr.color} Title={'CPR'} Value={cpr.value} Desc={'Perhitungan biaya yang kita keluarkan untuk setiap hasil yang kita dapatkan'} />
+                                <Infocard Color={oclp.color} Title={'OCLP'} Value={oclp.value} Desc={'Mendorong pengunjung untuk mengklik tautan atau tombol yang mengarahkan mereka ke halaman atau situs web eksternal yang relevan'} />
                             </>
                             }
                         </div>
@@ -148,10 +148,10 @@ export default function Performance({ id }) {
                                 ))
                                 : 
                                 <>
-                                    <Infocard Color={ctr.color} Title={'CTR'} Value={ctr.value} Desc={ctr.target} />
-                                    <Infocard Color='' Title={'ATC'} Value={'180%'} Desc={'Decs'} />
-                                    <Infocard Color={roas.color} Title={'ROAS'} Value={roas.value} Desc={roas.target} />
-                                    <Infocard Color={r_roas.color} Title={'Real ROAS'} Value={r_roas.value} Desc={r_roas.target} />
+                                    <Infocard Color={ctr.color} Title={'CTR'} Value={ctr.value} Desc={'Rasio jumlah klik pada iklan kita dibandingkan dengan jumlah iklan ditayangkan'} />
+                                    <Infocard Color='' Title={'ATC'} Value={'180%'} Desc={'Menambahkan produk atau barang ke dalam keranjang belanja saat berbelanja secara online di situs web e-commerce atau toko online'} />
+                                    <Infocard Color={roas.color} Title={'ROAS'} Value={roas.value} Desc={'Menambahkan produk atau barang ke dalam keranjang belanja saat berbelanja secara online di situs web e-commerce atau toko online'} />
+                                    <Infocard Color={r_roas.color} Title={'Real ROAS'} Value={r_roas.value} Desc={'Mengukur banyak pendapatan asli yang dihasilkan tiap pengeluaran iklan'} />
                                 </>
                                 }
                             </div>

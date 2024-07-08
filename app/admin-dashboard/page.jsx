@@ -11,11 +11,14 @@ import CampaignTable from "@/components/Admin-component/CampaignTable"
 import TenantProfile from "@/components/Admin-component/TenantProfile"
 import AccountTable from "@/components/Admin-component/AccountTable"
 import ClientTable from "@/components/Admin-component/ClientTable"
+import { useRouter } from "next/navigation"
 
 export const AdminDashboardContext = createContext()
 export default function AdminDashboard(){
 
     const [userData, setUserData] = useState([])
+
+    const router = useRouter()
 
     const [tenantsCount, setTenantsCount] = useState ("")
     const [usersCount, setUsersCount] = useState("")
