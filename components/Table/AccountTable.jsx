@@ -9,6 +9,7 @@ import jsPDF from "jspdf";
 import 'jspdf-autotable';
 import { BiEdit } from 'react-icons/bi';
 import { MdDeleteForever } from 'react-icons/md';
+import CreateAccount from '../Create/CreateCampaign';
 
 const AccountTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -16,6 +17,7 @@ const AccountTable = () => {
     const [selectedStatus, setSelectedStatus] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [isWideScreen, setIsWideScreen] = useState(true); // Set default to true
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const tableRef = useRef(null);
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -205,11 +207,22 @@ const AccountTable = () => {
     };
 
     const filteredData = tableData.filter((data) => {
-        return (
-            (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
-            (!selectedStatus || data.status === Number(selectedStatus)) &&
-            (!searchTerm || data.username.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
+        const client_name = localStorage.getItem("name");
+        const role = localStorage.getItem("roles");
+        if(role != 'client'){
+            return (
+                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+                (!selectedStatus || data.status === Number(selectedStatus)) &&
+                (!searchTerm || data.username.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+        } else {
+            return (
+                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+                (!selectedStatus || data.status === Number(selectedStatus)) &&
+                (!searchTerm || data.username.toLowerCase().includes(searchTerm.toLowerCase())) &&
+                (data.client_name === client_name)
+            );
+        }
     });
 
     const checkDeviceWidth = () => {
@@ -259,6 +272,14 @@ const AccountTable = () => {
         }
     }
 
+    const handleOpenModal = () => {
+        setModalIsOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalIsOpen(false);
+    };
+
     return (
         <>
             <div className='font-semibold text-3xl text-slate-800 mb-10'>
@@ -287,7 +308,7 @@ const AccountTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
-                        <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
+                        {/* <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end" onClick={handleOpenModal}>+ Add</button> */}
                         <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
                             <RiFileExcel2Line className="relative font-medium text-lg" />
                         </button>
@@ -305,7 +326,7 @@ const AccountTable = () => {
                                 <th className='px-4 py-2 border'>Platform</th>
                                 <th className='px-4 py-2 border'>Email</th>
                                 <th className='px-4 py-2 border'>Status</th>
-                                <th className='px-4 py-2 border'>Action</th>
+                                <th className='px-4 py-2 border hidden'>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -317,7 +338,7 @@ const AccountTable = () => {
                                         <td className='px-4 py-2 border text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
                                         <td className='px-4 py-2 border text-nowrap'>{data.email}</td>
                                         <td className='px-4 py-2 border text-nowrap'><StatusBadge status={data.status} /></td>
-                                        <td className='px-4 py-2 border text-nowrap flex gap-1 justify-center'>
+                                        <td className='px-4 py-2 border text-nowrap hidden gap-1 justify-center'>
                                             <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
                                                 <BiEdit size={25}/>
                                             </button>
@@ -369,6 +390,8 @@ const AccountTable = () => {
                     </table>
                 </div>
             </div>
+
+            <CreateAccount isOpen={modalIsOpen} onClose={handleCloseModal} />
         </>
     )
 }

@@ -11,6 +11,7 @@ import LoadingCircle from "../Loading/LoadingCircle";
 import Swal from "sweetalert2";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
+import CreateCampaign from "../Create/CreateCampaign";
 
 const CampaignTable = () => {
     const tableRef = useRef(null);
@@ -19,6 +20,7 @@ const CampaignTable = () => {
     const [selectedObjective, setSelectedObjective] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [isWideScreen, setIsWideScreen] = useState(true);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const date = new Date();
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -247,12 +249,24 @@ const CampaignTable = () => {
     };
 
     const filteredData = tableData.filter((data) => {
-        return (
-        (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
-        (!selectedObjective || data.objective === Number(selectedObjective)) &&
-        (!searchTerm ||
-            data.name.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
+        const client_name = localStorage.getItem("name");
+        const role = localStorage.getItem("roles");
+        if(role != 'client') {
+            return (
+                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+                (!selectedObjective || data.objective === Number(selectedObjective)) &&
+                (!searchTerm ||
+                    data.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+        } else {
+            return (
+                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+                (!selectedObjective || data.objective === Number(selectedObjective)) &&
+                (!searchTerm ||
+                    data.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+                (data.client_name.toLowerCase() == client_name.toLowerCase())
+            );
+        }
     });
 
     const checkDeviceWidth = () => {
@@ -265,12 +279,20 @@ const CampaignTable = () => {
         return () => window.removeEventListener("resize", checkDeviceWidth);
     }, []);
 
+    const handleOpenModal = () => {
+        setModalIsOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalIsOpen(false);
+    };
+
     return (
         <>
-            <div className="font-semibold text-3xl text-slate-800 mb-10">
+            <div className={`font-semibold text-3xl text-slate-800 mb-10`}>
                 <h1>Campaigns</h1>
             </div>
-            <div className="bg-white border border-gray-300 rounded-lg p-5" style={{ width: "100%" }}>
+            <div className={`bg-white ${modalIsOpen ? 'overflow-hidden' : ''} border border-gray-300 rounded-lg p-5`} style={{ width: "100%" }}>
                     <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
                         <div className={`mb-4 flex flex-row items-start gap-4`}>
                             {/* {'Filter starts here'} */}
@@ -311,7 +333,7 @@ const CampaignTable = () => {
                             {/* {'Filter ends here'} */}
                         </div>
                         <div className="w-full flex gap-3 justify-end pb-5">
-                            <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
+                            {/* <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end" onClick={() => setModalIsOpen(handleOpenModal)}>+ Add</button> */}
                             <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
                                 <RiFileExcel2Line className="relative font-medium text-lg" />
                             </button>
@@ -331,7 +353,7 @@ const CampaignTable = () => {
                             <th className="px-2 py-2 border">Objective</th>
                             <th className="px-2 py-2 border">Start Date</th>
                             <th className="px-2 py-2 border">Status</th>
-                            <th className="px-2 py-2 border">Action</th>
+                            <th className="px-2 py-2 border hidden">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -371,7 +393,7 @@ const CampaignTable = () => {
                                     <td className="px-2 py-2 border text-nowrap">
                                         <StatusBadge status={data.status} />
                                     </td>
-                                    <td className="px-2 py-2 border text-nowrap flex gap-1 justify-center">
+                                    <td className="px-2 py-2 border text-nowrap hidden gap-1 justify-center">
                                         <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
                                             <BiEdit size={25}/>
                                         </button>
@@ -390,7 +412,7 @@ const CampaignTable = () => {
                                 </tr>
                                 ) : (
                                     <tr>
-                                        <td colSpan="6" className="text-center">
+                                        <td colSpan="8" className="text-center">
                                             <LoadingCircle />
                                         </td>
                                     </tr>
@@ -452,6 +474,8 @@ const CampaignTable = () => {
                     </table>
                 </div>
             </div>
+
+            <CreateCampaign isOpen={modalIsOpen} onClose={handleCloseModal}/>
         </>
     )
 }

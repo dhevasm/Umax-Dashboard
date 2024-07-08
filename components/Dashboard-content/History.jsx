@@ -53,12 +53,12 @@ export default function History({ id }) {
                     ) : (
                         <>
                             <div className="w-full flex gap-3 justify-end pb-5">
-                                <button className="float-right border border-gray-300 rounded-lg px-3 py-2">
+                                {/* <button className="float-right border border-gray-300 rounded-lg px-3 py-2">
                                     <RiFileExcel2Line className="relative font-medium text-lg" />
                                 </button>
                                 <button className="float-right border border-gray-300 rounded-lg px-3 py-2">
                                     <AiOutlineFilePdf className="relative font-medium text-lg" />
-                                </button>
+                                </button> */}
                             </div>
                             <div className={`overflow-x-auto ${currentData.length > 0 ? 'shadow-md' : 'shadow-lg'}`}>
                                 <table className='w-full border-collapse'>

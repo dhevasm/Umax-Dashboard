@@ -87,7 +87,7 @@ function Dashboard() {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
         Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
-            router.back();
+            router.push('/');
         });
         }
     }, [router]);

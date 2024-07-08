@@ -64,11 +64,13 @@ const Page = () => {
           const { Token } = data
           const tenantID = data.Data.tenant_id;
           const roles = data.Data.roles;
+          const name = data.Data.name;
 
           // setitem on local storage
           localStorage.setItem('jwtToken', Token);
           localStorage.setItem('tenantId', tenantID);
           localStorage.setItem('roles', roles);
+          localStorage.setItem('name', name);
 
           if (roles == 'sadmin' || roles == "admin") {  
             router.push('/admin-dashboard');
@@ -129,7 +131,7 @@ const Page = () => {
         } else {
           router.push('/dashboard');  
         }
-    }
+    };
   }, [router]);
 
 

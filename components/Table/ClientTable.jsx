@@ -10,14 +10,15 @@ import { useDownloadExcel } from "react-export-table-to-excel";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
 import { BiEdit } from 'react-icons/bi';
-import { FiDelete } from 'react-icons/fi';
 import { MdDeleteForever } from 'react-icons/md';
+import CreateClient from '../Create/CreateClient';
 
 const ClientTable = () => {
     const [tableData, setTableData] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('');    
     const [searchTerm, setSearchTerm] = useState('');
     const [isWideScreen, setIsWideScreen] = useState(true);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const tableRef = useRef(null);
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -252,6 +253,14 @@ const ClientTable = () => {
         }
     }
 
+    const handleOpenModal = () => {
+        setModalIsOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalIsOpen(false);
+    };
+
     return (
         <>
             <div className='font-semibold text-3xl text-slate-800 mb-10'>
@@ -277,7 +286,7 @@ const ClientTable = () => {
                             {/* {'Filter ends here'} */}
                         </div>
                         <div className="w-full flex gap-3 justify-end pb-5">
-                            <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end">+ Add</button>
+                            {/* <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end" onClick={() => setModalIsOpen(handleOpenModal)}>+ Add</button> */}
                             <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
                                 <RiFileExcel2Line className="relative font-medium text-lg" />
                             </button>
@@ -295,7 +304,7 @@ const ClientTable = () => {
                                     <th className='px-4 py-2 border'>Contact</th>
                                     <th className='px-4 py-2 border'>Email</th>
                                     <th className='px-4 py-2 border'>Status</th>
-                                    <th className='px-4 py-2 border'>Action</th>
+                                    <th className='px-4 py-2 border hidden'>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -307,7 +316,7 @@ const ClientTable = () => {
                                             <td className='px-4 py-2 border text-nowrap'>{data.contact}</td>
                                             <td className='px-4 py-2 border text-nowrap'>{data.email}</td>
                                             <td className='px-4 py-2 border text-nowrap'><StatusBadge status={data.status} /></td>
-                                            <td className='px-4 py-2 border text-nowrap flex justify-center gap-1'>
+                                            <td className='px-4 py-2 border text-nowrap hidden justify-center gap-1'>
                                                 <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
                                                     <BiEdit size={25}/>
                                                 </button>
@@ -360,6 +369,8 @@ const ClientTable = () => {
                         </table>
                     </div>
             </div>
+
+            <CreateClient isOpen={modalIsOpen} onClose={handleCloseModal} />
         </>
     )
 }
