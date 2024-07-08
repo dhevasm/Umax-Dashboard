@@ -10,14 +10,16 @@ export default function CountCard({color, title, value, handleClick}){
         setChangeTable(table)
     }
 
+   
     return (
-        <>
-            <div className={`w-[300px] h-[100px] bg-${color}-200 border border-${color}-500 text-${color}-500 shadow-lg rounded-lg flex justify-center items-center hover:cursor-pointer mb-5`} onClick={() => handleCardClick(handleClick)}>
-                <div className="flex flex-col items-center">
-                    <h1 className="text-3xl font-bold">{value}</h1>
-                    <p>{title}</p>
-                </div>
-            </div>
-        </>
+        <div className={` bg-blue-300 text-white p-4 rounded-md shadow-md w-full mb-3 md:w-[30%]`}> 
+            <h3 className="text-xl font-semibold">{title}</h3>
+            <h1 className="text-4xl font-bold">{value}</h1>
+            <button onClick={() => handleCardClick(handleClick)} className="text-white font-bold rounded mt-4">
+                Lihat Detail
+            </button>
+        </div>
     )
+
+    
 }

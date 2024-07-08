@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation"
 export const AdminDashboardContext = createContext()
 export default function AdminDashboard(){
 
+    const router = useRouter()
+
     const [userData, setUserData] = useState([])
 
     const router = useRouter()
@@ -123,7 +125,7 @@ export default function AdminDashboard(){
             <div className="flex w-full min-h-full justify-end px-3  bg-gray-100">
                 <div className="w-[75%] mt-20 rounded-md p-5 me-3 shadow-xl bg-white" ref={MainCard}>
                     <div className="flex flex-wrap justify-evenly">
-                        {
+                        {   
                             userData.roles == 'sadmin' ?
                                 getTenantsCount() &&
                                 <CountCard color="blue" handleClick="tenants" title="Total Tenants" value={tenantsCount ? tenantsCount : <div className="animate-pulse">Loading....</div>}/>

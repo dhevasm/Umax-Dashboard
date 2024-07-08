@@ -73,7 +73,6 @@ export default function AdminNavbar({userData}){
                         <h1 className="font-bold">{userData.name}</h1>
                         <p>{userData.roles}</p>
                     </div>
-                    
                 </div>
             </nav>
         </>

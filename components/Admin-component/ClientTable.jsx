@@ -24,6 +24,7 @@ export default function ClientTable() {
     const [EditclientId, setEditclientId] = useState(null)
     const [showPassword, setShowPassword] = useState(false)
 
+
     function handleShowPassword() {
         setShowPassword(!showPassword)
     }
@@ -80,6 +81,7 @@ export default function ClientTable() {
     useEffect(() => {
         validateForm()
     }, [values])
+
 
     function showModal(mode, client_id = null ){
         setModeModal(mode)
@@ -311,7 +313,7 @@ export default function ClientTable() {
                 text: "Please Fill The Blank!",
                 icon: "error"
               });
-              validateForm()
+            //   validateForm()
             
         }
         
@@ -671,7 +673,6 @@ export default function ClientTable() {
                                         {
                                             modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>Submit</button>
                                         }
-                                        
                                 </div>  
                         </div>
                     </div>
