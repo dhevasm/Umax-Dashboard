@@ -86,7 +86,7 @@ export default function Sidebar({ onCampaignIDChange }) {
                     <style jsx>
                         {`
                         .SidebarFilterActive {
-                            background-color: blue;
+                            background-color: rgb(38, 100, 235);
                             padding: 5px 10px;
                             border-radius: 50px;
                             color: white;

@@ -122,7 +122,7 @@ function Dashboard() {
                             {
                                 `
                                 .dashboardActive{
-                                    color : blue;
+                                    color : rgb(38, 100, 235);
                                     padding-bottom: 10px;
                                     border-bottom: 3px solid blue;
                                     font-weight: 800;

@@ -12,17 +12,17 @@ export default function InfoCard({ Color, Title, Value, Desc }) {
 
     useEffect(() => {
         if (Color === "Success") {
-            setBordercolor("border-green-500");
-            setBackground("bg-green-100");
-            setText("text-green-500");
+            setBordercolor("border-green-600");
+            setBackground("bg-green-300");
+            setText("text-green-600");
         } else if (Color === "Warning") {
-            setBordercolor("border-yellow-500");
-            setBackground("bg-yellow-100");
-            setText("text-yellow-500");
+            setBordercolor("border-yellow-600");
+            setBackground("bg-yellow-300");
+            setText("text-yellow-600");
         } else {
-            setBordercolor("border-blue-500");
-            setBackground("bg-blue-100");
-            setText("text-blue-500");
+            setBordercolor("border-blue-600");
+            setBackground("bg-blue-300");
+            setText("text-blue-600");
         }
     }, [Color]);
 
