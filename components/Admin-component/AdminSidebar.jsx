@@ -12,6 +12,9 @@ import Sidebar from "../Sidebar";
 import { jsx } from "react/jsx-runtime"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
+import { RiArrowGoBackLine, RiDashboard2Line, RiDeleteBack2Line, RiLogoutBoxLine, RiTableLine, RiUser3Line, RiWindowLine } from "react-icons/ri"
+import { VscDashboard } from "react-icons/vsc"
+import { MdDashboard } from "react-icons/md"
 
 export default function AdminSidebar(){
 
@@ -57,14 +60,14 @@ export default function AdminSidebar(){
     return(
         <>
             <div className="fixed z-10 bg-[#1C2434] w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
-                <ul className="pt-28 ms-5">
-                    <li className="mb-4 ms-2">
+                <ul className="pt-28 pl-3 uppercase ms-5">
+                    <li className="mb-4 ms-2 text-slate-400 font-semibold">
                         Menu
                     </li>
                     <li className="mb-4 text-sm">
                         <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => setChangeTable("dashboard")}>
-                            <div className="flex items-center gap-2">
-                                <FaTachometerAlt/>
+                            <div className="flex items-center gap-2 text-slate-300 font-semibold">
+                                <MdDashboard size={20}/>
                                 Dashboard
                             </div>
                         </button>
@@ -73,7 +76,7 @@ export default function AdminSidebar(){
                     {
                         userData.roles == "admin" && <button className="px-4 py-2 w-full text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center" onClick={() => setChangeTable("company")}>
                         <IconContext.Provider value={{ className: "text-md" }}>
-                            <FaBuilding />
+                            <FaBuilding size={20}/>
                         </IconContext.Provider>
                         Your Tenant
                         </button>
@@ -81,9 +84,9 @@ export default function AdminSidebar(){
                     </li>
                     <li className="mb-4">
                         <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleSidebarLink}>
-                            <div className="flex items-center gap-2">
-                                <FaServer/>
-                                Data table
+                            <div className="flex items-center gap-2 text-slate-300 font-semibold">
+                                <RiTableLine size={20}/>
+                                Data Table
                             </div>
                             <IconContext.Provider value={{ className: "text-xl" }}>
                                 {
@@ -94,40 +97,40 @@ export default function AdminSidebar(){
                         <ul className="pl-4 mt-2 space-y-2" ref={sidebarLink}>
                             <li>
                                { userData.roles == "sadmin" &&
-                                <button onClick={() => setChangeTable("tenants")} className="px-4 py-2 text-sm w-full  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
+                                <button onClick={() => setChangeTable("tenants")} className="px-7 py-2 text-sm w-full  text-slate-300  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
                                     <IconContext.Provider value={{ className: "text-md" }}>
-                                        <FaTable />
+                                        {/* <FaTable /> */}
                                     </IconContext.Provider>
-                                    Table Tenants
+                                    Tenants
                                 </button>}
                             </li>
                             <li>
-                                <button onClick={() => setChangeTable("users")} className="px-4 py-2 text-sm  w-full hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
+                                <button onClick={() => setChangeTable("users")} className="px-7 py-2 text-sm  w-full text-slate-300 hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
                                 <IconContext.Provider value={{ className: "text-md" }}>
-                                        <FaTable />
+                                        {/* <FaTable /> */}
                                 </IconContext.Provider>
-                                Table Users</button>
+                                Users</button>
                             </li>
                             <li>
-                                <button onClick={() => setChangeTable("campaigns")} className="px-4 py-2 text-sm w-full hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
+                                <button onClick={() => setChangeTable("campaigns")} className="px-7 py-2 text-sm w-full text-slate-300 hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
                                 <IconContext.Provider value={{ className: "text-md" }}>
-                                        <FaTable />
+                                        {/* <FaTable /> */}
                                 </IconContext.Provider>
-                                    Table Campaigns</button>
+                                    Campaigns</button>
                             </li>
                             <li>
-                                <button onClick={() => setChangeTable("accounts")} className="px-4 py-2 text-sm w-full hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
+                                <button onClick={() => setChangeTable("accounts")} className="px-7 py-2 text-sm w-full text-slate-300 hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
                                 <IconContext.Provider value={{ className: "text-md" }}>
-                                        <FaTable />
+                                        {/* <FaTable /> */}
                                     </IconContext.Provider>
-                                    Table Accounts</button>
+                                    Accounts</button>
                             </li>
                             <li>
-                                <button onClick={() => setChangeTable("clients")} className="px-4 py-2 text-sm w-full hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]  flex gap-2 items-center">
+                                <button onClick={() => setChangeTable("clients")} className="px-7 py-2 text-sm w-full text-slate-300 hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]  flex gap-2 items-center">
                                 <IconContext.Provider value={{ className: "text-md" }}>
-                                        <FaTable />
+                                        {/* <FaTable /> */}
                                     </IconContext.Provider>
-                                    Table Clients
+                                    Clients
                                 </button>
                             </li>
                         </ul>
@@ -135,7 +138,7 @@ export default function AdminSidebar(){
                     <li className="mb-4">
                     <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push('/profile')}>
                             <div className="flex items-center gap-2">
-                                <FaUser/>
+                                <RiUser3Line size={20}/>
                                 Profile
                             </div>
                         </button>
@@ -143,7 +146,7 @@ export default function AdminSidebar(){
                     <li className="mb-4">
                     <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleLogout}>
                             <div className="flex items-center gap-2">
-                                <FaSignOutAlt/>
+                                <RiLogoutBoxLine size={20}/>
                                 Log Out
                             </div>
                         </button>
