@@ -280,31 +280,31 @@ const ClientTable = () => {
         const pageButtons = [];
         const maxButtons = 3; // Maximum number of buttons to show
     
-        // Previous button
+        // First page button
         pageButtons.push(
             <button
                 key="first"
-                className={`px-3 py-1 border ${
-                    currentPage === 1 ? "bg-gray-200 border-gray-300 border cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                className={`px-3 py-1 ${
+                    currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(1)}
                 disabled={currentPage === 1}
             >
-                <BiFirstPage />
+                {'<<'}
             </button>
         );
     
-        // Previous button
+        // Previous page button
         pageButtons.push(
             <button
                 key="prev"
-                className={`px-3 py-1 border ${
-                    currentPage === 1 ? "bg-gray-200 border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                className={`px-3 py-1 ${
+                    currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1}
             >
-                <BiSolidArrowToLeft />
+                {'<'}
             </button>
         );
     
@@ -312,48 +312,55 @@ const ClientTable = () => {
         for (let i = 1; i <= totalPages; i++) {
             // Show only maxButtons buttons around the current page
             if (
-                (i >= currentPage - Math.floor(maxButtons / 2) &&
-                    i <= currentPage + Math.floor(maxButtons / 2))
+                i >= currentPage - Math.floor(maxButtons / 2) &&
+                i <= currentPage + Math.floor(maxButtons / 2)
             ) {
                 pageButtons.push(
                     <button
                         key={i}
-                        className={`px-3 py-1 border ${
-                            i === currentPage ? "bg-gray-100 border-gray-300" : "bg-white hover:bg-gray-100"
+                        className={`px-3 py-1 ${
+                            i === currentPage ? "font-bold" : ""
                         } rounded-md`}
                         onClick={() => goToPage(i)}
                     >
                         {i}
                     </button>
                 );
-            } 
+            }
         }
     
-        // Next button
+        // Info page
+        pageButtons.push(
+            <span key="info" className="px-3 py-1 rounded-md">
+                {`Page ${currentPage} / ${totalPages}`}
+            </span>
+        );
+    
+        // Next page button
         pageButtons.push(
             <button
                 key="next"
-                className={`px-3 py-1 border ${
-                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                className={`px-3 py-1 ${
+                    currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
             >
-                <BiSolidArrowToRight />
+                {'>'}
             </button>
         );
     
-        // Next button
+        // Last page button
         pageButtons.push(
             <button
                 key="last"
-                className={`px-3 py-1 border ${
-                    currentPage === totalPages ? "bg-gray-200 border border-gray-300 cursor-not-allowed" : "bg-white hover:bg-gray-100"
+                className={`px-3 py-1 ${
+                    currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(totalPages)}
                 disabled={currentPage === totalPages}
             >
-                <BiLastPage />
+                {'>>'}
             </button>
         );
     
