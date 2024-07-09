@@ -35,7 +35,7 @@ export default function AdminNavbar({userData}){
 
     return (
         <>
-            <nav className="w-full fixed z-20 h-[85px] bg-slate-100 shadow-md flex justify-between items-center">
+            <nav className="w-full fixed z-20 h-[85px] bg-white shadow-md flex justify-between items-center">
                 <div className="flex h-full">
                     <div className="w-[300px] h-full bg-[#1C2434] flex justify-center items-center transition-transform" ref={navbarBrand}>
                         <img src="assets/logo.png" alt="Logo" className="drop-shadow-xl decoration-white"/>
