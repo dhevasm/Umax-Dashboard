@@ -36,6 +36,43 @@ export default function AccountTable() {
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
 
+    // validasi form
+    const [values, setValues] = useState({name: '', email: '', password: '', passwordverify: ''})
+    const [error, setError] = useState({
+        name: '',
+        email: '',
+        password: '',
+        passwordverify: ''
+    })
+    const [isvalid, setIsvalid] = useState(false)
+
+    function validateForm(){
+        let errors = {}
+        if(values.name == ''){
+            errors.name = 'Username is required'
+        }
+        if(values.email == ''){
+            errors.email = 'Email is required'
+        }
+        if(values.password != values.passwordverify){
+            errors.password = 'Password not match'
+            errors.passwordverify = 'Password not match'
+        }
+        if(values.password == ''){
+            errors.password = 'Password is required'
+        }
+        if(values.passwordverify == ''){
+            errors.passwordverify = 'Password verify is required'
+        }
+        setError(errors)
+        setIsvalid(Object.keys(errors).length === 0)
+    }
+
+    useEffect(() => {
+        validateForm()
+    }, [values])
+
+
     function showModal(mode, account_id = null ){
         setModeModal(mode)
         if(mode == "Edit"){
@@ -43,17 +80,21 @@ export default function AccountTable() {
             if(filteredaccount.length > 0){
                 // console.log(filteredCampaing[0])
                 setEditaccountId(account_id)
+                setValues({name: filteredaccount[0].username, email: filteredaccount[0].email})
+                setError({name: '', email: ''})
                 document.getElementById('name').value = filteredaccount[0].username
                 document.getElementById('client').value = filteredaccount[0].client_id
                 document.getElementById('platform').value = filteredaccount[0].platform
                 document.getElementById('email').value = filteredaccount[0].email
-                document.getElementById('status').value = filteredaccount[0].status
+                document.getElementById('status').checked = filteredaccount[0].status == 1 ? true : false
                 passwordInput.current.classList.add("hidden")
                 passwordverifyInput.current.classList.add("hidden")
             } else{
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
+            setValues({name: "", email: "", password: "", passwordverify: ""})
+            setError({name: '', email: '', password: '', passwordverify: ''})
             document.getElementById('name').value = null
             document.getElementById('email').value = null
             document.getElementById('password').value = null
@@ -89,6 +130,7 @@ export default function AccountTable() {
     }
 
     const deleteaccount = async (account_id) => {
+        closeModal()
         try {
             const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/account-delete?account_id=${account_id}`, {
                 headers: {
@@ -199,90 +241,107 @@ export default function AccountTable() {
     useEffect(() => {
     }, [account])
 
-    async function createCampaing(){
-        const name = document.getElementById('name').value
-        const client = document.getElementById('client').value
-        const email = document.getElementById('email').value
-        const platform = document.getElementById('platform').value
-        const password = document.getElementById('password').value
-        const passwordverify = document.getElementById('passwordverify').value
-        const status = document.getElementById('status').value
-        const tenant_id = document.getElementById('tenant').value
+    async function createAccount(){
+        if(isvalid){
+            const name = document.getElementById('name').value
+            const client = document.getElementById('client').value
+            const email = document.getElementById('email').value
+            const platform = document.getElementById('platform').value
+            const password = document.getElementById('password').value
+            const passwordverify = document.getElementById('passwordverify').value
+            const status = document.getElementById('status').checked ? 1 : 2
+            const tenant_id = document.getElementById('tenant').value
 
-        const formData = new FormData();
-        formData.append('username', name);
-        formData.append('client_id', client);
-        formData.append('email', email);
-        formData.append('platform', platform);
-        formData.append('password', password);
-        formData.append('confirm_password', passwordverify);
-        formData.append('status', status);
-        formData.append('notes', "notes");
-
-        let url = ""
-
-        if(userData.roles == "sadmin"){
-            url = `https://umaxxnew-1-d6861606.deta.app/account-create?tenantId=${tenant_id}`
-        }else if(userData.roles == "admin"){
-            url = `https://umaxxnew-1-d6861606.deta.app/account-create`
-        }
-
-        const response = await axios.post(url, formData, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-
-        if(response.data.Output == "Create Account Successfully"){
-            getaccount()
-            closeModal()
-            setUpdateCard(true)
-            document.getElementById('name').value = null
-            document.getElementById('email').value = null
-            document.getElementById('password').value = null
-            document.getElementById('passwordverify').value = null
-            Swal.fire("Success", "Account created successfully", "success")
-        }else{
-            Swal.fire("Error", response.detail, "error")
-        }
-    }
-
-    async function updateCampaing(){
-        if(EditaccountId !== null) {
-        const name = document.getElementById('name').value
-        const client = document.getElementById('client').value
-        const email = document.getElementById('email').value
-        const platform = document.getElementById('platform').value
-        const password = document.getElementById('password').value
-        const passwordverify = document.getElementById('passwordverify').value
-        const status = document.getElementById('status').value
-
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('client', client);
-        formData.append('email', email);
-        formData.append('platform', platform);
-        formData.append('password', password);
-        formData.append('confirm_password', passwordverify);
-        formData.append('status', status);
-        formData.append('notes', "notes");
+            const formData = new FormData();
+            formData.append('username', name);
+            formData.append('client_id', client);
+            formData.append('email', email);
+            formData.append('platform', platform);
+            formData.append('password', password);
+            formData.append('confirm_password', passwordverify);
+            formData.append('status', status);
+            formData.append('notes', "notes");
     
-            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/account-edit?account_id=${EditaccountId}`, formData, {
+            let url = ""
+    
+            if(userData.roles == "sadmin"){
+                url = `https://umaxxnew-1-d6861606.deta.app/account-create?tenantId=${tenant_id}`
+            }else if(userData.roles == "admin"){
+                url = `https://umaxxnew-1-d6861606.deta.app/account-create`
+            }
+    
+            const response = await axios.post(url, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
     
-            if(response.data.Output == "Data Updated Successfully"){
+            if(response.data.Output == "Create Account Successfully"){
                 getaccount()
                 closeModal()
+                setUpdateCard(true)
                 document.getElementById('name').value = null
                 document.getElementById('email').value = null
                 document.getElementById('password').value = null
                 document.getElementById('passwordverify').value = null
-                Swal.fire("Success", "Campaing Updated", "success")
+                Swal.fire("Success", "Account created successfully", "success")
             }else{
-                Swal.fire("Error", response.detail.ErrMsg, "error")
+                Swal.fire("Error", response.detail, "error")
+            }
+        }else{
+            Swal.fire({
+                title: "Failed!",
+                text: "Please Fill The Blank!",
+                icon: "error"
+              });
+        }
+    }
+
+    async function updateAccount(){
+        if(EditaccountId !== null) {
+            if(isvalid){
+                const name = document.getElementById('name').value
+                const client = document.getElementById('client').value
+                const email = document.getElementById('email').value
+                const platform = document.getElementById('platform').value
+                const password = document.getElementById('password').value
+                const passwordverify = document.getElementById('passwordverify').value
+                const status = document.getElementById('status').checked ? 1 : 2
+
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('client', client);
+                formData.append('email', email);
+                formData.append('platform', platform);
+                formData.append('password', password);
+                formData.append('confirm_password', passwordverify);
+                formData.append('status', status);
+                formData.append('notes', "notes");
+            
+                    const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/account-edit?account_id=${EditaccountId}`, formData, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                        }
+                    })
+            
+                    if(response.data.Output == "Data Updated Successfully"){
+                        getaccount()
+                        closeModal()
+                        document.getElementById('name').value = null
+                        document.getElementById('email').value = null
+                        document.getElementById('password').value = null
+                        document.getElementById('passwordverify').value = null
+                        Swal.fire("Success", "Campaing Updated", "success")
+                    }else{
+                        Swal.fire("Error", response.detail.ErrMsg, "error")
+                    }
+            }else{
+                Swal.fire({
+                    title: "Failed!",
+                    text: "Please Fill The Blank!",
+                    icon: "error"
+                  });
+            
             }
         }
     }
@@ -409,13 +468,13 @@ export default function AccountTable() {
             <div className="w-full">
             <div className="flex flex-col md:flex-row justify-between mt-3">
                     <h1 className="text-3xl font-bold flex gap-2"><RiIdCardLine/> Accounts</h1>
-                    <p>Dashboard / Accounts</p>
+                    <p><a href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Accounts</p>
                 </div>
-                <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
+                <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                     <div className="flex gap-5">
                     <div className="mt-5">
                             <label htmlFor="platformfilter" className="text-sm font-medium text-gray-900 hidden">Platform</label>
-                            <select id="platformfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-10 py-2" defaultValue={0}
+                            <select id="platformfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
                              onChange={(e) => {
                                 const accountvalue = e.target.value;
                                 const filteredData = accountMemo.filter((account) =>
@@ -432,7 +491,7 @@ export default function AccountTable() {
                         </div>
                         <div className="mt-5">
                             <label htmlFor="accountfilter" className="text-sm font-medium text-gray-900 hidden">status</label>
-                            <select id="accountfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-10 py-2" defaultValue={0}
+                            <select id="accountfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
                              onChange={(e) => {
                                 const accountvalue = e.target.value;
                                 const filteredData = accountMemo.filter((account) =>
@@ -448,13 +507,13 @@ export default function AccountTable() {
                         </div>
                     </div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
-                        <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
+                        <div className="flex gap-2">
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded " onClick={generatePDF}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <AiOutlineFilePdf />
                                 </IconContext.Provider>
                             </button>
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generateExcel}>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded " onClick={generateExcel}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <FaFileExcel />
                                 </IconContext.Provider>
@@ -497,12 +556,13 @@ export default function AccountTable() {
                             {
                                 account.length > 0 ? account.map((account, index) => {
                                     return (
-                                        <tr key={index} className=  "odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer" onClick={() => showModal("Edit", account._id)}>
+                                        <tr key={index} className=  "odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer">
                                             <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.username}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
                                             <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.client_name}</td>
                                             <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.email }</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap"><a href={`mailto:${account.email
+                                            }`} className="text-blue-500">{account.email}</a></td>
                                             <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
                                             {/* <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
                                                 <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(account._id)}>
@@ -560,15 +620,15 @@ export default function AccountTable() {
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
 
-                <div className="relative p-4 w-full max-w-md max-h-full ">
+                <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                            <h3 className="text-lg font-semibold text-gray-900 ">
-                                {`${modeModal} Campaing`}
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white">
+                            <h3 className="text-lg font-semibold ">
+                                {`${modeModal} Account`}
                             </h3>
-                            <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
@@ -576,9 +636,12 @@ export default function AccountTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Account Name</label>
+                                    <label htmlFor="name" className="flex mb-2 text-sm font-medium text-gray-900 ">Account Name <div className="text-red-500">*</div> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type account name here"
-                                    required/>
+                                    required onChange={(e) => setValues({...values, name: e.target.value})}/>
+                                    {
+                                        error.name ? <p className="text-red-500 text-sm">{error.name}</p> : ""
+                                    }
                                 </div>
                                 <div className="col-span-1">
                                     <label htmlFor="client" className="block mb-2 text-sm font-medium text-gray-900">Client</label>
@@ -610,43 +673,52 @@ export default function AccountTable() {
                                 </div>
 
                                 <div className="col-span-1">
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email</label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required/>
+                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email <div className="text-red-500">*</div></label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    {
+                                        error.email ? <p className="text-red-500 text-sm">{error.email}</p> : ""
+                                    }
                                 </div>
 
                                 
 
                                 <div className="col-span-1" ref={passwordInput}>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
+                                    <label htmlFor="password" className="flex mb-2 text-sm font-medium text-gray-900 ">Password <div className="text-red-500">*</div></label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required/>
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, password: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
+                                    {
+                                        error.password ? <p className="text-red-500 text-sm">{error.password}</p> : ""
+                                    }
                                 </div>
                                 <div className="col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-gray-900 ">Confirm Password</label>
+                                    <label htmlFor="passwordverify" className="flex mb-2 text-sm font-medium text-gray-900 ">Confirm Password <div className="text-red-500">*</div></label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required/>
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
+                                    {
+                                        error.passwordverify ? <p className="text-red-500 text-sm">{error.passwordverify}</p> : ""
+                                    }
                                 </div>
 
                             </div>
                                 <div className="flex justify-between items-end">
                                 <div>
-                                    <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900">Status</label>
-                                        <select id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                            <option value="1">Active</option>
-                                            <option value="2">Inactive</option>
-                                        </select>
+                                <label htmlFor="status" className="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
+                                <span className="me-3 text-sm font-medium text-gray-900">Status</span>
+                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
                                     </div>
-
+                                        
                                         {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaing}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaing}>Submit</button>
+                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateAccount}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createAccount}>Submit</button>
                                         }
                                         
                                 </div>  

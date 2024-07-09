@@ -27,7 +27,7 @@ export default function UserTable() {
     const [userMemo, setUserMemo] = useState([])
     const [EditUserId, setEditUserId] = useState(null)
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
+    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData] = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -84,6 +84,7 @@ export default function UserTable() {
     }
 
     const deleteuser = async (user_id) => {
+        closeModal()
         // console.log(user_id)
         try {
             const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/user-delete?user_id=${user_id}`, {
@@ -238,14 +239,14 @@ export default function UserTable() {
             const role = document.getElementById('role').value
             const formData = new FormData();
             formData.append('role', role);
-    
+            console.log(EditUserId)
             const response = await axios.post(`https://umaxxnew-1-d6861606.deta.app/change-user-role?user_id=${EditUserId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
     
-            if(response.data.Output.includes("Successfully changed")){
+            if(response.data.Output.includes("Successfully changed") || response.data.Output.includes("Berhasil")){
                 getUsers()
                 closeModal()
                 Swal.fire("Success", "user Updated", "success")
@@ -459,7 +460,6 @@ export default function UserTable() {
                                 </div>
                             </div>
                         </div>
-
                         <div className=" bg-white h-fit overflow-auto">
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md uppercase bg-white text-gray-600">
@@ -543,7 +543,7 @@ export default function UserTable() {
                                 {`${modeModal} user`}
                             </h3>
                             <button type="button" className="text-white text-xl bg-transparent hover:bg-blue-400 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
-                                <FaTimes />
+                                <FaTimes/>
                             </button>
                         </div>
                         {/* <!-- Modal body --> */}
@@ -554,9 +554,9 @@ export default function UserTable() {
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
                                     disabled/>
                                 </div>
-                                <div className="col-span-2">
+                                <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
                                     <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">Role</label>
-                                    <select id="role" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <select id="role" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 " >
                                         <option value="admin">Admin</option>
                                         <option value="staff">Staff</option>
                                     </select>

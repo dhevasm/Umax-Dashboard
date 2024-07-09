@@ -71,6 +71,7 @@ const Profile = () => {
             <div className="w-full bg-white shadow-lg rounded-b-lg overflow-hidden">
                 <div className="relative bg-gradient-to-l from-blue-400 to-blue-500 p-6">
                     <div className="absolute top-4 left-4">
+
                         <button>
                             <IoIosArrowBack className="text-white text-2xl cursor-pointer hover:text-gray-200" onClick={() => router.back()}/>
                         </button>

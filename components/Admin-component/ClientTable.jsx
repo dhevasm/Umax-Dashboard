@@ -97,7 +97,7 @@ export default function ClientTable() {
                 document.getElementById('address').value = filteredclient[0].address
                 document.getElementById('contact').value = filteredclient[0].contact.slice(1)
                 document.getElementById('email').value = filteredclient[0].email
-                document.getElementById('status').value = filteredclient[0].status
+                document.getElementById('status').checked = filteredclient[0].status == 1 ? true : false
                 passwordInput.current.classList.add("hidden")
                 passwordverifyInput.current.classList.add("hidden")
                 tenantInput.current.classList.add("hidden")
@@ -106,8 +106,8 @@ export default function ClientTable() {
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
-            setValues({name: '', address: '', contact: '', email: ''})
-            setError({name: '', address: '', contact: '', email: ''})
+            setValues({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
+            setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
@@ -151,6 +151,7 @@ export default function ClientTable() {
     }
 
     const deleteclient = async (client_id) => {
+        closeModal()
         try {
             const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/client-delete?client_id=${client_id}`, {
                 headers: {
@@ -268,7 +269,7 @@ export default function ClientTable() {
             const address = document.getElementById('address').value
             const contact = `+${document.getElementById('contact').value}`
             const email = document.getElementById('email').value
-            const status = document.getElementById('status').value
+            const status = document.getElementById('status').checked ? 1 : 2
             const password = document.getElementById('password').value
             const passwordverify = document.getElementById('passwordverify').value
             const tenant_id = document.getElementById('tenant').value
@@ -313,7 +314,7 @@ export default function ClientTable() {
             }
         }else{
             Swal.fire({
-                title: "Error!",
+                title: "Failed!",
                 text: "Please Fill The Blank!",
                 icon: "error"
               });
@@ -325,34 +326,44 @@ export default function ClientTable() {
 
     async function updateClient(){
         if(EditclientId !== null) {
-            const name = document.getElementById('name').value
-            const address = document.getElementById('address').value
-            const contact = `+${document.getElementById('contact').value}`
-            const email = document.getElementById('email').value
-            const status = document.getElementById('status').value
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('address', address);
-            formData.append('email', email);
-            formData.append('contact', contact);
-            formData.append('status', status);  
-    
-            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/client-edit?client_id=${EditclientId}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            if(isvalid){
+
+                const name = document.getElementById('name').value
+                const address = document.getElementById('address').value
+                const contact = `+${document.getElementById('contact').value}`
+                const email = document.getElementById('email').value
+                const status = document.getElementById('status').checked ? 1 : 2
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('address', address);
+                formData.append('email', email);
+                formData.append('contact', contact);
+                formData.append('status', status);  
+        
+                const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/client-edit?client_id=${EditclientId}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                    }
+                })
+        
+                if(response.data.Output == "Data Updated Successfully"){
+                    getclient()
+                    closeModal()
+                    document.getElementById('name').value = null
+                    document.getElementById('address').value = null
+                    document.getElementById('contact').value = null
+                    document.getElementById('email').value = null
+                    Swal.fire("Success", "Client Updated", "success")
+                }else{
+                    Swal.fire("Error", response.detail.ErrMsg, "error")
                 }
-            })
-    
-            if(response.data.Output == "Data Updated Successfully"){
-                getclient()
-                closeModal()
-                document.getElementById('name').value = null
-                document.getElementById('address').value = null
-                document.getElementById('contact').value = null
-                document.getElementById('email').value = null
-                Swal.fire("Success", "Client Updated", "success")
             }else{
-                Swal.fire("Error", response.detail.ErrMsg, "error")
+                Swal.fire({
+                    title: "Failed!",
+                    text: "Please Fill The Blank!",
+                    icon: "error"
+                  });
+            
             }
         }
     }
@@ -462,13 +473,13 @@ export default function ClientTable() {
             <div className="w-full">
             <div className="flex flex-col md:flex-row justify-between mt-3">
                     <h1 className="text-3xl font-bold flex gap-2"><MdPeopleOutline/> Client</h1>
-                    <p> Dashboard / Client</p>
+                    <p><a href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Clients</p>
                 </div>
-                <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
+                <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                     <div>
                     <div className="mt-5">
                             <label htmlFor="statusfilter" className="text-sm font-medium text-gray-900 hidden">Status</label>
-                            <select id="statusfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full px-10 py-2" defaultValue={0}
+                            <select id="statusfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full px-5 py-2" defaultValue={0}
                             onChange={(e) => {
                                 const clientvalue = e.target.value;
                                 const filteredData = clientMemo.filter((client) =>
@@ -482,15 +493,16 @@ export default function ClientTable() {
                             </select>
                             
                         </div>
+                        
                     </div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
-                        <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
+                        <div className="flex gap-2">
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={generatePDF}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <AiOutlineFilePdf />
                                 </IconContext.Provider>
                             </button>
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generateExcel}>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={generateExcel}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <FaFileExcel />
                                 </IconContext.Provider>
@@ -533,12 +545,12 @@ export default function ClientTable() {
                             {
                                 client.length > 0 ? client.map((client, index) => {
                                     return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer" onClick={() => showModal("Edit", client._id)}>
+                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer">
                                             <td  scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.name}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
                                             <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.address}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.contact}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.email }</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap"><a href={`tel:${client.contact}`} className="text-blue-500">{client.contact}</a></td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap"><a href={`mailto:${client.email}`} className="text-blue-500">{client.email }</a></td>
                                             <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.status == 1 ? "Active" : "Inactive"}</td>
                                             {/* <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
                                                 <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(client._id)}>
@@ -596,15 +608,15 @@ export default function ClientTable() {
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
 
-                <div className="relative p-4 w-full max-w-md max-h-full ">
+                <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                            <h3 className="text-lg font-semibold text-gray-900 ">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white">
+                            <h3 className="text-lg font-semibold">
                                 {`${modeModal} Client`}
                             </h3>
-                            <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className=" text-xl bg-transparent hover:bg-blue-400  rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes/>
                             </button>
                         </div>
@@ -612,7 +624,7 @@ export default function ClientTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-1 ">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">client Name <span className="text-red-500">*</span> </label>
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Client Name <span className="text-red-500">*</span> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
                                     required
                                     onChange={(e) => setValues({...values, name: e.target.value})}/>
@@ -671,13 +683,6 @@ export default function ClientTable() {
                                         error.passwordverify && <p className="text-red-500 text-sm">{error.passwordverify}</p>
                                     }
                                 </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900">Status <span className="text-red-500">*</span> </label>
-                                    <select id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
-                                        <option value="1">Active</option>
-                                        <option value="2">Inactive</option>
-                                    </select>
-                                </div>
                                 <div className="col-span-1" ref={tenantInput}>
                                     <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant <span className="text-red-500">*</span> </label>
                                     <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
@@ -693,10 +698,20 @@ export default function ClientTable() {
                             </div>
                             
                                 <div className="flex justify-between items-end">
-                                <div></div>
+                                <div>
+                                    <label htmlFor="status" className="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
+                                    <span className="me-3 text-sm font-medium text-gray-900">Status</span>
+                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
                                 <div>
                                  {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>Submit</button>
+                                            modeModal === 'Edit' ? <div className="flex gap-3">
+                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>Save Change</button>
+                                                <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditclientId)}><FaTrash/></button>
+                                            </div> 
+                                             : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>Submit</button>
                                         }
                                 </div>
                                 </div>  
@@ -704,7 +719,6 @@ export default function ClientTable() {
                     </div>
                 </div>
             </div> 
-
         </>
     )
 }
