@@ -17,6 +17,7 @@ import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { IoMdEye } from "react-icons/io"
 import { IoMdEyeOff } from "react-icons/io"
+import { MdPeopleOutline } from "react-icons/md"
 export default function ClientTable() {
 
     const [client, setclient] = useState([])
@@ -90,6 +91,8 @@ export default function ClientTable() {
             if(filteredclient.length > 0){
                 // console.log(filteredCampaing[0])
                 setEditclientId(client_id)
+                setValues({name: filteredclient[0].name, address: filteredclient[0].address, contact: filteredclient[0].contact.slice(1), email: filteredclient[0].email})
+                setError({name: '', address: '', contact: '', email: ''})
                 document.getElementById('name').value = filteredclient[0].name
                 document.getElementById('address').value = filteredclient[0].address
                 document.getElementById('contact').value = filteredclient[0].contact.slice(1)
@@ -103,7 +106,8 @@ export default function ClientTable() {
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
-            setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
+            setValues({name: '', address: '', contact: '', email: ''})
+            setError({name: '', address: '', contact: '', email: ''})
             document.getElementById('name').value = null
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
@@ -455,10 +459,30 @@ export default function ClientTable() {
 
     return (
         <>
-            <div className="w-full pb-20">
-                <div className="border-t border-gray-300 my-5"></div>
+            <div className="w-full">
+            <div className="flex flex-col md:flex-row justify-between mt-3">
+                    <h1 className="text-3xl font-bold flex gap-2"><MdPeopleOutline/> Client</h1>
+                    <p> Dashboard / Client</p>
+                </div>
                 <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
-                    <h1 className="text-3xl font-bold">Clients</h1>
+                    <div>
+                    <div className="mt-5">
+                            <label htmlFor="statusfilter" className="text-sm font-medium text-gray-900 hidden">Status</label>
+                            <select id="statusfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full px-10 py-2" defaultValue={0}
+                            onChange={(e) => {
+                                const clientvalue = e.target.value;
+                                const filteredData = clientMemo.filter((client) =>
+                                client.status == clientvalue
+                                );
+                                clientvalue === "0" ? setclient(clientMemo) : setclient(filteredData);
+                            }}>
+                                <option value="0" key={0} >All User</option>
+                                <option value={1} key={1}>Active</option>
+                                <option value={2} key={2}>Inactive</option>
+                            </select>
+                            
+                        </div>
+                    </div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
                         <div>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
@@ -492,9 +516,9 @@ export default function ClientTable() {
                         </div>
                     </div>
                 </div>
-                <div className="rounded-md mt-5 shadow-xl overflow-auto">
+                <div className="rounded-md mt-5 shadow-xl h-[50vh] overflow-auto">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-white uppercase bg-gray-500">
+                        <thead className="text-xs text-black uppercase bg-[#F9FAFB]">
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
                                 <th scope="col" className="px-6 py-3">Name</th>
@@ -502,21 +526,21 @@ export default function ClientTable() {
                                 <th scope="col" className="px-6 py-3">Contact</th>
                                 <th scope="col" className="px-6 py-3">Email</th>
                                 <th scope="col" className="px-6 py-3">Status</th>
-                                <th scope="col" className="px-6 py-3">Action</th>
+                                {/* <th scope="col" className="px-6 py-3">Action</th> */}
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 client.length > 0 ? client.map((client, index) => {
                                     return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-slate-100 hover:cursor-pointer">
-                                            <td  scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.name}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.address}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.contact}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.email }</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{client.status == 1 ? "Active" : "Inactive"}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
+                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer" onClick={() => showModal("Edit", client._id)}>
+                                            <td  scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.name}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.address}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.contact}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.email }</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{client.status == 1 ? "Active" : "Inactive"}</td>
+                                            {/* <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
                                                 <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(client._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaEye />
@@ -532,7 +556,7 @@ export default function ClientTable() {
                                                         <FaTrash />
                                                     </IconContext.Provider>
                                                 </button>
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     )
                             }).slice(firstPage, lastPage) : <tr className="text-center animate-pulse"><td>Loading...</td></tr>
@@ -558,7 +582,7 @@ export default function ClientTable() {
                             {"<"}   
                         </button>
                         <div>
-                            <p>Showing page {currentPage} from {totalPages}</p>
+                            <p>Page {currentPage} / {totalPages}</p>
                         </div>
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
                             {">"}
@@ -670,9 +694,11 @@ export default function ClientTable() {
                             
                                 <div className="flex justify-between items-end">
                                 <div></div>
-                                        {
+                                <div>
+                                 {
                                             modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>Submit</button>
                                         }
+                                </div>
                                 </div>  
                         </div>
                     </div>

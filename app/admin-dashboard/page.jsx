@@ -27,7 +27,9 @@ export default function AdminDashboard(){
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
+
     const [changeTable, setChangeTable] = useState("dashboard")
+
 
     const AdminDashboardContextValue = (() => {
         sidebarHide,
@@ -121,6 +123,7 @@ export default function AdminDashboard(){
                     <AdminSidebar />
 
             {/* main content */}
+
 
             <div className="flex w-full min-h-full justify-end bg-gray-100">
                 <div className={`${sidebarHide ? 'w-full' : 'w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>

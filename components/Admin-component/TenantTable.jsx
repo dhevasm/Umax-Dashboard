@@ -17,6 +17,7 @@ import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { Switch } from "@material-tailwind/react"
 import { indonesia } from "@/public/assets"
+import { RiBuildingLine } from "react-icons/ri"
 export default function TenantTable() {
 
     const [tenants, setTenants] = useState([])
@@ -436,6 +437,11 @@ export default function TenantTable() {
             lastPageButton.current.classList.add("paginDisable");
             firstPageButton.current.classList.remove("paginDisable");
             previousButton.current.classList.remove("paginDisable");
+        }else if(currentPage == 1 && currentPage == totalPages){
+            firstPageButton.current.classList.add("paginDisable");
+            previousButton.current.classList.add("paginDisable");
+            nextButton.current.classList.add("paginDisable");
+            lastPageButton.current.classList.add("paginDisable");
         }else{
             firstPageButton.current.classList.remove("paginDisable");
             previousButton.current.classList.remove("paginDisable");
@@ -470,10 +476,13 @@ export default function TenantTable() {
 
     return (
         <>
-            <div className="w-full pb-20">
-                <div className="border-t border-gray-300 my-5"></div>
+            <div className="w-full">
+            <div className="flex flex-col md:flex-row justify-between mt-3">
+                    <h1 className="text-3xl font-bold flex gap-2"><RiBuildingLine/> Tenants</h1>
+                    <p>Dashboard / Tenants</p>
+                </div>
                 <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
-                    <h1 className="text-3xl font-bold">Tenants</h1>
+                    <div></div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
                         <div>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
@@ -507,9 +516,9 @@ export default function TenantTable() {
                         </div>
                     </div>
                 </div>
-                <div className="rounded-md mt-5 shadow-xl overflow-auto">
+                <div className="rounded-md mt-5 shadow-xl h-[50vh] overflow-auto">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-white uppercase bg-blue-500">
+                        <thead className="text-xs text-black uppercase bg-[#F9FAFB]">
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
                                 <th scope="col" className="px-6 py-3">Company</th>
@@ -523,12 +532,12 @@ export default function TenantTable() {
                                 tenants.length > 0 ? tenants.map((tenant, index) => {
                                     return (
                                         <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer" onClick={() => showModal("Edit", tenant._id)}>
-                                            <td  scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.company}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{tenant.address}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                                            <td  scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{tenant.company}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{tenant.address}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
                                              <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a></td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
                                                <a className="text-blue-500" href={`tel:${tenant.contact}`}>{String(tenant.contact)}</a> </td>
                                             
                                         </tr>
@@ -556,7 +565,7 @@ export default function TenantTable() {
                             {"<"}   
                         </button>
                         <div>
-                            <p>Showing page {currentPage} from {totalPages}</p>
+                            <p>Page {currentPage} / {totalPages}</p>
                         </div>
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
                             {">"}
@@ -636,7 +645,7 @@ export default function TenantTable() {
                                         {
                                             City.length > 0 ? City.map((item, index) => (
                                                 <option key={index} value={item}>{item}</option>
-                                            )) : <option disabled hidden>Please Select Country   </option>
+                                            )) : <option disabled value={0} key={0} hidden>Please Select Country</option>
                                         }
                                     </select>
                                 </div>
