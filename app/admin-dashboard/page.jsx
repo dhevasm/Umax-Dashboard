@@ -24,11 +24,18 @@ export default function AdminDashboard(){
     const [tenantsCount, setTenantsCount] = useState ("")
     const [usersCount, setUsersCount] = useState("")
     const [campaignsCount, setCampaignsCount] = useState("")
+    const [clientCount, setClientCount] = useState("")
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
 
-    const [changeTable, setChangeTable] = useState("dashboard")
+    const [dataDashboard, setDataDashboard] = useState({
+        tenants: "",
+        users: "",
+        campaigns: "",
+        clients: ""
+    })
+    const [changeTable, setChangeTable] = useState("campaigns")
 
 
     const AdminDashboardContextValue = (() => {
@@ -38,8 +45,9 @@ export default function AdminDashboard(){
         setUpdateCard,
         changeTable,
         setChangeTable,
-        userData
-    }, [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData])
+        userData,
+        dataDashboard
+    }, [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard])
 
     async function getUserData(){
         const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-id', {
@@ -63,6 +71,12 @@ export default function AdminDashboard(){
             }
         })
         setCampaignsCount(getCampaigns.data.Data.length)
+        const getClient = await axios.get('https://umaxxnew-1-d6861606.deta.app/client-by-tenant', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            }
+        })
+        setClientCount(getClient.data.Data.length)
     }
 
     async function getTenantsCount(){   
@@ -80,6 +94,15 @@ export default function AdminDashboard(){
         getUserData()
         getUserCampaignCount()
     }, [])
+
+    useEffect(() => {
+        setDataDashboard({
+            tenants: tenantsCount,
+            users: usersCount,
+            campaigns: campaignsCount,
+            clients: clientCount
+        })
+    },[clientCount, tenantsCount, campaignsCount, usersCount])
 
     useEffect(() => {
         if(userData.roles == 'admin'){
@@ -121,12 +144,11 @@ export default function AdminDashboard(){
             <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
                     <AdminNavbar userData={userData}/>
                     <AdminSidebar />
-
             {/* main content */}
 
 
             <div className="flex w-full min-h-full justify-end bg-gray-100">
-                <div className={`${sidebarHide ? 'w-full' : 'w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
+                <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
                     <div>  
                         {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
                         {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}

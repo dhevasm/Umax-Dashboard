@@ -7,17 +7,23 @@ import ChartThree from "./Chart/ChartThree"
 import Map from "./Maps/Map"
 import Image from "next/image"
 import { BiSolidLeftArrow, BiSolidRightArrow} from "react-icons/bi"
+import { useContext } from "react"
+import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { useState, useEffect } from "react"
+import LoadingCircle from "../Loading/LoadingCircle"
 
 export default function Dashboard(){
+
+    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard] = useContext(AdminDashboardContext)
 
     return (
         <>
             <div className="w-full h-full flex flex-wrap gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full">
-                    <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Users" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
+                    <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} />
+                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div className="text-md animate-pulse">Loading...</div>} handleClick={"users"} />
+                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"} />
+                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"} />
                 </div>
                 <div className="w-full xl:h-[450px] h-[900px] flex xl:flex-row lg:flex-col md:flex-col sm:flex-col gap-7 mb-3">
                     <div className="xl:w-1/3 max-h-[450px] h-full bg-white rounded-sm shadow-lg p-5">

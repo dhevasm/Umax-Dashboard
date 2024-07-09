@@ -141,6 +141,7 @@ export default function TenantTable() {
 
     const deleteTenant = async (tenant_id) => {
         // console.log(tenant_id)
+        closeModal()
         try {
             const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
                 headers: {
@@ -479,18 +480,18 @@ export default function TenantTable() {
             <div className="w-full">
             <div className="flex flex-col md:flex-row justify-between mt-3">
                     <h1 className="text-3xl font-bold flex gap-2"><RiBuildingLine/> Tenants</h1>
-                    <p>Dashboard / Tenants</p>
+                    <p><a href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Tenants</p>
                 </div>
                 <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
                     <div></div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
-                        <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
+                        <div className="flex gap-2">
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={generatePDF}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <AiOutlineFilePdf />
                                 </IconContext.Provider>
                             </button>
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generateExcel}>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={generateExcel}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <FaFileExcel />
                                 </IconContext.Provider>

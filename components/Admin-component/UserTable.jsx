@@ -24,7 +24,7 @@ export default function UserTable() {
     const [userMemo, setUserMemo] = useState([])
     const [EditUserId, setEditUserId] = useState(null)
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable] = useContext(AdminDashboardContext)
+    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData] = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -81,6 +81,7 @@ export default function UserTable() {
     }
 
     const deleteuser = async (user_id) => {
+        closeModal()
         // console.log(user_id)
         try {
             const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/user-delete?user_id=${user_id}`, {
@@ -235,14 +236,14 @@ export default function UserTable() {
             const role = document.getElementById('role').value
             const formData = new FormData();
             formData.append('role', role);
-    
+            console.log(EditUserId)
             const response = await axios.post(`https://umaxxnew-1-d6861606.deta.app/change-user-role?user_id=${EditUserId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
     
-            if(response.data.Output.includes("Successfully changed")){
+            if(response.data.Output.includes("Successfully changed") || response.data.Output.includes("Berhasil")){
                 getUsers()
                 closeModal()
                 Swal.fire("Success", "user Updated", "success")
@@ -362,13 +363,13 @@ export default function UserTable() {
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between mt-3">
                     <h1 className="text-3xl font-bold flex gap-2"> <RiUser3Line/> Users</h1>
-                    <p>Dashboard / Users</p>
+                    <p><a href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Users</p>
                 </div>
                 <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                     <div className="flex gap-5">
                         <div className="mt-5">
                             <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                            <select id="rolefilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full px-10 py-2" defaultValue={0}
+                            <select id="rolefilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full px-5 py-2" defaultValue={0}
                             onChange={(e) => {
                                 const role = e.target.value;
                                 const filteredData = userMemo.filter((user) =>
@@ -398,13 +399,13 @@ export default function UserTable() {
 
                     </div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
-                        <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
+                        <div className="flex gap-2">
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={generatePDF}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <AiOutlineFilePdf />
                                 </IconContext.Provider>
                             </button>
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generateExcel}>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={generateExcel}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <FaFileExcel />
                                 </IconContext.Provider>
@@ -432,7 +433,7 @@ export default function UserTable() {
                 </div>
                 <div className="rounded-md  h-[50vh] mt-5 shadow-xl overflow-auto">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-black uppercase bg-[#F9FAFB]" >
+                        <thead className="text-xs text-black uppercase bg-[#F9FAFB]  border-b-2 border-gray-300" >
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
                                 <th scope="col" className="px-6 py-3">Name</th>
@@ -445,14 +446,14 @@ export default function UserTable() {
                             {
                                 users.length > 0 ? users.map((user, index) => {
                                     return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer">
-                                            <td  scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)} >{user.roles}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
+                                        <tr key={index} className="bg-white hover:bg-blue-200 border-b-2 border-gray-300 hover:cursor-pointer">
+                                            <td  scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
+                                            <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
+                                            <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)} >{user.roles}</td>
+                                            <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                              <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a></td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
-                                               <a className="text-blue-500" href={`tel:${user.company_name}`}>{String(user.company_name)}</a> </td>
+                                            <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                               {user.company_name}</td>
                                             {/* <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
                                                 <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(user._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
@@ -520,7 +521,7 @@ export default function UserTable() {
                                 {`${modeModal} user`}
                             </h3>
                             <button type="button" className="text-white text-xl bg-transparent hover:bg-blue-400 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
-                                <FaTimes />
+                                <FaTimes/>
                             </button>
                         </div>
                         {/* <!-- Modal body --> */}
@@ -531,9 +532,9 @@ export default function UserTable() {
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
                                     disabled/>
                                 </div>
-                                <div className="col-span-2">
+                                <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
                                     <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">Role</label>
-                                    <select id="role" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <select id="role" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 " >
                                         <option value="admin">Admin</option>
                                         <option value="staff">Staff</option>
                                     </select>

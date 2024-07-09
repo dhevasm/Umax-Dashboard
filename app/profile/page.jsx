@@ -72,7 +72,7 @@ const Profile = () => {
                 <div className="relative bg-gradient-to-l from-blue-400 to-blue-500 p-6">
                     <div className="absolute top-4 left-4">
                         <Link href="/dashboard">
-                            <IoIosArrowBack className="text-white text-2xl cursor-pointer hover:text-gray-200" />
+                            <IoIosArrowBack className="text-white text-2xl cursor-pointer hover:text-gray-200"/>
                         </Link>
                     </div>
                     <div className="absolute top-4 right-4">

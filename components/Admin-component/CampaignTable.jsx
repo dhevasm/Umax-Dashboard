@@ -27,12 +27,42 @@ export default function CampaignTable() {
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
 
+    // validasi form
+    const [values, setValues] = useState({name: '', start_date: '', end_date: ''})
+    const [error, setError] = useState({
+        name: '',
+        start_date: '',
+        end_date: '',
+    })
+    const [isvalid, setIsvalid] = useState(false)
+
+    function validateForm(){
+        let errors = {}
+        if(values.name == ''){
+            errors.name = 'Campaign name is required'
+        }
+        if(values.start_date == ''){
+            errors.address = 'Start date is required'
+        }
+        if(values.end_date == ''){
+            errors.contact = 'End date is required'
+        }
+        setError(errors)
+        setIsvalid(Object.keys(errors).length === 0)
+    }
+
+    useEffect(() => {
+        validateForm()
+    }, [values])
+
     function showModal(mode, campaign_id = null ){
         setModeModal(mode)
         if(mode == "Edit"){
             const filteredCampaign = campaigns.filter(campaign => campaign._id === campaign_id);
             if(filteredCampaign.length > 0){
-                // console.log(filteredCampaing[0])
+                setValues({name: filteredCampaign[0].name, start_date: filteredCampaign[0].start_date, end_date: filteredCampaign[0].end_date})
+                setError({name: '', start_date: '', end_date: ''})
+                console.log(filteredCampaign[0])
                 setEditCampaignId(campaign_id)
                 document.getElementById('name').value = filteredCampaign[0].name
                 document.getElementById('tenant').value = filteredCampaign[0].tenant_id
@@ -41,12 +71,13 @@ export default function CampaignTable() {
                 document.getElementById('start_date').value = filteredCampaign[0].start_date
                 document.getElementById('end_date').value = filteredCampaign[0].end_date
                 document.getElementById('status').value = filteredCampaign[0].status 
-                console.log(filteredCampaign[0].start_date)   
                 
             } else{
                 Swal.fire("Campaign not found");
             }
         }else if(mode == "Create") {
+            setValues({name: '', start_date: '', end_date: ''})
+            setError({name: '', start_date: '', end_date: ''})
             document.getElementById('name').value = null
         }
         addModal.current.classList.remove("hidden")
@@ -77,6 +108,7 @@ export default function CampaignTable() {
     }
 
     const deleteCampaign = async (campaing_id) => {
+        closeModal()
         try {
             const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/campaign-delete?campaign_id=${campaing_id}`, {
                 headers: {
@@ -189,53 +221,8 @@ export default function CampaignTable() {
     }, [campaigns])
 
     async function createCampaing(){
-        const name = document.getElementById('name').value
-        const account = document.getElementById('account').value
-        const tenant = document.getElementById('tenant').value
-        const objective = document.getElementById('objective').value
-        const status = document.getElementById('status').value
-        const start_date = document.getElementById('start_date').value
-        const end_date = document.getElementById('end_date').value
 
-        console.log(tenant)
-
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('account_id', account);
-        formData.append('objective', objective)
-        formData.append('status', status)
-        formData.append('start_date', start_date)
-        formData.append('end_date', end_date)
-        formData.append('notes', "notes")
-        
-
-        let url = ""
-
-        if(userData.roles == "sadmin"){
-            url = `https://umaxxnew-1-d6861606.deta.app/campaign-create?tenantId=${tenant}`
-        }else if(userData.roles == "admin"){
-            url = `https://umaxxnew-1-d6861606.deta.app/campaign-create`
-        }
-
-        const response = await axios.post(url, formData, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-
-        if(response.data.Output == "Create Campaign Successfully"){
-            getCampaign()
-            closeModal()
-            setUpdateCard(true)
-            document.getElementById('name').value = null
-            Swal.fire("Success", "Campaing created successfully", "success")
-        }else{
-            Swal.fire("Error", response.detail, "error")
-        }
-    }
-
-    async function updateCampaing(){
-        if(EditCampaignId !== null) {
+        if(isvalid){
             const name = document.getElementById('name').value
             const account = document.getElementById('account').value
             const tenant = document.getElementById('tenant').value
@@ -243,10 +230,9 @@ export default function CampaignTable() {
             const status = document.getElementById('status').value
             const start_date = document.getElementById('start_date').value
             const end_date = document.getElementById('end_date').value
-            console.log(account)
-            console.log(EditCampaignId)
-
-
+    
+            console.log(tenant)
+    
             const formData = new FormData();
             formData.append('name', name);
             formData.append('account_id', account);
@@ -255,20 +241,82 @@ export default function CampaignTable() {
             formData.append('start_date', start_date)
             formData.append('end_date', end_date)
             formData.append('notes', "notes")
+            
     
-            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/campaign-edit?campaign_id=${EditCampaignId}`, formData, {
+            let url = ""
+    
+            if(userData.roles == "sadmin"){
+                url = `https://umaxxnew-1-d6861606.deta.app/campaign-create?tenantId=${tenant}`
+            }else if(userData.roles == "admin"){
+                url = `https://umaxxnew-1-d6861606.deta.app/campaign-create`
+            }
+    
+            const response = await axios.post(url, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
     
-            if(response.data.Output == "Campaign Successfully edited"){
+            if(response.data.Output == "Create Campaign Successfully"){
                 getCampaign()
                 closeModal()
+                setUpdateCard(true)
                 document.getElementById('name').value = null
-                Swal.fire("Success", "Campaign Updated", "success")
+                Swal.fire("Success", "Campaing created successfully", "success")
             }else{
-                Swal.fire("Error", response.detail.ErrMsg, "error")
+                Swal.fire("Error", response.detail, "error")
+            }
+        }else{
+            Swal.fire({
+                title: "Failed!",
+                text: "Please Fill The Blank!",
+                icon: "error"
+              });
+        }
+    }
+
+    async function updateCampaing(){
+        if(EditCampaignId !== null) {
+            if(isvalid){
+                const name = document.getElementById('name').value
+                const account = document.getElementById('account').value
+                const tenant = document.getElementById('tenant').value
+                const objective = document.getElementById('objective').value
+                const status = document.getElementById('status').value
+                const start_date = document.getElementById('start_date').value
+                const end_date = document.getElementById('end_date').value
+                console.log(account)
+                console.log(EditCampaignId)
+    
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('account_id', account);
+                formData.append('objective', objective)
+                formData.append('status', status)
+                formData.append('start_date', start_date)
+                formData.append('end_date', end_date)
+                formData.append('notes', "notes")
+        
+                const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/campaign-edit?campaign_id=${EditCampaignId}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                    }
+                })
+        
+                if(response.data.Output == "Campaign Successfully edited"){
+                    getCampaign()
+                    closeModal()
+                    document.getElementById('name').value = null
+                    Swal.fire("Success", "Campaign Updated", "success")
+                }else{
+                    Swal.fire("Error", response.detail.ErrMsg, "error")
+                }
+            }else{
+                Swal.fire({
+                    title: "Failed!",
+                    text: "Please Fill The Blank!",
+                    icon: "error"
+                  });
             }
         }
     }
@@ -401,13 +449,13 @@ export default function CampaignTable() {
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between mt-3">
                     <h1 className="text-3xl font-bold flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
-                    <p>Dashboard / Campaigns</p>
+                    <p><a href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
                 </div>
                 <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                 <div className="flex gap-5">
                         <div className="mt-5">
                             <label htmlFor="platformfilter" className="text-sm font-medium text-gray-900 hidden">Platform</label>
-                            <select id="platformfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-10 py-2" defaultValue={0}
+                            <select id="platformfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
                              onChange={(e) => {
                                 const campaignvalue = e.target.value;
                                 const filteredData = campaignMemo.filter((campaign) =>
@@ -424,7 +472,7 @@ export default function CampaignTable() {
                         </div>
                         <div className="mt-5">
                             <label htmlFor="objectivefilter" className="text-sm font-medium text-gray-900 hidden">Objective</label>
-                            <select id="objectivefilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-10 py-2" defaultValue={0}
+                            <select id="objectivefilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
                              onChange={(e) => {
                                 const campaignvalue = e.target.value;
                                 const filteredData = campaignMemo.filter((campaign) =>
@@ -441,7 +489,7 @@ export default function CampaignTable() {
                         </div>
                         <div className="mt-5">
                             <label htmlFor="statusfilter" className="text-sm font-medium text-gray-900 hidden">status</label>
-                            <select id="statusfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-10 py-2" defaultValue={0}
+                            <select id="statusfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
                              onChange={(e) => {
                                 const campaignvalue = e.target.value;
                                 const filteredData = campaignMemo.filter((campaign) =>
@@ -459,13 +507,13 @@ export default function CampaignTable() {
 
                     </div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
-                        <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
+                        <div className="flex gap-2">
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={generatePDF}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <AiOutlineFilePdf />
                                 </IconContext.Provider>
                             </button>
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generateExcel}>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={generateExcel}>
                                 <IconContext.Provider value={{ className: "text-xl" }}>
                                     <FaFileExcel />
                                 </IconContext.Provider>
@@ -575,15 +623,15 @@ export default function CampaignTable() {
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
 
-                <div className="relative p-4 w-full max-w-md max-h-full ">
+                <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                            <h3 className="text-lg font-semibold text-gray-900 ">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white">
+                            <h3 className="text-lg font-semibold ">
                                 {`${modeModal} Campaing`}
                             </h3>
-                            <button type="button" className="text-gray-600 text-xl bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
@@ -591,9 +639,9 @@ export default function CampaignTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Campaign Name</label>
+                                    <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Campaign Name {error.name ? <div className="text-red-500">*</div> : ""}</label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
-                                    required/>
+                                    required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                 </div>
                                 <div className="col-span-1">
                                     <label htmlFor="account" className="block mb-2 text-sm font-medium text-gray-900">account</label>
@@ -615,6 +663,7 @@ export default function CampaignTable() {
                                         }
                                     </select>
                                 </div>
+
                                 
                                 <div className="col-span-1">
                                 <label htmlFor="objective" className="block mb-2 text-sm font-medium text-gray-900">Objective</label>
@@ -635,24 +684,29 @@ export default function CampaignTable() {
                                 </div>
 
                                 <div className="col-span-1">
-                                <label htmlFor="start_date" className="block mb-2 text-sm font-medium text-gray-900">Start Date</label>
+                                <label htmlFor="start_date" className="flex mb-2 text-sm font-medium text-gray-900">Start Date {error.start_date ? <div className="text-red-500">*</div> : ""}</label>
                                 <input type="date" name="start_date" id="start_date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
-                                    required/>
+                                    required onChange={(e) => setValues({...values, start_date: e.target.value})}/>
                                 </div>
 
                                 <div className="col-span-1">
-                                <label htmlFor="end_date" className="block mb-2 text-sm font-medium text-gray-900">End Date</label>
+                                <label htmlFor="end_date" className="flex mb-2 text-sm font-medium text-gray-900">End Date {error.end_date ? <div className="text-red-500">*</div> : ""}</label>
                                 <input type="date" name="end_date" id="end_date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
-                                    required/>
+                                    required onChange={(e) => setValues({...values, end_date: e.target.value})}/>
                                 </div>
                                 
                                 
                                 
                             </div>
                                 <div className="flex justify-between items-end">
-                                    
+                                    <div></div>
                                         {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaing}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaing}>Submit</button>
+                                            modeModal === 'Edit' ? <div className="flex gap-2">
+                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaing}>Save Change</button> 
+                                                <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}><FaTrash/>
+                                                </button> 
+                                            </div> 
+                                                : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaing}>Submit</button>
                                         }
                                         
                                 </div>  
