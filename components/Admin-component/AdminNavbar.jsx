@@ -37,8 +37,8 @@ export default function AdminNavbar({userData}){
         <>
             <nav className="w-full fixed z-20 h-14 bg-slate-100 shadow-md flex justify-between items-center">
                 <div className="flex h-full">
-                    <div className="w-[300px] h-full bg-slate-200 flex justify-center items-center transition-transform" ref={navbarBrand}>
-                        <img src="assets/logo.png" alt="Logo"/>
+                    <div className="w-[300px] h-full bg-[#1C2434] flex justify-center items-center transition-transform" ref={navbarBrand}>
+                        <img src="assets/logo.png" alt="Logo" className="drop-shadow-xl decoration-white"/>
                     </div>
                     <button onClick={hideHandle} className="mx-5">
                         <FaBars className="text-2xl" />

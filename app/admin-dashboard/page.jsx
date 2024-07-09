@@ -20,8 +20,6 @@ export default function AdminDashboard(){
 
     const [userData, setUserData] = useState([])
 
-    const router = useRouter()
-
     const [tenantsCount, setTenantsCount] = useState ("")
     const [usersCount, setUsersCount] = useState("")
     const [campaignsCount, setCampaignsCount] = useState("")
@@ -123,7 +121,7 @@ export default function AdminDashboard(){
 
             {/* main content */}
             <div className="flex w-full min-h-full justify-end px-3  bg-gray-100">
-                <div className="w-[75%] mt-20 rounded-md p-5 me-3 shadow-xl bg-white" ref={MainCard}>
+                <div className="w-[75%] pt-20" ref={MainCard}>
                     <div className="flex flex-wrap justify-evenly">
                         {   
                             userData.roles == 'sadmin' ?
