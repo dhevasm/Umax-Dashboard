@@ -12,6 +12,7 @@ import TenantProfile from "@/components/Admin-component/TenantProfile"
 import AccountTable from "@/components/Admin-component/AccountTable"
 import ClientTable from "@/components/Admin-component/ClientTable"
 import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
 
 export const AdminDashboardContext = createContext()
 export default function AdminDashboard(){
@@ -87,8 +88,8 @@ export default function AdminDashboard(){
     const MainCard = useRef(null)
     
     useEffect(() => {
-        MainCard.current.classList.toggle("w-full")
-        MainCard.current.classList.toggle("me-3")
+            // MainCard.current.classList.toggle("")
+
     }, [sidebarHide])
 
     useEffect(() => {
@@ -120,19 +121,10 @@ export default function AdminDashboard(){
                     <AdminSidebar />
 
             {/* main content */}
-            <div className="flex w-full min-h-full justify-end px-3  bg-gray-100">
-                <div className="w-[75%] pt-20" ref={MainCard}>
-                    <div className="flex flex-wrap justify-evenly">
-                        {   
-                            userData.roles == 'sadmin' ?
-                                getTenantsCount() &&
-                                <CountCard color="blue" handleClick="tenants" title="Total Tenants" value={tenantsCount ? tenantsCount : <div className="animate-pulse">Loading....</div>}/>
-                                :
-                                <CountCard color="blue" handleClick="company" title="Company" value={userData.company_name ? <div className="text-center text-xl">{userData.company_name}</div> : <div className="animate-pulse">Loading....</div>}/>
-                        }       
-                        <CountCard color="green" title="Total Users" handleClick="users" value={usersCount ? usersCount : <div className="animate-pulse">Loading....</div>}/>    
-                        <CountCard color="yellow" title="Total Campaigns" handleClick="campaigns" value={campaignsCount ? campaignsCount : <div className="animate-pulse">Loading....</div>}/>    
-                    </div>
+
+            <div className="flex w-full min-h-full justify-end  bg-gray-100">
+                <div className={`${sidebarHide ? 'w-full' : 'w-[calc(100%-300px)]'} bg-red-200 mt-[85px] p-5`} ref={MainCard}>
+
                     <div>  
                        {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
                        {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
