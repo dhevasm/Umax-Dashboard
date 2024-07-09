@@ -17,6 +17,7 @@ import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { IoMdEye } from "react-icons/io"
 import { IoMdEyeOff } from "react-icons/io"
+import { RiIdCardLine } from "react-icons/ri"
 export default function AccountTable() {
 
     const [account, setaccount] = useState([])
@@ -405,10 +406,47 @@ export default function AccountTable() {
 
     return (
         <>
-            <div className="w-full pb-20">
-                <div className="border-t border-gray-300 my-5"></div>
+            <div className="w-full">
+            <div className="flex flex-col md:flex-row justify-between mt-3">
+                    <h1 className="text-3xl font-bold flex gap-2"><RiIdCardLine/> Accounts</h1>
+                    <p>Dashboard / Accounts</p>
+                </div>
                 <div className=" flex flex-col md:flex-row justify-between items-center w-full ">
-                    <h1 className="text-3xl font-bold">Accounts</h1>
+                    <div className="flex gap-5">
+                    <div className="mt-5">
+                            <label htmlFor="platformfilter" className="text-sm font-medium text-gray-900 hidden">Platform</label>
+                            <select id="platformfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-10 py-2" defaultValue={0}
+                             onChange={(e) => {
+                                const accountvalue = e.target.value;
+                                const filteredData = accountMemo.filter((account) =>
+                                account.platform == accountvalue
+                                );
+                                accountvalue === "0" ? setaccount(accountMemo) : setaccount(filteredData);
+                            }}>
+                                <option value="0" key={0} >All Platform</option>
+                                <option value={1} key={1}>Meta Ads</option>
+                                <option value={2} key={2}>Google Ads</option>
+                                <option value={3} key={3}>Tiktok Ads</option>
+                            </select>
+                            
+                        </div>
+                        <div className="mt-5">
+                            <label htmlFor="accountfilter" className="text-sm font-medium text-gray-900 hidden">status</label>
+                            <select id="accountfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-10 py-2" defaultValue={0}
+                             onChange={(e) => {
+                                const accountvalue = e.target.value;
+                                const filteredData = accountMemo.filter((account) =>
+                                account.status == accountvalue
+                                );
+                                accountvalue === "0" ? setaccount(accountMemo) : setaccount(filteredData);
+                            }}>
+                                <option value="0" key={0} >All Status</option>
+                                <option value={1} key={1}>Active</option>
+                                <option value={2} key={2}>Inactive</option>
+                            </select>
+                            
+                        </div>
+                    </div>
                     <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
                         <div>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={generatePDF}>
@@ -442,9 +480,9 @@ export default function AccountTable() {
                         </div>
                     </div>
                 </div>
-                <div className="rounded-md mt-5 shadow-xl overflow-auto">
+                <div className="rounded-md mt-5 shadow-xl h-[50vh] overflow-auto">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-white uppercase bg-red-500">
+                        <thead className="text-xs text-black uppercase bg-[#F9FAFB]">
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
                                 <th scope="col" className="px-6 py-3">Username</th>
@@ -452,21 +490,21 @@ export default function AccountTable() {
                                 <th scope="col" className="px-6 py-3">Platform</th>
                                 <th scope="col" className="px-6 py-3">Email</th>
                                 <th scope="col" className="px-6 py-3">Status</th>
-                                <th scope="col" className="px-6 py-3">Action</th>
+                                {/* <th scope="col" className="px-6 py-3">Action</th> */}
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 account.length > 0 ? account.map((account, index) => {
                                     return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-red-200 hover:cursor-pointer">
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{account.username}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{account.client_name}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{account.email }</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
-                                            <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
+                                        <tr key={index} className=  "odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer" onClick={() => showModal("Edit", account._id)}>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.username}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.client_name}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.email }</td>
+                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
+                                            {/* <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
                                                 <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(account._id)}>
                                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                                         <FaEye />
@@ -482,7 +520,7 @@ export default function AccountTable() {
                                                         <FaTrash />
                                                     </IconContext.Provider>
                                                 </button>
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     )
                             }).slice(firstPage, lastPage) : <tr className="text-center animate-pulse"><td>Loading...</td></tr>
@@ -508,7 +546,7 @@ export default function AccountTable() {
                             {"<"}   
                         </button>
                         <div>
-                            <p>Showing page {currentPage} from {totalPages}</p>
+                            <p>Page {currentPage} / {totalPages}</p>
                         </div>
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
                             {">"}

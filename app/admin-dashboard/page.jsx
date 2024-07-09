@@ -27,7 +27,7 @@ export default function AdminDashboard(){
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
-    const [changeTable, setChangeTable] = useState("tenants")
+    const [changeTable, setChangeTable] = useState("campaigns")
 
     const AdminDashboardContextValue = (() => {
         sidebarHide,
@@ -123,7 +123,7 @@ export default function AdminDashboard(){
             {/* main content */}
 
             <div className="flex w-full min-h-full justify-end  bg-gray-100">
-                <div className={`${sidebarHide ? 'w-full' : 'w-[calc(100%-300px)]'} bg-red-200 mt-[85px] p-5`} ref={MainCard}>
+                <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} bg-[#F1F5F9] mt-[85px] p-5`} ref={MainCard}>
 
                     <div>  
                        {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
