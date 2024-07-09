@@ -4,7 +4,6 @@ import { useState,useEffect, createContext, useRef } from "react"
 
 import AdminNavbar from "@/components/Admin-component/AdminNavbar"
 import AdminSidebar from "@/components/Admin-component/AdminSidebar"
-import CountCard from "@/components/Admin-component/CountCard"
 import TenantTable from "@/components/Admin-component/TenantTable"
 import UserTable from "@/components/Admin-component/UserTable"
 import CampaignTable from "@/components/Admin-component/CampaignTable"
@@ -13,6 +12,7 @@ import AccountTable from "@/components/Admin-component/AccountTable"
 import ClientTable from "@/components/Admin-component/ClientTable"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
+import Dashboard from "@/components/Admin-component/Dashboard"
 
 export const AdminDashboardContext = createContext()
 export default function AdminDashboard(){
@@ -27,7 +27,9 @@ export default function AdminDashboard(){
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
-    const [changeTable, setChangeTable] = useState("campaigns")
+
+    const [changeTable, setChangeTable] = useState("dashboard")
+
 
     const AdminDashboardContextValue = (() => {
         sidebarHide,
@@ -122,16 +124,17 @@ export default function AdminDashboard(){
 
             {/* main content */}
 
-            <div className="flex w-full min-h-full justify-end  bg-gray-100">
-                <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} bg-[#F1F5F9] mt-[85px] p-5`} ref={MainCard}>
 
+            <div className="flex w-full min-h-full justify-end bg-gray-100">
+                <div className={`${sidebarHide ? 'w-full' : 'w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
                     <div>  
-                       {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
-                       {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
-                       {changeTable == "users" && <UserTable/>}
+                        {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
+                        {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
+                        {changeTable == "users" && <UserTable/>}
                         {changeTable == "campaigns" && <CampaignTable/>}
                         {changeTable == "accounts" && <AccountTable/>}
                         {changeTable == "clients" && <ClientTable/>}
+                        {changeTable == "dashboard" && <Dashboard/>}
                     </div>
                 </div>
             </div>

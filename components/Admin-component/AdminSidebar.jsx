@@ -62,7 +62,7 @@ export default function AdminSidebar(){
                         Menu
                     </li>
                     <li className="mb-4 text-sm">
-                        <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleSidebarLink}>
+                        <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => setChangeTable("dashboard")}>
                             <div className="flex items-center gap-2">
                                 <FaTachometerAlt/>
                                 Dashboard
