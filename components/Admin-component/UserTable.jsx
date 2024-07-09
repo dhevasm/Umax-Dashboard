@@ -387,7 +387,7 @@ export default function UserTable() {
                 </div>
                 <div className="rounded-md mt-5 shadow-xl overflow-auto">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-white uppercase bg-green-500">
+                        <thead className="text-xs text-black uppercase bg-[#F9FAFB]">
                             <tr>
                                 <th scope="col" className="px-6 py-3">No</th>
                                 <th scope="col" className="px-6 py-3">Name</th>
