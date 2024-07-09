@@ -147,8 +147,10 @@ export default function AdminDashboard(){
             {/* main content */}
 
 
+
             <div className="flex w-full min-h-full justify-end bg-gray-100">
                 <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
+
                     <div>  
                         {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
                         {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
