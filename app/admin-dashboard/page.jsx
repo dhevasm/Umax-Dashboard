@@ -1,18 +1,17 @@
 'use client'
 import { useState, useEffect, createContext, useRef } from "react"
-import dynamic from "next/dynamic"
 import axios from "axios"
 
-const AdminNavbar = dynamic(() => import('@/components/Admin-component/AdminNavbar'), { ssr: false })
-const AdminSidebar = dynamic(() => import('@/components/Admin-component/AdminSidebar'), { ssr: false })
-const TenantTable = dynamic(() => import('@/components/Admin-component/TenantTable'), { ssr: false })
-const UserTable = dynamic(() => import('@/components/Admin-component/UserTable'), { ssr: false })
-const CampaignTable = dynamic(() => import('@/components/Admin-component/CampaignTable'), { ssr: false })
-const TenantProfile = dynamic(() => import('@/components/Admin-component/TenantProfile'), { ssr: false })
-const AccountTable = dynamic(() => import('@/components/Admin-component/AccountTable'), { ssr: false })
-const ClientTable = dynamic(() => import('@/components/Admin-component/ClientTable'), { ssr: false })
-const Dashboard = dynamic(() => import('@/components/Admin-component/Dashboard'), { ssr: false })
-
+import dynamic from "next/dynamic"
+const AdminNavbar = dynamic(() => import("@/components/Admin-component/AdminNavbar"), {ssr: false})
+const AdminSidebar = dynamic(() => import("@/components/Admin-component/AdminSidebar"), {ssr: false})
+const TenantTable = dynamic(() => import("@/components/Admin-component/TenantTable"), {ssr: false})
+const UserTable = dynamic(() => import("@/components/Admin-component/UserTable"), {ssr: false})
+const CampaignTable = dynamic(() => import("@/components/Admin-component/CampaignTable"), {ssr: false})
+const TenantProfile = dynamic(() => import("@/components/Admin-component/TenantProfile"), {ssr: false})
+const AccountTable = dynamic(() => import("@/components/Admin-component/AccountTable"), {ssr: false})
+const ClientTable = dynamic(() => import("@/components/Admin-component/ClientTable"), {ssr: false})
+const Dashboard = dynamic(() => import("@/components/Admin-component/Dashboard"), {ssr: false})
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 
@@ -101,7 +100,7 @@ function AdminDashboard() {
             campaigns: campaignsCount,
             clients: clientCount
         })
-    }, [clientCount, tenantsCount, campaignsCount, usersCount])
+    },[clientCount, tenantsCount, campaignsCount, usersCount])
 
     const MainCard = useRef(null)
 
@@ -127,13 +126,24 @@ function AdminDashboard() {
                 })
             }
         }
-    }, [router])
+    }, [router]);
 
-    return (
-        <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
-            <AdminNavbar userData={userData} />
-            <AdminSidebar />
-            <div className="flex w-full min-h-full justify-end bg-gray-100 text-black dark:bg-slate-700 dark:text-white">
+    if (typeof window !== "undefined" && updateCard) {
+        getTenantsCount()
+        getUserCampaignCount()
+        setUpdateCard(false)
+    }
+
+    return(
+        <>
+            <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
+                    <AdminNavbar userData={userData}/>
+                    <AdminSidebar />
+            {/* main content */}
+
+
+
+            <div className="flex w-full min-h-full justify-end bg-[#f1f5f9]">
                 <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
                     <div>
                         {userData.roles === 'sadmin' && changeTable === "tenants" && <TenantTable />}
@@ -149,5 +159,4 @@ function AdminDashboard() {
         </AdminDashboardContext.Provider>
     )
 }
-
 export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false })

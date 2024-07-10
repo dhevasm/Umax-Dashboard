@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { RiBellLine, RiChat3Line} from "react-icons/ri";
 import { BiBell } from "react-icons/bi";
 
-export default function AdminNavbar({userData}){
+function AdminNavbar({userData}){
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable} = useContext(AdminDashboardContext)
 
@@ -19,11 +19,14 @@ export default function AdminNavbar({userData}){
     }
 
     const checkIsMobile = () => {
-        if (window.innerWidth <= 640) {
-            hideHandle()
-            navbarBrand.current.classList.add("hidden")
-        } 
+        if (typeof window !== 'undefined') {
+            if (window.innerWidth <= 640) {
+                hideHandle()
+                navbarBrand.current.classList.add("hidden")
+            } 
+        }
     }
+
     useEffect(() => {
         checkIsMobile()
        if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -110,3 +113,5 @@ export default function AdminNavbar({userData}){
         </>
     )
 }
+
+export default dynamic(() => Promise.resolve(AdminNavbar), { ssr: false });
