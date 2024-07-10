@@ -2,7 +2,10 @@
 
 import TableLoading from "@/components/Loading/TableLoading";
 import Navbar from "@/components/Navbar";
-import CampaignTable from "@/components/Table/CampaignTable";
+import dynamic from "next/dynamic";
+const CampaignTable = dynamic(() => import("@/components/Table/CampaignTable"), {
+    ssr: false,
+});
 import { Suspense, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";

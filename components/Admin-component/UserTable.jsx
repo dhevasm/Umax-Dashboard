@@ -9,15 +9,11 @@ import jsPDF from "jspdf"
 import 'jspdf-autotable'
 import { IconContext } from "react-icons"
 import { AiOutlineFilePdf } from "react-icons/ai"
-import { FaArrowLeft, FaArrowRight, FaFileExcel, FaTable } from "react-icons/fa"
-import { FaPlus } from "react-icons/fa"
-import { FaPen } from "react-icons/fa"
+import { FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
-import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { useRouter } from "next/navigation"
-import { RiFileExcel2Line, RiFileExcelLine, RiUser3Line } from "react-icons/ri"
-import Image from "next/image"
+import { RiFileExcel2Line, RiUser3Line } from "react-icons/ri"
 import CountCard from "./CountCard"
 import { BiPlus } from "react-icons/bi"
 
@@ -26,6 +22,9 @@ export default function UserTable() {
     const [users, setUsers] = useState([])
     const [userMemo, setUserMemo] = useState([])
     const [EditUserId, setEditUserId] = useState(null)
+    const [selectedRole, setSelectedRole] = useState("");
+    const [selectedTenant, setSelectedTenant] = useState("");
+    const [searchTerm, setSearchTerm] = useState("")
 
     const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData] = useContext(AdminDashboardContext)
 
@@ -371,67 +370,106 @@ export default function UserTable() {
         );
     };
 
+    // Filter Function
+    const handleRoleChange = (event) => {
+        setSelectedRole(event.target.value);
+    };
+
+    const handleTenantChange = (event) => {
+        setSelectedTenant(event.target.value);
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredData = users.filter((data) => {
+        const client_name = localStorage.getItem("name");
+        const role = localStorage.getItem("roles");
+        // if(role != 'client') {
+        return (
+            (!selectedRole || data.roles === selectedRole) &&
+            (!selectedTenant || data.company_name.toLowerCase().includes(selectedTenant.toLowerCase())) &&
+            (!searchTerm ||
+                data.name.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+        // } else {
+        //     return (
+        //         (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+        //         (!selectedObjective || data.objective === Number(selectedObjective)) &&
+        //         (!searchTerm ||
+        //             data.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        //         (data.client_name.toLowerCase() == client_name.toLowerCase())
+        //     );
+        // }
+    });
+    // Filter function end
+
     return (
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
                     <h1 className="text-2xl font-bold flex gap-2"> <RiUser3Line/> USERS</h1>
-                    <p>Dashboard / Users</p>
+                    <p><span className="hover:cursor-pointer hover:text-blue-400 hover:underline" onClick={() => setChangeTable("dashboard")}>Dashboard</span> / Users</p>
                 </div>
 
+                {/* {'Statistic Card'} */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
                     <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
                     <CountCard title="Users" value="0" handleClick={() => alert('User')} />
                     <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
                     <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
                 </div>
+                {/* {'Statistic Card end'} */}
                 
+                {/* Main card  */}
                 <div className="w-full h-fit bg-white mb-5 rounded-md shadow-md">
-                    <div className="w-full h-10 bg-[#3c50e0] flex items-center rounded-t-md">
+
+                    {/* Header */}
+                    <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
                             <FaTable  className="text-blue-200" size={18}/><p className="text-white text-md font-semibold">User Table</p>
                         </h1>
                     </div>
-                    <div className="w-full h-fit bg-white p-4">
-                        <div className="w-full flex justify-start mb-4">
-                            <button className="bg-white hover:bg-gray-100 border font-bold py-2 px-3 rounded mr-2" onClick={generatePDF}>
-                                <IconContext.Provider value={{ className: "text-xl" }}>
-                                    <AiOutlineFilePdf />
-                                </IconContext.Provider>
-                            </button>
-                            <button className="bg-white hover:bg-gray-100 border font-bold py-2 px-3 rounded mr-2" onClick={generateExcel}>
-                                <IconContext.Provider value={{ className: "text-xl" }}>
-                                    <RiFileExcel2Line />
-                                </IconContext.Provider>
-                            </button>
-                            <button className="bg-white hover:bg-gray-100 border font-bold py-2 px-3 rounded " onClick={() => {Router.push('register')}} >
-                                <IconContext.Provider value={{ className: "text-xl" }}>
-                                    <BiPlus className="text-thin"/>
-                                </IconContext.Provider>
-                            </button>
-                        </div>
+                    {/* Header end */}
 
+                    {/* Body */}
+                    <div className="w-full h-fit bg-white rounded-b-md p-4">
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
-                            <div className="flex gap-3">
+                            <div className="flex">
+                                {/* Button */}
+                                <button className="bg-white mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <AiOutlineFilePdf />
+                                    </IconContext.Provider>
+                                </button>
+                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <RiFileExcel2Line />
+                                    </IconContext.Provider>
+                                </button>
+                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => {Router.push('register')}} >
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <BiPlus className="text-thin"/>
+                                    </IconContext.Provider>
+                                </button>
+                                {/* Button end */}
+
+                                {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full px-3 py-2" defaultValue={0}
-                                    onChange={(e) => {
-                                        const role = e.target.value;
-                                        const filteredData = userMemo.filter((user) =>
-                                        user.roles.includes(role)
-                                        );
-                                        role === "0" ? setUsers(userMemo) : setUsers(filteredData);
-                                    }}>
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    value={selectedRole} onChange={handleRoleChange}
+                                    >
                                         <option value="0" key={0} >All User</option>
                                         <option value="admin" key={1}>Admin</option>
                                         <option value="staff" key={2}>Staff</option>
-                                    </select>
-                                    
+                                    </select>  
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="tenantfilter" className="text-sm font-medium text-gray-900 hidden">Tenant</label>
-                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full px-3 py-2" defaultValue={0}>
+                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm rounded-e-md block w-full px-3 py-2" defaultValue={0}
+                                    value={selectedTenant} onChange={handleTenantChange}>
                                         <option value="0" key={0} disabled hidden>Filter Tenant</option>
                                         {
                                             tenants.map((tenant, index) => {
@@ -442,62 +480,76 @@ export default function UserTable() {
                                         }
                                     </select>
                                 </div>
-
+                                {/* Filter by select end */}
                             </div>
+
+                            {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
-                                    onChange={(e) => {
-                                        const search = e.target.value.toLowerCase();
-                                        const filteredData = userMemo.filter((user) =>
-                                        user.name.toLowerCase().includes(search)
-                                        );
-                                        search === "" ? setUsers(userMemo) : setUsers(filteredData);
-                                    }} id="search"/>
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                    id="search"/>
                                     <span className="absolute inset-y-0 right-0 flex items-center pr-3">
                                         <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </span>
                                 </div>
                             </div>
+                            {/* Search */}
                         </div>
-                        <div className=" bg-white h-fit overflow-auto">
+
+                        
+                        <div className="bg-white h-fit overflow-auto">
                             <table className="w-full text-sm text-left" ref={tableRef}>
-                                <thead className="text-md uppercase bg-white text-gray-600">
+                                <thead className="text-md text-left uppercase bg-white">
                                     <tr>
-                                        <th scope="col" className="px-6 border py-5">No</th>
-                                        <th scope="col" className="px-6 border py-5">Name</th>
-                                        <th scope="col" className="px-6 border py-5">Role</th>
-                                        <th scope="col" className="px-6 border py-5">Email</th>
-                                        <th scope="col" className="px-6 border py-5">Company</th>
+                                        <th scope="col" className="px-6 border py-3">No.</th>
+                                        <th scope="col" className="px-6 border py-3">Name</th>
+                                        <th scope="col" className="px-6 border py-3">Role</th>
+                                        <th scope="col" className="px-6 border py-3">Email</th>
+                                        <th scope="col" className="px-6 border py-3">Company</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white">
                                     {
-                                        users.length > 0 ? users.map((user, index) => (
+                                        // Maping data yang sudah melalui filter
+                                        filteredData.length > 0 ? filteredData.map((user, index) => (
                                             <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300">
-                                                <td className="px-6 border py-4 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                                <td className="px-6 border py-4 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
-                                                <td className="px-6 border py-4 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.roles}</td>
-                                                <td className="px-6 border py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
+                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
+                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.roles}</td>
+                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap">
                                                     <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a>
                                                 </td>
-                                                <td className="px-6 border py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap">
                                                     <a className="text-blue-500" href={`tel:${user.company_name}`}>{String(user.company_name)}</a>
                                                 </td>
                                             </tr>
                                         )).slice(firstPage, lastPage) : (
-                                            <tr className="text-center">
-                                                <td colSpan={5}>
-                                                    <LoadingCircle />
-                                                </td>
-                                            </tr>
+                                            // Check user yang sudah difilter
+                                            users.length > 0 ? (
+                                                // Jika data tida ditemukan
+                                                <tr className="text-center border">
+                                                    <td colSpan={5} className=" py-4">
+                                                        Data not found
+                                                    </td>
+                                                </tr>
+                                            ) :
+                                            (
+                                                // Jika data ditemukan tapi masih loading
+                                                <tr className="text-center py-3">
+                                                    <td colSpan={5}>
+                                                        <LoadingCircle />
+                                                    </td>
+                                                </tr>
+                                            )
                                         )
                                     }
                                 </tbody>
                             </table>
                         </div>
 
-                        
+                        {/* Pagin */}
                         <style jsx>
                             {
                                 `
@@ -527,8 +579,11 @@ export default function UserTable() {
                                 </button>
                             </div>
                         </div>
+                        {/* Pagin end */}
                     </div>
+                    {/* Body end */}
                 </div>
+                {/* Main cardcend */}
             </div>
 
             {/* <!-- Main modal --> */}
@@ -589,7 +644,6 @@ export default function UserTable() {
                     </div>
                 </div>
             </div> 
-
         </>
     )
 }

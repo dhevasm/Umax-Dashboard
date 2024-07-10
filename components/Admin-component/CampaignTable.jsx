@@ -9,18 +9,21 @@ import jsPDF from "jspdf"
 import 'jspdf-autotable'
 import { IconContext } from "react-icons"
 import { AiOutlineFilePdf } from "react-icons/ai"
-import { FaArrowLeft, FaArrowRight, FaFileExcel } from "react-icons/fa"
-import { FaPlus } from "react-icons/fa"
-import { FaPen } from "react-icons/fa"
+import { FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
-import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
-import { RiMegaphoneLine } from "react-icons/ri"
+import { RiFileExcel2Line, RiMegaphoneLine } from "react-icons/ri"
+import CountCard from "./CountCard"
+import { BiPlus } from "react-icons/bi"
 export default function CampaignTable() {
 
     const [campaigns, setCampaigns] = useState([])
     const [campaignMemo, setCampaignMemo] = useState([])
     const [EditCampaignId, setEditCampaignId] = useState(null)
+    const [selectedPlatform, setSelectedPlatform] = useState("");
+    const [selectedObjective, setSelectedObjective] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
     const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData] = useContext(AdminDashboardContext)
 
@@ -321,7 +324,6 @@ export default function CampaignTable() {
         }
     }
 
-
     const [timezone, setTimezone] = useState([])
     const [currency, setCurrency] = useState([])
     const [culture, setCulture] = useState([])
@@ -444,180 +446,233 @@ export default function CampaignTable() {
         }
     }
 
+    const handlePlatformChange = (event) => {
+        setSelectedPlatform(event.target.value);
+    };
+
+    function LoadingCircle() {
+        return (
+          <div className="flex justify-center items-center h-20">
+            <div className="relative">
+              <div className="w-10 h-10 border-4 border-[#1C2434] rounded-full border-t-transparent animate-spin"></div>
+            </div>
+          </div>
+        );
+    };
+
+    const handleStatusChange = (event) => {
+        setSelectedStatus(event.target.value);
+    };
+
+    const handleObjectiveChange = (event) => {
+        setSelectedObjective(event.target.value);
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredData = campaigns.filter((data) => {
+        return (
+            (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+            (!selectedObjective || data.objective === Number(selectedObjective)) &&
+            (!selectedStatus || data.status === Number(selectedStatus)) &&
+            (!searchTerm ||
+                data.name.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+    });
+
     return (
         <>
             <div className="w-full">
-                <div className="flex flex-col md:flex-row justify-between mt-3">
-                    <h1 className="text-3xl font-bold flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
-                    <p><a href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
+                <div className="flex flex-col md:flex-row justify-between items-center mb-3">
+                    <h1 className="text-2xl font-bold uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
+                    <p><a className="hover:cursor-pointer hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
                 </div>
-                <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
-                <div className="flex gap-5">
-                        <div className="mt-5">
-                            <label htmlFor="platformfilter" className="text-sm font-medium text-gray-900 hidden">Platform</label>
-                            <select id="platformfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
-                             onChange={(e) => {
-                                const campaignvalue = e.target.value;
-                                const filteredData = campaignMemo.filter((campaign) =>
-                                campaign.platform == campaignvalue
-                                );
-                                campaignvalue === "0" ? setCampaigns(campaignMemo) : setCampaigns(filteredData);
-                            }}>
-                                <option value="0" key={0} >All Platform</option>
-                                <option value={1} key={1}>Meta Ads</option>
-                                <option value={2} key={2}>Google Ads</option>
-                                <option value={3} key={3}>Tiktok Ads</option>
-                            </select>
-                            
-                        </div>
-                        <div className="mt-5">
-                            <label htmlFor="objectivefilter" className="text-sm font-medium text-gray-900 hidden">Objective</label>
-                            <select id="objectivefilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
-                             onChange={(e) => {
-                                const campaignvalue = e.target.value;
-                                const filteredData = campaignMemo.filter((campaign) =>
-                                campaign.objective == campaignvalue
-                                );
-                                campaignvalue === "0" ? setCampaigns(campaignMemo) : setCampaigns(filteredData);
-                            }}>
-                                <option value="0" key={0} >All Objective</option>
-                                <option value={1} key={1}>Awareness</option>
-                                <option value={2} key={2}>Conversion</option>
-                                <option value={3} key={3}>Consideration</option>
-                            </select>
-                            
-                        </div>
-                        <div className="mt-5">
-                            <label htmlFor="statusfilter" className="text-sm font-medium text-gray-900 hidden">status</label>
-                            <select id="statusfilter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full md:px-5 py-2" defaultValue={0}
-                             onChange={(e) => {
-                                const campaignvalue = e.target.value;
-                                const filteredData = campaignMemo.filter((campaign) =>
-                                campaign.status == campaignvalue
-                                );
-                                campaignvalue === "0" ? setCampaigns(campaignMemo) : setCampaigns(filteredData);
-                            }}>
-                                <option value="0" key={0} >All Status</option>
-                                <option value={1} key={1}>Active</option>
-                                <option value={3} key={2}>Complete</option>
-                                <option value={2} key={3}>Draft</option>
-                            </select>
-                            
+
+                {/* {'Statistic Card'} */}
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
+                    <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
+                    <CountCard title="Users" value="0" handleClick={() => alert('User')} />
+                    <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
+                    <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
+                </div>
+                {/* {'Statistic Card end'} */}
+
+                <div className="w-full h-fit bg-white mb-5 rounded-md shadow-md">
+                    {/* Header */}
+                    <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
+                        <h1 className="flex gap-2 p-4 items-center text">
+                            <FaTable  className="text-blue-200" size={18}/><p className="text-white text-md font-semibold">Campaigns Table</p>
+                        </h1>
+                    </div>
+                    {/* Header end */}
+
+                    {/* Body */}
+                    <div className="w-full h-fit bg-white rounded-b-md p-4">
+                        <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
+                            <div className="flex">
+                                {/* Button */}
+                                <button className="bg-white mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <AiOutlineFilePdf />
+                                    </IconContext.Provider>
+                                </button>
+                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <RiFileExcel2Line />
+                                    </IconContext.Provider>
+                                </button>
+                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => showModal("Create")} >
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <BiPlus className="text-thin"/>
+                                    </IconContext.Provider>
+                                </button>
+                                {/* Button end */}
+
+                                {/* Filter by select */}
+                                <div className="mb-4">
+                                    <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    value={selectedStatus} onChange={handleStatusChange}
+                                    >
+                                        <option value="">Status</option>
+                                        <option value="2">Draft</option>
+                                        <option value="1">Active</option>
+                                        <option value="3">Completed</option>
+                                    </select>  
+                                </div>
+                                <div className="mb-4">
+                                    <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                        value={selectedPlatform}
+                                        onChange={handlePlatformChange}
+                                    >
+                                        <option value="">Platform</option>
+                                        <option value="1">Meta Ads</option>
+                                        <option value="2">Google Ads</option>
+                                        <option value="3">Tiktok Ads</option>
+                                    </select>  
+                                </div>
+                                <div className="mb-4">
+                                    <label htmlFor="tenantfilter" className="text-sm font-medium text-gray-900 hidden">Tenant</label>
+                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm rounded-e-md block w-full px-3 py-2" defaultValue={0}
+                                        value={selectedObjective}
+                                        onChange={handleObjectiveChange}
+                                    >
+                                        <option value="">Objective</option>
+                                        <option value="1">Awareness</option>
+                                        <option value="2">Concervation</option>
+                                        <option value="3">Consideration</option>
+                                    </select>
+                                </div>
+                                {/* Filter by select end */}
+                            </div>
+
+                            {/* Search */}
+                            <div className="flex gap-5">
+                                <div className="relative mb-4">
+                                    <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                    id="search"/>
+                                    <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </span>
+                                </div>
+                            </div>
+                            {/* Search */}
                         </div>
 
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-5 items-center mt-5">
-                        <div className="flex gap-2">
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={generatePDF}>
-                                <IconContext.Provider value={{ className: "text-xl" }}>
-                                    <AiOutlineFilePdf />
-                                </IconContext.Provider>
-                            </button>
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={generateExcel}>
-                                <IconContext.Provider value={{ className: "text-xl" }}>
-                                    <FaFileExcel />
-                                </IconContext.Provider>
-                            </button>
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => showModal("Create")}>
-                                <IconContext.Provider value={{ className: "text-xl" }}>
-                                    <FaPlus />
-                                </IconContext.Provider>
-                            </button>
-                        </div>
-                        <div className="relative">
-                            <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search Campaing" 
-                            onChange={(e) => {
-                                const search = e.target.value.toLowerCase();
-                                const filteredData = campaignMemo.filter((campaign) =>
-                                campaign.name.toLowerCase().includes(search)
-                                );
-                                search === "" ? setCampaigns(campaignMemo) : setCampaigns(filteredData);
-                            }} id="search"/>
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-3">
-                                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="rounded-md mt-5 shadow-xl h-[50vh] overflow-auto">
-                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" ref={tableRef}>
-                        <thead className="text-xs text-black uppercase bg-[#F9FAFB]">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">No</th>
-                                <th scope="col" className="px-6 py-3">Name</th>
-                                <th scope="col" className="px-6 py-3">Client</th>
-                                <th scope="col" className="px-6 py-3">Account</th>
-                                <th scope="col" className="px-6 py-3">Platform</th>
-                                <th scope="col" className="px-6 py-3">Objective</th>
-                                <th scope="col" className="px-6 py-3">Status</th>
-                                <th scope="col" className="px-6 py-3">Company</th>
-                                {/* <th scope="col" className="px-6 py-3">Action</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                campaigns.length > 0 ? campaigns.map((campaign, index) => {
-                                    return (
-                                        <tr key={index} className="odd:bg-white  even:bg-gray-200 hover:bg-blue-200 hover:cursor-pointer" onClick={() => showModal("Edit", campaign._id)}>
-                                            <td  scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{campaign.name}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{campaign.client_name}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{campaign.account_name}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{campaign.status == 1 ? "Active" : campaign.status == 3 ? "Complete" : "Draft"}</td>
-                                            <td scope="row" className="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">{campaign.company_name}</td>
-                                            {/* <td scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap flex gap-3">
-                                                <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 py-2 px-4 rounded-md" onClick={() => handleDetail(campaign._id)}>
-                                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                                        <FaEye />
-                                                    </IconContext.Provider>
-                                                </button>
-                                                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 rounded-md" onClick={() => showModal("Edit", campaign._id)}>
-                                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                                        <FaPen />
-                                                    </IconContext.Provider>
-                                                </button>
-                                                <button className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-red-500 py-2 px-4 rounded-md" onClick={() => handleDelete(campaign._id)}>
-                                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                                        <FaTrash />
-                                                    </IconContext.Provider>
-                                                </button>
-                                            </td> */}
-                                        </tr>
+                        <div className="bg-white h-fit overflow-auto">
+                            <table className="w-full text-sm text-left" ref={tableRef}>
+                                <thead className="text-md text-left uppercase bg-white">
+                                    <tr>
+                                        <th scope="col" className="px-5 border py-3">No.</th>
+                                        <th scope="col" className="px-5 border py-3">Name</th>
+                                        <th scope="col" className="px-5 border py-3">Client</th>
+                                        <th scope="col" className="px-5 border py-3">Account</th>
+                                        <th scope="col" className="px-5 border py-3">Platform</th>
+                                        <th scope="col" className="px-5 border py-3">Objective</th>
+                                        <th scope="col" className="px-5 border py-3">Status</th>
+                                        <th scope="col" className="px-5 border py-3">Company</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white">
+                                    {
+                                        filteredData.length > 0 ? filteredData.map((campaign, index) => {
+                                            return (
+                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
+                                                    <td  scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
+                                                    <td scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{campaign.name}</td>
+                                                    <td scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{campaign.client_name}</td>
+                                                    <td scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{campaign.account_name}</td>
+                                                    <td scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                    <td scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
+                                                    <td scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{campaign.status == 1 ? "Active" : campaign.status == 3 ? "Complete" : "Draft"}</td>
+                                                    <td scope="row" className="px-5 py-3 border font-medium text-gray-900 whitespace-nowrap">{campaign.company_name}</td>
+                                                </tr>
+                                            )
+                                    }).slice(firstPage, lastPage) : (
+                                        // Check user yang sudah difilter
+                                        campaigns.length > 0 ? (
+                                            // Jika data tida ditemukan
+                                            <tr className="text-center border">
+                                                <td colSpan={8} className=" py-4">
+                                                    Data not found
+                                                </td>
+                                            </tr>
+                                        ) :
+                                        (
+                                            // Jika data ditemukan tapi masih loading
+                                            <tr className="text-center py-3">
+                                                <td colSpan={8}>
+                                                    <LoadingCircle />
+                                                </td>
+                                            </tr>
+                                        )
                                     )
-                            }).slice(firstPage, lastPage) : <tr className="text-center animate-pulse"><td>Loading...</td></tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <style jsx>
-                    {
-                        `
-                            .paginDisable{
-                                opacity:0.5;
-                            }
-                        `
-                    }
-
-                </style>
-                    <div className="mt-5 flex  gap-3 items-center w-full justify-end">
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
-                            {"<<"}
-                        </button>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
-                            {"<"}   
-                        </button>
-                        <div>
-                            <p>Page {currentPage} / {totalPages}</p>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
-                            {">"}
-                        </button>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
-                           {">>"}
-                        </button>
+
+                        {/* Pagin */}
+                        <style jsx>
+                            {
+                                `
+                                    .paginDisable{
+                                        opacity:0.5;
+                                    }
+                                `
+                            }
+
+                        </style>
+                        <div className="w-full flex justify-between items-center mb-4">
+                            <div className="mt-5 flex  gap-3 items-center w-full justify-end">
+                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
+                                    {"<<"}
+                                </button>
+                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
+                                    {"<"}   
+                                </button>
+                                <div>
+                                    <p>Page {currentPage} / {totalPages}</p>
+                                </div>
+                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
+                                    {">"}
+                                </button>
+                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
+                                {">>"}
+                                </button>
+                            </div>
+                        </div>
+                        {/* Pagin end */}
                     </div>
+                    {/* Body end */}
+
+                </div>
+                {/* Main Card end */}
             </div>
 
             {/* <!-- Main modal --> */}

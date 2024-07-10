@@ -2,20 +2,21 @@
 import axios from "axios"
 import { useState,useEffect, createContext, useRef } from "react"
 
-import AdminNavbar from "@/components/Admin-component/AdminNavbar"
-import AdminSidebar from "@/components/Admin-component/AdminSidebar"
-import TenantTable from "@/components/Admin-component/TenantTable"
-import UserTable from "@/components/Admin-component/UserTable"
-import CampaignTable from "@/components/Admin-component/CampaignTable"
-import TenantProfile from "@/components/Admin-component/TenantProfile"
-import AccountTable from "@/components/Admin-component/AccountTable"
-import ClientTable from "@/components/Admin-component/ClientTable"
+import dynamic from "next/dynamic"
+const AdminNavbar = dynamic(() => import("@/components/Admin-component/AdminNavbar"), {ssr: false})
+const AdminSidebar = dynamic(() => import("@/components/Admin-component/AdminSidebar"), {ssr: false})
+const TenantTable = dynamic(() => import("@/components/Admin-component/TenantTable"), {ssr: false})
+const UserTable = dynamic(() => import("@/components/Admin-component/UserTable"), {ssr: false})
+const CampaignTable = dynamic(() => import("@/components/Admin-component/CampaignTable"), {ssr: false})
+const TenantProfile = dynamic(() => import("@/components/Admin-component/TenantProfile"), {ssr: false})
+const AccountTable = dynamic(() => import("@/components/Admin-component/AccountTable"), {ssr: false})
+const ClientTable = dynamic(() => import("@/components/Admin-component/ClientTable"), {ssr: false})
+const Dashboard = dynamic(() => import("@/components/Admin-component/Dashboard"), {ssr: false})
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
-import Dashboard from "@/components/Admin-component/Dashboard"
 
 export const AdminDashboardContext = createContext()
-export default function AdminDashboard(){
+function Page(){
 
     const router = useRouter()
 
@@ -104,12 +105,6 @@ export default function AdminDashboard(){
         })
     },[clientCount, tenantsCount, campaignsCount, usersCount])
 
-    useEffect(() => {
-        if(userData.roles == 'admin'){
-            setChangeTable("company")   
-        }
-    }, [userData])
-
     const MainCard = useRef(null)
     
     useEffect(() => {
@@ -139,6 +134,12 @@ export default function AdminDashboard(){
         }
     }, [router]);
 
+    if (typeof window !== "undefined" && updateCard) {
+        getTenantsCount()
+        getUserCampaignCount()
+        setUpdateCard(false)
+    }
+
     return(
         <>
             <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
@@ -148,7 +149,7 @@ export default function AdminDashboard(){
 
 
 
-            <div className="flex w-full min-h-full justify-end bg-gray-100">
+            <div className="flex w-full min-h-full justify-end bg-[#f1f5f9]">
                 <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
 
                     <div>  
@@ -166,3 +167,5 @@ export default function AdminDashboard(){
         </>
     )
 }
+
+export default dynamic(() => Promise.resolve(Page), { ssr: false });
