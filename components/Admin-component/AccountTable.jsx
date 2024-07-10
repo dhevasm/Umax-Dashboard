@@ -602,7 +602,7 @@ export default function AccountTable() {
                                     {
                                         filteredData.length > 0 ? filteredData.map((account, index) => {
                                             return (
-                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
+                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", account._id)}>
                                                     <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
                                                     <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
                                                     <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{account.client_name}</td>

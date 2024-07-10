@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useContext, Suspense } from "react"
-import { SidebarContext } from "../app/dashboard/page.jsx"
+// import { SidebarContext } from "@/app/dashboard/page"
 import SidebarCard from "./Card/SidebarCard"
 import axios from "axios"
 import SidebarLoading from "./Loading/SidebarLoading"
@@ -14,7 +14,7 @@ export default function Sidebar({ onCampaignIDChange }) {
     const [status, setStatus] = useState(0);
     const [hidden, setHidden] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [sidebarHide, setSidebarHide] =   useContext(SidebarContext);
+    // const [sidebarHide, setSidebarHide] = useContext(SidebarContext);
     const [campaignID, setCampaignID] = useContext(SidebarContext);
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
@@ -22,7 +22,7 @@ export default function Sidebar({ onCampaignIDChange }) {
     function hideHandle() {
         setHidden(!hidden);
         sidebar.current.classList.toggle("-translate-x-full");
-        setSidebarHide(!sidebarHide);
+        // setSidebarHide(!sidebarHide);
     }
     // Sidebar Hide Handle end
 
