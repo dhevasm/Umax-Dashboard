@@ -84,7 +84,7 @@ export default function AdminSidebar(){
                     </li>
                     <li className="mb-4">
                         <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleSidebarLink}>
-                            <div className="flex items-center gap-2 text-slate-300 font-semibold">
+                            <div className="flex items-center gap-2 text-slate-300 ">
                                 <RiTableLine size={20}/>
                                 Data Table
                             </div>

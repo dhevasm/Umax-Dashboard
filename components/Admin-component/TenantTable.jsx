@@ -23,7 +23,7 @@ export default function TenantTable() {
     const [tenantMemo, setTenantMemo] = useState([])
     const [EditTenantId, setEditTenantId] = useState(null)
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")

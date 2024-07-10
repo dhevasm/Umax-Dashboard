@@ -14,7 +14,7 @@ import { FiWatch } from "react-icons/fi"
 export default function TenantProfile({tenant_id}){
 
     const [tenant, setTenant] = useState([])
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("edit")
 

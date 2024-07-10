@@ -26,7 +26,7 @@ export default function UserTable() {
     const [selectedTenant, setSelectedTenant] = useState("");
     const [searchTerm, setSearchTerm] = useState("")
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
