@@ -33,7 +33,7 @@ export default function AccountTable() {
         setShowPassword(!showPassword)
     }
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -514,7 +514,7 @@ export default function AccountTable() {
                 </div>
                 {/* {'Statistic Card end'} */}
 
-                <div className="w-full h-fit bg-white mb-5 rounded-md shadow-md">
+                <div className="w-full h-fit bg-[#f1f5f9] mb-5 rounded-md shadow-md">
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
@@ -574,10 +574,12 @@ export default function AccountTable() {
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
-                                    <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
+                                    <label htmlFor="search" className="hidden"></label>
+                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
+                                    defaultValue="" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
-                                    id="search"/>
+                                    />
                                     <span className="absolute inset-y-0 right-0 flex items-center pr-3">
                                         <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </span>

@@ -25,7 +25,7 @@ export default function CampaignTable() {
     const [selectedStatus, setSelectedStatus] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -484,7 +484,7 @@ export default function CampaignTable() {
 
     return (
         <>
-            <div className="w-full">
+            <div className="w-full h-fit bg-[#f1f5f9]">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
                     <h1 className="text-2xl font-bold uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
                     <p><a className="hover:cursor-pointer hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
@@ -499,7 +499,7 @@ export default function CampaignTable() {
                 </div>
                 {/* {'Statistic Card end'} */}
 
-                <div className="w-full h-fit bg-white mb-5 rounded-md shadow-md">
+                <div className="w-full h-fit bg-[#f1f5f9] mb-5 rounded-md shadow-md">
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
@@ -572,7 +572,8 @@ export default function CampaignTable() {
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
-                                    <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
+                                    <label htmlFor="search" className="hidden"></label>
+                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     id="search"/>

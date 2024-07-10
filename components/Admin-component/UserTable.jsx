@@ -26,7 +26,7 @@ export default function UserTable() {
     const [selectedTenant, setSelectedTenant] = useState("");
     const [searchTerm, setSearchTerm] = useState("")
 
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -426,7 +426,7 @@ export default function UserTable() {
                 {/* {'Statistic Card end'} */}
                 
                 {/* Main card  */}
-                <div className="w-full h-fit bg-white mb-5 rounded-md shadow-md">
+                <div className="w-full h-fit bg-[#f1f5f9] mb-5 rounded-md shadow-md">
 
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">

@@ -6,6 +6,7 @@ import { FaBars, FaSignOutAlt, FaSun, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { RiBellLine, RiChat3Line} from "react-icons/ri";
 import { BiBell } from "react-icons/bi";
+import dynamic from "next/dynamic";
 
 function AdminNavbar({userData}){
 
@@ -114,4 +115,4 @@ function AdminNavbar({userData}){
     )
 }
 
-export default dynamic(() => Promise.resolve(AdminNavbar), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminNavbar));
