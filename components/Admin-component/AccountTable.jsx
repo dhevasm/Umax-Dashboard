@@ -31,7 +31,7 @@ export default function AccountTable() {
 
     function handleShowPassword() {
         setShowPassword(!showPassword)
-    }
+    }   
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
 

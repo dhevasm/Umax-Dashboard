@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useContext, Suspense } from "react"
-import { SidebarContext } from "@/app/dashboard/page"
+import { SidebarContext } from "../app/dashboard/page"
 import SidebarCard from "./Card/SidebarCard"
 import axios from "axios"
 import SidebarLoading from "./Loading/SidebarLoading"
