@@ -11,17 +11,22 @@ import { useContext } from "react"
 import { AdminDashboardContext } from "@/app/admin-dashboard/page"
 import { useState, useEffect } from "react"
 import LoadingCircle from "../Loading/LoadingCircle"
+export default function Dashboard({tenant_id}){
 
-export default function Dashboard(){
-
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard} = useContext(AdminDashboardContext)
 
     return (
         <>
             <div className="w-full h-full flex flex-wrap gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full">
-                    <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} />
+                    {userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
+
+                    userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} /> :
+                    
+                    <CountCard title="Tenants" value={<div className="text-md animate-pulse">Loading...</div>} />}
+
                     <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div className="text-md animate-pulse">Loading...</div>} handleClick={"users"} />
+
                     <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"} />
                     <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"} />
                 </div>

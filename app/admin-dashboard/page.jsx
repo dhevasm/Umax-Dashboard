@@ -1,6 +1,6 @@
 'use client'
+import { useState, useEffect, createContext, useRef } from "react"
 import axios from "axios"
-import { useState,useEffect, createContext, useRef } from "react"
 
 import dynamic from "next/dynamic"
 const AdminNavbar = dynamic(() => import("@/components/Admin-component/AdminNavbar"), {ssr: false})
@@ -16,30 +16,27 @@ import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 
 export const AdminDashboardContext = createContext()
-function Page(){
 
+function AdminDashboard() {
     const router = useRouter()
 
     const [userData, setUserData] = useState([])
-
-    const [tenantsCount, setTenantsCount] = useState ("")
+    const [tenantsCount, setTenantsCount] = useState("")
     const [usersCount, setUsersCount] = useState("")
     const [campaignsCount, setCampaignsCount] = useState("")
     const [clientCount, setClientCount] = useState("")
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
-
     const [dataDashboard, setDataDashboard] = useState({
         tenants: "",
         users: "",
         campaigns: "",
         clients: ""
     })
-    const [changeTable, setChangeTable] = useState("campaigns")
+    const [changeTable, setChangeTable] = useState("dashboard")
 
-
-    const AdminDashboardContextValue = (() => {
+    const AdminDashboardContextValue = {
         sidebarHide,
         setSidebarHide,
         updateCard,
@@ -48,9 +45,9 @@ function Page(){
         setChangeTable,
         userData,
         dataDashboard
-    }, [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard])
+    }
 
-    async function getUserData(){
+    async function getUserData() {
         const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-id', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -59,7 +56,7 @@ function Page(){
         setUserData(response.data.Data[0])
     }
 
-    async function getUserCampaignCount(){
+    async function getUserCampaignCount() {
         const getUsers = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -80,8 +77,8 @@ function Page(){
         setClientCount(getClient.data.Data.length)
     }
 
-    async function getTenantsCount(){   
-        if(userData.roles == 'sadmin'){
+    async function getTenantsCount() {
+        if (userData.roles === 'sadmin') {
             const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -106,14 +103,9 @@ function Page(){
     },[clientCount, tenantsCount, campaignsCount, usersCount])
 
     const MainCard = useRef(null)
-    
-    useEffect(() => {
-            // MainCard.current.classList.toggle("")
-
-    }, [sidebarHide])
 
     useEffect(() => {
-        if(updateCard){
+        if (typeof window !== "undefined" && updateCard) {
             getTenantsCount()
             getUserCampaignCount()
             setUpdateCard(false)
@@ -121,16 +113,18 @@ function Page(){
     }, [updateCard])
 
     useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
-        const role = localStorage.getItem('roles');
-        if (!token) {
-            Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
-                router.push('/');
-            });
-        } else if (role !== 'admin' && role !== 'sadmin') {
-            Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
-                router.push('/dashboard');
-            });
+        if (typeof window !== "undefined") {
+            const token = localStorage.getItem('jwtToken')
+            const role = localStorage.getItem('roles')
+            if (!token) {
+                Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+                    router.push('/')
+                })
+            } else if (role !== 'admin' && role !== 'sadmin') {
+                Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
+                    router.push('/dashboard')
+                })
+            }
         }
     }, [router]);
 
@@ -151,21 +145,18 @@ function Page(){
 
             <div className="flex w-full min-h-full justify-end bg-[#f1f5f9]">
                 <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
-
-                    <div>  
-                        {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
-                        {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
-                        {changeTable == "users" && <UserTable/>}
-                        {changeTable == "campaigns" && <CampaignTable/>}
-                        {changeTable == "accounts" && <AccountTable/>}
-                        {changeTable == "clients" && <ClientTable/>}
-                        {changeTable == "dashboard" && <Dashboard/>}
+                    <div>
+                        {userData.roles === 'sadmin' && changeTable === "tenants" && <TenantTable />}
+                        {userData.roles === 'admin' && changeTable === "company" && <TenantProfile tenant_id={userData.tenant_id} />}
+                        {changeTable === "users" && <UserTable />}
+                        {changeTable === "campaigns" && <CampaignTable />}
+                        {changeTable === "accounts" && <AccountTable />}
+                        {changeTable === "clients" && <ClientTable />}
+                        {changeTable === "dashboard" && <Dashboard />}
                     </div>
                 </div>
             </div>
-             </AdminDashboardContext.Provider>
-        </>
+        </AdminDashboardContext.Provider>
     )
 }
-
-export default dynamic(() => Promise.resolve(Page), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false })

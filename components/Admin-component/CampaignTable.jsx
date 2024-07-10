@@ -693,7 +693,7 @@ export default function CampaignTable() {
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className="col-span-2">
+                                <div className="col-span-1">
                                     <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Campaign Name {error.name ? <div className="text-red-500">*</div> : ""}</label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>

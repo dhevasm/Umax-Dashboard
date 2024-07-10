@@ -700,6 +700,13 @@ export default function AccountTable() {
                                         error.name ? <p className="text-red-500 text-sm">{error.name}</p> : ""
                                     }
                                 </div>
+                                <div className="col-span-2">
+                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email <div className="text-red-500">*</div></label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    {
+                                        error.email ? <p className="text-red-500 text-sm">{error.email}</p> : ""
+                                    }
+                                </div>
                                 <div className="col-span-1">
                                     <label htmlFor="client" className="block mb-2 text-sm font-medium text-gray-900">Client</label>
                                     <select id="client" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
@@ -729,13 +736,7 @@ export default function AccountTable() {
                                     </select>
                                 </div>
 
-                                <div className="col-span-1">
-                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email <div className="text-red-500">*</div></label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
-                                    {
-                                        error.email ? <p className="text-red-500 text-sm">{error.email}</p> : ""
-                                    }
-                                </div>
+                                
 
                                 
 
