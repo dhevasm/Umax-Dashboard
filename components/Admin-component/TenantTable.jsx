@@ -16,7 +16,6 @@ import { FaTrash } from "react-icons/fa"
 import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { Switch } from "@material-tailwind/react"
-import { indonesia } from "@/public/assets"
 import { RiBuildingLine } from "react-icons/ri"
 export default function TenantTable() {
 

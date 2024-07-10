@@ -1,44 +1,43 @@
 'use client'
+import { useState, useEffect, createContext, useRef } from "react"
+import dynamic from "next/dynamic"
 import axios from "axios"
-import { useState,useEffect, createContext, useRef } from "react"
 
-import AdminNavbar from "@/components/Admin-component/AdminNavbar"
-import AdminSidebar from "@/components/Admin-component/AdminSidebar"
-import TenantTable from "@/components/Admin-component/TenantTable"
-import UserTable from "@/components/Admin-component/UserTable"
-import CampaignTable from "@/components/Admin-component/CampaignTable"
-import TenantProfile from "@/components/Admin-component/TenantProfile"
-import AccountTable from "@/components/Admin-component/AccountTable"
-import ClientTable from "@/components/Admin-component/ClientTable"
+const AdminNavbar = dynamic(() => import('@/components/Admin-component/AdminNavbar'), { ssr: false })
+const AdminSidebar = dynamic(() => import('@/components/Admin-component/AdminSidebar'), { ssr: false })
+const TenantTable = dynamic(() => import('@/components/Admin-component/TenantTable'), { ssr: false })
+const UserTable = dynamic(() => import('@/components/Admin-component/UserTable'), { ssr: false })
+const CampaignTable = dynamic(() => import('@/components/Admin-component/CampaignTable'), { ssr: false })
+const TenantProfile = dynamic(() => import('@/components/Admin-component/TenantProfile'), { ssr: false })
+const AccountTable = dynamic(() => import('@/components/Admin-component/AccountTable'), { ssr: false })
+const ClientTable = dynamic(() => import('@/components/Admin-component/ClientTable'), { ssr: false })
+const Dashboard = dynamic(() => import('@/components/Admin-component/Dashboard'), { ssr: false })
+
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
-import Dashboard from "@/components/Admin-component/Dashboard"
 
 export const AdminDashboardContext = createContext()
-export default function AdminDashboard(){
 
+function AdminDashboard() {
     const router = useRouter()
 
     const [userData, setUserData] = useState([])
-
-    const [tenantsCount, setTenantsCount] = useState ("")
+    const [tenantsCount, setTenantsCount] = useState("")
     const [usersCount, setUsersCount] = useState("")
     const [campaignsCount, setCampaignsCount] = useState("")
     const [clientCount, setClientCount] = useState("")
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
-
     const [dataDashboard, setDataDashboard] = useState({
         tenants: "",
         users: "",
         campaigns: "",
         clients: ""
     })
-    const [changeTable, setChangeTable] = useState("campaigns")
+    const [changeTable, setChangeTable] = useState("dashboard")
 
-
-    const AdminDashboardContextValue = (() => {
+    const AdminDashboardContextValue = {
         sidebarHide,
         setSidebarHide,
         updateCard,
@@ -47,9 +46,9 @@ export default function AdminDashboard(){
         setChangeTable,
         userData,
         dataDashboard
-    }, [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard])
+    }
 
-    async function getUserData(){
+    async function getUserData() {
         const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-id', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -58,7 +57,7 @@ export default function AdminDashboard(){
         setUserData(response.data.Data[0])
     }
 
-    async function getUserCampaignCount(){
+    async function getUserCampaignCount() {
         const getUsers = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -79,8 +78,8 @@ export default function AdminDashboard(){
         setClientCount(getClient.data.Data.length)
     }
 
-    async function getTenantsCount(){   
-        if(userData.roles == 'sadmin'){
+    async function getTenantsCount() {
+        if (userData.roles === 'sadmin') {
             const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -102,23 +101,12 @@ export default function AdminDashboard(){
             campaigns: campaignsCount,
             clients: clientCount
         })
-    },[clientCount, tenantsCount, campaignsCount, usersCount])
-
-    useEffect(() => {
-        if(userData.roles == 'admin'){
-            setChangeTable("company")   
-        }
-    }, [userData])
+    }, [clientCount, tenantsCount, campaignsCount, usersCount])
 
     const MainCard = useRef(null)
-    
-    useEffect(() => {
-            // MainCard.current.classList.toggle("")
-
-    }, [sidebarHide])
 
     useEffect(() => {
-        if(updateCard){
+        if (typeof window !== "undefined" && updateCard) {
             getTenantsCount()
             getUserCampaignCount()
             setUpdateCard(false)
@@ -126,43 +114,40 @@ export default function AdminDashboard(){
     }, [updateCard])
 
     useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
-        const role = localStorage.getItem('roles');
-        if (!token) {
-            Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
-                router.push('/');
-            });
-        } else if (role !== 'admin' && role !== 'sadmin') {
-            Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
-                router.push('/dashboard');
-            });
+        if (typeof window !== "undefined") {
+            const token = localStorage.getItem('jwtToken')
+            const role = localStorage.getItem('roles')
+            if (!token) {
+                Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+                    router.push('/')
+                })
+            } else if (role !== 'admin' && role !== 'sadmin') {
+                Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
+                    router.push('/dashboard')
+                })
+            }
         }
-    }, [router]);
+    }, [router])
 
-    return(
-        <>
-            <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
-                    <AdminNavbar userData={userData}/>
-                    <AdminSidebar />
-            {/* main content */}
-
-
-
-            <div className="flex w-full min-h-full justify-end bg-gray-100">
+    return (
+        <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
+            <AdminNavbar userData={userData} />
+            <AdminSidebar />
+            <div className="flex w-full min-h-full justify-end bg-gray-100 text-black dark:bg-slate-700 dark:text-white">
                 <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
-
-                    <div>  
-                        {userData.roles == 'sadmin' && changeTable == "tenants" && <TenantTable />}
-                        {userData.roles == 'admin' && changeTable == "company" && <TenantProfile tenant_id={userData.tenant_id} />}
-                        {changeTable == "users" && <UserTable/>}
-                        {changeTable == "campaigns" && <CampaignTable/>}
-                        {changeTable == "accounts" && <AccountTable/>}
-                        {changeTable == "clients" && <ClientTable/>}
-                        {changeTable == "dashboard" && <Dashboard/>}
+                    <div>
+                        {userData.roles === 'sadmin' && changeTable === "tenants" && <TenantTable />}
+                        {userData.roles === 'admin' && changeTable === "company" && <TenantProfile tenant_id={userData.tenant_id} />}
+                        {changeTable === "users" && <UserTable />}
+                        {changeTable === "campaigns" && <CampaignTable />}
+                        {changeTable === "accounts" && <AccountTable />}
+                        {changeTable === "clients" && <ClientTable />}
+                        {changeTable === "dashboard" && <Dashboard />}
                     </div>
                 </div>
             </div>
-             </AdminDashboardContext.Provider>
-        </>
+        </AdminDashboardContext.Provider>
     )
 }
+
+export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false })

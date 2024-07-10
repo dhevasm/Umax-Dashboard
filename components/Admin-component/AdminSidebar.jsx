@@ -24,7 +24,7 @@ export default function AdminSidebar(){
     const Router = useRouter()
     
     const [minimizedSidebar, setMinimizedSidebar] = useState(false)
-    const [sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData] = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData} = useContext(AdminDashboardContext)
 
     useEffect(() => {
         if (sidebarHide) {
@@ -74,7 +74,7 @@ export default function AdminSidebar(){
                     </li>
                     <li className="mb-4">
                     {
-                        userData.roles == "admin" && <button className="px-4 py-2 w-full text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center" onClick={() => setChangeTable("company")}>
+                        userData.roles == "admin" && <button className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center" onClick={() => setChangeTable("company")}>
                         <IconContext.Provider value={{ className: "text-md" }}>
                             <FaBuilding size={20}/>
                         </IconContext.Provider>
@@ -136,7 +136,7 @@ export default function AdminSidebar(){
                         </ul>
                     </li>
                     <li className="mb-4">
-                    <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push('/profile')}>
+                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push('/profile')}>
                             <div className="flex items-center gap-2">
                                 <RiUser3Line size={20}/>
                                 Profile
@@ -144,7 +144,7 @@ export default function AdminSidebar(){
                         </button>
                     </li>
                     <li className="mb-4">
-                    <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleLogout}>
+                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleLogout}>
                             <div className="flex items-center gap-2">
                                 <RiLogoutBoxLine size={20}/>
                                 Log Out
