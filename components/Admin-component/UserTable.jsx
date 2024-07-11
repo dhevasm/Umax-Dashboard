@@ -86,7 +86,7 @@ export default function UserTable() {
         closeModal()
         // console.log(user_id)
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/user-delete?user_id=${user_id}`, {
+            const response = await axios.delete(`https://umaxxxxx-1-r8435045.deta.app/user-delete?user_id=${user_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -181,7 +181,7 @@ export default function UserTable() {
     }
 
     async function getUsers(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-tenant', {
+        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -215,7 +215,7 @@ export default function UserTable() {
     //     formData.append('input_timezone', timezone);
     //     formData.append('currency_position', currencyposition);
 
-    //     const response = await axios.post('https://umaxxnew-1-d6861606.deta.app/user-create', formData, {
+    //     const response = await axios.post('https://umaxxxxx-1-r8435045.deta.app/user-create', formData, {
     //         headers: {
     //             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
     //         }
@@ -239,7 +239,7 @@ export default function UserTable() {
             const formData = new FormData();
             formData.append('role', role);
             console.log(EditUserId)
-            const response = await axios.post(`https://umaxxnew-1-d6861606.deta.app/change-user-role?user_id=${EditUserId}`, formData, {
+            const response = await axios.post(`https://umaxxxxx-1-r8435045.deta.app/change-user-role?user_id=${EditUserId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -262,20 +262,20 @@ export default function UserTable() {
     const [tenants, setTenants] = useState([])
 
     async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/timezone').then((response) => {
             setTimezone(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/currency').then((response) => {
             setCurrency(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/culture').then((response) => {
             setCulture(response.data)
         })
 
         // if(localStorage.getItem('roles') == 'sadmin'){
-        //     await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+        //     await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
         //         headers : {
         //             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
         //         }
@@ -407,21 +407,23 @@ export default function UserTable() {
 
     return (
         <>
-            <div className="w-full">
+            <div className="w-full dark:text-white">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-                    <h1 className="text-2xl font-bold flex gap-2"> <RiUser3Line/> USERS</h1>
+                    <h1 className="text-2xl font-bold flex gap-2 dark:text-white"> <RiUser3Line/> USERS</h1>
                     <p><span className="hover:cursor-pointer hover:text-blue-400 hover:underline" onClick={() => setChangeTable("dashboard")}>Dashboard</span> / Users</p>
                 </div>
 
                 {/* {'Statistic Card'} */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                   {
-                   userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"}  /> :
-                   userData.roles == "sadmin" ?  <CountCard title="Users" value={dataDashboard.tenants ? dataDashboard.tenants : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"}  /> : ""
-                  }
-                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div className="text-md animate-pulse">Loading...</div>} handleClick={"users"}  />
-                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"}  />
-                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"}  />
+                    {
+                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
+                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
+                        <CountCard title="Tenants" value={<div>Loading...</div>} />
+                    }
+                    
+                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
+                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
+                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
                 </div>
                 {/* {'Statistic Card end'} */}
                 
@@ -437,21 +439,21 @@ export default function UserTable() {
                     {/* Header end */}
 
                     {/* Body */}
-                    <div className="w-full h-fit bg-white rounded-b-md p-4">
+                    <div className="w-full h-fit bg-white dark:bg-slate-800  rounded-b-md p-4">
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className="bg-white mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => {Router.push('register')}} >
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => {Router.push('register')}} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -460,8 +462,8 @@ export default function UserTable() {
 
                                 {/* Filter by select */}
                                 <div className="mb-4">
-                                    <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
                                         <option value="" key="" >Role</option>
@@ -470,15 +472,15 @@ export default function UserTable() {
                                     </select>  
                                 </div>
                                 <div className="mb-4">
-                                    <label htmlFor="tenantfilter" className="text-sm font-medium text-gray-900 hidden">Tenant</label>
-                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
+                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     // value={selectedTenant} onChange={handleTenantChange}
                                     >
                                         <option value="0" key={0} disabled hidden>Tenant</option>
                                         {
                                             tenants.map((tenant, index) => {
                                                 return (
-                                                    <option value={tenant.tenant_id} key={index + 1}>{tenant.company}</option>
+                                                    <option value={tenant.tenant_ids} key={index + 1}>{tenant.company}</option>
                                                 )
                                             })
                                         }
@@ -490,7 +492,7 @@ export default function UserTable() {
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
-                                    <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
+                                    <input type="text" className="w-full dark:bg-slate-800 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     id="search"/>
@@ -505,7 +507,7 @@ export default function UserTable() {
                         
                         <div className="bg-white h-fit overflow-auto">
                             <table className="w-full text-sm text-left" ref={tableRef}>
-                                <thead className="text-md text-left uppercase bg-white">
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-800">
                                     <tr>
                                         <th scope="col" className="px-6 border py-3">No.</th>
                                         <th scope="col" className="px-6 border py-3">Name</th>
@@ -514,18 +516,18 @@ export default function UserTable() {
                                         <th scope="col" className="px-6 border py-3">Company</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white">
+                                <tbody className="bg-white  dark:bg-slate-900 ">
                                     {
                                         // Maping data yang sudah melalui filter
                                         filteredData.length > 0 ? filteredData.map((user, index) => (
-                                            <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300">
-                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
-                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.roles}</td>
-                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap">
+                                            <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-950 hover:cursor-pointer transition-colors duration-300">
+                                                <td className="px-6 border py-3 font-medium whitespace-nowrap">{index + 1}</td>
+                                                <td className="px-6 border py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
+                                                <td className="px-6 border py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.roles}</td>
+                                                <td className="px-6 border py-3 font-medium whitespace-nowrap">
                                                     <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a>
                                                 </td>
-                                                <td className="px-6 border py-3 font-medium text-gray-900 whitespace-nowrap">
+                                                <td className="px-6 border py-3 font-medium whitespace-nowrap">
                                                     <a className="text-blue-500" href={`tel:${user.company_name}`}>{String(user.company_name)}</a>
                                                 </td>
                                             </tr>
@@ -566,19 +568,19 @@ export default function UserTable() {
                         </style>
                         <div className="w-full flex justify-between items-center mb-4">
                             <div className="mt-5 flex  gap-3 items-center w-full justify-end">
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
                                     {"<<"}
                                 </button>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
                                     {"<"}   
                                 </button>
                                 <div>
                                     <p>Page {currentPage} / {totalPages}</p>
                                 </div>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
                                     {">"}
                                 </button>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
                                 {">>"}
                                 </button>
                             </div>
@@ -595,7 +597,7 @@ export default function UserTable() {
 
                 <div className="relative p-4 w-full max-w-md max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-slate-800 dark:text-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500">
                             <h3 className="text-lg font-semibold text-white ">
@@ -609,13 +611,13 @@ export default function UserTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium  ">Name</label>
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-900 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
                                     disabled/>
                                 </div>
                                 <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
-                                    <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">Role</label>
-                                    <select id="role" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 " >
+                                    <label htmlFor="role" className="block mb-2 text-sm font-medium ">Role</label>
+                                    <select id="role" className="bg-gray-50 border border-gray-300 dark:bg-slate-900  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 " >
                                         <option value="admin">Admin</option>
                                         <option value="staff">Staff</option>
                                     </select>

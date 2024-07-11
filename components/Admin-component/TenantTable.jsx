@@ -26,7 +26,7 @@ export default function TenantTable() {
     const [EditTenantId, setEditTenantId] = useState(null)
     const [searchTerm, setSearchTerm] = useState("");
 
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData} = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -145,7 +145,7 @@ export default function TenantTable() {
         // console.log(tenant_id)
         closeModal()
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
+            const response = await axios.delete(`https://umaxxxxx-1-r8435045.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -234,7 +234,7 @@ export default function TenantTable() {
     }
 
     async function getTenants(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -278,7 +278,7 @@ export default function TenantTable() {
             formData.append('input_timezone', timezone);
             formData.append('currency_position', currencyposition);
     
-            const response = await axios.post('https://umaxxnew-1-d6861606.deta.app/tenant-create', formData, {
+            const response = await axios.post('https://umaxxxxx-1-r8435045.deta.app/tenant-create', formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -330,7 +330,7 @@ export default function TenantTable() {
             formData.append('input_timezone', timezone);
             formData.append('currency_position', currencyposition);
     
-            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/tenant-edit?tenantId=${EditTenantId}`, formData, {
+            const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/tenant-edit?tenantId=${EditTenantId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -355,15 +355,15 @@ export default function TenantTable() {
     }
 
     async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/timezone').then((response) => {
             setTimezone(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/currency').then((response) => {
             setCurrency(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/culture').then((response) => {
             setCulture(response.data)
         })
 
@@ -508,10 +508,15 @@ export default function TenantTable() {
 
                 {/* {'Statistic Card'} */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                    <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Users" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
+                    {
+                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
+                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
+                        <CountCard title="Tenants" value={<div>Loading...</div>} />
+                    }
+                    
+                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
+                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
+                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
                 </div>
                 {/* {'Statistic Card end'} */}
 

@@ -30,7 +30,7 @@ export default function Dashboard({tenant_id}){
                     <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"} />
                     <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"} />
                 </div>
-                <div className="w-full xl:h-[450px] h-[900px] flex xl:flex-row lg:flex-col md:flex-col sm:flex-col gap-7 mb-3">
+                <div className="w-full xl:h-[450px] h-[900px] flex flex-col md:flex-row gap-7 mb-3">
                     <div className="xl:w-1/3 max-h-[450px] h-full bg-white rounded-sm shadow-lg p-5">
                         <ChartOne />
                     </div>
@@ -38,7 +38,7 @@ export default function Dashboard({tenant_id}){
                         <ChartTwo />
                     </div>
                 </div>
-                <div className="w-full xl:h-[450px] h-[900px] flex xl:flex-row lg:flex-col md:flex-col sm:flex-col gap-7 mb-3">
+                <div className="w-full xl:h-[450px] h-[900px] flex flex-col md:flex-row gap-7 mb-3">
                     <div className="xl:w-3/5 max-h-[450px] h-full bg-white rounded-sm shadow-lg p-5">
                         <Map />
                     </div>

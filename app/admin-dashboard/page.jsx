@@ -48,7 +48,7 @@ function AdminDashboard() {
     }
 
     async function getUserData() {
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-id', {
+        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-id', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -57,19 +57,19 @@ function AdminDashboard() {
     }
 
     async function getUserCampaignCount() {
-        const getUsers = await axios.get('https://umaxxnew-1-d6861606.deta.app/user-by-tenant', {
+        const getUsers = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
         setUsersCount(getUsers.data.Data.length)
-        const getCampaigns = await axios.get('https://umaxxnew-1-d6861606.deta.app/campaign-by-tenant', {
+        const getCampaigns = await axios.get('https://umaxxxxx-1-r8435045.deta.app/campaign-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
         setCampaignsCount(getCampaigns.data.Data.length)
-        const getClient = await axios.get('https://umaxxnew-1-d6861606.deta.app/client-by-tenant', {
+        const getClient = await axios.get('https://umaxxxxx-1-r8435045.deta.app/client-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -79,7 +79,7 @@ function AdminDashboard() {
 
     async function getTenantsCount() {
         if (userData.roles === 'sadmin') {
-            const getTenants = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+            const getTenants = await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }

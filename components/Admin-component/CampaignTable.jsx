@@ -15,6 +15,7 @@ import { FaTimes } from "react-icons/fa"
 import { RiFileExcel2Line, RiMegaphoneLine } from "react-icons/ri"
 import CountCard from "./CountCard"
 import { BiPlus } from "react-icons/bi"
+import { object } from "yup"
 export default function CampaignTable() {
 
     const [campaigns, setCampaigns] = useState([])
@@ -25,7 +26,7 @@ export default function CampaignTable() {
     const [selectedStatus, setSelectedStatus] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
 
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -36,6 +37,9 @@ export default function CampaignTable() {
         name: '',
         start_date: '',
         end_date: '',
+        account : '',
+        objective: '',
+        status : ''
     })
     const [isvalid, setIsvalid] = useState(false)
 
@@ -45,10 +49,19 @@ export default function CampaignTable() {
             errors.name = 'Campaign name is required'
         }
         if(values.start_date == ''){
-            errors.address = 'Start date is required'
+            errors.start_date = 'Start date is required'
         }
         if(values.end_date == ''){
-            errors.contact = 'End date is required'
+            errors.end_date = 'End date is required'
+        }
+        if(values.account == ''){
+            errors.account = 'Account is required'
+        }
+        if(values.objective == ''){
+            errors.objective = 'Objective is required'
+        }
+        if(values.status == ''){
+            errors.status = 'Status is required'
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -63,8 +76,8 @@ export default function CampaignTable() {
         if(mode == "Edit"){
             const filteredCampaign = campaigns.filter(campaign => campaign._id === campaign_id);
             if(filteredCampaign.length > 0){
-                setValues({name: filteredCampaign[0].name, start_date: filteredCampaign[0].start_date, end_date: filteredCampaign[0].end_date})
-                setError({name: '', start_date: '', end_date: ''})
+                setValues({name: filteredCampaign[0].name, start_date: filteredCampaign[0].start_date, end_date: filteredCampaign[0].end_date, account: filteredCampaign[0].account_id, objective: filteredCampaign[0].objective, status: filteredCampaign[0].status})
+                setError({name: '', start_date: '', end_date: '', account: '', objective: '', status: ''})
                 console.log(filteredCampaign[0])
                 setEditCampaignId(campaign_id)
                 document.getElementById('name').value = filteredCampaign[0].name
@@ -79,8 +92,11 @@ export default function CampaignTable() {
                 Swal.fire("Campaign not found");
             }
         }else if(mode == "Create") {
-            setValues({name: '', start_date: '', end_date: ''})
-            setError({name: '', start_date: '', end_date: ''})
+            setValues({name: '', start_date: '', end_date: '', account: '', objective: '', status: ''})
+            setError({name: '', start_date: '', end_date: '', account: '', objective: '', status: ''})
+            document.getElementById('account').value = ""
+            document.getElementById('objective').value = ""
+            document.getElementById('status').value = ""
             document.getElementById('name').value = null
         }
         addModal.current.classList.remove("hidden")
@@ -113,7 +129,7 @@ export default function CampaignTable() {
     const deleteCampaign = async (campaing_id) => {
         closeModal()
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/campaign-delete?campaign_id=${campaing_id}`, {
+            const response = await axios.delete(`https://umaxxxxx-1-r8435045.deta.app/campaign-delete?campaign_id=${campaing_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -204,7 +220,7 @@ export default function CampaignTable() {
     }
 
     async function getCampaign(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/campaign-by-tenant', {
+        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/campaign-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -249,9 +265,9 @@ export default function CampaignTable() {
             let url = ""
     
             if(userData.roles == "sadmin"){
-                url = `https://umaxxnew-1-d6861606.deta.app/campaign-create?tenantId=${tenant}`
+                url = `https://umaxxxxx-1-r8435045.deta.app/campaign-create?tenantId=${tenant}`
             }else if(userData.roles == "admin"){
-                url = `https://umaxxnew-1-d6861606.deta.app/campaign-create`
+                url = `https://umaxxxxx-1-r8435045.deta.app/campaign-create`
             }
     
             const response = await axios.post(url, formData, {
@@ -300,7 +316,7 @@ export default function CampaignTable() {
                 formData.append('end_date', end_date)
                 formData.append('notes', "notes")
         
-                const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/campaign-edit?campaign_id=${EditCampaignId}`, formData, {
+                const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/campaign-edit?campaign_id=${EditCampaignId}`, formData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                     }
@@ -331,19 +347,19 @@ export default function CampaignTable() {
     const [tenant, setTenant] = useState([])
 
     async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/timezone').then((response) => {
             setTimezone(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/currency').then((response) => {
             setCurrency(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/culture').then((response) => {
             setCulture(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/account-by-tenant', {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/account-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -352,7 +368,7 @@ export default function CampaignTable() {
         })
 
         if(userData.roles == "sadmin"){
-            await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+            await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -492,10 +508,15 @@ export default function CampaignTable() {
 
                 {/* {'Statistic Card'} */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                    <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Users" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
+                    {
+                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
+                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
+                        <CountCard title="Tenants" value={<div>Loading...</div>} />
+                    }
+                    
+                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
+                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
+                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
                 </div>
                 {/* {'Statistic Card end'} */}
 
@@ -694,20 +715,27 @@ export default function CampaignTable() {
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className="col-span-1">
-                                    <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Campaign Name {error.name ? <div className="text-red-500">*</div> : ""}</label>
+                                <div className={` ${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
+                                    <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Campaign Name <div className="text-red-500">*</div></label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
+                                    {
+                                        error.name ? <div className="text-red-500 text-sm">{error.name}</div> : ""
+                                    }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="account" className="block mb-2 text-sm font-medium text-gray-900">account</label>
-                                    <select id="account" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <label htmlFor="account" className="flex mb-2 text-sm font-medium text-gray-900">account <div className="text-red-500">*</div></label>
+                                    <select id="account" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) =>setValues({...values, account: e.target.value})}>
+                                        <option value="" disabled hidden>Select account</option>
                                         {
                                             account.length > 0 ? account.map((account, index) => {
                                                 return <option key={index} value={account._id}>{account.username}</option>
                                             }) : <option key={0} value={0}>Loading...</option>
                                         }
                                     </select>
+                                    {
+                                        error.account ? <div className="text-red-500 text-sm">{error.account}</div> : ""
+                                    }
                                 </div>
                                 <div className="col-span-1" ref={tenantInput}>
                                     <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant</label>
@@ -722,33 +750,48 @@ export default function CampaignTable() {
 
                                 
                                 <div className="col-span-1">
-                                <label htmlFor="objective" className="block mb-2 text-sm font-medium text-gray-900">Objective</label>
-                                    <select id="objective" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                <label htmlFor="objective" className="flex mb-2 text-sm font-medium text-gray-900">Objective <div className="text-red-500">*</div></label>
+                                    <select id="objective" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  "  defaultValue={""} onChange={(e) =>setValues({...values, objective: e.target.value})}>
+                                        <option value="" disabled hidden>Select objective</option>
                                         <option value="1">Awareness</option>
                                         <option value="2">Conversion</option>
                                         <option value="3">Consideration</option>
                                     </select>
+                                    {
+                                        error.objective ? <div className="text-red-500 text-sm">{error.objective}</div> : ""
+                                    }
                                 </div>
                                 
                                 <div className="col-span-1">
-                                <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900">status</label>
-                                    <select id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                <label htmlFor="status" className="flex mb-2 text-sm font-medium text-gray-900">status <div className="text-red-500">*</div></label>
+                                    <select id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  " defaultValue={""} onChange={(e) => setValues({...values, status: e.target.value})}>
+                                        <option value="" disabled hidden>Select status</option>
                                         <option value="1">Active</option>
                                         <option value="2">Draft</option>
                                         <option value="3">Complete</option>
                                     </select>
+                                    {
+                                        error.status ? <div className="text-red-500 text-sm">{error.status}</div> : ""
+                                    }
                                 </div>
 
                                 <div className="col-span-1">
-                                <label htmlFor="start_date" className="flex mb-2 text-sm font-medium text-gray-900">Start Date {error.start_date ? <div className="text-red-500">*</div> : ""}</label>
+                                <label htmlFor="start_date" className="flex mb-2 text-sm font-medium text-gray-900">Start Date <div className="text-red-500">*</div></label>
                                 <input type="date" name="start_date" id="start_date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
                                     required onChange={(e) => setValues({...values, start_date: e.target.value})}/>
+                                    {
+                                        error.start_date ? <div className="text-red-500 text-sm">{error.start_date}</div> : ""
+                                    }
                                 </div>
+                                
 
                                 <div className="col-span-1">
-                                <label htmlFor="end_date" className="flex mb-2 text-sm font-medium text-gray-900">End Date {error.end_date ? <div className="text-red-500">*</div> : ""}</label>
+                                <label htmlFor="end_date" className="flex mb-2 text-sm font-medium text-gray-900">End Date <div className="text-red-500">*</div></label>
                                 <input type="date" name="end_date" id="end_date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
                                     required onChange={(e) => setValues({...values, end_date: e.target.value})}/>
+                                    {
+                                        error.end_date ? <div className="text-red-500 text-sm">{error.end_date}</div> : ""
+                                    }
                                 </div>
                                 
                                 

@@ -9,7 +9,7 @@ import jsPDF from "jspdf"
 import 'jspdf-autotable'
 import { IconContext } from "react-icons"
 import { AiOutlineFilePdf } from "react-icons/ai"
-import { FaFileExcel, FaTable } from "react-icons/fa"
+import { FaFileExcel, FaTable, FaTrash } from "react-icons/fa"
 import { FaPlus } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { IoMdEye } from "react-icons/io"
@@ -33,18 +33,20 @@ export default function AccountTable() {
         setShowPassword(!showPassword)
     }   
 
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
 
     // validasi form
-    const [values, setValues] = useState({name: '', email: '', password: '', passwordverify: ''})
+    const [values, setValues] = useState({name: '', email: '', password: '', passwordverify: '', client:'', platform:  ''})
     const [error, setError] = useState({
         name: '',
         email: '',
         password: '',
-        passwordverify: ''
+        passwordverify: '',
+        client : '',
+        platform: '',
     })
     const [isvalid, setIsvalid] = useState(false)
 
@@ -52,6 +54,9 @@ export default function AccountTable() {
         let errors = {}
         if(values.name == ''){
             errors.name = 'Username is required'
+        }
+        if(!values.email.includes("@")){
+            errors.email = "Email must contain @"
         }
         if(values.email == ''){
             errors.email = 'Email is required'
@@ -65,6 +70,12 @@ export default function AccountTable() {
         }
         if(values.passwordverify == ''){
             errors.passwordverify = 'Password verify is required'
+        }   
+        if(values.client == ''){
+            errors.client = 'Client is required'
+        }
+        if(values.platform == ''){
+            errors.platform = 'Platform is required'    
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -82,8 +93,8 @@ export default function AccountTable() {
             if(filteredaccount.length > 0){
                 // console.log(filteredCampaing[0])
                 setEditaccountId(account_id)
-                setValues({name: filteredaccount[0].username, email: filteredaccount[0].email})
-                setError({name: '', email: ''})
+                setValues({name: filteredaccount[0].username, email: filteredaccount[0].email, client: filteredaccount[0].client_id, platform: filteredaccount[0].platform})
+                setError({name: '', email: '', client:'', platform: ''})
                 document.getElementById('name').value = filteredaccount[0].username
                 document.getElementById('client').value = filteredaccount[0].client_id
                 document.getElementById('platform').value = filteredaccount[0].platform
@@ -95,12 +106,14 @@ export default function AccountTable() {
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
-            setValues({name: "", email: "", password: "", passwordverify: ""})
-            setError({name: '', email: '', password: '', passwordverify: ''})
+            setValues({name: "", email: "", password: "", passwordverify: "", client: "", platform: ""})
+            setError({name: '', email: '', password: '', passwordverify: '', client: '', platform: ''})
             document.getElementById('name').value = null
             document.getElementById('email').value = null
             document.getElementById('password').value = null
             document.getElementById('passwordverify').value = null
+            document.getElementById("client").value = ""
+            document.getElementById("platform").value = ""
             passwordInput.current.classList.remove("hidden")
             passwordverifyInput.current.classList.remove("hidden")
         }
@@ -134,7 +147,7 @@ export default function AccountTable() {
     const deleteaccount = async (account_id) => {
         closeModal()
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/account-delete?account_id=${account_id}`, {
+            const response = await axios.delete(`https://umaxxxxx-1-r8435045.deta.app/account-delete?account_id=${account_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -224,7 +237,7 @@ export default function AccountTable() {
     }
 
     async function getaccount(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/account-by-tenant', {
+        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/account-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -267,9 +280,9 @@ export default function AccountTable() {
             let url = ""
     
             if(userData.roles == "sadmin"){
-                url = `https://umaxxnew-1-d6861606.deta.app/account-create?tenantId=${tenant_id}`
+                url = `https://umaxxxxx-1-r8435045.deta.app/account-create?tenantId=${tenant_id}`
             }else if(userData.roles == "admin"){
-                url = `https://umaxxnew-1-d6861606.deta.app/account-create`
+                url = `https://umaxxxxx-1-r8435045.deta.app/account-create`
             }
     
             const response = await axios.post(url, formData, {
@@ -320,7 +333,7 @@ export default function AccountTable() {
                 formData.append('status', status);
                 formData.append('notes', "notes");
             
-                    const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/account-edit?account_id=${EditaccountId}`, formData, {
+                    const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/account-edit?account_id=${EditaccountId}`, formData, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                         }
@@ -356,19 +369,19 @@ export default function AccountTable() {
     const [tenant, setTenant] = useState([])
 
     async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/timezone').then((response) => {
             setTimezone(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/currency').then((response) => {
             setCurrency(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/culture').then((response) => {
             setCulture(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/client-by-tenant', {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/client-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -376,7 +389,7 @@ export default function AccountTable() {
             setClient(response.data.Data)
         })
         if(userData.roles ==  "sadmin"){
-            await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+            await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -506,10 +519,15 @@ export default function AccountTable() {
 
                 {/* {'Statistic Card'} */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                    <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Users" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
+                    {
+                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
+                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
+                        <CountCard title="Tenants" value={<div>Loading...</div>} />
+                    }
+                    
+                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
+                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
+                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
                 </div>
                 {/* {'Statistic Card end'} */}
 
@@ -693,7 +711,7 @@ export default function AccountTable() {
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className="col-span-2">
+                                <div className={`${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
                                     <label htmlFor="name" className="flex mb-2 text-sm font-medium text-gray-900 ">Account Name <div className="text-red-500">*</div> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type account name here"
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
@@ -701,7 +719,7 @@ export default function AccountTable() {
                                         error.name ? <p className="text-red-500 text-sm">{error.name}</p> : ""
                                     }
                                 </div>
-                                <div className="col-span-2">
+                                <div className="col-span-1">
                                     <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email <div className="text-red-500">*</div></label>
                                     <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {
@@ -709,15 +727,20 @@ export default function AccountTable() {
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="client" className="block mb-2 text-sm font-medium text-gray-900">Client</label>
-                                    <select id="client" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <label htmlFor="client" className="flex mb-2 text-sm font-medium text-gray-900">Client <div className="text-red-500">*</div> </label>
+                                    <select id="client" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, client: e.target.value})}>
+                                        <option value="" disabled hidden>Select Client</option>
                                         {
                                             client.length > 0 ? client.map((client, index) => {
                                                 return <option key={index} value={client._id}>{client.name}</option>
                                             }) : <option key={0} value={0}>Loading...</option>
                                         }
                                     </select>
+                                    {
+                                        error.client ? <p className="text-red-500 text-sm">{error.client}</p> : ""
+                                    }
                                 </div>
+
                                 <div className="col-span-1" ref={tenantInput}>
                                     <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant</label>
                                     <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
@@ -729,18 +752,17 @@ export default function AccountTable() {
                                     </select>
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="platform" className="block mb-2 text-sm font-medium text-gray-900">Platform</label>
-                                    <select id="platform" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                                        <option value="1">Meta Ads</option>
+                                    <label htmlFor="platform" className="flex mb-2 text-sm font-medium text-gray-900">Platform <div classname="text-red-500">*</div> </label>
+                                    <select id="platform" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, platform: e.target.value})}>
+                                        <option value="" disabled hidden>Select platform</option>
+                                        <option value="1">Meta Ads</option>z
                                         <option value="2">Google Ads</option>
                                         <option value="3">Tiktok Ads</option>
                                     </select>
+                                    {
+                                        error.platform ? <p className="text-red-500 text-sm">{error.platform}</p> : ""
+                                    }
                                 </div>
-
-                                
-
-                                
-
                                 <div className="col-span-1" ref={passwordInput}>
                                     <label htmlFor="password" className="flex mb-2 text-sm font-medium text-gray-900 ">Password <div className="text-red-500">*</div></label>
                                     <div className="relative">
@@ -777,7 +799,11 @@ export default function AccountTable() {
                                     </div>
                                         
                                         {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateAccount}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createAccount}>Submit</button>
+                                            modeModal === 'Edit' ? <div className="flex gap-3">
+                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateAccount}>Save Change</button>
+                                                <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditaccountId)}><FaTrash/></button>
+                                            </div>  : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createAccount}>Submit</button>
+                                                
                                         }
                                         
                                 </div>  
@@ -785,7 +811,7 @@ export default function AccountTable() {
                     </div>
                 </div>
             </div> 
-
+                                        
         </>
     )
 }

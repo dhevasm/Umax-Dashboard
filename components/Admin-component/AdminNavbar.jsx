@@ -105,7 +105,7 @@ function AdminNavbar({userData}){
                     <h1 className="text-nowrap font-medium">{userData.name}</h1>
                     <p className="text-gray-500">{userData.roles}</p>
                     </div>
-                    <div>
+                    <div className="hidden md:block">
                     {userData.image ?  <img  src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-[50px] h-[50px] bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p>}
                     </div>
                 </div>
