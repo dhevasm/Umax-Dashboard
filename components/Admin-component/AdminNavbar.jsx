@@ -115,4 +115,4 @@ function AdminNavbar({userData}){
     )
 }
 
-export default dynamic(() => Promise.resolve(AdminNavbar), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminNavbar));

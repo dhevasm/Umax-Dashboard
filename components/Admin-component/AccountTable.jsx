@@ -498,7 +498,6 @@ export default function AccountTable() {
 
     return (
         <>
-
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
                     <h1 className="text-2xl font-bold uppercase flex gap-2"><RiIdCardLine/> Accounts</h1>
@@ -514,7 +513,7 @@ export default function AccountTable() {
                 </div>
                 {/* {'Statistic Card end'} */}
 
-                <div className="w-full h-fit bg-white mb-5 rounded-md shadow-md">
+                <div className="w-full h-fit bg-[#f1f5f9] mb-5 rounded-md shadow-md">
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
@@ -548,7 +547,7 @@ export default function AccountTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="">Status</option>
@@ -558,7 +557,7 @@ export default function AccountTable() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e rounded-e-md text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedPlatform}
                                         onChange={handlePlatformChange}
                                     >
@@ -574,10 +573,12 @@ export default function AccountTable() {
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
-                                    <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
+                                    <label htmlFor="search" className="hidden"></label>
+                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
+                                    defaultValue="" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
-                                    id="search"/>
+                                    />
                                     <span className="absolute inset-y-0 right-0 flex items-center pr-3">
                                         <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </span>

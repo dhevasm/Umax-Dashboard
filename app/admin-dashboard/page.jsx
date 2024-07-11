@@ -3,15 +3,15 @@ import { useState, useEffect, createContext, useRef } from "react"
 import axios from "axios"
 
 import dynamic from "next/dynamic"
-const AdminNavbar = dynamic(() => import("@/components/Admin-component/AdminNavbar"), {ssr: false})
-const AdminSidebar = dynamic(() => import("@/components/Admin-component/AdminSidebar"), {ssr: false})
-const TenantTable = dynamic(() => import("@/components/Admin-component/TenantTable"), {ssr: false})
-const UserTable = dynamic(() => import("@/components/Admin-component/UserTable"), {ssr: false})
-const CampaignTable = dynamic(() => import("@/components/Admin-component/CampaignTable"), {ssr: false})
-const TenantProfile = dynamic(() => import("@/components/Admin-component/TenantProfile"), {ssr: false})
-const AccountTable = dynamic(() => import("@/components/Admin-component/AccountTable"), {ssr: false})
-const ClientTable = dynamic(() => import("@/components/Admin-component/ClientTable"), {ssr: false})
-const Dashboard = dynamic(() => import("@/components/Admin-component/Dashboard"), {ssr: false})
+const AdminNavbar = dynamic(() => import("@/components/Admin-component/AdminNavbar"))
+const AdminSidebar = dynamic(() => import("@/components/Admin-component/AdminSidebar"))
+const TenantTable = dynamic(() => import("@/components/Admin-component/TenantTable"))
+const UserTable = dynamic(() => import("@/components/Admin-component/UserTable"))
+const CampaignTable = dynamic(() => import("@/components/Admin-component/CampaignTable"))
+const TenantProfile = dynamic(() => import("@/components/Admin-component/TenantProfile"))
+const AccountTable = dynamic(() => import("@/components/Admin-component/AccountTable"))
+const ClientTable = dynamic(() => import("@/components/Admin-component/ClientTable"))
+const Dashboard = dynamic(() => import("@/components/Admin-component/Dashboard"))
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 
@@ -158,6 +158,7 @@ function AdminDashboard() {
             </div>
         </AdminDashboardContext.Provider>
         </>
+
     )
 }
 export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false })

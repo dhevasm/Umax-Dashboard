@@ -1,21 +1,23 @@
 'use client'
 
-// import { SidebarContext } from "@/app/dashboard/page"
+
 import { useState, useRef, useEffect, useContext, Suspense } from "react"
+
 import SidebarCard from "./Card/SidebarCard"
 import axios from "axios"
 import SidebarLoading from "./Loading/SidebarLoading"
 import { FaSearch } from 'react-icons/fa';
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io"
 
+
 export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHide }) {
+
     const [campaigns, setCampaigns] = useState([]);
     const sidebar = useRef(null);
     const [status, setStatus] = useState(0);
     const [hidden, setHidden] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    // const {sidebarHide, setSidebarHide} = useContext(SidebarContext);
-    // const {campaignID, setCampaignID} = useContext(SidebarContext);
+
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     // Sidebar Hide Handle start

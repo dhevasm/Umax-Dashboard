@@ -8,6 +8,19 @@
   background-color: #fff;
 }
 
+.select-no-arrow {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0"></svg>') no-repeat;
+  background-position: right 0.75rem center;
+}
+
+.blur-background {
+  filter: blur(5px);
+  transition: filter 0.3s;
+}
+
 /* Warna Scrollbar */
 ::-webkit-scrollbar-thumb {
   background-color: #888;
