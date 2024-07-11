@@ -13,6 +13,7 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         'bg-login': "url('/assets/bg-default.svg')",
+        'bg-tenant': "url('/assets/Building.png')",
       },
     },
   },

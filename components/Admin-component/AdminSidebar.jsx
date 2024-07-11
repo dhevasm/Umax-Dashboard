@@ -59,7 +59,7 @@ export default function AdminSidebar(){
 
     return(
         <>
-            <div className="fixed z-10 bg-[#1C2434] w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
+            <div className="fixed z-10 bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
                 <ul className="pt-28 pl-3 uppercase ms-5">
                     <li className="mb-4 ms-2 text-slate-400 font-semibold">
                         Menu

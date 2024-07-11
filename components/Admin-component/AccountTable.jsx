@@ -500,8 +500,8 @@ export default function AccountTable() {
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-                    <h1 className="text-2xl font-bold uppercase flex gap-2"><RiIdCardLine/> Accounts</h1>
-                    <p><a className="hover:cursor-pointer hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Accounts</p>
+                    <h1 className="text-2xl font-bold uppercase flex dark:text-white gap-2"><RiIdCardLine/> Accounts</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Accounts</p>
                 </div>
 
                 {/* {'Statistic Card'} */}
@@ -513,7 +513,7 @@ export default function AccountTable() {
                 </div>
                 {/* {'Statistic Card end'} */}
 
-                <div className="w-full h-fit bg-[#f1f5f9] mb-5 rounded-md shadow-md">
+                <div className="w-full h-fit mb-5 rounded-md shadow-md">
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
@@ -523,21 +523,21 @@ export default function AccountTable() {
                     {/* Header end */}
 
                     {/* Body */}
-                    <div className="w-full h-fit bg-white rounded-b-md p-4">
+                    <div className="w-full h-fit bg-white dark:bg-slate-800  rounded-b-md p-4">
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className="bg-white mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className="bg-white dark:bg-slate-800 dark:text-white mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
+                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => showModal("Create")} >
+                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -547,7 +547,7 @@ export default function AccountTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="">Status</option>
@@ -557,7 +557,7 @@ export default function AccountTable() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e rounded-e-md text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e rounded-e-md text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedPlatform}
                                         onChange={handlePlatformChange}
                                     >
@@ -574,7 +574,7 @@ export default function AccountTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
+                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 dark:bg-slate-800 dark:text-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
                                     defaultValue="" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
@@ -589,28 +589,28 @@ export default function AccountTable() {
 
                         <div className="bg-white h-fit overflow-auto">
                             <table className="w-full text-sm text-left" ref={tableRef}>
-                                <thead className="text-md text-left uppercase bg-white">
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-700 dark:text-white">
                                     <tr>
-                                    <th scope="col" className="px-5 border py-3">No</th>
-                                    <th scope="col" className="px-5 border py-3">Username</th>
-                                    <th scope="col" className="px-5 border py-3">Client</th>
-                                    <th scope="col" className="px-5 border py-3">Platform</th>
-                                    <th scope="col" className="px-5 border py-3">Email</th>
-                                    <th scope="col" className="px-5 border py-3">Status</th>
+                                    <th scope="col" className="px-5 border dark:border-none py-3">No</th>
+                                    <th scope="col" className="px-5 border dark:border-none py-3">Username</th>
+                                    <th scope="col" className="px-5 border dark:border-none py-3">Client</th>
+                                    <th scope="col" className="px-5 border dark:border-none py-3">Platform</th>
+                                    <th scope="col" className="px-5 border dark:border-none py-3">Email</th>
+                                    <th scope="col" className="px-5 border dark:border-none py-3">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white">
+                                <tbody className="bg-white dark:bg-slate-800 dark:text-white">
                                     {
                                         filteredData.length > 0 ? filteredData.map((account, index) => {
                                             return (
-                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", account._id)}>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{account.client_name}</td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap"><a href={`mailto:${account.email
-                                                    }`} className="text-blue-500">{account.email}</a></td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
+                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 hover:cursor-pointer dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300" onClick={() => showModal("Edit", account._id)}>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{index + 1}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.client_name}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap"><a href={`mailto:${account.email
+                                                    }`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
                                                 </tr>
                                             )
                                     }).slice(firstPage, lastPage) : (

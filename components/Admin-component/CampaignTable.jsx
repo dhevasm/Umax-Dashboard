@@ -486,8 +486,8 @@ export default function CampaignTable() {
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-                    <h1 className="text-2xl font-bold uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
-                    <p><a className="hover:cursor-pointer hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
+                    <h1 className="text-2xl font-bold dark:text-white uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
                 </div>
 
                 {/* {'Statistic Card'} */}
@@ -499,7 +499,7 @@ export default function CampaignTable() {
                 </div>
                 {/* {'Statistic Card end'} */}
 
-                <div className="w-full h-fit bg-[#f1f5f9] mb-5 rounded-md shadow-md">
+                <div className="w-full h-fit mb-5 rounded-md shadow-md">
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
