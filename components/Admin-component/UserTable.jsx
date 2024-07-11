@@ -461,19 +461,20 @@ export default function UserTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
-                                        <option value="0" key={0} >All User</option>
+                                        <option value="" key="" >Role</option>
                                         <option value="admin" key={1}>Admin</option>
                                         <option value="staff" key={2}>Staff</option>
                                     </select>  
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="tenantfilter" className="text-sm font-medium text-gray-900 hidden">Tenant</label>
-                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm rounded-e-md block w-full px-3 py-2" defaultValue={0}
-                                    value={selectedTenant} onChange={handleTenantChange}>
-                                        <option value="0" key={0} disabled hidden>Filter Tenant</option>
+                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    // value={selectedTenant} onChange={handleTenantChange}
+                                    >
+                                        <option value="0" key={0} disabled hidden>Tenant</option>
                                         {
                                             tenants.map((tenant, index) => {
                                                 return (

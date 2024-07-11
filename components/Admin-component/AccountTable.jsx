@@ -498,7 +498,6 @@ export default function AccountTable() {
 
     return (
         <>
-
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
                     <h1 className="text-2xl font-bold uppercase flex gap-2"><RiIdCardLine/> Accounts</h1>
@@ -548,7 +547,7 @@ export default function AccountTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="">Status</option>
@@ -558,7 +557,7 @@ export default function AccountTable() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e rounded-e-md text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedPlatform}
                                         onChange={handlePlatformChange}
                                     >

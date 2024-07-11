@@ -484,7 +484,7 @@ export default function CampaignTable() {
 
     return (
         <>
-            <div className="w-full h-fit bg-[#f1f5f9]">
+            <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
                     <h1 className="text-2xl font-bold uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
                     <p><a className="hover:cursor-pointer hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
@@ -533,7 +533,7 @@ export default function CampaignTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="">Status</option>
@@ -544,7 +544,7 @@ export default function CampaignTable() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedPlatform}
                                         onChange={handlePlatformChange}
                                     >
@@ -556,7 +556,7 @@ export default function CampaignTable() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="tenantfilter" className="text-sm font-medium text-gray-900 hidden">Tenant</label>
-                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm rounded-e-md block w-full px-3 py-2" defaultValue={0}
+                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e text-gray-900 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedObjective}
                                         onChange={handleObjectiveChange}
                                     >
