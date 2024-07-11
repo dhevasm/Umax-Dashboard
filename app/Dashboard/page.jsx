@@ -33,10 +33,6 @@ function Dashboard() {
     const sidebarContext = (() => ({
         SidebarHide,
         setSidebarHide,
-        campaignID,
-        setCampaignID,
-        name,
-        setName
     }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {

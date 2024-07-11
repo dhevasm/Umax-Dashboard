@@ -15,7 +15,7 @@ export default function Sidebar({ onCampaignIDChange }) {
     const [hidden, setHidden] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const {sidebarHide, setSidebarHide} = useContext(SidebarContext);
-    const {campaignID, setCampaignID} = useContext(SidebarContext);
+    // const {campaignID, setCampaignID} = useContext(SidebarContext);
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     // Sidebar Hide Handle start
