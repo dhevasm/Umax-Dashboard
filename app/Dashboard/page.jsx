@@ -66,10 +66,6 @@ function Dashboard() {
         setPlatform(platform);
     };
 
-    const setSidebarHideHandle = (value) => {
-        setSidebarHide(value)
-    }
-
     // Dashborad Change Content Start
     const [activeContent, setActiveContent] = useState("performance")
     // Dashborad Change Content End
