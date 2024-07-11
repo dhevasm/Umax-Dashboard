@@ -66,6 +66,10 @@ function Dashboard() {
         setPlatform(platform);
     };
 
+    const setSidebarHideHandle = (value) => {
+        setSidebarHide(value)
+    }
+
     // Dashborad Change Content Start
     const [activeContent, setActiveContent] = useState("performance")
     // Dashborad Change Content End
@@ -92,10 +96,10 @@ function Dashboard() {
         <>
         {/* Header */}
         
-        <SidebarContext.Provider value={sidebarContext}>
+        {/* <SidebarContext.Provider value={sidebarContext}> */}
             <Navbar />
-            <Sidebar onCampaignIDChange={handleCampaignIDChange}/>
-        </SidebarContext.Provider>
+            <Sidebar onCampaignIDChange={handleCampaignIDChange} sidebarHide={SidebarHide} setSidebarHide={setSidebarHide}/>
+        {/* </SidebarContext.Provider> */}
 
         {/* Dashboard Container */}
         <div className="flex w-full min-h-full justify-end items-center bg-gray-100">
