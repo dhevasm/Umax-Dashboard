@@ -41,7 +41,7 @@ const Page = () => {
       setLoading(true);
 
       // const { Token } = response.Data;
-      fetch(`https://umaxxnew-1-d6861606.deta.app/login`, {
+      fetch(`https://umaxxxxx-1-r8435045.deta.app/login`, {
         method: "POST",
         headers: {
           accept: "application/json",
