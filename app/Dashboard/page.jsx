@@ -98,7 +98,7 @@ function Dashboard() {
         {/* </SidebarContext.Provider> */}
 
         {/* Dashboard Container */}
-        <div className="flex w-full min-h-full justify-end items-center bg-gray-100">
+        <div className="flex w-full min-h-full justify-end items-center bg-gray-100 dark:bg-slate-800">
             {/* Dashboard Card */}
             <div className="w-[75%] min-h-screen bg-white rounded-xl mt-[100px] md:me-3 ms-5 text-black transition-transform" ref={Card}>
                 {/* header */}

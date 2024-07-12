@@ -43,6 +43,28 @@ export default function Navbar() {
         }
     }
 
+    const checkIsMobile = () => {
+        if (typeof window !== 'undefined') {
+            if (window.innerWidth <= 640) {
+                hideHandle()
+                navbarBrand.current.classList.add("hidden")
+            } 
+        }
+    }
+
+    useEffect(() => {
+        checkIsMobile()
+       if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById("theme").checked = true
+            localStorage.setItem('color-theme', 'dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+            document.getElementById("theme").checked = false
+            localStorage.setItem('color-theme', 'light')
+        }
+    }, [])
+
     useEffect(() => {
         fetchUser()
     }, [])
@@ -74,34 +96,39 @@ export default function Navbar() {
                     <img src={`data:image/png;base64, ${image}`} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
                     <h1 onClick={handleToggle} className="flex flex-col cursor-pointer">
                         <div className="text-sm flex gap-1 items-end font-medium">
-                        <p>{name}</p>
+                        <p className="dark:text-slate-100">{name}</p>
                         <span className="text-blue-500">
                             {isHidden ? <IoIosArrowDown size={18} className="font-semibold text-black" /> : <IoIosArrowUp size={18} className="font-semibold text-black" />}
                         </span>
                         </div>
-                        <div className="text-xs text-gray-500">{role}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{role}</div>
                     </h1>
                 </div>
-                <div className={`profile-dropdown ${isHidden ? 'hidden' : ''} absolute z-10 mt-3 -right-7 p-3 bg-white border border-gray-100 shadow-md w-48 transition-all duration-3000`}>
+                <div className={`profile-dropdown ${isHidden ? 'hidden' : ''} absolute z-10 mt-3 -right-7 p-3 bg-white dark:bg-slate-700 border border-gray-100 dark:border-gray-600 shadow-md w-48 transition-all duration-3000`}>
                     <div className="flex flex-col mb-2">
-                        <p className="font-semibold text-[12px]">{name}</p>
-                        <p className="from-neutral-300 text-[12px]">{email}</p>
+                        <p className="font-semibold text-[12px] dark:text-slate-100 dark:font-thin">{name}</p>
+                        <p className="from-neutral-300 text-[12px] dark:text-blue-600 dark:font-semibold">{email}</p>
                     </div>
                     <div className="border-t border-gray-300"></div>
-                    <Link href="/profile" className="block px-2 py-1 text-[12px] text-black">Profile</Link>
-                    <a href="/users" className="block px-2 py-1 text-[12px] text-black">Users</a>
-                    <a href="/settings" className="block px-2 py-1 text-[12px] text-black">Settings</a>
+                    <Link href="/profile" className="block px-2 py-1 text-[12px] text-black dark:text-slate-100">Profile</Link>
+                    <a href="/users" className="block px-2 py-1 text-[12px] text-black dark:text-slate-100">Users</a>
+                    <a href="/settings" className="block px-2 py-1 text-[12px] text-black dark:text-slate-100">Settings</a>
                     <div className="border-t border-gray-300"></div>
-                    <a onClick={handleLogout} className="block px-2 py-1 text-[12px] mt-2 cursor-pointer">Logout</a>
+                    <a onClick={handleLogout} className="block px-2 py-1 text-[12px] mt-2 cursor-pointer dark:text-slate-100">Logout</a>
                 </div>
             </div>
         );
     }
 
+    function handleTheme(){
+        document.documentElement.classList.toggle("dark")
+        localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
+    }
+
     return (
         <>
             {/* Navbar */}
-            <nav className="fixed top-0 z-50 w-full p-3 bg-white shadow-lg">
+            <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-700 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <img src="assets/logo.png" alt="Logo" className="ms-5 w-[100px]"/>
@@ -131,18 +158,18 @@ export default function Navbar() {
                                 `}
                             </style>
                             {/* {role == 'client' && */}
-                                <li className={`font-semibold flex gap-1 items-center ${activeLink === "/dashboard" ? "active-link" : ""}`} onClick={() => handleClick("/dashboard")}>
+                                <li className={`font-semibold flex gap-1 items-center ${activeLink === "/dashboard" ? "active-link" : ""} dark:text-slate-100`} onClick={() => handleClick("/dashboard")}>
                                     <span><MdDashboard size={20} /></span>Dashboard
                                 </li> 
                             {/* } */}
-                            <li className={`font-semibold flex gap-1 items-center ${activeLink === "/campaigns" ? "active-link" : ""}`} onClick={() => handleClick("/campaigns")}>
+                            <li className={`font-semibold flex gap-1 items-center ${activeLink === "/campaigns" ? "active-link" : ""} dark:text-slate-100`} onClick={() => handleClick("/campaigns")}>
                                 <span><BiSolidMegaphone size={20} /></span>Campaigns
                             </li>
-                            <li className={`font-semibold flex gap-1 items-center ${activeLink === "/accounts" ? "active-link" : ""}`} onClick={() => handleClick("/accounts")}>
+                            <li className={`font-semibold flex gap-1 items-center ${activeLink === "/accounts" ? "active-link" : ""} dark:text-slate-100`} onClick={() => handleClick("/accounts")}>
                                 <span><AiOutlineUser size={20} /></span>Accounts
                             </li>
                             {role != 'client' &&
-                                <li className={`font-semibold flex gap-1 items-center ${activeLink === "/clients" ? "active-link" : ""}`} onClick={() => handleClick("/clients")}>
+                                <li className={`font-semibold flex gap-1 items-center ${activeLink === "/clients" ? "active-link" : ""} dark:text-slate-100`} onClick={() => handleClick("/clients")}>
                                     <span><BiGroup size={20} /></span>Clients
                                 </li>
                             }
@@ -151,7 +178,11 @@ export default function Navbar() {
 
                     {/* Profile */}
                     <div className="flex gap-3">
-                        {/* Notification */}
+                        <label htmlFor="theme" className="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme}/>
+                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            </div>
+                        </label>
                     <div>
                     <div className="text-black me-3 hover:cursor-pointer">
                             <div className="relative mt-2" onClick={(e) => {
@@ -159,7 +190,7 @@ export default function Navbar() {
                                 e.stopPropagation();
                             }
                             }>
-                            <BiBell size={20} />
+                            <BiBell size={20}  className="dark:text-slate-100"/>
                             </div>
                         <div className="notif-dropdown flex hidden absolute z-10 mt-2 p-5 right-5 bg-white rounded-lg shadow-lg flex-col gap-3 w-[200px]">
                             <a href="/">Notification 1</a>
