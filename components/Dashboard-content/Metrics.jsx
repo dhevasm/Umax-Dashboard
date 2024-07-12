@@ -41,7 +41,7 @@ export default function Metrics({ id }) {
                     {id === '' 
                         ? Array(12).fill(0).map((_, index) => (
                             <MetricsLoading key={index} />
-                          ))
+                        ))
                         : data.map((item, index) => (
                             <div key={index} className="flex flex-wrap justify-center gap-10">  
                                 <MetricCard Value={item.amountspent} Title={'Amount Spent'} />
@@ -57,10 +57,11 @@ export default function Metrics({ id }) {
                                 <MetricCard Value={item.roas} Title={'ROAS'} />
                                 <MetricCard Value={item.realroas} Title={'Real ROAS'} />
                             </div>
-                          ))
+                        ))
                     }
                 </div>
             </div>
         </div>
+
     );
 }
