@@ -222,13 +222,14 @@ export default function TenantProfile({tenant_id}){
 
     return (
         <>
-            <div className="w-full h-full">
+            <div className="w-full h-full rounded-sm">
                 <div className="flex justify-between items-center">
-                <h1 className="text-3xl  m-3">Tenant Profile</h1>
-                <p> <a className="hover:cursor-pointer" onClick={() => setChangeTable("dashboard")}>Dashboard</a> / Tenant Profile</p>
+                    <h1 className="text-2xl dark:text-white">Tenant Profile</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>Dashboard</a> / Tenant Profile</p>
                 </div>
-                <div className="rouneded-lg shadow-xl mt-3">
-                    <div className="w-full flex justify-between h-[30vh] bg-[#1C2434] items-end px-5 py-5 rounded-t-md">
+
+                <div className="rounded-sm shadow-md mt-3">
+                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant bg-no-repeat items-end px-5 py-5 rounded-t-sm">
                         {
                             tenant.company ? (
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
@@ -238,220 +239,218 @@ export default function TenantProfile({tenant_id}){
                             <FaPen className="text-white hover:cursor-pointer" onClick={() => showModal("Edit", tenant._id)}/>
                         </div>
                     </div>
-                    <div className="p-5">
-                        {
-                            tenant.address ? (
-                                <>
-                                <div className="flex items-center gap-5 my-5 mb-10">
-                                    <h1 className="font-bold text-xl">General</h1>
-                                    <div className="w-full h-0.5 mt-3 bg-gray-400"></div>
+
+                    <div className="p-5 bg-white dark:bg-slate-800 rounded-b-sm">
+                        {tenant.address ? (
+                            <>
+                            <div className="flex items-center gap-5 my-5 mb-10">
+                                <h1 className="font-bold text-xl text-gray-700 dark:text-white">General</h1>
+                                <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
+                            </div>
+                            <div className="flex flex-col md:flex-row gap-2 items-start mt-3 p-5">
+                                <FaBuilding className="text-2xl text-[#3d50e0]" />
+                                <p className="ml-2 dark:text-white">Address: {tenant.address}</p>
+                            </div>
+                            <div className="flex w-full flex-wrap flex-col md:flex-row gap-5 mt-5">
+                                <div className="flex gap-2 items-center p-5">
+                                <FaPhone className="text-[#3d50e0]" />
+                                <div className="ml-2 dark:text-white">
+                                    Contact: <a href={`tel:${tenant.contact}`} className="text-blue-500">{tenant.contact}</a>
                                 </div>
-                                    <div className="flex fllex-col md:flex-row gap-2 items-start mt-3 p-5 bg-slate-200 rounded-lg shadow-md"> <FaBuilding className="text-xl"/> 
-                                       <p>Address : {tenant.address}</p> 
-                                     </div>
-                                     
-                                    <div className="flex w-full flex-wrap flex-col md:flex-row gap-5 mt-5">
-                                        <div className="flex  gap-2 items-center bg-slate-200 rounded-lg shadow-md p-5"> <FaPhone/> 
-                                            <div>
-                                                Contact <a href={`tel:${tenant.contact}`} className="text-blue-500">{tenant.contact}</a>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2  items-center bg-slate-200 rounded-lg shadow-md p-5"> <FaEnvelope/>
-                                            <div>
-                                                Email :  <a href={`mailto:${tenant.email}`} className="text-blue-500"> {tenant.email} </a> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                <div className="flex items-center gap-5 my-5 mb-10">
-                                    <h1 className="font-bold text-xl">Format</h1>
-                                    <div className="w-full h-0.5 mt-3 bg-gray-400"></div>
                                 </div>
-                                    <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5 pb-5 ">
-                                        <div className="flex gap-2 items-center bg-slate-200 rounded-lg shadow-md p-5"> <FaHome/> 
-                                            <p>
-                                                Culture : {tenant.culture}
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-2 items-center bg-slate-200 rounded-lg shadow-md p-5"> <FaFlag/>
-                                            <p>
-                                                Language :  {tenant.language}
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-2 items-center bg-slate-200 rounded-lg shadow-md p-5"> <FaDollarSign/>
-                                            <p>
-                                                Currency :  {tenant.currency}
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-2 items-center bg-slate-200 rounded-lg shadow-md p-5"> <FiWatch/>
-                                            <p>
-                                                Timezone :  {tenant.timezone_name}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                </>
-                            ) : "Loading ..."
-                        }
-                    
+                                <div className="flex gap-2 items-center p-5">
+                                <FaEnvelope className="text-[#3d50e0]" />
+                                <div className="ml-2 dark:text-white">
+                                    Email: <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-5 my-5 mb-10">
+                                <h1 className="font-bold text-xl text-gray-700 dark:text-white">Format</h1>
+                                <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
+                            </div>
+                            <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5 pb-5">
+                                <div className="flex gap-2 items-center p-5">
+                                <FaHome className="text-[#3d50e0]" />
+                                <p className="ml-2 dark:text-white">Culture: {tenant.culture}</p>
+                                </div>
+                                <div className="flex gap-2 items-center p-5">
+                                <FaFlag className="text-[#3d50e0]" />
+                                <p className="ml-2 dark:text-white">Language: {tenant.language}</p>
+                                </div>
+                                <div className="flex gap-2 items-center p-5">
+                                <FaDollarSign className="text-[#3d50e0]" />
+                                <p className="ml-2 dark:text-white">Currency: {tenant.currency}</p>
+                                </div>
+                                <div className="flex gap-2 items-center p-5">
+                                <FiWatch className="text-[#3d50e0]" />
+                                <p className="ml-2 dark:text-white">Timezone: {tenant.timezone_name}</p>
+                                </div>
+                            </div>
+                            </>
+                        ) : (
+                            <p>Loading...</p>
+                        )}
                     </div>
+
                 </div>             
 
             </div>
+
              {/* <!-- Main modal --> */}
              <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-
-<div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
-    {/* <!-- Modal content --> */}
-    <div className="relative bg-white rounded-lg shadow">
-        {/* <!-- Modal header --> */}
-        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white ">
-            <h3 className="text-xl font-semibold">
-                {`${modeModal} Tenant`}
-            </h3>
-            
-            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
-                <FaTimes />
-            </button>
-        </div>
-        {/* <!-- Modal body --> */}
-        <div className="p-4 md:p-5">
-            <div className="flex justify-between items-center">
-            <div className="text-xl font-semibold text-blue-500">General</div>
-
-            <div className="flex gap-2 items-center">
-            {
-                modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
-            }
-            </div>
-            
-            </div>
-        
-        <div className="w-full h-0.5 my-3 bg-gray-300"></div>
-       
-            <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen overflow-y-auto pb-52 md:pb-3">
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Company Name {
-                        error.name && <p className="text-red-500 text-sm">*</p>
-                    }</label>
-                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
-                    required onChange={(e) => setValues({...values, name: e.target.value})}/>
-                    {
-                        error.name && <p className="text-red-500 text-sm">{error.name}</p>
-                    }
-                </div>
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="address" className="mb-2 text-sm font-medium text-gray-900 flex">Company Address {
-                        error.address && <p className="text-red-500 text-sm">*</p>
-                    }</label>
-                    <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
-                    required onChange={(e) => setValues({...values, address: e.target.value})}/>
-                    {
-                        error.address && <p className="text-red-500 text-sm">{error.address}</p>
-                    }
-                </div>
-
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-900">Country</label>
-                    <select id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
-                        <option value="0" key={0} disabled hidden>Select Country</option>
-                        {
-                            Country.length > 0 ? Country.map((item, index) => (
-                                <option key={index} value={item.country}>{item.country}</option>
-                            )) : <option disabled>Loading</option>
-                        }
-                    </select>
-                </div>
-
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900">City</label>
-                    <select id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                        {
-                            City.length > 0 ? City.map((item, index) => (
-                                <option key={index} value={item}>{item}</option>
-                            )) : <option disabled value={0} key={0} hidden>Please Select Country</option>
-                        }
-                    </select>
-                </div>
-
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email{
-                        error.email && <p className="text-red-500 text-sm">*</p>
-                    }</label>
-                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
-                    {
-                        error.email && <p className="text-red-500 text-sm">{error.email}</p>
-                    }
-                </div>
-
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="contact" className="flex mb-2 text-sm font-medium text-gray-900 ">Contact {
-                        error.contact && <p className="text-red-500 text-sm">*</p>
-                    }</label>
-                    <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
-                    {
-                        error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
-                    }
-                </div>
-
-                <div className="
-                col-span-2">
-                    <div className="flex justify-between items-center">
-                    <div className="text-xl font-semibold text-blue-500 ">Format</div>
-                    <div className="flex items-center gap-1">
-                        <input id="currencyposition" type="checkbox"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                        <label htmlFor="currencyposition" className="w-full py-3 ms-2 text-sm    text-gray-900">Currency Position</label>
+                <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
+                {/* <!-- Modal content --> */}
+                <div className="relative bg-white rounded-lg shadow">
+                    {/* <!-- Modal header --> */}
+                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white ">
+                        <h3 className="text-xl font-semibold">
+                            {`${modeModal} Tenant`}
+                        </h3>
+                        
+                        <button type="button" className="text-xl bg-transparent hover:bg-blue-400 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <FaTimes />
+                        </button>
                     </div>
-                    </div>
-                <div className="w-full h-0.5 my-1 bg-gray-300"></div>
-                </div>
+                    {/* <!-- Modal body --> */}
+                    <div className="p-4 md:p-5">
+                        <div className="flex justify-between items-center">
+                        <div className="text-xl font-semibold text-blue-500">General</div>
 
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
-                    <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                        <option value={null} index={0} disabled hidden>Select Language</option>
-                        <option value="en">English</option>
-                        <option value="id">Indonesia</option>
-                    </select>
-                </div>
-
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
-                    <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                    <option value={null} index={0} disabled hidden>Select Culture</option>
+                        <div className="flex gap-2 items-center">
                         {
-                            culture.length > 0 ? culture.map((item, index) => (
-                                <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
-                            )) : <option disabled>Loading</option>
+                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
                         }
-                    </select>
-                </div>
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
-                    <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                    <option value={null} index={0} disabled hidden>Select Timezone</option>
-                    {
-                            timezone.length > 0 ? timezone.map((item, index) => (
-                                <option key={index} value={item.timezone}>{item.timezone}</option>
-                            )) : <option disabled>Loading</option>
-                        }
-                    </select>
-                </div>
-                <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
-                    <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                    <option value={null} index={0} disabled hidden>Select Currency</option>
-                    {
-                            currency.length > 0 ? currency.map((item, index) => (
-                                <option key={index} value={item.currency.split(" ")[0]}>{item.currency}</option>
-                            )) : <option disabled>Loading</option>
-                        }
-                    </select>
+                        </div>
+                        
+                        </div>
+                    
+                    <div className="w-full h-0.5 my-3 bg-gray-300"></div>
+                
+                        <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen overflow-y-auto pb-52 md:pb-3">
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Company Name {
+                                    error.name && <p className="text-red-500 text-sm">*</p>
+                                }</label>
+                                <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                required onChange={(e) => setValues({...values, name: e.target.value})}/>
+                                {
+                                    error.name && <p className="text-red-500 text-sm">{error.name}</p>
+                                }
+                            </div>
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="address" className="mb-2 text-sm font-medium text-gray-900 flex">Company Address {
+                                    error.address && <p className="text-red-500 text-sm">*</p>
+                                }</label>
+                                <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                required onChange={(e) => setValues({...values, address: e.target.value})}/>
+                                {
+                                    error.address && <p className="text-red-500 text-sm">{error.address}</p>
+                                }
+                            </div>
+
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-900">Country</label>
+                                <select id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
+                                    <option value="0" key={0} disabled hidden>Select Country</option>
+                                    {
+                                        Country.length > 0 ? Country.map((item, index) => (
+                                            <option key={index} value={item.country}>{item.country}</option>
+                                        )) : <option disabled>Loading</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900">City</label>
+                                <select id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                    {
+                                        City.length > 0 ? City.map((item, index) => (
+                                            <option key={index} value={item}>{item}</option>
+                                        )) : <option disabled value={0} key={0} hidden>Please Select Country</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email{
+                                    error.email && <p className="text-red-500 text-sm">*</p>
+                                }</label>
+                                <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                {
+                                    error.email && <p className="text-red-500 text-sm">{error.email}</p>
+                                }
+                            </div>
+
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="contact" className="flex mb-2 text-sm font-medium text-gray-900 ">Contact {
+                                    error.contact && <p className="text-red-500 text-sm">*</p>
+                                }</label>
+                                <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                {
+                                    error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
+                                }
+                            </div>
+
+                            <div className="
+                            col-span-2">
+                                <div className="flex justify-between items-center">
+                                <div className="text-xl font-semibold text-blue-500 ">Format</div>
+                                <div className="flex items-center gap-1">
+                                    <input id="currencyposition" type="checkbox"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
+                                    <label htmlFor="currencyposition" className="w-full py-3 ms-2 text-sm    text-gray-900">Currency Position</label>
+                                </div>
+                                </div>
+                            <div className="w-full h-0.5 my-1 bg-gray-300"></div>
+                            </div>
+
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
+                                <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                    <option value={null} index={0} disabled hidden>Select Language</option>
+                                    <option value="en">English</option>
+                                    <option value="id">Indonesia</option>
+                                </select>
+                            </div>
+
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
+                                <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <option value={null} index={0} disabled hidden>Select Culture</option>
+                                    {
+                                        culture.length > 0 ? culture.map((item, index) => (
+                                            <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
+                                        )) : <option disabled>Loading</option>
+                                    }
+                                </select>
+                            </div>
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
+                                <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <option value={null} index={0} disabled hidden>Select Timezone</option>
+                                {
+                                        timezone.length > 0 ? timezone.map((item, index) => (
+                                            <option key={index} value={item.timezone}>{item.timezone}</option>
+                                        )) : <option disabled>Loading</option>
+                                    }
+                                </select>
+                            </div>
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
+                                <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <option value={null} index={0} disabled hidden>Select Currency</option>
+                                {
+                                        currency.length > 0 ? currency.map((item, index) => (
+                                            <option key={index} value={item.currency.split(" ")[0]}>{item.currency}</option>
+                                        )) : <option disabled>Loading</option>
+                                    }
+                                </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
         </>
     )
 }

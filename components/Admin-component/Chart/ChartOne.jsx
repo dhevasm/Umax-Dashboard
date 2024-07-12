@@ -1,68 +1,99 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const options = {
-  colors: ["#3C50E0", "#80CAEE"],
-  chart: {
-    fontFamily: "Satoshi, sans-serif",
-    type: "bar",
-    height: 335,
-    stacked: true,
-    toolbar: {
-      show: false,
+const ChartOne = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const theme = typeof window !== 'undefined' ? localStorage.getItem('color-theme') : 'light';
+
+  useEffect(() => {
+    if(theme === 'dark'){
+      setIsDarkMode(true);
+    } else {
+      setIsDarkMode(false);
+    }
+  }, [theme]);
+
+  const options = {
+    colors: ["#3C50E0", "#80CAEE"],
+    chart: {
+      fontFamily: "Satoshi, sans-serif",
+      type: "bar",
+      height: 335,
+      stacked: true,
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+      background: isDarkMode ? "#1e293b" : "#ffffff",
+      foreColor: isDarkMode ? "#FFFFFF" : "#000000",
     },
-    zoom: {
-      enabled: false,
-    },
-  },
-  responsive: [
-    {
-      breakpoint: 1536,
-      options: {
-        plotOptions: {
-          bar: {
-            borderRadius: 0,
-            columnWidth: "25%",
+    responsive: [
+      {
+        breakpoint: 1536,
+        options: {
+          plotOptions: {
+            bar: {
+              borderRadius: 0,
+              columnWidth: "25%",
+            },
           },
         },
       },
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        borderRadius: 0,
+        columnWidth: "25%",
+        borderRadiusApplication: "end",
+        borderRadiusWhenStacked: "last",
+      },
     },
-  ],
-  plotOptions: {
-    bar: {
-      horizontal: false,
-      borderRadius: 0,
-      columnWidth: "25%",
-      borderRadiusApplication: "end",
-      borderRadiusWhenStacked: "last",
+    dataLabels: {
+      enabled: false,
     },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  xaxis: {
-    categories: ["M", "T", "W", "T", "F", "S", "S"],
-  },
-  legend: {
-    position: "top",
-    horizontalAlign: "left",
-    fontFamily: "Satoshi",
-    fontWeight: 500,
-    fontSize: "14px",
-    markers: {
-      radius: 99,
+    xaxis: {
+      categories: ["M", "T", "W", "T", "F", "S", "S"],
+      labels: {
+        style: {
+          colors: isDarkMode ? '#FFFFFF' : '#000000',
+        },
+      },
     },
-  },
-  fill: {
-    opacity: 1,
-  },
-};
+    yaxis: {
+      labels: {
+        style: {
+          colors: isDarkMode ? '#FFFFFF' : '#000000',
+        },
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "left",
+      fontFamily: "Satoshi",
+      fontWeight: 500,
+      fontSize: "14px",
+      markers: {
+        radius: 99,
+      },
+      labels: {
+        colors: isDarkMode ? '#FFFFFF' : '#000000',
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    theme: {
+      mode: isDarkMode ? 'dark' : 'light',
+    },
+  };
 
-const ChartOne = () => {
   const series = [
     {
       name: "Sales",
@@ -75,10 +106,10 @@ const ChartOne = () => {
   ];
 
   return (
-    <div className="col-span-12 rounded-sm bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
+    <div className="col-span-12 rounded-sm bg-white dark:bg-slate-800 p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
-          <h4 className="text-xl font-semibold text-black">
+          <h4 className="text-xl font-semibold text-black dark:text-white">
             Profit this week
           </h4>
         </div>
@@ -87,12 +118,12 @@ const ChartOne = () => {
             <select
               name="#"
               id="#"
-              className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
+              className="relative z-20 inline-flex appearance-none dark:text-white bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="dark:bg-boxdark dark:text-white">
                 This Week
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="dark:bg-boxdark dark:text-white">
                 Last Week
               </option>
             </select>

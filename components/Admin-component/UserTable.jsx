@@ -409,8 +409,8 @@ export default function UserTable() {
         <>
             <div className="w-full dark:text-white">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-                    <h1 className="text-2xl font-bold flex gap-2 dark:text-white"> <RiUser3Line/> USERS</h1>
-                    <p><span className="hover:cursor-pointer hover:text-blue-400 hover:underline" onClick={() => setChangeTable("dashboard")}>Dashboard</span> / Users</p>
+                    <h1 className="text-2xl font-bold flex dark:text-white gap-2"> <RiUser3Line/> USERS</h1>
+                    <p className="dark:text-white"><span className="hover:cursor-pointer hover:text-blue-400 dark:text-white hover:underline" onClick={() => setChangeTable("dashboard")}>Dashboard</span> / Users</p>
                 </div>
 
                 {/* {'Statistic Card'} */}
@@ -428,7 +428,7 @@ export default function UserTable() {
                 {/* {'Statistic Card end'} */}
                 
                 {/* Main card  */}
-                <div className="w-full h-fit bg-[#f1f5f9] mb-5 rounded-md shadow-md">
+                <div className="w-full h-fit mb-5 rounded-md shadow-md">
 
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
