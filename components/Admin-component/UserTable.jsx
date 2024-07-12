@@ -528,7 +528,7 @@ export default function UserTable() {
                                                     <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a>
                                                 </td>
                                                 <td className="px-6 border py-3 font-medium whitespace-nowrap">
-                                                    <a className="text-blue-500" href={`tel:${user.company_name}`}>{String(user.company_name)}</a>
+                                                {String(user.company_name)}
                                                 </td>
                                             </tr>
                                         )).slice(firstPage, lastPage) : (

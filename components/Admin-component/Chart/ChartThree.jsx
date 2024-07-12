@@ -10,7 +10,7 @@ const options = {
     type: "donut",
   },
   colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF"],
-  labels: ["Desktop", "Tablet", "Mobile", "Unknown"],
+  labels: ["Google Ads", "Meta Ads", "Tiktok Ads", "Unknown"],
   legend: {
     show: false,
     position: "bottom",
@@ -91,6 +91,7 @@ const ChartThree = () => {
   }
   )
   setSeries([chartData.google, chartData.meta, chartData.tiktok, 0])
+  console.log(chartData)
 }, [campaigns])
 
   const [series, setSeries] = useState([65, 34, 12, 56]);

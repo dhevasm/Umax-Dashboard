@@ -502,7 +502,7 @@ export default function CampaignTable() {
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-                    <h1 className="text-2xl font-bold uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
+                    <h1 className="text-2xl dark:text-white font-bold uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
                     <p><a className="hover:cursor-pointer hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
                 </div>
 
