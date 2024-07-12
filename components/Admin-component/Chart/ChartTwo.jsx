@@ -130,14 +130,14 @@ const ChartTwo = () => {
   return (
     <div className="col-span-12 rounded-sm bg-white px-5 pb-5 pt-7.5 shadow-default">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-        <div className="flex w-full flex-row gap-3 sm:gap-5">
+        <div className="flex w-full flex-col md:flex-row gap-3 sm:gap-5">
           <div className="flex min-w-47.5">
             <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary">Total Revenue</p>
-              <p className="text-sm text-nowrap font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-primary text-sm md:text-md">Total Revenue</p>
+              <p className="text-xs md:text-sm text-nowrap font-medium">12.04.2022 - 12.05.2022</p>
             </div>
           </div>
           <div className="flex min-w-47.5">
@@ -145,8 +145,8 @@ const ChartTwo = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-secondary">Total Sales</p>
-              <p className="text-sm text-nowrap font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-secondary text-sm md:text-md">Total Sales</p>
+              <p className="text-xs md:text-sm text-nowrap font-medium">12.04.2022 - 12.05.2022</p>
             </div>
           </div>
         </div>

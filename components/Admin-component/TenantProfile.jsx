@@ -27,7 +27,7 @@ export default function TenantProfile({tenant_id}){
     const [DialCountry, setDialCountry] = useState([])
 
     async function getTenant(){
-        const response = await axios.get(`https://umaxxnew-1-d6861606.deta.app/tenant-by-id?tenant_id=${tenant_id}`, {
+        const response = await axios.get(`https://umaxxxxx-1-r8435045.deta.app/tenant-by-id?tenant_id=${tenant_id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
             }

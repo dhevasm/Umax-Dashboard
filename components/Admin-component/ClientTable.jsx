@@ -35,7 +35,7 @@ export default function ClientTable() {
         setShowPassword(!showPassword)
     }
 
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -66,6 +66,9 @@ export default function ClientTable() {
         }
         if(values.contact == ''){
             errors.contact = 'Contact is required'
+        }
+        if(!values.email.includes("@")){
+            errors.email = "Email must contain @"
         }
         if(values.email == ''){
             errors.email = 'Email is required'
@@ -158,7 +161,7 @@ export default function ClientTable() {
     const deleteclient = async (client_id) => {
         closeModal()
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/client-delete?client_id=${client_id}`, {
+            const response = await axios.delete(`https://umaxxxxx-1-r8435045.deta.app/client-delete?client_id=${client_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -248,7 +251,7 @@ export default function ClientTable() {
     }
 
     async function getclient(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/client-by-tenant', {
+        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/client-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -291,9 +294,9 @@ export default function ClientTable() {
             let url = ""
 
             if(userData.roles == "sadmin"){
-                url = `https://umaxxnew-1-d6861606.deta.app/client-create?tenantId=${tenant_id}`
+                url = `https://umaxxxxx-1-r8435045.deta.app/client-create?tenantId=${tenant_id}`
             }else if(userData.roles == "admin"){
-                url = `https://umaxxnew-1-d6861606.deta.app/client-create`
+                url = `https://umaxxxxx-1-r8435045.deta.app/client-create`
             }
 
             const response = await axios.post(url, formData, {
@@ -344,7 +347,7 @@ export default function ClientTable() {
                 formData.append('contact', contact);
                 formData.append('status', status);  
         
-                const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/client-edit?client_id=${EditclientId}`, formData, {
+                const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/client-edit?client_id=${EditclientId}`, formData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                     }
@@ -379,20 +382,20 @@ export default function ClientTable() {
     const [tenants, setTenants] = useState([])
 
     async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/timezone').then((response) => {
             setTimezone(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/currency').then((response) => {
             setCurrency(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/culture').then((response) => {
             setCulture(response.data)
         })
 
         if(userData.roles == "sadmin"){
-            await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+            await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
                 headers : {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -508,10 +511,15 @@ export default function ClientTable() {
 
                 {/* {'Statistic Card'} */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                    <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Users" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
+                    {
+                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
+                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
+                        <CountCard title="Tenants" value={<div>Loading...</div>} />
+                    }
+                    
+                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
+                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
+                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
                 </div>
                 {/* {'Statistic Card end'} */}
 
@@ -593,7 +601,7 @@ export default function ClientTable() {
                                     {
                                         filteredData.length > 0 ? filteredData.map((client, index) => {
                                             return (
-                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
+                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", client._id)}>
                                                     <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
                                                     <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
                                                     <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{client.address}</td>
@@ -739,7 +747,7 @@ export default function ClientTable() {
                                         error.passwordverify && <p className="text-red-500 text-sm">{error.passwordverify}</p>
                                     }
                                 </div>
-                                <div className="col-span-1" ref={tenantInput}>
+                                <div className="col-span-2" ref={tenantInput}>
                                     <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant <span className="text-red-500">*</span> </label>
                                     <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                         {

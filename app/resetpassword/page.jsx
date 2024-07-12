@@ -31,7 +31,7 @@ const Page = () => {
         },
         onSubmit: (values) => {
             // const { Token } = response.Data;
-            fetch(`https://umaxxnew-1-d6861606.deta.app/reset-password?`, {
+            fetch(`https://umaxxxxx-1-r8435045.deta.app/reset-password?`, {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',

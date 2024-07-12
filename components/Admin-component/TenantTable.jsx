@@ -26,7 +26,7 @@ export default function TenantTable() {
     const [EditTenantId, setEditTenantId] = useState(null)
     const [searchTerm, setSearchTerm] = useState("");
 
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData} = useContext(AdminDashboardContext)
+    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -58,8 +58,8 @@ export default function TenantTable() {
                 document.getElementById('currency').value = filteredTenant[0].currency
                 document.getElementById('input_timezone').value = filteredTenant[0].timezone_name
                 document.getElementById('currencyposition').checked = filteredTenant[0].currency_position
-                setValues({name: filteredTenant[0].company, address: filteredTenant[0].address, contact: filteredTenant[0].contact, email: filteredTenant[0].email})
-                setError({name: '', address: '', contact: '', email: ''})
+                setValues({name: filteredTenant[0].company, address: filteredTenant[0].address, contact: filteredTenant[0].contact, email: filteredTenant[0].email, language: filteredTenant[0].language, culture: filteredTenant[0].culture, timezone: filteredTenant[0].timezone_name, currency: filteredTenant[0].currency, country:filteredTenant[0].country, city:filteredTenant[0].city})
+                setError({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country :'', city:''})
                 document.getElementById('country').value = filteredTenant[0].address.split(" - ")[2]
                 handleCityList(filteredTenant[0].address.split(" - ")[2])
                 setTimeout(() => {
@@ -71,8 +71,8 @@ export default function TenantTable() {
                 Swal.fire("Tenant not found");
             }
         }else if(mode == "Create") {
-            setValues({name: '', address: '', contact: '', email: ''})
-            setError({name: '', address: '', contact: '', email: ''})
+            setValues({name: '', address: '', contact: '', email: '', language:'', culture: '', timezone: '', currency: '', country:'', city:''})
+            setError({name: '', address: '', contact: '', email: '', language:'', culture: '', timezone: '', currency: '', country:'', city:''})
             deleteButton.current.classList.add("hidden")
             document.getElementById('name').value = null
             document.getElementById('address').value = null
@@ -86,12 +86,18 @@ export default function TenantTable() {
     }
 
     // Validasi Form 
-    const [values, setValues] = useState({name: '', address: '', contact: '', email: ''})
+    const [values, setValues] = useState({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country:'', city:''})
     const [error, setError] = useState({
         name: '',
         address: '',
         contact: '',
         email: '',
+        language:'',
+        culture : '',
+        timezone: '',
+        currency : '',
+        country : '', 
+        city : '',
     })
     const [isvalid, setIsvalid] = useState(false)
 
@@ -108,6 +114,24 @@ export default function TenantTable() {
         }
         if(values.email == ''){
             errors.email = 'Email is required'
+        }
+        if(values.language == ""){
+            errors.language = "Language is required"
+        }
+        if(values.culture == ""){   
+            errors.culture = "Culture is required"
+        }
+        if(values.timezone == ""){
+            errors.timezone = "Timezone is required"
+        }
+        if(values.currency == ""){
+            errors.currency = "Currency is required"
+        }
+        if(values.country == ""){
+            errors.country = "Country is required"
+        }
+        if(values.city == ""){
+            errors.city == "City is required"
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -145,7 +169,7 @@ export default function TenantTable() {
         // console.log(tenant_id)
         closeModal()
         try {
-            const response = await axios.delete(`https://umaxxnew-1-d6861606.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
+            const response = await axios.delete(`https://umaxxxxx-1-r8435045.deta.app/tenant-delete?tenant_id=${tenant_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -234,7 +258,7 @@ export default function TenantTable() {
     }
 
     async function getTenants(){
-        const response = await axios.get('https://umaxxnew-1-d6861606.deta.app/tenant-get-all', {
+        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -278,7 +302,7 @@ export default function TenantTable() {
             formData.append('input_timezone', timezone);
             formData.append('currency_position', currencyposition);
     
-            const response = await axios.post('https://umaxxnew-1-d6861606.deta.app/tenant-create', formData, {
+            const response = await axios.post('https://umaxxxxx-1-r8435045.deta.app/tenant-create', formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -330,7 +354,7 @@ export default function TenantTable() {
             formData.append('input_timezone', timezone);
             formData.append('currency_position', currencyposition);
     
-            const response = await axios.put(`https://umaxxnew-1-d6861606.deta.app/tenant-edit?tenantId=${EditTenantId}`, formData, {
+            const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/tenant-edit?tenantId=${EditTenantId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
@@ -355,15 +379,15 @@ export default function TenantTable() {
     }
 
     async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/timezone').then((response) => {
             setTimezone(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/currency').then((response) => {
             setCurrency(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        await axios.get('https://umaxxxxx-1-r8435045.deta.app/culture').then((response) => {
             setCulture(response.data)
         })
 
@@ -379,6 +403,7 @@ export default function TenantTable() {
     }
 
     async function handleCityList(countryname){
+        setValues({...values, country: countryname})
         let citylist = []
         Country.map((item) => {
             if(item.country == countryname){
@@ -508,10 +533,15 @@ export default function TenantTable() {
 
                 {/* {'Statistic Card'} */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                    <CountCard title="Tenants" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Users" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Campaigns" value="0" handleClick={() => alert('User')} />
-                    <CountCard title="Clients" value="0" handleClick={() => alert('User')} />
+                    {
+                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
+                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
+                        <CountCard title="Tenants" value={<div>Loading...</div>} />
+                    }
+                    
+                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
+                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
+                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
                 </div>
                 {/* {'Statistic Card end'} */}
 
@@ -705,9 +735,11 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-900">Country</label>
-                                    <select id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
-                                        <option value="0" key={0} disabled hidden>Select Country</option>
+                                    <label htmlFor="country" className="flex mb-2 text-sm font-medium text-gray-900">Country {
+                                            error.country && <p className="text-red-500 text-sm">*</p>
+                                    }</label>
+                                    <select id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => handleCityList(e.target.value)}  >
+                                        <option value="" disabled hidden>Select Country</option>
                                         {
                                             Country.length > 0 ? Country.map((item, index) => (
                                                 <option key={index} value={item.country}>{item.country}</option>
@@ -717,12 +749,13 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900">City</label>
-                                    <select id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                    <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900">City {
+                                        error.city && <p className="text-red-500 text-sm">*</p>}</label>
+                                    <select id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, city: e.target.value})}>
                                         {
                                             City.length > 0 ? City.map((item, index) => (
                                                 <option key={index} value={item}>{item}</option>
-                                            )) : <option disabled value={0} key={0} hidden>Please Select Country</option>
+                                            )) : <option  value="" hidden disabled>Please Select Country</option>
                                         }
                                     </select>
                                 </div>
@@ -754,46 +787,62 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
-                                    <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                                        <option value={null} index={0} disabled hidden>Select Language</option>
+                                    <label htmlFor="language" className="flex mb-2 text-sm font-medium text-gray-900">Language {
+                                        error.language && <p className="text-red-500 text-sm">*</p>}</label>
+                                    <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, language: e.target.value})}>
+                                        <option value="" disabled hidden>Select Language</option>
                                         <option value="en">English</option>
                                         <option value="id">Indonesia</option>
                                     </select>
+                                    {/* {
+                                        error.language && <p className="text-red-500 text-xs">{error.language}</p>
+                                    } */}
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
-                                    <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                                    <option value={null} index={0} disabled hidden>Select Culture</option>
+                                    <label htmlFor="culture" className="flex mb-2xs font-medium text-gray-900">Culture {
+                                        error.culture && <p className="text-red-500 text-sm">*</p>}</label>
+                                    <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, culture: e.target.value})}>
+                                    <option value="" disabled hidden>Select Culture</option>
                                         {
                                             culture.length > 0 ? culture.map((item, index) => (
                                                 <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
+                                    {/* {
+                                        error.culture && <p className="text-red-500 text-xs">{error.culture}</p>
+                                    } */}
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
-                                    <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                                    <option value={null} index={0} disabled hidden>Select Timezone</option>
+                                    <label htmlFor="input_timezone" className="flex mb-2 text-sm font-medium text-gray-900">Time Zone {
+                                        error.timezone && <p className="text-red-500 text-sm">*</p>}</label>
+                                    <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, timezone: e.target.value})}>
+                                    <option value="" index={0} disabled hidden>Select Timezone</option>
                                     {
                                             timezone.length > 0 ? timezone.map((item, index) => (
                                                 <option key={index} value={item.timezone}>{item.timezone}</option>
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
+                                    {/* {
+                                        error.timezone && <p className="text-red-500 text-xs">{error.timezone}</p>
+                                    } */}
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
-                                    <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
-                                    <option value={null} index={0} disabled hidden>Select Currency</option>
+                                    <label htmlFor="currency" className="flex mb-2 text-sm font-medium text-gray-900">Currency {
+                                        error.currency && <p className="text-red-500 text-sm">*</p>}</label>
+                                    <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, currency: e.target.value})}>
+                                    <option value="" disabled hidden>Select Currency</option>
                                     {
                                             currency.length > 0 ? currency.map((item, index) => (
                                                 <option key={index} value={item.currency.split(" ")[0]}>{item.currency}</option>
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
+                                    {/* {
+                                        error.currency && <p className="text-red-500 text-xs">{error.currency}</p>
+                                    } */}
                                     </div>
                                 </div>
                             </div>

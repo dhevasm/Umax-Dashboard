@@ -17,7 +17,7 @@ const ForgotPassword = () => {
         onSubmit: async (values) => {
             try {
                 const response = await fetch(
-                    `https://umaxxnew-1-d6861606.deta.app/send-password-reset-email`,
+                    `https://umaxxxxx-1-r8435045.deta.app/send-password-reset-email`,
                     {
                         method: 'POST',
                         headers: {

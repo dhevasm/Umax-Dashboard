@@ -114,7 +114,7 @@ const ChartOne = () => {
           </h4>
         </div>
         <div>
-          <div className="relative z-20 inline-block">
+          <div className="relative z-10 inline-block">
             <select
               name="#"
               id="#"

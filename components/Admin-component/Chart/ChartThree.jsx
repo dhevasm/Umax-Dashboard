@@ -1,5 +1,8 @@
+'use client'
 import React from "react";
 import ReactApexChart from "react-apexcharts";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const options = {
   chart: {
@@ -7,7 +10,7 @@ const options = {
     type: "donut",
   },
   colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF"],
-  labels: ["Desktop", "Tablet", "Mobile", "Unknown"],
+  labels: ["Google Ads", "Meta Ads", "Tiktok Ads", "Unknown"],
   legend: {
     show: false,
     position: "bottom",
@@ -44,7 +47,54 @@ const options = {
 };
 
 const ChartThree = () => {
-  const series = [65, 34, 12, 56];
+
+  const [campaigns, setCampaigns] = useState([])  
+  const [chartData, setChartData] = useState({
+    google : 0,
+    meta : 0,
+    tiktok : 0,
+  })
+
+  async function getCampaigns() { 
+    const res = await axios.get("https://umaxxxxx-1-r8435045.deta.app/campaign-by-tenant", {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      },
+    })
+    const data = res.data.Data
+    setCampaigns(data)
+  }
+
+  useEffect(() => {
+    getCampaigns()
+  }, [])
+
+  useEffect(() => {
+    campaigns.map((campaign) => {
+      if(campaign.platform == 1){
+        setChartData({
+          ...chartData,
+          google : chartData.google + 1
+        })
+      }else if(campaign.platform == 2){
+        setChartData({
+          ...chartData,
+          meta : chartData.meta + 1
+        })
+    
+      }else if(campaign.platform == 3){
+        setChartData({
+          ...chartData,
+          tiktok : chartData.tiktok + 1
+        })
+      }
+  }
+  )
+  setSeries([chartData.google, chartData.meta, chartData.tiktok, 0])
+  console.log(chartData)
+}, [campaigns])
+
+  const [series, setSeries] = useState([65, 34, 12, 56]);
 
   return (
     <div className="col-span-12 rounded-sm bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5">
