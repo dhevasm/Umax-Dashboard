@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation'
 

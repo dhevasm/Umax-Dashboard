@@ -5,7 +5,6 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
 
 const Page = () => {
   const [error, setError] = useState();

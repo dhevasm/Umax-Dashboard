@@ -4,10 +4,10 @@ import React, { Suspense, useEffect } from 'react'
 
 import Navbar from "@/components/Navbar"
 import dynamic from "next/dynamic";
-const ClientTable = dynamic(() => import('@/components/Table/ClientTable'), { ssr: false });
 import TableLoading from '@/components/Loading/TableLoading'
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+const ClientTable = dynamic(() => import('@/components/Table/ClientTable'), { ssr: false });
 
 const Page = () => {
 

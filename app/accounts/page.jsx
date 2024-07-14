@@ -1,17 +1,12 @@
 "use client";
 
 import React, { Suspense, useEffect } from "react";
-
 import Navbar from "@/components/Navbar";
 import dynamic from "next/dynamic";
-
-const AccountTable = dynamic(() => import("@/components/Table/AccountTable"), {
-  ssr: false,
-});
-
 import TableLoading from "@/components/Loading/TableLoading";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+const AccountTable = dynamic(() => import("@/components/Table/AccountTable"), {ssr: false,});
 
 const Page = () => {
   const router = useRouter();

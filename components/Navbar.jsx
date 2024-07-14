@@ -46,7 +46,6 @@ export default function Navbar() {
     const checkIsMobile = () => {
         if (typeof window !== 'undefined') {
             if (window.innerWidth <= 640) {
-                hideHandle()
                 navbarBrand.current.classList.add("hidden")
             } 
         }
@@ -131,7 +130,7 @@ export default function Navbar() {
             <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <img src="assets/logo.png" alt="Logo" className="ms-5 w-[100px]" />
+                    <img src="assets/logo.png" alt="Logo" className="ms-5 w-[150px]" />
 
                     {/* Nav Links */}
                     <div>

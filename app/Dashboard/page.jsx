@@ -1,8 +1,6 @@
 'use client'
 
-import axios from "axios"
-import { useState, useEffect, useRef, createContext, useMemo, use } from "react"
-import { Suspense } from "react"
+import { useState, useEffect, useRef, createContext } from "react"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 import dynamic from "next/dynamic"
@@ -30,10 +28,6 @@ function Dashboard() {
     const [name, setName] = useState('');
     const [platform, setPlatform] = useState('');
     const [SidebarHide, setSidebarHide] = useState(false)
-    const sidebarContext = (() => ({
-        SidebarHide,
-        setSidebarHide,
-    }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {
       const handleResize = () => {
@@ -91,11 +85,8 @@ function Dashboard() {
     return (
         <>
         {/* Header */}
-        
-        {/* <SidebarContext.Provider value={sidebarContext}> */}
-            <Navbar />
-            <Sidebar onCampaignIDChange={handleCampaignIDChange} sidebarHide={SidebarHide} setSidebarHide={setSidebarHide}/>
-        {/* </SidebarContext.Provider> */}
+        <Navbar />
+        <Sidebar onCampaignIDChange={handleCampaignIDChange} sidebarHide={SidebarHide} setSidebarHide={setSidebarHide}/>
 
         {/* Dashboard Container */}
         <div className="flex w-full min-h-full justify-end items-center bg-gray-100 dark:bg-slate-900">

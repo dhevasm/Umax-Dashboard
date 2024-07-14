@@ -20,7 +20,7 @@ const AccountTable = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const dataPerPage = 10;
+    const [dataPerPage, setDataPerPage] = useState(10);
     const tableRef = useRef(null);
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -209,6 +209,10 @@ const AccountTable = () => {
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
+
+    const handleSortChange = (event) => {
+        setDataPerPage(event.target.value);
+    }
 
     const filteredData = tableData.filter((data) => {
         const client_name = localStorage.getItem("name");
@@ -426,6 +430,14 @@ const AccountTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
+                        <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200"
+                            value={dataPerPage}
+                            onChange={handleSortChange}
+                        >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
                         <button className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300" onClick={() => ConfirmationModal('excel')}>
                             <RiFileExcel2Line className="font-medium text-lg" />
                         </button>
@@ -436,7 +448,7 @@ const AccountTable = () => {
                 </div>
                 <div className='overflow-x-auto'>
                     <table className='w-full border-collapse'>
-                        <thead className='bg-white dark:bg-gray-800'>
+                        <thead className='bg-white dark:bg-blue-700'>
                             <tr className='text-left'>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>No.</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Name</th>

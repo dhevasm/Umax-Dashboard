@@ -10,12 +10,11 @@ import { useDownloadExcel } from "react-export-table-to-excel";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
 import Swal from "sweetalert2";
-import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from 'react-icons/bi';
 
 export default function History({ id }) {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const dataPerPage = 10;
+    const [dataPerPage, setDataPerPage] = useState(10);
     const tableRef = useRef(null);
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
     const date = new Date();
@@ -140,6 +139,10 @@ export default function History({ id }) {
         }
     }
 
+    const handleSortChange = (event) => {
+        setDataPerPage(event.target.value);
+    }
+
     const totalPages = Math.ceil(data.length / dataPerPage);
 
     // Function to change current page
@@ -178,27 +181,6 @@ export default function History({ id }) {
                 {'<'}
             </button>
         );
-    
-        // Render page buttons
-        // for (let i = 1; i <= totalPages; i++) {
-        //     // Show only maxButtons buttons around the current page
-        //     if (
-        //         i >= currentPage - Math.floor(maxButtons / 2) &&
-        //         i <= currentPage + Math.floor(maxButtons / 2)
-        //     ) {
-        //         pageButtons.push(
-        //             <button
-        //                 key={i}
-        //                 className={`px-3 py-1 ${
-        //                     i === currentPage ? "font-bold" : ""
-        //                 } rounded-md`}
-        //                 onClick={() => goToPage(i)}
-        //             >
-        //                 {i}
-        //             </button>
-        //         );
-        //     }
-        // }
     
         // Info page
         pageButtons.push(
@@ -258,6 +240,14 @@ export default function History({ id }) {
                     ) : (
                         <>
                             <div className="w-full flex gap-3 justify-end pb-5">
+                                <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-800 dark:text-gray-200"
+                                    value={dataPerPage}
+                                    onChange={handleSortChange}
+                                >
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                </select>
                                 <button className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2">
                                     <RiFileExcel2Line className="relative font-medium text-lg" onClick={() => ConfirmationModal('excel')} />
                                 </button>
@@ -298,7 +288,7 @@ export default function History({ id }) {
                                         {currentHistory.length > 0 ? (
                                             currentHistory.map((data, index) => (
                                                 <tr key={index} className='border text-center dark:border-gray-600'>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{index + 1}</td>
+                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{index + 1}.</td>
                                                     <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.timestamp_update}</td>
                                                     <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.amountspent}</td>
                                                     <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.reach}</td>

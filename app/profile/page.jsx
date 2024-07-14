@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
-import Link from 'next/link';
 import { CiGlobe, CiEdit } from 'react-icons/ci';
 import axios from 'axios';
 import { MdOutlinePermContactCalendar, MdOutlineAccessTime, MdOutlineEmail } from 'react-icons/md';
@@ -13,7 +12,6 @@ import { FaUsersCog } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import dynamic from 'next/dynamic';
-import LoadingCircle from '@/components/Loading/LoadingCircle';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState({});

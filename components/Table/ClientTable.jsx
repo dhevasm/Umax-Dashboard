@@ -21,7 +21,7 @@ const ClientTable = () => {
     const [isWideScreen, setIsWideScreen] = useState(true);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const dataPerPage = 10;
+    const [dataPerPage, setDataPerPage] = useState(10);
     const [selectedClient, setSelectedClient] = useState(null);
     const tableRef = useRef(null);
     const date = new Date();
@@ -199,6 +199,10 @@ const ClientTable = () => {
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+    }
+
+    const handleSortChange = (event) => {
+        setDataPerPage(event.target.value);
     }
 
     useEffect(() => {
@@ -385,14 +389,14 @@ const ClientTable = () => {
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
                     <div className={`mb-4 flex flex-row items-start gap-4`}>
                         <input
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] text-gray-400 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300`}
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] text-gray-400 py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
                             type="text"
                             placeholder="Search"
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />
                         <select 
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300`} 
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 py-2 bg-white dark:bg-gray-700 dark:text-gray-300`} 
                             value={selectedStatus} 
                             onChange={handleStatusChange}
                         >
@@ -402,6 +406,14 @@ const ClientTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
+                        <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200"
+                            value={dataPerPage}
+                            onChange={handleSortChange}
+                        >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
                         <button className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300" onClick={() => ConfirmationModal('excel')}>
                             <RiFileExcel2Line className="relative font-medium text-lg" />
                         </button>
@@ -412,7 +424,7 @@ const ClientTable = () => {
                 </div>
                 <div className='overflow-x-auto'>
                     <table className='w-full border dark:border-gray-600'>
-                        <thead className='bg-white dark:bg-gray-800'>
+                        <thead className='bg-white dark:bg-blue-700'>
                             <tr className='text-left'>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>No.</th>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>Name</th>
@@ -426,7 +438,7 @@ const ClientTable = () => {
                         <tbody>
                             {currentClients.length > 0 ? (
                                 currentClients.map((data, index) => (
-                                    <tr key={index} className='text-center dark:bg-gray-900'>
+                                    <tr key={index} className='text-center'>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{index + 1}.</td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
                                             <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>

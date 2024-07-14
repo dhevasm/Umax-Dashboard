@@ -24,7 +24,7 @@ const CampaignTable = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedCampaign, setSelectedCampaign] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const dataPerPage = 10;
+    const [dataPerPage, setDataPerPage] = useState(10);
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -253,6 +253,10 @@ const CampaignTable = () => {
         setSearchTerm(event.target.value);
     };
 
+    const handleSortChange = (event) => {
+        setDataPerPage(event.target.value);
+    }
+
     const filteredData = tableData.filter((data) => {
         const client_name = localStorage.getItem("name");
         const role = localStorage.getItem("roles");
@@ -438,6 +442,14 @@ const CampaignTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
+                        <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200"
+                            value={dataPerPage}
+                            onChange={handleSortChange}
+                        >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
                         <button className="float-right border border-gray-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
                             <RiFileExcel2Line className="relative font-medium text-lg text-gray-800 dark:text-gray-200" />
                         </button>
@@ -448,7 +460,7 @@ const CampaignTable = () => {
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-white dark:bg-gray-700">
+                        <thead className="bg-white dark:bg-blue-700">
                             <tr className="text-left">
                                 <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">No.</th>
                                 <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Name</th>
@@ -506,9 +518,10 @@ const CampaignTable = () => {
                             )}
                         </tbody>
                     </table>
-                    <div className="flex justify-end mt-4">
+                    <div className="flex justify-end items-center">
                         {renderPagination()}
                     </div>
+
                     <table className="w-full border hidden" ref={tableRef}>
                         <thead className="bg-white dark:bg-gray-700">
                             <tr className="text-left">

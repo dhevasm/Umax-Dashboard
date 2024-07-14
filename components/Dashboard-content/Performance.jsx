@@ -7,10 +7,10 @@ import axios from "axios";
 import SuggestionLoding from "../Loading/SuggestionLoding";
 import InfoCardLoading from "../Loading/InfoCardLoading";
 import Chart from "./Chart";
+import Swal from "sweetalert2";
 
 export default function Performance({ id }) {
     // Variabel for Metrics
-    const [metrics, setMetrics] = useState([])
     const [rar, setRar] = useState({});
     const [oclp, setOclp] = useState({})
     const [cpr, setCpr] = useState({})
