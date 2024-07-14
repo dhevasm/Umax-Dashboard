@@ -103,6 +103,9 @@ export default function TenantProfile({tenant_id}){
         if(values.contact == ''){
             errors.contact = 'Contact is required'
         }
+        if(!values.email.includes('@')){
+            errors.email = "Email must contain '@'"
+        }
         if(values.email == ''){
             errors.email = 'Email is required'
         }
@@ -298,12 +301,12 @@ export default function TenantProfile({tenant_id}){
             </div>
 
              {/* <!-- Main modal --> */}
-             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none0 bg-opacity-75 z-50">
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                 {/* <!-- Modal content --> */}
                 <div className="relative bg-white rounded-lg shadow">
                     {/* <!-- Modal header --> */}
-                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white ">
+                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white ">
                         <h3 className="text-xl font-semibold">
                             {`${modeModal} Tenant`}
                         </h3>
@@ -313,7 +316,7 @@ export default function TenantProfile({tenant_id}){
                         </button>
                     </div>
                     {/* <!-- Modal body --> */}
-                    <div className="p-4 md:p-5">
+                    <div className="p-4 md:p-5 dark:bg-slate-900 dark:text-white">
                         <div className="flex justify-between items-center">
                         <div className="text-xl font-semibold text-blue-500">General</div>
 
@@ -329,20 +332,20 @@ export default function TenantProfile({tenant_id}){
                 
                         <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen overflow-y-auto pb-52 md:pb-3">
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="name" className="mb-2 text-sm font-medium text-gray-900 flex">Company Name {
+                                <label htmlFor="name" className="mb-2 text-sm font-medium  flex">Company Name {
                                     error.name && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
                                 required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                 {
                                     error.name && <p className="text-red-500 text-sm">{error.name}</p>
                                 }
                             </div>
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="address" className="mb-2 text-sm font-medium text-gray-900 flex">Company Address {
+                                <label htmlFor="address" className="mb-2 text-sm font-medium  flex">Company Address {
                                     error.address && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
                                 required onChange={(e) => setValues({...values, address: e.target.value})}/>
                                 {
                                     error.address && <p className="text-red-500 text-sm">{error.address}</p>
@@ -350,8 +353,8 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-900">Country</label>
-                                <select id="country" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
+                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">Country</label>
+                                <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
                                     <option value="0" key={0} disabled hidden>Select Country</option>
                                     {
                                         Country.length > 0 ? Country.map((item, index) => (
@@ -362,8 +365,8 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900">City</label>
-                                <select id="city" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">City</label>
+                                <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                     {
                                         City.length > 0 ? City.map((item, index) => (
                                             <option key={index} value={item}>{item}</option>
@@ -373,20 +376,20 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email{
+                                <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">Email{
                                     error.email && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                 {
                                     error.email && <p className="text-red-500 text-sm">{error.email}</p>
                                 }
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="contact" className="flex mb-2 text-sm font-medium text-gray-900 ">Contact {
+                                <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">Contact {
                                     error.contact && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                 {
                                     error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
                                 }
@@ -398,15 +401,15 @@ export default function TenantProfile({tenant_id}){
                                 <div className="text-xl font-semibold text-blue-500 ">Format</div>
                                 <div className="flex items-center gap-1">
                                     <input id="currencyposition" type="checkbox"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                    <label htmlFor="currencyposition" className="w-full py-3 ms-2 text-sm    text-gray-900">Currency Position</label>
+                                    <label htmlFor="currencyposition" className="w-full py-3 ms-2 text-sm    ">Currency Position</label>
                                 </div>
                                 </div>
                             <div className="w-full h-0.5 my-1 bg-gray-300"></div>
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="language" className="block mb-2 text-sm font-medium text-gray-900">Language</label>
-                                <select id="language" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <label htmlFor="language" className="block mb-2 text-sm font-medium ">Language</label>
+                                <select id="language" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                     <option value={null} index={0} disabled hidden>Select Language</option>
                                     <option value="en">English</option>
                                     <option value="id">Indonesia</option>
@@ -414,8 +417,8 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="culture" className="block mb-2 text-sm font-medium text-gray-900">Culture</label>
-                                <select id="culture" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <label htmlFor="culture" className="block mb-2 text-sm font-medium ">Culture</label>
+                                <select id="culture" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Culture</option>
                                     {
                                         culture.length > 0 ? culture.map((item, index) => (
@@ -425,8 +428,8 @@ export default function TenantProfile({tenant_id}){
                                 </select>
                             </div>
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium text-gray-900">Time Zone</label>
-                                <select id="input_timezone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium ">Time Zone</label>
+                                <select id="input_timezone" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Timezone</option>
                                 {
                                         timezone.length > 0 ? timezone.map((item, index) => (
@@ -436,8 +439,8 @@ export default function TenantProfile({tenant_id}){
                                 </select>
                             </div>
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900">Currency</label>
-                                <select id="currency" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <label htmlFor="currency" className="block mb-2 text-sm font-medium ">Currency</label>
+                                <select id="currency" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Currency</option>
                                 {
                                         currency.length > 0 ? currency.map((item, index) => (

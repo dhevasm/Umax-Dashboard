@@ -545,17 +545,17 @@ export default function AccountTable() {
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 dark:text-white mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className="bg-white dark:bg-slate-800 dark:text-white mb-4 border hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
+                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => showModal("Create")} >
+                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -564,8 +564,8 @@ export default function AccountTable() {
 
                                 {/* Filter by select */}
                                 <div className="mb-4">
-                                    <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="">Status</option>
@@ -574,8 +574,8 @@ export default function AccountTable() {
                                     </select>  
                                 </div>
                                 <div className="mb-4">
-                                    <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e rounded-e-md text-gray-900 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e rounded-e-md  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedPlatform}
                                         onChange={handlePlatformChange}
                                     >
@@ -622,11 +622,11 @@ export default function AccountTable() {
                                         filteredData.length > 0 ? filteredData.map((account, index) => {
                                             return (
                                                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 hover:cursor-pointer dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300" onClick={() => showModal("Edit", account._id)}>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{index + 1}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.client_name}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap"><a href={`mailto:${account.email
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap">{index + 1}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap">{account.client_name}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap"><a href={`mailto:${account.email
                                                     }`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
                                                     <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
                                                 </tr>
@@ -668,19 +668,19 @@ export default function AccountTable() {
                         </style>
                         <div className="w-full flex justify-between items-center mb-4">
                             <div className="mt-5 flex  gap-3 items-center w-full justify-end">
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
+                                <button className="dark:text-white hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
                                     {"<<"}
                                 </button>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
+                                <button className="dark:text-white hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
                                     {"<"}   
                                 </button>
                                 <div>
-                                    <p>Page {currentPage} / {totalPages}</p>
+                                    <p className="dark:text-white">Page {currentPage} / {totalPages}</p>
                                 </div>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
+                                <button className="dark:text-white hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
                                     {">"}
                                 </button>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
+                                <button className="dark:text-white hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
                                 {">>"}
                                 </button>
                             </div>
@@ -694,13 +694,13 @@ export default function AccountTable() {
             </div>
 
             {/* <!-- Main modal --> */}
-            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+            <div id="crud-modal" ref={addModal} className="fixed inset-0 dark:text-white flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-slate-900 rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">
                                 {`${modeModal} Account`}
                             </h3>
@@ -712,23 +712,23 @@ export default function AccountTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className={`${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
-                                    <label htmlFor="name" className="flex mb-2 text-sm font-medium text-gray-900 ">Account Name <div className="text-red-500">*</div> </label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type account name here"
+                                    <label htmlFor="name" className="flex mb-2 text-sm font-medium  ">Account Name <div className="text-red-500 dark:text-red-600">*</div> </label>
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type account name here"
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
-                                        error.name ? <p className="text-red-500 text-sm">{error.name}</p> : ""
+                                        error.name ? <p className="text-red-500 dark:text-red-600 text-sm">{error.name}</p> : ""
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium text-gray-900 ">Email <div className="text-red-500">*</div></label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">Email <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {
-                                        error.email ? <p className="text-red-500 text-sm">{error.email}</p> : ""
+                                        error.email ? <p className="text-red-500 dark:text-red-600 text-sm">{error.email}</p> : ""
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="client" className="flex mb-2 text-sm font-medium text-gray-900">Client <div className="text-red-500">*</div> </label>
-                                    <select id="client" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, client: e.target.value})}>
+                                    <label htmlFor="client" className="flex mb-2 text-sm font-medium ">Client <div className="text-red-500 dark:text-red-600">*</div> </label>
+                                    <select id="client" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, client: e.target.value})}>
                                         <option value="" disabled hidden>Select Client</option>
                                         {
                                             client.length > 0 ? client.map((client, index) => {
@@ -737,13 +737,13 @@ export default function AccountTable() {
                                         }
                                     </select>
                                     {
-                                        error.client ? <p className="text-red-500 text-sm">{error.client}</p> : ""
+                                        error.client ? <p className="text-red-500 dark:text-red-600 text-sm">{error.client}</p> : ""
                                     }
                                 </div>
 
                                 <div className="col-span-1" ref={tenantInput}>
-                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant</label>
-                                    <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium ">Tenant</label>
+                                    <select id="tenant" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                         {
                                             tenant.length > 0 ? tenant.map((tenant, index) => {
                                                 return <option key={index} value={tenant._id}>{tenant.company}</option>
@@ -752,39 +752,39 @@ export default function AccountTable() {
                                     </select>
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="platform" className="flex mb-2 text-sm font-medium text-gray-900">Platform <div classname="text-red-500">*</div> </label>
-                                    <select id="platform" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, platform: e.target.value})}>
+                                    <label htmlFor="platform" className="flex mb-2 text-sm font-medium ">Platform <div classname="text-red-500 dark:text-red-600">*</div> </label>
+                                    <select id="platform" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, platform: e.target.value})}>
                                         <option value="" disabled hidden>Select platform</option>
                                         <option value="1">Meta Ads</option>z
                                         <option value="2">Google Ads</option>
                                         <option value="3">Tiktok Ads</option>
                                     </select>
                                     {
-                                        error.platform ? <p className="text-red-500 text-sm">{error.platform}</p> : ""
+                                        error.platform ? <p className="text-red-500 dark:text-red-600 text-sm">{error.platform}</p> : ""
                                     }
                                 </div>
                                 <div className="col-span-1" ref={passwordInput}>
-                                    <label htmlFor="password" className="flex mb-2 text-sm font-medium text-gray-900 ">Password <div className="text-red-500">*</div></label>
+                                    <label htmlFor="password" className="flex mb-2 text-sm font-medium  ">Password <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, password: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, password: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
                                     {
-                                        error.password ? <p className="text-red-500 text-sm">{error.password}</p> : ""
+                                        error.password ? <p className="text-red-500 dark:text-red-600 text-sm">{error.password}</p> : ""
                                     }
                                 </div>
                                 <div className="col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="flex mb-2 text-sm font-medium text-gray-900 ">Confirm Password <div className="text-red-500">*</div></label>
+                                    <label htmlFor="passwordverify" className="flex mb-2 text-sm font-medium  ">Confirm Password <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
                                     {
-                                        error.passwordverify ? <p className="text-red-500 text-sm">{error.passwordverify}</p> : ""
+                                        error.passwordverify ? <p className="text-red-500 dark:text-red-600 text-sm">{error.passwordverify}</p> : ""
                                     }
                                 </div>
 
@@ -793,8 +793,8 @@ export default function AccountTable() {
                                 <div>
                                 <label htmlFor="status" className="inline-flex items-center cursor-pointer">
                                 <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                <span className="me-3 text-sm font-medium text-gray-900">Status</span>
-                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                <span className="me-3 text-sm font-medium ">Status</span>
+                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                 </label>
                                     </div>
                                         

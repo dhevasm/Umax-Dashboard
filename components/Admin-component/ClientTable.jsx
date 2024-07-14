@@ -533,21 +533,21 @@ export default function ClientTable() {
                     {/* Header end */}
 
 
-                    <div className="w-full h-fit bg-white rounded-b-md p-4">
+                    <div className="w-full h-fit bg-white dark:bg-slate-800 dark:text-white rounded-b-md p-4">
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className="bg-white mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => showModal("Create")} >
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -556,8 +556,8 @@ export default function ClientTable() {
 
                                 {/* Filter by select */}
                                 <div className="mb-4">
-                                    <label htmlFor="rolefilter" className="text-sm font-medium text-gray-900 hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e rounded-e-md text-gray-900 text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
+                                    <label htmlFor="rolefilter" className="text-sm font-medium hidden">Role</label>
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="">Status</option>
@@ -572,7 +572,7 @@ export default function ClientTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
+                                    <input type="text" id="search" name="search" className=" dark:bg-slate-800 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
                                     defaultValue="" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
@@ -585,36 +585,36 @@ export default function ClientTable() {
                             {/* Search */}
                         </div>
 
-                        <div className="bg-white h-fit overflow-auto">
+                        <div className="bg-white dark:bg-slate-800 h-fit overflow-auto">
                             <table className="w-full text-sm text-left" ref={tableRef}>
-                                <thead className="text-md text-left uppercase bg-white">
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
-                                        <th scope="col" className="px-5 border py-3">No</th>
-                                        <th scope="col" className="px-5 border py-3">Name</th>
-                                        <th scope="col" className="px-5 border py-3">Address</th>
-                                        <th scope="col" className="px-5 border py-3">Contact</th>
-                                        <th scope="col" className="px-5 border py-3">Email</th>
-                                        <th scope="col" className="px-5 border py-3">Status</th>
+                                        <th scope="col" className="px-5 border dark:border-none py-3">No</th>
+                                        <th scope="col" className="px-5 border dark:border-none py-3">Name</th>
+                                        <th scope="col" className="px-5 border dark:border-none py-3">Address</th>
+                                        <th scope="col" className="px-5 border dark:border-none py-3">Contact</th>
+                                        <th scope="col" className="px-5 border dark:border-none py-3">Email</th>
+                                        <th scope="col" className="px-5 border dark:border-none py-3">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white">
+                                <tbody className="bg-white dark:bg-slate-800">
                                     {
                                         filteredData.length > 0 ? filteredData.map((client, index) => {
                                             return (
-                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", client._id)}>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{index + 1}</td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{client.address}</td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap"><a href={`tel:${client.contact}`} className="text-blue-500">{client.contact}</a></td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap"><a href={`mailto:${client.email}`} className="text-blue-500">{client.email }</a></td>
-                                                    <td scope="row" className="px-5 border py-3 font-medium text-gray-900 whitespace-nowrap">{client.status == 1 ? "Active" : "Inactive"}</td>
+                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300" onClick={() => showModal("Edit", client._id)}>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium whitespace-nowrap">{index + 1}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium whitespace-nowrap">{client.address}</td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium whitespace-nowrap"><a href={`tel:${client.contact}`} className="text-blue-500">{client.contact}</a></td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium whitespace-nowrap"><a href={`mailto:${client.email}`} className="text-blue-500">{client.email }</a></td>
+                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium whitespace-nowrap">{client.status == 1 ? "Active" : "Inactive"}</td>
                                                 </tr>
                                             )
                                     }).slice(firstPage, lastPage) : (
                                         // Check user yang sudah difilter
                                         client.length > 0 ? (
                                             // Jika data tida ditemukan
-                                            <tr className="text-center border">
+                                            <tr className="text-center border dark:border-none">
                                                 <td colSpan={8} className=" py-4">
                                                     Data not found
                                                 </td>
@@ -647,19 +647,19 @@ export default function ClientTable() {
                         </style>
                         <div className="w-full flex justify-between items-center mb-4">
                             <div className="mt-5 flex  gap-3 items-center w-full justify-end">
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
                                     {"<<"}
                                 </button>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
                                     {"<"}   
                                 </button>
                                 <div>
                                     <p>Page {currentPage} / {totalPages}</p>
                                 </div>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
                                     {">"}
                                 </button>
-                                <button className="bg-white hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
+                                <button className="bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
                                 {">>"}
                                 </button>
                             </div>
@@ -674,9 +674,9 @@ export default function ClientTable() {
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold">
                                 {`${modeModal} Client`}
                             </h3>
@@ -688,8 +688,8 @@ export default function ClientTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-1 ">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 ">Client Name <span className="text-red-500">*</span> </label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium ">Client Name <span className="text-red-500">*</span> </label>
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
                                     required
                                     onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
@@ -697,8 +697,8 @@ export default function ClientTable() {
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 ">Address <span className="text-red-500">*</span> </label>
-                                    <input type="text" name="address" id="address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client address here"
+                                    <label htmlFor="address" className="block mb-2 text-sm font-medium ">Address <span className="text-red-500">*</span> </label>
+                                    <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client address here"
                                     required
                                     onChange={(e) => setValues({...values, address: e.target.value})}/>
                                     {
@@ -707,25 +707,25 @@ export default function ClientTable() {
                                 </div>
                                 
                                 <div className="col-span-1">
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Email <span className="text-red-500">*</span> </label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium ">Email <span className="text-red-500">*</span> </label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required
                                     onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {
                                         error.email && <p className="text-red-500 text-sm">{error.email}</p>
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 ">Contact <span className="text-red-500">*</span> </label>
-                                    <input type="number" name="contact" id="contact" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required
+                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium ">Contact <span className="text-red-500">*</span> </label>
+                                    <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required
                                     onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                     {
                                         error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
                                     }
                                 </div>
                                 <div className="col-span-1" ref={passwordInput}>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password <span className="text-red-500">*</span> </label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium ">Password <span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required 
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required 
                                         onChange={(e)=> setValues({...values, password: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
@@ -736,9 +736,9 @@ export default function ClientTable() {
                                     }
                                 </div>
                                 <div className="col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-gray-900 ">Confirm Password <span className="text-red-500">*</span> </label>
+                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium ">Confirm Password <span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
@@ -748,8 +748,8 @@ export default function ClientTable() {
                                     }
                                 </div>
                                 <div className="col-span-2" ref={tenantInput}>
-                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-gray-900">Tenant <span className="text-red-500">*</span> </label>
-                                    <select id="tenant" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium ">Tenant <span className="text-red-500">*</span> </label>
+                                    <select id="tenant" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
                                         {
                                             tenants.length > 0 ? tenants.map((tenant, index) => {
                                                 return (
@@ -765,8 +765,8 @@ export default function ClientTable() {
                                 <div>
                                     <label htmlFor="status" className="inline-flex items-center cursor-pointer">
                                     <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                    <span className="me-3 text-sm font-medium text-gray-900">Status</span>
-                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <span className="me-3 text-sm font-medium ">Status</span>
+                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                     </label>
                                 </div>
                                 <div>

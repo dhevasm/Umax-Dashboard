@@ -32,7 +32,7 @@ function Dashboard() {
     const [SidebarHide, setSidebarHide] = useState(false)
     const sidebarContext = (() => ({
         SidebarHide,
-        setSidebarHide,
+        setSidebarHide, 
     }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {

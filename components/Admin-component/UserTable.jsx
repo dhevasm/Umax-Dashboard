@@ -34,7 +34,7 @@ export default function UserTable() {
     const Router = useRouter()
 
     function showModal(mode, user_id = null ){
-        console.log(user_id)
+        // console.log(user_id)
         setModeModal(mode)
         if(mode == "Edit"){
             const filteredUsers = userMemo.filter(user => user._id === user_id);
@@ -443,17 +443,17 @@ export default function UserTable() {
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3" onClick={generateExcel}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 font-bold px-3 " onClick={() => {Router.push('register')}} >
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => {Router.push('register')}} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -463,7 +463,7 @@ export default function UserTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
                                         <option value="" key="" >Role</option>
@@ -473,7 +473,7 @@ export default function UserTable() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     // value={selectedTenant} onChange={handleTenantChange}
                                     >
                                         <option value="0" key={0} disabled hidden>Tenant</option>
@@ -507,27 +507,27 @@ export default function UserTable() {
                         
                         <div className="bg-white h-fit overflow-auto">
                             <table className="w-full text-sm text-left" ref={tableRef}>
-                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-800">
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
-                                        <th scope="col" className="px-6 border py-3">No.</th>
-                                        <th scope="col" className="px-6 border py-3">Name</th>
-                                        <th scope="col" className="px-6 border py-3">Role</th>
-                                        <th scope="col" className="px-6 border py-3">Email</th>
-                                        <th scope="col" className="px-6 border py-3">Company</th>
+                                        <th scope="col" className="px-6 border dark:border-none py-3">No.</th>
+                                        <th scope="col" className="px-6 border dark:border-none py-3">Name</th>
+                                        <th scope="col" className="px-6 border dark:border-none py-3">Role</th>
+                                        <th scope="col" className="px-6 border dark:border-none py-3">Email</th>
+                                        <th scope="col" className="px-6 border dark:border-none py-3">Company</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white  dark:bg-slate-900 ">
+                                <tbody className="bg-white dark:bg-slate-800">
                                     {
                                         // Maping data yang sudah melalui filter
                                         filteredData.length > 0 ? filteredData.map((user, index) => (
-                                            <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-950 hover:cursor-pointer transition-colors duration-300">
-                                                <td className="px-6 border py-3 font-medium whitespace-nowrap">{index + 1}</td>
-                                                <td className="px-6 border py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
-                                                <td className="px-6 border py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.roles}</td>
-                                                <td className="px-6 border py-3 font-medium whitespace-nowrap">
+                                            <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
+                                                <td className="px-6 border dark:border-none py-3 font-medium whitespace-nowrap">{index + 1}</td>
+                                                <td className="px-6 border dark:border-none py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
+                                                <td className="px-6 border dark:border-none py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", user._id)}>{user.roles}</td>
+                                                <td className="px-6 border dark:border-none py-3 font-medium whitespace-nowrap">
                                                     <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a>
                                                 </td>
-                                                <td className="px-6 border py-3 font-medium whitespace-nowrap">
+                                                <td className="px-6 border dark:border-none py-3 font-medium whitespace-nowrap">
                                                 {String(user.company_name)}
                                                 </td>
                                             </tr>
@@ -597,9 +597,9 @@ export default function UserTable() {
 
                 <div className="relative p-4 w-full max-w-md max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-slate-800 dark:text-white rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800">
                             <h3 className="text-lg font-semibold text-white ">
                                 {`${modeModal} user`}
                             </h3>
@@ -612,12 +612,12 @@ export default function UserTable() {
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
                                     <label htmlFor="name" className="block mb-2 text-sm font-medium  ">Name</label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-900 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
                                     disabled/>
                                 </div>
                                 <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
                                     <label htmlFor="role" className="block mb-2 text-sm font-medium ">Role</label>
-                                    <select id="role" className="bg-gray-50 border border-gray-300 dark:bg-slate-900  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 " >
+                                    <select id="role" className="bg-gray-50 border dark:border-none border-gray-300 dark:bg-slate-800  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 " >
                                         <option value="admin">Admin</option>
                                         <option value="staff">Staff</option>
                                     </select>
