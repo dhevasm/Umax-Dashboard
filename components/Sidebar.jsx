@@ -82,7 +82,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
     return (
         <>
             {/* Sidebar */}
-            <div className="fixed mt-[100px] mb-3 me-3 md:ms-3 left-0 md:w-[348px] w-[300px] h-screen bg-white dark:bg-slate-700 rounded-xl flex flex-col items-center px-3 z-10 transition-transform shadow-md md:pb-28" ref={sidebar}>
+            <div className="fixed mt-[100px] mb-3 me-3 md:ms-3 left-0 md:w-[348px] w-[300px] h-screen bg-white dark:bg-slate-800 rounded-xl flex flex-col items-center px-3 z-10 transition-transform shadow-md md:pb-28" ref={sidebar}>
                 {/* Campaign Status Filter */}
                 <div className="m-3 mt-5 px-4 md:px-5 w-full bg-gray-200 dark:bg-slate-500 p-2 rounded-full flex justify-between items-center text-md hover:cursor-pointer font-bold">
                     <style jsx>
@@ -102,7 +102,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
                         }
                         `}
                     </style>
-                    <p className="SidebarFilterActive hover:bg-slate-500 text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>All</p>
+                    <p className="SidebarFilterActive hover:bg-slate-600 dark:hover:bg-slate-400 text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>All</p>
                     <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
                     <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="active" onClick={() => handleClick(1, 'active')}>Active</p>
                     <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
@@ -111,13 +111,13 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
                 {/* Search Bar */}
                 <div className="w-full flex items-center">
                     <div className="relative w-full px-2 mb-2 flex justify-center">
-                        <input className="text-black dark:bg-slate-300 dark m-1 p-2 pl-9 rounded-xl h-11 border border-gray-300 dark:text-gray-800 w-full focus:outline-none" type="text" placeholder="Search" onChange={(event) => setSearchTerm(event.target.value)} />
-                        <div className="absolute left-6 top-4 text-gray-500">
+                        <input className="text-black dark:bg-slate-700 dark:text-slate-100 m-1 p-2 pl-9 rounded-xl h-11 border border-gray-300 dark:border-slate-600 w-full focus:outline-none" type="text" placeholder="Search" onChange={(event) => setSearchTerm(event.target.value)} />
+                        <div className="absolute left-6 top-4 text-gray-500 dark:text-slate-300">
                             <FaSearch className="h-4 w-4 text-[3px]" />
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Campaign Cards */}
                 <div className="w-full overflow-y-auto">
                     {/* Campaign Card */}
@@ -141,10 +141,11 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
                         ))
                     )}
                 </div>
+                
                 {/* Sidebar Hide Button */}
                 <button 
                     onClick={hideHandle} 
-                    className="absolute top-10 -right-10 z-10 bg-blue-600 text-white rounded-r-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-blue-700 hover:scale-105 transition-transform duration-300"
+                    className="absolute top-10 -right-10 z-10 bg-blue-600 text-white rounded-r-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-blue-700 hover:scale-105 transition-transform duration-300 dark:bg-blue-500 dark:hover:bg-blue-400"
                     aria-label="Close"
                 >
                     {!hidden ? <IoIosArrowDropright className="h-6 w-6" /> : <IoIosArrowDropleft className="h-6 w-6" />}

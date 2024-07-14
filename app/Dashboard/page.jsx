@@ -1,8 +1,6 @@
 'use client'
 
-import axios from "axios"
-import { useState, useEffect, useRef, createContext, useMemo, use } from "react"
-import { Suspense } from "react"
+import { useState, useEffect, useRef, createContext } from "react"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 import dynamic from "next/dynamic"
@@ -30,10 +28,6 @@ function Dashboard() {
     const [name, setName] = useState('');
     const [platform, setPlatform] = useState('');
     const [SidebarHide, setSidebarHide] = useState(false)
-    const sidebarContext = (() => ({
-        SidebarHide,
-        setSidebarHide, 
-    }), [SidebarHide, setSidebarHide])
 
     useEffect(() => {
       const handleResize = () => {
@@ -91,71 +85,67 @@ function Dashboard() {
     return (
         <>
         {/* Header */}
-        
-        {/* <SidebarContext.Provider value={sidebarContext}> */}
-            <Navbar />
-            <Sidebar onCampaignIDChange={handleCampaignIDChange} sidebarHide={SidebarHide} setSidebarHide={setSidebarHide}/>
-        {/* </SidebarContext.Provider> */}
+        <Navbar />
+        <Sidebar onCampaignIDChange={handleCampaignIDChange} sidebarHide={SidebarHide} setSidebarHide={setSidebarHide}/>
 
         {/* Dashboard Container */}
-        <div className="flex w-full min-h-full justify-end items-center bg-gray-100 dark:bg-slate-800">
-            {/* Dashboard Card */}
-            <div className="w-[75%] min-h-screen bg-white rounded-xl mt-[100px] md:me-3 ms-5 text-black transition-transform" ref={Card}>
+        <div className="flex w-full min-h-full justify-end items-center bg-gray-100 dark:bg-slate-900">
+        {/* Dashboard Card */}
+            <div className="w-[75%] min-h-screen bg-white dark:bg-slate-800 rounded-xl mt-[100px] md:me-3 ms-5 text-black dark:text-white transition-transform" ref={Card}>
                 {/* header */}
                 <div className="m-10">
-                    {campaignID === '' ? (
-                        <PerformenceNavLoading/>
-                    ) : (
-                        <div className="flex gap-3 items-center md:flex-row flex-col">
-                            <img src={`../assets/${platform == 1 ? 'meta.svg' : platform == 2 ? 'google.svg' : platform == 3 ? 'tiktok.svg' : null}`} className="w-[50px]" alt="" />
-                            <p className="text-2xl font-semibold">{name}</p>
-                        </div>  
-                    )}  
-
-                    {/* Dashboard Nav Link */}
-                    <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300">
-                        <style jsx>
-                            {
-                                `
-                                .dashboardActive{
-                                    color : rgb(38, 100, 235);
-                                    padding-bottom: 10px;
-                                    border-bottom: 3px solid blue;
-                                    font-weight: 800;
-                                    transition: background-color 0.5s, color 0.5s;
-                                }
-                                .DashboardLink:hover{
-                                    cursor: pointer;
-                                }
-                                `
-                            }
-                        </style>
-                        <p className="dashboardActive DashboardLink font-semibold text-gray-300 text-[15px]" id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
-                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
-                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="history" onClick={() => SetActiveLink("history")}>History</p>
-                        <p className="DashboardLink font-semibold text-gray-300 text-[15px]" id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
+                {campaignID === '' ? (
+                    <PerformenceNavLoading />
+                ) : (
+                    <div className="flex gap-3 items-center md:flex-row flex-col">
+                    <img src={`../assets/${platform === 1 ? 'meta.svg' : platform === 2 ? 'google.svg' : platform === 3 ? 'tiktok.svg' : null}`} className="w-[50px]" alt="" />
+                    <p className="text-2xl font-semibold">{name}</p>
                     </div>
+                )}
+
+                {/* Dashboard Nav Link */}
+                <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300 dark:border-slate-600">
+                    <style jsx>
+                    {`
+                        .dashboardActive {
+                        color: rgb(38, 100, 235);
+                        padding-bottom: 10px;
+                        border-bottom: 3px solid blue;
+                        font-weight: 800;
+                        transition: background-color 0.5s, color 0.5s;
+                        }
+                        .DashboardLink:hover {
+                        cursor: pointer;
+                        }
+                    `}
+                    </style>
+                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "performance" ? "dashboardActive" : ""}`} id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
+                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "metrics" ? "dashboardActive" : ""}`} id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
+                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "history" ? "dashboardActive" : ""}`} id="history" onClick={() => SetActiveLink("history")}>History</p>
+                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "setting" ? "dashboardActive" : ""}`} id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
+                </div>
                 </div>
 
                 {/* Nav Select */}
                 <div className="flex md:hidden justify-end m-10">
-                    <select className="border w-full border-gray-300 rounded-md shadow-sm p-1 px-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" onChange={(e) => SetActiveLink(e.target.value)}>
-                        <option value="performance">Performance</option>
-                        <option value="metrics">Metrics</option>
-                        <option value="history">History</option>
-                        <option value="setting">Setting</option>
-                    </select>
+                <select className="border w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-1 px-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" onChange={(e) => SetActiveLink(e.target.value)}>
+                    <option value="performance">Performance</option>
+                    <option value="metrics">Metrics</option>
+                    <option value="history">History</option>
+                    <option value="setting">Setting</option>
+                </select>
                 </div>
 
                 {/* Content */}
                 <div className="m-10">
-                    {activeContent === "performance" && <Performance key={campaignID} id={campaignID}/>}
-                    {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID}/>}
-                    {activeContent === "history" && <History key={campaignID} id={campaignID}/>}
-                    {activeContent === "setting" && <Setting key={campaignID} id={campaignID}/>}
+                {activeContent === "performance" && <Performance key={campaignID} id={campaignID} />}
+                {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID} />}
+                {activeContent === "history" && <History key={campaignID} id={campaignID} />}
+                {activeContent === "setting" && <Setting key={campaignID} id={campaignID} />}
                 </div>
             </div>
         </div>
+
         </>
     )
 }

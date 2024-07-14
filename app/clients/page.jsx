@@ -4,10 +4,10 @@ import React, { Suspense, useEffect } from 'react'
 
 import Navbar from "@/components/Navbar"
 import dynamic from "next/dynamic";
-const ClientTable = dynamic(() => import('@/components/Table/ClientTable'), { ssr: false });
 import TableLoading from '@/components/Loading/TableLoading'
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+const ClientTable = dynamic(() => import('@/components/Table/ClientTable'), { ssr: false });
 
 const Page = () => {
 
@@ -23,10 +23,10 @@ const Page = () => {
 
 
   return (
-    <div className='w-full h-screen bg-white'>
+    <div className='w-full h-screen bg-white dark:bg-slate-900'>
       <Navbar />
       <div className="w-full mt-20 h-fit">
-        <div className="w-full h-full md:p-10 p-5 bg-white">
+        <div className="w-full h-full md:p-10 p-5 bg-white dark:bg-slate-900">
           <Suspense fallback={<TableLoading/>}>
             <ClientTable/>
           </Suspense>

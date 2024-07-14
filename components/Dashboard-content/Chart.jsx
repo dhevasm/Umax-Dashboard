@@ -82,6 +82,18 @@ const Chart = ({ campaignID, time }) => {
         },
         xaxis: {
         categories: Data.categories,
+        labels: {
+            style: {
+                colors: '#64748b',
+            },
+        },
+        },
+        yaxis: {
+        labels: {
+            style: {
+                colors: '#64748b',
+            },
+        },
         },
         colors: ["#FF5733", "#33FF57", "#3357FF", "#F39C12"],
     };

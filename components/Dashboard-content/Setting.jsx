@@ -92,106 +92,106 @@ const Setting = ({ id }) => {
   return (
     <div className=''>
       {id === '' ? (
-        <SettingLoading />
+          <SettingLoading />
       ) : (
-        <div className='h-screen w-full flex flex-col bg-white'>
-          <div className='w-full float-right h-2 flex justify-end mb-3 items-center'>
-            <button
-              className='transition duration-300'
-              onClick={handleRefresh}
-              disabled={loading}
-              title='Refresh'
-            >
-              <RiRefreshLine size={24} className='me-7'/>
-            </button>
-          </div>
-          {data.map((item, index) => (
-            <div key={index} className='p-6 mb-8 bg-white rounded-lg'>
-              <div className='grid grid-cols-1 sm:grid-cols-2 gap-10 mb-8'>
-              <div>
-                  <label className='block text-sm font-medium text-gray-700'>
-                    Reach Amount Ratio (RAR)
-                  </label>
-                  <p className='text-xs text-gray-500'>Recommended value &gt; 5%</p>
-                  <input
-                    type="number"
-                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
-                    value={item.rar}
-                    onChange={(e) => handleChange(index, 'rar', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>
-                    Click Through Rate (CTR)
-                  </label>
-                  <p className='text-xs text-gray-500'>Recommended value &gt; 1.5%</p>
-                  <input
-                    type="number"
-                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
-                    value={item.ctr}
-                    onChange={(e) => handleChange(index, 'ctr', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>
-                    Outbound Click Landing Page (OCLP)
-                  </label>
-                  <p className='text-xs text-gray-500'>Recommended value &gt; 80%</p>
-                  <input
-                    type="number"
-                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
-                    value={item.oclp}
-                    onChange={(e) => handleChange(index, 'oclp', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>
-                    Return on AD Spent (ROAS)
-                  </label>
-                  <p className='text-xs text-gray-500'>Recommended value &gt; 3.0x</p>
-                  <input
-                    type="number"
-                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
-                    value={item.roas}
-                    onChange={(e) => handleChange(index, 'roas', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>
-                    Cost per Result (CPR)
-                  </label>
-                  <p className='text-xs text-gray-500'>Recommended value &lt; Rp. 5000</p>
-                  <input
-                    type="number"
-                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
-                    value={item.cpr}
-                    onChange={(e) => handleChange(index, 'cpr', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className='block text-sm font-medium text-gray-700'>
-                    Cost per Click (CPC)
-                  </label>
-                  <p className='text-xs text-gray-500'>Recommended value &lt; Rp. 1000</p>
-                  <input
-                    type="number"
-                    className='mt-1 block w-full border border-gray-300 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
-                    value={item.cpc}
-                    onChange={(e) => handleChange(index, 'cpc', e.target.value)}
-                  />
-                </div>
+          <div className='h-screen w-full flex flex-col bg-white dark:bg-gray-800'>
+              <div className='w-full float-right h-2 flex justify-end mb-3 items-center'>
+                  <button
+                      className='transition duration-300'
+                      onClick={handleRefresh}
+                      disabled={loading}
+                      title='Refresh'
+                  >
+                      <RiRefreshLine size={24} className='me-7 text-gray-700 dark:text-gray-300'/>
+                  </button>
               </div>
-              <button 
-                className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'
-                onClick={handleSubmit} // Call handleSubmit on Save button click
-              >
-                Save
-              </button>
-            </div>
-          ))}
-        </div>
+              {data.map((item, index) => (
+                  <div key={index} className='p-6 mb-8 bg-white dark:bg-gray-800 rounded-lg'>
+                      <div className='grid grid-cols-1 sm:grid-cols-2 gap-10 mb-8'>
+                          <div>
+                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                                  Reach Amount Ratio (RAR)
+                              </label>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 5%</p>
+                              <input
+                                  type="number"
+                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                  value={item.rar}
+                                  onChange={(e) => handleChange(index, 'rar', e.target.value)}
+                              />
+                          </div>
+                          <div>
+                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                                  Click Through Rate (CTR)
+                              </label>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 1.5%</p>
+                              <input
+                                  type="number"
+                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                  value={item.ctr}
+                                  onChange={(e) => handleChange(index, 'ctr', e.target.value)}
+                              />
+                          </div>
+                          <div>
+                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                                  Outbound Click Landing Page (OCLP)
+                              </label>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 80%</p>
+                              <input
+                                  type="number"
+                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                  value={item.oclp}
+                                  onChange={(e) => handleChange(index, 'oclp', e.target.value)}
+                              />
+                          </div>
+                          <div>
+                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                                  Return on AD Spent (ROAS)
+                              </label>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 3.0x</p>
+                              <input
+                                  type="number"
+                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                  value={item.roas}
+                                  onChange={(e) => handleChange(index, 'roas', e.target.value)}
+                              />
+                          </div>
+                          <div>
+                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                                  Cost per Result (CPR)
+                              </label>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &lt; Rp. 5000</p>
+                              <input
+                                  type="number"
+                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                  value={item.cpr}
+                                  onChange={(e) => handleChange(index, 'cpr', e.target.value)}
+                              />
+                          </div>
+                          <div>
+                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                                  Cost per Click (CPC)
+                              </label>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &lt; Rp. 1000</p>
+                              <input
+                                  type="number"
+                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                  value={item.cpc}
+                                  onChange={(e) => handleChange(index, 'cpc', e.target.value)}
+                              />
+                          </div>
+                      </div>
+                      <button 
+                          className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'
+                          onClick={handleSubmit}
+                      >
+                          Save
+                      </button>
+                  </div>
+              ))}
+          </div>
       )}
-    </div>
+  </div>
   );
 };
 

@@ -1,17 +1,12 @@
 "use client";
 
 import React, { Suspense, useEffect } from "react";
-
 import Navbar from "@/components/Navbar";
 import dynamic from "next/dynamic";
-
-const AccountTable = dynamic(() => import("@/components/Table/AccountTable"), {
-  ssr: false,
-});
-
 import TableLoading from "@/components/Loading/TableLoading";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+const AccountTable = dynamic(() => import("@/components/Table/AccountTable"), {ssr: false,});
 
 const Page = () => {
   const router = useRouter();
@@ -25,10 +20,10 @@ const Page = () => {
   }, [router]);
 
   return (
-    <div className="w-full h-screen bg-white">
+    <div className="w-full h-screen bg-white dark:bg-slate-900">
       <Navbar />
       <div className="w-full mt-20 h-fit">
-        <div className="w-full h-full md:p-10 p-5 bg-white">
+        <div className="w-full h-full md:p-10 p-5 bg-white dark:bg-slate-900">
           <Suspense fallback={<TableLoading />}>
             <AccountTable />
           </Suspense>

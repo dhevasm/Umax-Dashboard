@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
-import Link from 'next/link';
 import { CiGlobe, CiEdit } from 'react-icons/ci';
 import axios from 'axios';
 import { MdOutlinePermContactCalendar, MdOutlineAccessTime, MdOutlineEmail } from 'react-icons/md';
@@ -13,7 +12,6 @@ import { FaUsersCog } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import dynamic from 'next/dynamic';
-import LoadingCircle from '@/components/Loading/LoadingCircle';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState({});
@@ -67,13 +65,12 @@ const Profile = () => {
     } = profileData;
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-            <div className="w-full bg-white shadow-lg rounded-b-lg overflow-hidden">
-                <div className="relative bg-gradient-to-l from-blue-400 to-blue-500 p-6">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center">
+            <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-b-lg overflow-hidden">
+                <div className="relative bg-gradient-to-l from-blue-400 to-blue-500 p-6 dark:from-gray-700 dark:to-gray-800">
                     <div className="absolute top-4 left-4">
-
                         <button>
-                            <IoIosArrowBack className="text-white text-2xl cursor-pointer hover:text-gray-200" onClick={() => router.back()}/>
+                            <IoIosArrowBack className="text-white text-2xl cursor-pointer hover:text-gray-200" onClick={() => router.back()} />
                         </button>
                     </div>
                     <div className="absolute top-4 right-4">
@@ -84,14 +81,14 @@ const Profile = () => {
                             {image ? (
                                 <img src={`data:image/png;base64,${image}`} className="object-cover w-full h-full" alt="Profile" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-300 animate-pulse"></div>
+                                <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-300 dark:bg-gray-600 animate-pulse"></div>
                             )}
                         </div>
                         <h1 className="mt-4 text-white text-2xl font-semibold">{name}</h1>
                         <p className="text-white text-lg">{roles}</p>
                     </div>
                 </div>
-                <div className="p-6">
+                <div className="p-6 dark:text-gray-200">
                     <ProfileSection title="Personal Information">
                         <ProfileItem icon={MdOutlinePermContactCalendar} label="Username" value={name} />
                         <ProfileItem icon={FaUsersCog} label="Roles" value={roles} />
@@ -112,7 +109,7 @@ const Profile = () => {
 
 const ProfileSection = ({ title, children }) => (
     <div className="mb-6">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">{title}</h2>
+        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">{title}</h2>
         <div className="grid sm:grid-cols-2 gap-4">
             {children}
         </div>
@@ -120,13 +117,13 @@ const ProfileSection = ({ title, children }) => (
 );
 
 const ProfileItem = ({ icon: Icon, label, value, flag }) => (
-    <div className="flex items-center p-4 bg-gray-50 rounded-lg shadow-sm w-full">
-        <Icon size={24} className="text-blue-500 mr-3" />
+    <div className="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm w-full">
+        <Icon size={24} className="text-blue-500 dark:text-blue-400 mr-3" />
         <div>
-            <h3 className="text-gray-700 font-medium">{label}</h3>
-            <div className='flex gap-2'>
+            <h3 className="text-gray-700 dark:text-gray-300 font-medium">{label}</h3>
+            <div className="flex gap-2">
                 {flag && <img src={flag} className="w-5 h-5 mt-1" alt="" />}
-                <p className="text-gray-500">{value}</p>
+                <p className="text-gray-500 dark:text-gray-400">{value}</p>
             </div>
         </div>
     </div>

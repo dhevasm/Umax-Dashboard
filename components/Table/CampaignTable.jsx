@@ -24,7 +24,7 @@ const CampaignTable = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedCampaign, setSelectedCampaign] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const dataPerPage = 10;
+    const [dataPerPage, setDataPerPage] = useState(10);
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -253,6 +253,10 @@ const CampaignTable = () => {
         setSearchTerm(event.target.value);
     };
 
+    const handleSortChange = (event) => {
+        setDataPerPage(event.target.value);
+    }
+
     const filteredData = tableData.filter((data) => {
         const client_name = localStorage.getItem("name");
         const role = localStorage.getItem("roles");
@@ -310,7 +314,7 @@ const CampaignTable = () => {
         pageButtons.push(
             <button
                 key="first"
-                className={`px-3 py-1 ${
+                className={`px-3 py-1 dark:text-white ${
                     currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(1)}
@@ -324,7 +328,7 @@ const CampaignTable = () => {
         pageButtons.push(
             <button
                 key="prev"
-                className={`px-3 py-1 ${
+                className={`px-3 py-1 dark:text-white ${
                     currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage - 1)}
@@ -344,7 +348,7 @@ const CampaignTable = () => {
                 pageButtons.push(
                     <button
                         key={i}
-                        className={`px-3 py-1 ${
+                        className={`px-3 py-1 dark:text-white ${
                             i === currentPage ? "font-bold" : ""
                         } rounded-md`}
                         onClick={() => goToPage(i)}
@@ -357,7 +361,7 @@ const CampaignTable = () => {
     
         // Info page
         pageButtons.push(
-            <span key="info" className="px-3 py-1 rounded-md">
+            <span key="info" className="px-3 py-1 dark:text-white rounded-md">
                 {`Page ${currentPage} / ${totalPages}`}
             </span>
         );
@@ -366,7 +370,7 @@ const CampaignTable = () => {
         pageButtons.push(
             <button
                 key="next"
-                className={`px-3 py-1 ${
+                className={`px-3 py-1 dark:text-white ${
                     currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage + 1)}
@@ -380,7 +384,7 @@ const CampaignTable = () => {
         pageButtons.push(
             <button
                 key="last"
-                className={`px-3 py-1 ${
+                className={`px-3 py-1 dark:text-white ${
                     currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(totalPages)}
@@ -403,194 +407,152 @@ const CampaignTable = () => {
 
     return (
         <>
-            <div className={`font-semibold text-3xl text-slate-800 mb-10`}>
+            <div className={`font-semibold text-3xl text-slate-800 dark:text-slate-200 mb-10`}>
                 <h1>Campaigns</h1>
-            </div>
-            <div className={`bg-white ${modalIsOpen ? 'overflow-hidden' : ''} border border-gray-300 rounded-lg p-5`} style={{ width: "100%" }}>
-                    <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
-                        <div className={`mb-4 flex flex-row items-start gap-4`}>
-                            {/* {'Filter starts here'} */}
-                            <input
-                                className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 text-[15px] text-semibold py-2`}
-                                // style={{ width: "200px" }}
-                                type="text"
-                                placeholder="Search"
-                                value={searchTerm}
-                                onChange={handleSearchChange}
-                            />
-                            <select
-                                name=""
-                                className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2`}
-                                id=""
-                                // style={{ width: "200px" }}
-                                value={selectedPlatform}
-                                onChange={handlePlatformChange}
-                                >
-                                <option value="">Platform</option>
-                                <option value="1">Meta Ads</option>
-                                <option value="2">Google Ads</option>
-                                <option value="3">Tiktok Ads</option>
-                            </select>
-                            <select
-                                name=""
-                                className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2`}
-                                // style={{ width: "200px" }}
-                                id=""
-                                value={selectedObjective}
-                                onChange={handleObjectiveChange}
-                                >
-                                <option value="">Objective</option>
-                                <option value="1">Awareness</option>
-                                <option value="2">Concervation</option>
-                                <option value="3">Consideration</option>
-                            </select>
-                            {/* {'Filter ends here'} */}
-                        </div>
-                        <div className="w-full flex gap-3 justify-end pb-5">
-                            {/* <button className="float-right border border-gray-300 rounded-lg px-5 py-2 text-end" onClick={() => setModalIsOpen(handleOpenModal)}>+ Add</button> */}
-                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
-                                <RiFileExcel2Line className="relative font-medium text-lg" />
-                            </button>
-                            <button className="float-right border border-gray-300 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('pdf')}>
-                                <AiOutlineFilePdf className="relative font-medium text-lg" />
-                            </button>
-                        </div>
+                </div>
+                <div className={`bg-white dark:bg-gray-800 ${modalIsOpen ? 'overflow-hidden' : ''} border border-gray-300 dark:border-gray-700 rounded-lg p-5`} style={{ width: "100%" }}>
+                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
+                    <div className={`mb-4 flex flex-row items-start gap-4`}>
+                        <input
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 text-[15px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-200`}
+                            type="text"
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
+                        <select
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200`}
+                            value={selectedPlatform}
+                            onChange={handlePlatformChange}
+                        >
+                            <option value="">Platform</option>
+                            <option value="1">Meta Ads</option>
+                            <option value="2">Google Ads</option>
+                            <option value="3">Tiktok Ads</option>
+                        </select>
+                        <select
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200`}
+                            value={selectedObjective}
+                            onChange={handleObjectiveChange}
+                        >
+                            <option value="">Objective</option>
+                            <option value="1">Awareness</option>
+                            <option value="2">Concervation</option>
+                            <option value="3">Consideration</option>
+                        </select>
                     </div>
-                <div className="overflow-x-auto rounded-md">
-                    <table className="w-full border">
-                        <thead className="bg-white">
+                    <div className="w-full flex gap-3 justify-end pb-5">
+                        <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200"
+                            value={dataPerPage}
+                            onChange={handleSortChange}
+                        >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
+                        <button className="float-right border border-gray-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('excel')}>
+                            <RiFileExcel2Line className="relative font-medium text-lg text-gray-800 dark:text-gray-200" />
+                        </button>
+                        <button className="float-right border border-gray-300 dark:bg-gray-700 dark:border-gray-600 rounded-lg px-4 py-2" onClick={() => ConfirmationModal('pdf')}>
+                            <AiOutlineFilePdf className="relative font-medium text-lg text-gray-800 dark:text-gray-200" />
+                        </button>
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full">
+                        <thead className="bg-white dark:bg-blue-700">
                             <tr className="text-left">
-                                <th className="px-2 py-2 border">No. </th>
-                                <th className="px-2 py-2 border">Name</th>
-                                <th className="px-2 py-2 border">Client</th>
-                                <th className="px-2 py-2 border">Platform</th>
-                                <th className="px-2 py-2 border">Account</th>
-                                <th className="px-2 py-2 border">Objective</th>
-                                <th className="px-2 py-2 border">Start Date</th>
-                                <th className="px-2 py-2 border">Status</th>
-                                <th className="px-2 py-2 border hidden">Action</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">No.</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Name</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Client</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Platform</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Account</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Objective</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Start Date</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Status</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 hidden">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentCampaigns.length > 0 ? (
                                 currentCampaigns.map((data, index) => (
-                                <tr key={index} className="text-center">
-                                    <td className="px-2 py-2 border text-nowrap text-left">{index + 1}.</td>
-                                    <td className="px-2 py-2 border text-nowrap">
-                                        <button className="text-gray-500 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>
-                                            <p className="underline">
-                                                {data.name}
-                                            </p>
-                                        </button>
-                                    </td>
-                                    <td className="px-2 py-2 border text-nowrap">
-                                    {data.client_name}
-                                    </td>
-                                    <td className="px-2 py-2 border text-nowrap">
-                                    {data.platform === 1
-                                        ? "Meta Ads"
-                                        : data.platform === 2
-                                        ? "Google Ads"
-                                        : "Tiktok Ads"}
-                                    </td>
-                                    <td className="px-2 py-2 border text-nowrap">
-                                    {data.account_name}
-                                    </td>
-                                    <td className="px-2 py-2 border text-nowrap">
-                                    {data.objective === 1
-                                        ? "Awareness"
-                                        : data.objective === 2
-                                        ? "Concervation"
-                                        : "Consideration"}
-                                    </td>
-                                    <td className="px-2 py-2 border text-nowrap">
-                                    {data.start_date}
-                                    </td>
-                                    <td className="px-2 py-2 border text-nowrap">
-                                        <StatusBadge status={data.status} />
-                                    </td>
-                                    <td className="px-2 py-2 border text-nowrap hidden gap-1 justify-center">
-                                        <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
-                                            <BiEdit size={25}/>
-                                        </button>
-                                        <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
-                                            <MdDeleteForever size={25}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                ))
-                            )
-                            :   tableData.length > 0 ? (
-                                <tr>
-                                    <td colSpan="8" className="text-center py-4 border">
-                                        Data Not Found
-                                    </td>
-                                </tr>
-                                ) : (
-                                    <tr>
-                                        <td colSpan="8" className="text-center">
-                                            <LoadingCircle />
+                                    <tr key={index} className="text-center">
+                                        <td className="px-2 py-2 border text-nowrap text-left dark:border-gray-700 dark:text-gray-200">{index + 1}.</td>
+                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>
+                                                <p className="underline">{data.name}</p>
+                                            </button>
+                                        </td>
+                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.client_name}</td>
+                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            {data.platform === 1 ? "Meta Ads" : data.platform === 2 ? "Google Ads" : "Tiktok Ads"}
+                                        </td>
+                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.account_name}</td>
+                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            {data.objective === 1 ? "Awareness" : data.objective === 2 ? "Concervation" : "Consideration"}
+                                        </td>
+                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.start_date}</td>
+                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            <StatusBadge status={data.status} />
+                                        </td>
+                                        <td className="px-2 py-2 border text-nowrap hidden gap-1 justify-center dark:border-gray-700 dark:text-gray-200">
+                                            <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
+                                                <BiEdit size={25} />
+                                            </button>
+                                            <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
+                                                <MdDeleteForever size={25} />
+                                            </button>
                                         </td>
                                     </tr>
-                                )
-                            }
+                                ))
+                            ) : tableData.length > 0 ? (
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">Data Not Found</td>
+                                </tr>
+                            ) : (
+                                <tr>
+                                    <td colSpan="8" className="text-center dark:border-gray-700">
+                                        <LoadingCircle />
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
-
-                    <div className="flex justify-end mt-4">
+                    <div className="flex justify-end items-center">
                         {renderPagination()}
                     </div>
 
-                    {/* table for ekspor */}
                     <table className="w-full border hidden" ref={tableRef}>
-                        <thead className="bg-white">
+                        <thead className="bg-white dark:bg-gray-700">
                             <tr className="text-left">
-                            <th className="px-4 py-2 border">No. </th>
-                            <th className="px-4 py-2 border">Name</th>
-                            <th className="px-4 py-2 border">Client</th>
-                            <th className="px-4 py-2 border">Platform</th>
-                            <th className="px-4 py-2 border">Account</th>
-                            <th className="px-4 py-2 border">Objective</th>
-                            <th className="px-4 py-2 border">Start Date</th>
-                            <th className="px-4 py-2 border">Status</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">No.</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">Name</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">Client</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">Platform</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">Account</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">Objective</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">Start Date</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredData.map((data, index) => (
-                            <tr key={index} className="text-center">
-                                <td className="px-4 py-2 border text-nowrap text-left">{index + 1}.</td>
-                                <td className="px-4 py-2 border text-nowrap">{data.name}</td>
-                                <td className="px-4 py-2 border text-nowrap">
-                                {data.client_name}
-                                </td>
-                                <td className="px-4 py-2 border text-nowrap">
-                                {data.platform === 1
-                                    ? "Meta Ads"
-                                    : data.platform === 2
-                                    ? "Google Ads"
-                                    : "Tiktok Ads"}
-                                </td>
-                                <td className="px-4 py-2 border text-nowrap">
-                                {data.account_name}
-                                </td>
-                                <td className="px-4 py-2 border text-nowrap">
-                                {data.objective === 1
-                                    ? "Awareness"
-                                    : data.objective === 2
-                                    ? "Concervation"
-                                    : "Consideration"}
-                                </td>
-                                <td className="px-4 py-2 border text-nowrap">
-                                {data.start_date}
-                                </td>
-                                <td className="px-4 py-2 border text-nowrap">
-                                {data.status === 1
-                                    ? "Active"
-                                    : data.status === 2
-                                    ? "Draft"
-                                    : "Competed"}
-                                </td>
-                            </tr>
+                                <tr key={index} className="text-center">
+                                    <td className="px-4 py-2 border text-nowrap text-left dark:border-gray-700">{index + 1}.</td>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.name}</td>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.client_name}</td>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">
+                                        {data.platform === 1 ? "Meta Ads" : data.platform === 2 ? "Google Ads" : "Tiktok Ads"}
+                                    </td>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.account_name}</td>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">
+                                        {data.objective === 1 ? "Awareness" : data.objective === 2 ? "Concervation" : "Consideration"}
+                                    </td>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.start_date}</td>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">
+                                        {data.status === 1 ? "Active" : data.status === 2 ? "Draft" : "Completed"}
+                                    </td>
+                                </tr>
                             ))}
                         </tbody>
                     </table>

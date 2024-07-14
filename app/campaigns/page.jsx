@@ -3,12 +3,10 @@
 import TableLoading from "@/components/Loading/TableLoading";
 import Navbar from "@/components/Navbar";
 import dynamic from "next/dynamic";
-const CampaignTable = dynamic(() => import("@/components/Table/CampaignTable"), {
-    ssr: false,
-});
 import { Suspense, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+const CampaignTable = dynamic(() => import("@/components/Table/CampaignTable"), {ssr: false,});
 
 const Page = () => {
     const Card = useRef(null);
@@ -23,10 +21,10 @@ const Page = () => {
     }, [router]);
 
   return (
-    <div className='w-full h-screen bg-white'>
+    <div className='w-full h-screen bg-white dark:bg-slate-900'>
       <Navbar />
       <div className="w-full mt-20 h-fit">
-        <div className="w-full h-full md:p-10 p-5 bg-white">
+        <div className="w-full h-full md:p-10 p-5 bg-white dark:bg-slate-900">
           <Suspense fallback={<TableLoading/>}>
             <CampaignTable/>
           </Suspense>
