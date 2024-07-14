@@ -9,8 +9,8 @@ const options = {
     fontFamily: "Satoshi, sans-serif",
     type: "donut",
   },
-  colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF"],
-  labels: ["Google Ads", "Meta Ads", "Tiktok Ads", "Unknown"],
+  colors: ["#3B82F6", "#94A3B8", "#000000"],
+  labels: ["Meta Ads", "Google Ads", "Tiktok Ads"],
   legend: {
     show: false,
     position: "bottom",
@@ -49,11 +49,10 @@ const options = {
 const ChartThree = () => {
 
   const [campaigns, setCampaigns] = useState([])  
-  const [chartData, setChartData] = useState({
-    google : 0,
-    meta : 0,
-    tiktok : 0,
-  })
+  const [meta, setMeta] = useState(0)
+  const [google, setGoogle] = useState(0)
+  const [tiktok, setTiktok] = useState(0)
+  const [series,setSeries] = useState([0,0,0])
 
   async function getCampaigns() { 
     const res = await axios.get("https://umaxxxxx-1-r8435045.deta.app/campaign-by-tenant", {
@@ -63,53 +62,45 @@ const ChartThree = () => {
     })
     const data = res.data.Data
     setCampaigns(data)
-  }
+  }  
+
+  useEffect(() => {
+    const countMeta = campaigns.filter(campaign => campaign.platform === 1).length;
+    setMeta(countMeta)
+    setSeries([countMeta,google,tiktok])
+  }, [campaigns,meta])
+
+  useEffect(() => {
+    const countgoogle = campaigns.filter(campaign => campaign.platform === 2).length;
+    setGoogle(countgoogle)
+    setSeries([meta,countgoogle,tiktok])
+  }, [campaigns,google])
+
+  useEffect(() => {
+    const counttiktok = campaigns.filter(campaign => campaign.platform === 3).length;
+    setTiktok(counttiktok)
+    setSeries([meta,google,counttiktok])
+  }, [campaigns,tiktok])
 
   useEffect(() => {
     getCampaigns()
   }, [])
-
-  useEffect(() => {
-    campaigns.map((campaign) => {
-      if(campaign.platform == 1){
-        setChartData({
-          ...chartData,
-          google : chartData.google + 1
-        })
-      }else if(campaign.platform == 2){
-        setChartData({
-          ...chartData,
-          meta : chartData.meta + 1
-        })
-    
-      }else if(campaign.platform == 3){
-        setChartData({
-          ...chartData,
-          tiktok : chartData.tiktok + 1
-        })
-      }
-  }
-  )
-  setSeries([chartData.google, chartData.meta, chartData.tiktok, 0])
-  console.log(chartData)
-}, [campaigns])
-
-  const [series, setSeries] = useState([65, 34, 12, 56]);
-
+  
+ 
   return (
-    <div className="col-span-12 rounded-sm bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5">
+    <div className="col-span-12 rounded-sm bg-white dark:bg-slate-800 dark:text-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
-          <h5 className="text-xl font-semibold text-black">
-            Visitors Analytics
+          <h5 className="text-xl font-semibold ">
+            Campaign by Platform
           </h5>
         </div>
         <div>
-          <div className="relative z-20 inline-block">
+          <div className="relative inline-block">
             <select
               name=""
               id=""
-              className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
+              className="relative inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
               <option value="" className="">
                 Monthly
@@ -151,37 +142,37 @@ const ChartThree = () => {
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-primary"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black">
-              <span> Desktop </span>
-              <span> 65% </span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue-500"></span>
+            <p className="flex w-full justify-between text-sm font-medium ">
+              <span> Meta Ads </span>
+              <span> {meta} </span>
             </p>
           </div>
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black">
-              <span> Tablet </span>
-              <span> 34% </span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-slate-400"></span>
+            <p className="flex w-full justify-between text-sm font-medium ">
+              <span> Google Ads </span>
+              <span> {google} </span>
             </p>
           </div>
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#8FD0EF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black">
-              <span> Mobile </span>
-              <span> 12% </span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-black"></span>
+            <p className="flex w-full justify-between text-sm font-medium ">
+              <span> Tiktok Ads </span>
+              <span> {tiktok} </span>
             </p>
           </div>
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#0FADCF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black">
-              <span> Unknown </span>
-              <span> 56% </span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-yellow-500"></span>
+            <p className="flex w-full justify-between text-sm font-medium ">
+              <span> Total </span>
+              <span> {campaigns.length} </span>
             </p>
           </div>
         </div>

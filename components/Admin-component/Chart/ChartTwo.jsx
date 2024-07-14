@@ -2,120 +2,140 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import { useContext } from "react";
+import { AdminDashboardContext } from "@/app/admin-dashboard/page";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const options = {
-  legend: {
-    show: false,
-    position: "top",
-    horizontalAlign: "left",
-  },
-  colors: ["#3C50E0", "#80CAEE"],
-  chart: {
-    fontFamily: "Satoshi, sans-serif",
-    height: 335,
-    type: "area",
-    dropShadow: {
-      enabled: true,
-      color: "#623CEA14",
-      top: 10,
-      blur: 4,
-      left: 0,
-      opacity: 0.1,
-    },
-    toolbar: {
-      show: false,
-    },
-  },
-  responsive: [
-    {
-      breakpoint: 1024,
-      options: {
-        chart: {
-          height: 300,
-        },
-      },
-    },
-    {
-      breakpoint: 1366,
-      options: {
-        chart: {
-          height: 350,
-        },
-      },
-    },
-  ],
-  stroke: {
-    width: [2, 2],
-    curve: "straight",
-  },
-  grid: {
-    xaxis: {
-      lines: {
-        show: true,
-      },
-    },
-    yaxis: {
-      lines: {
-        show: true,
-      },
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  markers: {
-    size: 4,
-    colors: "#fff",
-    strokeColors: ["#3056D3", "#80CAEE"],
-    strokeWidth: 3,
-    strokeOpacity: 0.9,
-    strokeDashArray: 0,
-    fillOpacity: 1,
-    discrete: [],
-    hover: {
-      size: undefined,
-      sizeOffset: 5,
-    },
-  },
-  xaxis: {
-    type: "category",
-    categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-    ],
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-  yaxis: {
-    title: {
-      style: {
-        fontSize: "0px",
-      },
-    },
-    min: 0,
-    max: 100,
-  },
-};
+
+
 
 const ChartTwo = () => {
+  const {sidebarHide,
+    setSidebarHide,
+    updateCard,
+    setUpdateCard,
+    changeTable,
+    setChangeTable,
+    userData,
+    dataDashboard,
+    isDarkMode,
+    setIsDarkMode} = useContext(AdminDashboardContext)
+  
+    const options = {
+
+      legend: {
+        show: false,
+        position: "top",
+        horizontalAlign: "left",
+      },
+      colors: ["#3C50E0", "#80CAEE"],
+      chart: {
+        fontFamily: "Satoshi, sans-serif",
+        height: 335,
+        type: "area",
+        background: isDarkMode ? "#1E293B" : "#ffffff",
+        foreColor: isDarkMode ? "#FFFFFF" : "#000000",
+        dropShadow: {
+          enabled: true,
+          color: "#623CEA14",
+          top: 10,
+          blur: 4,
+          left: 0,
+          opacity: 0.1,
+        },
+        toolbar: {
+          show: false,
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 1024,
+          options: {
+            chart: {
+              height: 300,
+            },
+          },
+        },
+        {
+          breakpoint: 1366,
+          options: {
+            chart: {
+              height: 350,
+            },
+          },
+        },
+      ],
+      stroke: {
+        width: [2, 2],
+        curve: "straight",
+      },
+      grid: {
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        yaxis: {
+          lines: {
+            show: true,
+          },
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      markers: {
+        size: 4,
+        colors: "#fff",
+        strokeColors: ["#3056D3", "#80CAEE"],
+        strokeWidth: 3,
+        strokeOpacity: 0.9,
+        strokeDashArray: 0,
+        fillOpacity: 1,
+        discrete: [],
+        hover: {
+          size: undefined,
+          sizeOffset: 5,
+        },
+      },
+      xaxis: {
+        type: "category",
+        categories: [
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+        ],
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        title: {
+          style: {
+            fontSize: "0px",
+          },
+        },
+        min: 0,
+        max: 100,
+      },
+    };
+
+
   const series = [
     {
       name: "Product One",
@@ -128,7 +148,7 @@ const ChartTwo = () => {
   ];
 
   return (
-    <div className="col-span-12 rounded-sm bg-white px-5 pb-5 pt-7.5 shadow-default">
+    <div className="col-span-12 rounded-sm bg-white dark:bg-slate-800 dark:text-white px-5 pb-5 pt-7.5 shadow-default">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-col md:flex-row gap-3 sm:gap-5">
           <div className="flex min-w-47.5">
@@ -151,7 +171,7 @@ const ChartTwo = () => {
           </div>
         </div>
         <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-slate-50 p-1.5">
+          <div className="inline-flex items-center rounded-md bg-slate-50  p-1.5">
             <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card">
               Day
             </button>
@@ -166,7 +186,7 @@ const ChartTwo = () => {
       </div>
 
       <div>
-        <div id="chartOne" className="-ml-5">
+        <div id="chartOne" className="-ml-5 text-black">
           <ReactApexChart
             options={options}
             series={series}

@@ -25,6 +25,7 @@ function AdminDashboard() {
     const [usersCount, setUsersCount] = useState("")
     const [campaignsCount, setCampaignsCount] = useState("")
     const [clientCount, setClientCount] = useState("")
+    const [isDarkMode, setIsDarkMode] = useState(true)
 
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
@@ -44,8 +45,19 @@ function AdminDashboard() {
         changeTable,
         setChangeTable,
         userData,
-        dataDashboard
+        dataDashboard,
+        isDarkMode,
+        setIsDarkMode
     }
+
+    useEffect(() => {
+        if(localStorage.getItem('color-theme') == "dark"){
+            setIsDarkMode(true)
+        }else{
+            setIsDarkMode(false)
+        }
+    }, [])
+
 
     async function getUserData() {
         const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-id', {

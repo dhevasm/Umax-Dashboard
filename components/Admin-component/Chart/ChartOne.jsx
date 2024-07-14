@@ -2,20 +2,31 @@
 
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { useContext } from "react";
+import { AdminDashboardContext } from "@/app/admin-dashboard/page";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const ChartOne = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const theme = typeof window !== 'undefined' ? localStorage.getItem('color-theme') : 'light';
+  const {sidebarHide,
+    setSidebarHide,
+    updateCard,
+    setUpdateCard,
+    changeTable,
+    setChangeTable,
+    userData,
+    dataDashboard,
+    isDarkMode,
+    setIsDarkMode} = useContext(AdminDashboardContext)
+  // const theme = typeof window !== 'undefined' ? localStorage.getItem('color-theme') : 'light';
 
-  useEffect(() => {
-    if(theme === 'dark'){
-      setIsDarkMode(true);
-    } else {
-      setIsDarkMode(false);
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   if(theme === 'dark'){
+  //     setIsDarkMode(true);
+  //   } else {
+  //     setIsDarkMode(false);
+  //   }
+  // }, [theme]);
 
   const options = {
     colors: ["#3C50E0", "#80CAEE"],
@@ -30,7 +41,7 @@ const ChartOne = () => {
       zoom: {
         enabled: false,
       },
-      background: isDarkMode ? "#1e293b" : "#ffffff",
+      background: isDarkMode ? "#1E293B" : "#ffffff",
       foreColor: isDarkMode ? "#FFFFFF" : "#000000",
     },
     responsive: [
@@ -89,9 +100,7 @@ const ChartOne = () => {
     fill: {
       opacity: 1,
     },
-    theme: {
-      mode: isDarkMode ? 'dark' : 'light',
-    },
+    
   };
 
   const series = [
@@ -114,11 +123,11 @@ const ChartOne = () => {
           </h4>
         </div>
         <div>
-          <div className="relative z-10 inline-block">
+          <div className="relative inline-block">
             <select
               name="#"
               id="#"
-              className="relative z-20 inline-flex appearance-none dark:text-white bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
+              className="relative inline-flex appearance-none dark:text-white bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
               <option value="" className="dark:bg-boxdark dark:text-white">
                 This Week
@@ -157,7 +166,7 @@ const ChartOne = () => {
             options={options}
             series={series}
             type="bar"
-            height={350}
+            height={350}  
             width={"100%"}
           />
         </div>

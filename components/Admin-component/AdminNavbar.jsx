@@ -10,7 +10,16 @@ import dynamic from "next/dynamic";
 
 function AdminNavbar({userData}){
 
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable} = useContext(AdminDashboardContext)
+    const {sidebarHide,
+        setSidebarHide,
+        updateCard,
+        setUpdateCard,
+        changeTable,
+        setChangeTable,
+        test,
+        dataDashboard,
+        isDarkMode,
+        setIsDarkMode} = useContext(AdminDashboardContext)
 
     const navbarBrand = useRef()
 
@@ -49,6 +58,7 @@ function AdminNavbar({userData}){
     }
 
     function handleTheme(){
+        setIsDarkMode(!isDarkMode)
         document.documentElement.classList.toggle("dark")
         localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
     }
