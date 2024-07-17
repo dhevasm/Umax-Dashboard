@@ -22,6 +22,11 @@ function AdminNavbar({userData}){
         setIsDarkMode} = useContext(AdminDashboardContext)
 
     const navbarBrand = useRef()
+    useEffect(() => {
+        if (window.innerWidth <= 640) {
+            navbarBrand.current.classList.toggle("hidden")
+        } 
+    }, [changeTable])
 
     function hideHandle(){
         setSidebarHide(!sidebarHide)
@@ -31,7 +36,6 @@ function AdminNavbar({userData}){
     const checkIsMobile = () => {
         if (typeof window !== 'undefined') {
             if (window.innerWidth <= 640) {
-                hideHandle()
                 navbarBrand.current.classList.add("hidden")
             } 
         }
@@ -68,7 +72,7 @@ function AdminNavbar({userData}){
         <>
             <nav className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
                 <div className="flex h-full">
-                <div className="w-[300px] h-full bg-slate-800 shadow-none flex items-end p-3 transition-transform" ref={navbarBrand}>
+                <div className="w-[300px] flex h-full bg-slate-800 shadow-none items-end p-3 transition-transform" ref={navbarBrand}>
                     <img src="assets/icon.png" alt="Logo" className="w-10 h-10 decoration-white mr-1"/>
                     <p className="text-white font-sans text-3xl">UMAX</p>
                 </div>

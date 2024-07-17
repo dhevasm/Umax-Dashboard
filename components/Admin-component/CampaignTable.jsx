@@ -87,7 +87,8 @@ export default function CampaignTable() {
                 document.getElementById('account').value = filteredCampaign[0].account_id
                 document.getElementById('objective').value = filteredCampaign[0].objective
                 document.getElementById('start_date').value = dateconvert(filteredCampaign[0].start_date)
-                document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date)
+                filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : 
+                filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : ""
                 document.getElementById('status').value = filteredCampaign[0].status 
                 
             } else{

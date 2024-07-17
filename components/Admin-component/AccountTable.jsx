@@ -763,7 +763,7 @@ export default function AccountTable() {
                                         error.platform ? <p className="text-red-500 dark:text-red-600 text-sm">{error.platform}</p> : ""
                                     }
                                 </div>
-                                <div className="col-span-1" ref={passwordInput}>
+                                <div className="col-span-2 md:col-span-1" ref={passwordInput}>
                                     <label htmlFor="password" className="flex mb-2 text-sm font-medium  ">Password <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <div className="relative">
                                         <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, password: e.target.value})}/>
@@ -775,7 +775,7 @@ export default function AccountTable() {
                                         error.password ? <p className="text-red-500 dark:text-red-600 text-sm">{error.password}</p> : ""
                                     }
                                 </div>
-                                <div className="col-span-1" ref={passwordverifyInput}>
+                                <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
                                     <label htmlFor="passwordverify" className="flex mb-2 text-sm font-medium  ">Confirm Password <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <div className="relative">
                                         <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
@@ -791,12 +791,12 @@ export default function AccountTable() {
                             </div>
                                 <div className="flex justify-between items-end">
                                 <div>
-                                <label htmlFor="status" className="inline-flex items-center cursor-pointer">
+                                <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                 <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                <span className="me-3 text-sm font-medium ">Status</span>
+                                <span className="text-sm font-medium ">Status</span>
                                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                 </label>
-                                    </div>
+                                </div>
                                         
                                         {
                                             modeModal === 'Edit' ? <div className="flex gap-3">
