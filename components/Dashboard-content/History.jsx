@@ -240,7 +240,7 @@ export default function History({ id }) {
                     ) : (
                         <>
                             <div className="w-full flex gap-3 justify-end pb-5">
-                                <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-800 dark:text-gray-200"
+                                <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] dark:text-white text-semibold py-2 dark:bg-gray-800"
                                     value={dataPerPage}
                                     onChange={handleSortChange}
                                 >

@@ -91,7 +91,7 @@ function Dashboard() {
         {/* Dashboard Container */}
         <div className="flex w-full min-h-full justify-end items-center bg-gray-100 dark:bg-slate-900">
         {/* Dashboard Card */}
-            <div className="w-[75%] min-h-screen bg-white dark:bg-slate-800 rounded-xl mt-[100px] md:me-3 ms-5 text-black dark:text-white transition-transform" ref={Card}>
+            <div className="w-[75%] min-h-screen bg-white dark:bg-slate-800 rounded-xl mt-[100px] md:me-3 md:ms-5 text-black dark:text-white transition-transform" ref={Card}>
                 {/* header */}
                 <div className="m-10">
                 {campaignID === '' ? (
@@ -104,36 +104,36 @@ function Dashboard() {
                 )}
 
                 {/* Dashboard Nav Link */}
-                <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300 dark:border-slate-600">
-                    <style jsx>
-                    {`
-                        .dashboardActive {
-                        color: rgb(38, 100, 235);
-                        padding-bottom: 10px;
-                        border-bottom: 3px solid blue;
-                        font-weight: 800;
-                        transition: background-color 0.5s, color 0.5s;
-                        }
-                        .DashboardLink:hover {
-                        cursor: pointer;
-                        }
-                    `}
-                    </style>
-                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "performance" ? "dashboardActive" : ""}`} id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
-                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "metrics" ? "dashboardActive" : ""}`} id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
-                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "history" ? "dashboardActive" : ""}`} id="history" onClick={() => SetActiveLink("history")}>History</p>
-                    <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "setting" ? "dashboardActive" : ""}`} id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
-                </div>
+                  <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300 dark:border-slate-600">
+                      <style jsx>
+                      {`
+                          .dashboardActive {
+                          color: rgb(38, 100, 235);
+                          padding-bottom: 10px;
+                          border-bottom: 3px solid blue;
+                          font-weight: 800;
+                          transition: background-color 0.5s, color 0.5s;
+                          }
+                          .DashboardLink:hover {
+                          cursor: pointer;
+                          }
+                      `}
+                      </style>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "performance" ? "dashboardActive" : ""}`} id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "metrics" ? "dashboardActive" : ""}`} id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "history" ? "dashboardActive" : ""}`} id="history" onClick={() => SetActiveLink("history")}>History</p>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "setting" ? "dashboardActive" : ""}`} id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
+                  </div>
                 </div>
 
                 {/* Nav Select */}
                 <div className="flex md:hidden justify-end m-10">
-                <select className="border w-full border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-1 px-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" onChange={(e) => SetActiveLink(e.target.value)}>
-                    <option value="performance">Performance</option>
-                    <option value="metrics">Metrics</option>
-                    <option value="history">History</option>
-                    <option value="setting">Setting</option>
-                </select>
+                  <select className="border w-full border-gray-300 py-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-1 px-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" onChange={(e) => SetActiveLink(e.target.value)}>
+                      <option value="performance">Performance</option>
+                      <option value="metrics">Metrics</option>
+                      <option value="history">History</option>
+                      <option value="setting">Setting</option>
+                  </select>
                 </div>
 
                 {/* Content */}

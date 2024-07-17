@@ -389,14 +389,14 @@ const ClientTable = () => {
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
                     <div className={`mb-4 flex flex-row items-start gap-4`}>
                         <input
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] text-gray-400 py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
                             type="text"
                             placeholder="Search"
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />
                         <select 
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 py-2 bg-white dark:bg-gray-700 dark:text-gray-300`} 
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`} 
                             value={selectedStatus} 
                             onChange={handleStatusChange}
                         >
@@ -406,7 +406,7 @@ const ClientTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
-                        <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200"
+                        <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}
                         >
@@ -423,7 +423,7 @@ const ClientTable = () => {
                     </div>
                 </div>
                 <div className='overflow-x-auto'>
-                    <table className='w-full border dark:border-gray-600'>
+                    <table className='w-full'>
                         <thead className='bg-white dark:bg-blue-700'>
                             <tr className='text-left'>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>No.</th>
@@ -465,13 +465,11 @@ const ClientTable = () => {
                                 ))
                             ) : tableData.length > 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="text-center py-4 border dark:border-gray-600">
-                                        Data Not Found
-                                    </td>
+                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">Data Not Found</td>
                                 </tr>
                             ) : (
                                 <tr>
-                                    <td colSpan="6" className="text-center">
+                                    <td colSpan="8" className="text-center dark:border-gray-700">
                                         <LoadingCircle />
                                     </td>
                                 </tr>

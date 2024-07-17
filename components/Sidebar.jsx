@@ -102,7 +102,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
                         }
                         `}
                     </style>
-                    <p className="SidebarFilterActive hover:bg-slate-600 dark:hover:bg-slate-400 text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>All</p>
+                    <p className="SidebarFilterActive text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>All</p>
                     <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
                     <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="active" onClick={() => handleClick(1, 'active')}>Active</p>
                     <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
