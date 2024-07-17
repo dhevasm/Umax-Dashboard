@@ -104,7 +104,11 @@ export default function ClientTable() {
                 setValues({name: filteredclient[0].name, address: filteredclient[0].address, contact: filteredclient[0].contact.slice(1), email: filteredclient[0].email})
                 setError({name: '', address: '', contact: '', email: ''})
                 document.getElementById('name').value = filteredclient[0].name
-                document.getElementById('address').value = filteredclient[0].address
+                document.getElementById('country').value = filteredclient[0].address.split(", ")[1]
+                handleCityList(filteredclient[0].address.split(", ")[1])
+                setTimeout(() => {
+                    document.getElementById('city').value = filteredclient[0].address.split(", ")[0]
+                }, 300);
                 document.getElementById('contact').value = filteredclient[0].contact.slice(1)
                 document.getElementById('email').value = filteredclient[0].email
                 document.getElementById('status').checked = filteredclient[0].status == 1 ? true : false
@@ -113,13 +117,14 @@ export default function ClientTable() {
                 tenantInput.current.classList.add("hidden")
                 // console.log(client_id)
             } else{
-                Swal.fire("Campaing not found");
+                Swal.fire("client not found");
             }
         }else if(mode == "Create") {
             setValues({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             document.getElementById('name').value = null
-            document.getElementById('address').value = null
+            document.getElementById('country').value = 0
+            document.getElementById('city').value = 0
             document.getElementById('contact').value = null
             document.getElementById('email').value = null  
             document.getElementById('password').value = null  
@@ -264,7 +269,9 @@ export default function ClientTable() {
     async function createClient(){
         if(isvalid){
             const name = document.getElementById('name').value
-            const address = document.getElementById('address').value
+            const country = document.getElementById('country').value
+            const city = document.getElementById('city').value
+            const address = `${city}, ${country}`
             const contact = `+${document.getElementById('contact').value}`
             const email = document.getElementById('email').value
             const status = document.getElementById('status').checked ? 1 : 2
@@ -301,7 +308,8 @@ export default function ClientTable() {
                 closeModal()
                 setUpdateCard(true)
                 document.getElementById('name').value = null
-                document.getElementById('address').value = null
+                document.getElementById('country').value = 0
+                document.getElementById('city').value = 0
                 document.getElementById('contact').value = null
                 document.getElementById('email').value = null
                 document.getElementById('password').value = null
@@ -327,7 +335,9 @@ export default function ClientTable() {
             if(isvalid){
 
                 const name = document.getElementById('name').value
-                const address = document.getElementById('address').value
+                const country = document.getElementById('country').value
+                const city = document.getElementById('city').value
+                const address = `${city}, ${country}`
                 const contact = `+${document.getElementById('contact').value}`
                 const email = document.getElementById('email').value
                 const status = document.getElementById('status').checked ? 1 : 2
@@ -348,7 +358,8 @@ export default function ClientTable() {
                     getclient()
                     closeModal()
                     document.getElementById('name').value = null
-                    document.getElementById('address').value = null
+                    document.getElementById('country').value = 0
+                    document.getElementById('city').value = 0
                     document.getElementById('contact').value = null
                     document.getElementById('email').value = null
                     Swal.fire("Success", "Client Updated", "success")
@@ -425,6 +436,30 @@ export default function ClientTable() {
                 data.name.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     });
+
+
+    const [Country, setCountry] = useState([])
+    const [City, setCity] = useState([])
+
+    const getAdresslist = async () => {
+        await axios.get("https://countriesnow.space/api/v0.1/countries").then((response) => {
+            setCountry(response.data.data)
+        })
+    }
+
+    async function handleCityList(countryname){
+        let citylist = []
+        Country.map((item) => {
+            if(item.country == countryname){
+                citylist= item.cities
+            }
+        })
+        setCity(citylist)
+    }
+
+    useEffect(() => {
+        getAdresslist()
+    }, [])
 
     // Calculate total number of pages
     const totalPages = Math.ceil(filteredData.length / dataPerPage);
@@ -532,6 +567,7 @@ export default function ClientTable() {
     const indexOfLastclient = currentPage * dataPerPage;
     const indexOfFirstclient = indexOfLastclient - dataPerPage;
     const currentclients = filteredData.slice(indexOfFirstclient, indexOfLastclient);
+
 
     return (
         <>
@@ -705,31 +741,50 @@ export default function ClientTable() {
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className="col-span-1 ">
+                                <div className="col-span-2">
                                     <label htmlFor="name" className="block mb-2 text-sm font-medium ">Client Name <span className="text-red-500">*</span> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
                                     required
                                     onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
-                                        error.name && <p className="text-red-500 text-sm">{error.name}</p>
+                                        error.name && <p className="text-red-500 text-xs">{error.name}</p>
                                     }
                                 </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="address" className="block mb-2 text-sm font-medium ">Address <span className="text-red-500">*</span> </label>
-                                    <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client address here"
-                                    required
-                                    onChange={(e) => setValues({...values, address: e.target.value})}/>
+                                <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">Country</label>
+                                <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
+                                    <option value="0" key={0} disabled hidden>Select Country</option>
                                     {
-                                        error.address && <p className="text-red-500 text-sm">{error.address}</p>
+                                        Country.length > 0 ? Country.map((item, index) => (
+                                            <option key={index} value={item.country}>{item.country}</option>
+                                        )) : <option disabled>Loading</option>
                                     }
-                                </div>
+                                </select>
+                            </div>
+
+                            <div className="col-span-2 md:col-span-1">
+                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">City</label>
+                                <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}  onChange={(e) => setValues({...values, address: e.target.value})}>
+                                    {
+                                        City.length > 0 ? <option disabled value={0} key={0} hidden>Select City</option> : ""
+                                    }
+                                    {
+                                        City.length > 0 ? City.map((item, index) => (
+                                            <option key={index} value={item}>{item}</option>
+                                        )) : <option disabled value={0} key={0} hidden>Please Select Country</option>
+                                    }
+                                </select>
+                                {
+                                    error.address && <p className="text-red-500 text-xs">{error.address}</p>
+                                }
+                            </div>
                                 
                                 <div className="col-span-1">
                                     <label htmlFor="email" className="block mb-2 text-sm font-medium ">Email <span className="text-red-500">*</span> </label>
                                     <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required
                                     onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {
-                                        error.email && <p className="text-red-500 text-sm">{error.email}</p>
+                                        error.email && <p className="text-red-500 text-xs">{error.email}</p>
                                     }
                                 </div>
                                 <div className="col-span-1">
@@ -737,10 +792,10 @@ export default function ClientTable() {
                                     <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required
                                     onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                     {
-                                        error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
+                                        error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
                                     }
                                 </div>
-                                <div className="col-span-1" ref={passwordInput}>
+                                <div className="col-span-2 md:col-span-1" ref={passwordInput}>
                                     <label htmlFor="password" className="block mb-2 text-sm font-medium ">Password <span className="text-red-500">*</span> </label>
                                     <div className="relative">
                                         <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required 
@@ -750,10 +805,10 @@ export default function ClientTable() {
                                         </button>
                                     </div>
                                     {
-                                        error.password && <p className="text-red-500 text-sm">{error.password}</p>
+                                        error.password && <p className="text-red-500 text-xs">{error.password}</p>
                                     }
                                 </div>
-                                <div className="col-span-1" ref={passwordverifyInput}>
+                                <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
                                     <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium ">Confirm Password <span className="text-red-500">*</span> </label>
                                     <div className="relative">
                                         <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
@@ -762,7 +817,7 @@ export default function ClientTable() {
                                         </button>
                                     </div>
                                     {
-                                        error.passwordverify && <p className="text-red-500 text-sm">{error.passwordverify}</p>
+                                        error.passwordverify && <p className="text-red-500 text-xs">{error.passwordverify}</p>
                                     }
                                 </div>
                                 <div className="col-span-2" ref={tenantInput}>
@@ -781,9 +836,9 @@ export default function ClientTable() {
                             
                                 <div className="flex justify-between items-end">
                                 <div>
-                                    <label htmlFor="status" className="inline-flex items-center cursor-pointer">
+                                    <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                     <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                    <span className="me-3 text-sm font-medium ">Status</span>
+                                    <span className="text-sm font-medium ">Status</span>
                                     <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                     </label>
                                 </div>

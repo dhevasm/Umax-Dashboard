@@ -37,6 +37,12 @@ function AdminDashboard() {
     })
     const [changeTable, setChangeTable] = useState("dashboard")
 
+    useEffect(() => {
+        if (window.innerWidth <= 640) {
+            setSidebarHide(!sidebarHide)
+        } 
+    }, [changeTable])
+    
     const AdminDashboardContextValue = {
         sidebarHide,
         setSidebarHide,
