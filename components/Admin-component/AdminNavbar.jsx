@@ -77,9 +77,11 @@ function AdminNavbar({userData}){
                     </button>
                 </div>
 
-                <div className="flex items-center gap-3 me-5 md:me-10 text-xs cursor-pointer" onClick={() => {
-                    document.querySelector("#profileDropDown").classList?.toggle("hidden")
-                }}>
+                <div className="flex items-center gap-3 me-5 md:me-10 text-xs cursor-pointer" 
+                // onClick={() => {
+                //     document.querySelector("#profileDropDown").classList?.toggle("hidden")
+                // }}
+                >
                     <div className="hidden absolute top-16 right-10 p-5 bg-white rounded-lg shadow-lg" id="profileDropDown">
                     {userData.image ?  <img src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-20 h-20 bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p> }
                     <h1 className="font-bold text-lg">{userData.name}</h1><p className="text-md">{userData.roles}</p>
