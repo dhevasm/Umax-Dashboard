@@ -9,6 +9,7 @@ import { BiBell, BiGroup, BiSolidMegaphone} from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
+import { FaUser, FaUsers, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
 
 export default function Navbar() {
@@ -21,6 +22,7 @@ export default function Navbar() {
     const [role, setRole] = useState('')
     const [image, setImage] = useState('')
     const [isHidden, setIsHidden] = useState(true)
+    const [isDark, setIsDark] = useState(false)
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app'
 
     const fetchUser = async () => {
@@ -43,23 +45,14 @@ export default function Navbar() {
         }
     }
 
-    const checkIsMobile = () => {
-        if (typeof window !== 'undefined') {
-            if (window.innerWidth <= 640) {
-                navbarBrand.current.classList.add("hidden")
-            } 
-        }
-    }
-
     useEffect(() => {
-        checkIsMobile()
        if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
-            document.getElementById("theme").checked = true
+            setIsDark(true)
             localStorage.setItem('color-theme', 'dark')
         } else {
             document.documentElement.classList.remove('dark')
-            document.getElementById("theme").checked = false
+            setIsDark(false)
             localStorage.setItem('color-theme', 'light')
         }
     }, [])
@@ -92,7 +85,7 @@ export default function Navbar() {
         return (
             <div className="text-black me-5 hover:cursor-pointer relative">
                 <div className="flex items-center">
-                    <img src={`data:image/png;base64, ${image}`} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
+                    <img src={`data:image/png;base64, ${image}`} alt="Profile" className="w-11 h-11 rounded-full mr-2" />
                     <h1 onClick={handleToggle} className="flex flex-col cursor-pointer">
                         <div className="text-sm flex gap-1 items-end font-medium">
                         <p className="dark:text-slate-100">{name}</p>
@@ -103,17 +96,28 @@ export default function Navbar() {
                         <div className="text-xs text-gray-500 dark:text-gray-400">{role}</div>
                     </h1>
                 </div>
-                <div className={`profile-dropdown ${isHidden ? 'hidden' : ''} absolute z-10 mt-3 -right-7 p-3 bg-white dark:bg-slate-700 border border-gray-100 dark:border-gray-600 shadow-md w-48 transition-all duration-3000`}>
+                <div className={`profile-dropdown ${isHidden ? 'hidden' : ''} absolute z-10 mt-3 -right-7 p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg w-52 transition-all duration-300 ease-in-out`}>
                     <div className="flex flex-col mb-2">
-                        <p className="font-semibold text-[12px] dark:text-slate-100 dark:font-thin">{name}</p>
-                        <p className="from-neutral-300 text-[12px] dark:text-blue-600 dark:font-semibold">{email}</p>
+                        <div className="flex justify-between">
+                            <p className="font-bold text-[14px] text-gray-800 dark:text-slate-100">{name}</p>
+                            <label htmlFor="theme" className="inline-flex sm:hidden md:hidden lg:hidden xl:hidden items-center cursor-pointer">
+                                <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
+                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                </div>
+                            </label>
+                        </div>
+                        <p className="text-[12px] text-gray-500 dark:text-blue-500">{email}</p>
                     </div>
-                    <div className="border-t border-gray-300"></div>
-                    <Link href="/profile" className="block px-2 py-1 text-[12px] text-black dark:text-slate-100">Profile</Link>
-                    <a href="/users" className="block px-2 py-1 text-[12px] text-black dark:text-slate-100">Users</a>
-                    <a href="/settings" className="block px-2 py-1 text-[12px] text-black dark:text-slate-100">Settings</a>
-                    <div className="border-t border-gray-300"></div>
-                    <a onClick={handleLogout} className="block px-2 py-1 text-[12px] mt-2 cursor-pointer dark:text-slate-100">Logout</a>
+                    <div className="border-t border-gray-300 dark:border-gray-600"></div>
+                    <Link href="/profile" className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                        <FaUser className="mr-2" />
+                        Profile
+                    </Link>
+                    <div className="border-t border-gray-300 dark:border-gray-600"></div>
+                    <a onClick={handleLogout} className="flex items-center px-2 py-1 text-[14px] mt-2 text-red-600 dark:text-red-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                        <FaSignOutAlt className="mr-2" />
+                        Logout
+                    </a>
                 </div>
             </div>
         );
@@ -121,6 +125,7 @@ export default function Navbar() {
 
     function handleTheme(){
         document.documentElement.classList.toggle("dark")
+        setIsDark(!isDark);
         localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
     }
 
@@ -130,11 +135,11 @@ export default function Navbar() {
             <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <img src="assets/logo.png" alt="Logo" className="ms-5 w-[150px]" />
+                    <img src="assets/logo.png" alt="Logo" className="ms-4 w-[130px]" />
 
                     {/* Nav Links */}
                     <div>
-                    <ul className="hidden md:flex p-2 text-black dark:text-slate-100 gap-5">
+                    <ul className="hidden sm:hidden md:hidden lg:flex xl:flex p-2 text-black dark:text-slate-100 gap-5">
                         <style jsx>
                         {`
                             .active-link {
@@ -191,7 +196,7 @@ export default function Navbar() {
 
                     {/* Profile */}
                     <div className="flex gap-3 items-center">
-                        <div className="relative text-black dark:text-slate-100 me-3 hover:cursor-pointer">
+                        <div className="relative text-black hidden sm:flex md:flex lg:flex xl:flex dark:text-slate-100 me-3 hover:cursor-pointer">
                             <div className="" onClick={(e) => {
                             document.querySelector(".notif-dropdown").classList.toggle("hidden");
                             e.stopPropagation();
@@ -204,8 +209,8 @@ export default function Navbar() {
                             <a href="/" className="hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg">Notification 3</a>
                             </div>
                         </div>
-                        <label htmlFor="theme" className="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
+                        <label htmlFor="theme" className="hidden sm:inline-flex md:inline-flex lg:inline-flex xl:inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" checked={isDark} id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
                             <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                             </div>
                         </label>

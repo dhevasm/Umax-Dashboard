@@ -421,7 +421,7 @@ const CampaignTable = () => {
                             onChange={handleSearchChange}
                         />
                         <select
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200`}
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300`}
                             value={selectedPlatform}
                             onChange={handlePlatformChange}
                         >
@@ -431,7 +431,7 @@ const CampaignTable = () => {
                             <option value="3">Tiktok Ads</option>
                         </select>
                         <select
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200`}
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300`}
                             value={selectedObjective}
                             onChange={handleObjectiveChange}
                         >
@@ -442,7 +442,7 @@ const CampaignTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
-                        <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-gray-400 text-semibold py-2 dark:bg-gray-700 dark:text-gray-200"
+                        <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}
                         >

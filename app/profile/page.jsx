@@ -12,6 +12,7 @@ import { FaUsersCog } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState({});
@@ -64,6 +65,23 @@ const Profile = () => {
         language, timezoneName, culture
     } = profileData;
 
+    useEffect(() => {
+       if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById("theme").checked = true
+            localStorage.setItem('color-theme', 'dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+            document.getElementById("theme").checked = false
+            localStorage.setItem('color-theme', 'light')
+        }
+    }, [])
+
+    function handleTheme(){
+        document.documentElement.classList.toggle("dark")
+        localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
+    }
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center">
             <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-b-lg overflow-hidden">
@@ -74,9 +92,16 @@ const Profile = () => {
                         </button>
                     </div>
                     <div className="absolute top-4 right-4">
-                        <CiEdit className="text-white text-2xl cursor-pointer hover:text-gray-200" />
+                        <a href="/profile/edit">
+                            <CiEdit className="text-white text-2xl cursor-pointer hover:text-gray-200" />
+                        </a>
                     </div>
                     <div className="flex flex-col items-center mt-10">
+                        <label htmlFor="theme" className="items-center cursor-pointer hidden">
+                            <input type="checkbox" value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
+                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            </div>
+                        </label>
                         <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden">
                             {image ? (
                                 <img src={`data:image/png;base64,${image}`} className="object-cover w-full h-full" alt="Profile" />

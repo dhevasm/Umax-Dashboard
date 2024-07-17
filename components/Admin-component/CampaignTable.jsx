@@ -25,6 +25,8 @@ export default function CampaignTable() {
     const [selectedPlatform, setSelectedPlatform] = useState("");
     const [selectedObjective, setSelectedObjective] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [dataPerPage, setDataPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
@@ -159,15 +161,7 @@ export default function CampaignTable() {
             confirmButtonText: "Yes, download it!"
           }).then((result) => {
             if (result.isConfirmed) {
-                const backupLastPage = lastPage;
-                const backupFirstPage = firstPage;
-                setFirstPage(0);
-                setLastPage(campaigns.length);
-                setTimeout(() => {
-                    onDownload();
-                    setFirstPage(backupFirstPage);
-                    setLastPage(backupLastPage);
-                }, 100);
+                onDownload();
               Swal.fire({
                 title: "Downloaded!",
                 text: "Your file has been downloaded.",
@@ -231,9 +225,6 @@ export default function CampaignTable() {
         })
         setCampaigns(response.data.Data)
         setCampaignMemo(response.data.Data)
-        setTotalPages(Math.ceil(campaigns.length / itemsPerPage));
-        setFirstPage(0);
-        setLastPage(itemsPerPage);
     }
 
     useEffect(() => {
@@ -395,77 +386,6 @@ export default function CampaignTable() {
         }
     }, [])
 
-
-    // Pagination
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [totalPages, setTotalPages] = useState(0);
-    const [firstPage, setFirstPage] = useState(0);
-    const [lastPage, setLastPage] = useState(10);
-
-    useEffect(() => {
-        setCurrentPage(1);
-        setTotalPages(Math.ceil(campaigns.length / itemsPerPage));
-        setFirstPage(0);
-        setLastPage(itemsPerPage);
-    }, [campaigns, itemsPerPage]);
-
-    const firstPageButton = useRef(null);
-    const previousButton = useRef(null);
-    const nextButton = useRef(null);
-    const lastPageButton = useRef(null);
-
-    useEffect(() => {
-        setFirstPage((currentPage - 1) * itemsPerPage);
-        setLastPage(currentPage * itemsPerPage);
-        if(currentPage == 1){
-            firstPageButton.current.classList.add("paginDisable");
-            previousButton.current.classList.add("paginDisable");
-            nextButton.current.classList.remove("paginDisable");
-            lastPageButton.current.classList.remove("paginDisable");
-        }else if(currentPage == totalPages){
-            nextButton.current.classList.add("paginDisable");
-            lastPageButton.current.classList.add("paginDisable");
-            firstPageButton.current.classList.remove("paginDisable");
-            previousButton.current.classList.remove("paginDisable");
-        }else if(currentPage == 1 && currentPage == totalPages){
-            firstPageButton.current.classList.add("paginDisable");
-            previousButton.current.classList.add("paginDisable");
-            nextButton.current.classList.add("paginDisable");
-            lastPageButton.current.classList.add("paginDisable");
-        }else{
-            firstPageButton.current.classList.remove("paginDisable");
-            previousButton.current.classList.remove("paginDisable");
-            nextButton.current.classList.remove("paginDisable");
-            lastPageButton.current.classList.remove("paginDisable");
-        }
-    }, [currentPage]);
-
-    function handleNextButton(){
-        if(currentPage < totalPages){
-            setCurrentPage(currentPage + 1);
-        }
-    }
-
-    function handlePreviousButton(){
-        if(currentPage > 1){
-            setCurrentPage(currentPage - 1);
-        }
-    }
-
-    function handleFristPageButton(){
-        if(currentPage > 1){
-            setCurrentPage(1);
-        }
-    }
-
-    function handleLastPageButton(){
-        if(currentPage < totalPages){
-            setCurrentPage(totalPages);
-        }
-    }
-
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
     };
@@ -501,6 +421,113 @@ export default function CampaignTable() {
                 data.name.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     });
+
+    // Calculate total number of pages
+    const totalPages = Math.ceil(filteredData.length / dataPerPage);
+
+    // Function to change current page
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
+    const renderPagination = () => {
+        const pageButtons = [];
+        const maxButtons = 3; // Maximum number of buttons to show
+    
+        // First page button
+        pageButtons.push(
+            <button
+                key="first"
+                className={`px-3 py-1 dark:text-white ${
+                    currentPage === 1 ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(1)}
+                disabled={currentPage === 1}
+            >
+                {'<<'}
+            </button>
+        );
+    
+        // Previous page button
+        pageButtons.push(
+            <button
+                key="prev"
+                className={`px-3 py-1 dark:text-white ${
+                    currentPage === 1 ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+            >
+                {'<'}
+            </button>
+        );
+    
+        // Render page buttons
+        for (let i = 1; i <= totalPages; i++) {
+            // Show only maxButtons buttons around the current page
+            if (
+                i >= currentPage - Math.floor(maxButtons / 2) &&
+                i <= currentPage + Math.floor(maxButtons / 2)
+            ) {
+                pageButtons.push(
+                    <button
+                        key={i}
+                        className={`px-3 py-1 dark:text-white ${
+                            i === currentPage ? "font-bold" : ""
+                        } rounded-md`}
+                        onClick={() => goToPage(i)}
+                    >
+                        {i}
+                    </button>
+                );
+            }
+        }
+    
+        // Info page
+        pageButtons.push(
+            <span key="info" className="px-3 py-1 dark:text-white rounded-md">
+                {`Page ${currentPage} / ${totalPages}`}
+            </span>
+        );
+    
+        // Next page button
+        pageButtons.push(
+            <button
+                key="next"
+                className={`px-3 py-1 dark:text-white ${
+                    currentPage === totalPages ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+            >
+                {'>'}
+            </button>
+        );
+    
+        // Last page button
+        pageButtons.push(
+            <button
+                key="last"
+                className={`px-3 py-1 dark:text-white ${
+                    currentPage === totalPages ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(totalPages)}
+                disabled={currentPage === totalPages}
+            >
+                {'>>'}
+            </button>
+        );
+    
+        return (
+            <div className="flex justify-center gap-2 mt-4">
+                {pageButtons}
+            </div>
+        );
+    };
+       
+    const indexOfLastcampaign = currentPage * dataPerPage;
+    const indexOfFirstcampaign = indexOfLastcampaign - dataPerPage;
+    const currentcampaigns = filteredData.slice(indexOfFirstcampaign, indexOfLastcampaign);
 
     function dateconvert(date){
         let [day, month, year, hour] = date.split(" ");
@@ -642,7 +669,7 @@ export default function CampaignTable() {
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
                                     {
-                                        filteredData.length > 0 ? filteredData.map((campaign, index) => {
+                                        currentcampaigns.length > 0 ? currentcampaigns.map((campaign, index) => {
                                             return (
                                                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
                                                     <td  scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{index + 1}</td>
@@ -655,7 +682,7 @@ export default function CampaignTable() {
                                                     <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.company_name}</td>
                                                 </tr>
                                             )
-                                    }).slice(firstPage, lastPage) : (
+                                    }) : (
                                         // Check user yang sudah difilter
                                         campaigns.length > 0 ? (
                                             // Jika data tida ditemukan
@@ -692,21 +719,7 @@ export default function CampaignTable() {
                         </style>
                         <div className="w-full flex justify-between items-center mb-4">
                             <div className="mt-5 flex  gap-3 items-center w-full justify-end">
-                                <button className="  hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
-                                    {"<<"}
-                                </button>
-                                <button className="  hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
-                                    {"<"}   
-                                </button>
-                                <div>
-                                    <p>Page {currentPage} / {totalPages}</p>
-                                </div>
-                                <button className="  hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
-                                    {">"}
-                                </button>
-                                <button className="  hover:bg-gray-100 dark:hover:bg-slate-900 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
-                                {">>"}
-                                </button>
+                                {renderPagination()}
                             </div>
                         </div>
                         {/* Pagin end */}
