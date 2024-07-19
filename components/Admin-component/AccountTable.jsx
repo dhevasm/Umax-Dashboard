@@ -411,7 +411,7 @@ export default function AccountTable() {
         return (
           <div className="flex justify-center items-center h-20">
             <div className="relative">
-              <div className="w-10 h-10 border-4 border-[#1C2434] dark:border-slate-200 rounded-full border-t-transparent animate-spin"></div>
+              <div className="w-10 h-10 border-4 border-[#1C2434] dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
             </div>
           </div>
         );
@@ -526,24 +526,10 @@ export default function AccountTable() {
     return (
         <>
             <div className="w-full">
-                <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-                    <h1 className="text-2xl font-bold uppercase flex dark:text-white gap-2"><RiIdCardLine/> Accounts</h1>
+                <div className="flex flex-col md:flex-row justify-between items-center mb-10">
+                    <h1 className="text-3xl font-bold uppercase flex dark:text-white gap-2"><RiIdCardLine size={35}/> Accounts</h1>
                     <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Accounts</p>
                 </div>
-
-                {/* {'Statistic Card'} */}
-                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                    {
-                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
-                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
-                        <CountCard title="Tenants" value={<div>Loading...</div>} />
-                    }
-                    
-                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
-                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
-                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
-                </div>
-                {/* {'Statistic Card end'} */}
 
                 <div className="w-full h-fit mb-5 rounded-md shadow-md">
                     {/* Header */}
@@ -623,33 +609,31 @@ export default function AccountTable() {
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700 dark:text-white">
                                     <tr>
-                                    <th scope="col" className="px-5 border dark:border-none py-3">No</th>
-                                    <th scope="col" className="px-5 border dark:border-none py-3">Username</th>
-                                    <th scope="col" className="px-5 border dark:border-none py-3">Client</th>
-                                    <th scope="col" className="px-5 border dark:border-none py-3">Platform</th>
-                                    <th scope="col" className="px-5 border dark:border-none py-3">Email</th>
-                                    <th scope="col" className="px-5 border dark:border-none py-3">Status</th>
+                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">Username</th>
+                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">Client</th>
+                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
+                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">Email</th>
+                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800 dark:text-white">
                                     {
                                         currentaccounts.length > 0 ? currentaccounts.map((account, index) => {
                                             return (
-                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 hover:cursor-pointer dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300" onClick={() => showModal("Edit", account._id)}>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap">{index + 1}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap">{account.client_name}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium  dark:text-white whitespace-nowrap"><a href={`mailto:${account.email
+                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 hover:cursor-pointer dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 dark:text-white whitespace-nowrap underline font-semibold" title="Click to edit" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.client_name}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap"><a href={`mailto:${account.email
                                                     }`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
-                                                    <td scope="row" className="px-5 border dark:border-none py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
                                                 </tr>
                                             )
                                     }) : (
                                         // Check user yang sudah difilter
                                         account.length > 0 ? (
                                             // Jika data tida ditemukan
-                                            <tr className="text-center border">
+                                            <tr className="text-center border dark:border-gray-500">
                                                 <td colSpan={8} className=" py-4">
                                                     Data not found
                                                 </td>
@@ -657,7 +641,7 @@ export default function AccountTable() {
                                         ) :
                                         (
                                             // Jika data ditemukan tapi masih loading
-                                            <tr className="text-center py-3">
+                                            <tr className="text-center py-3 border dark:border-gray-500">
                                                 <td colSpan={8}>
                                                     <LoadingCircle />
                                                 </td>
@@ -683,7 +667,7 @@ export default function AccountTable() {
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-slate-900 rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-slate-900 rounded-md shadow">
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">

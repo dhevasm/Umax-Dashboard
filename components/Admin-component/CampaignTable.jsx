@@ -395,7 +395,7 @@ export default function CampaignTable() {
         return (
           <div className="flex justify-center items-center h-20">
             <div className="relative">
-              <div className="w-10 h-10 border-4 border-[#1C2434] rounded-full border-t-transparent animate-spin"></div>
+              <div className="w-10 h-10 border-4 border-[#1C2434] dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
             </div>
           </div>
         );
@@ -530,31 +530,16 @@ export default function CampaignTable() {
     return (
         <>
             <div className="w-full">
-                <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-
-                    <h1 className="text-2xl font-bold dark:text-white uppercase flex gap-2"> <RiMegaphoneLine/> Campaigns</h1>
+                <div className="flex flex-col md:flex-row justify-between items-center mb-10">
+                    <h1 className="text-3xl font-bold dark:text-white uppercase flex gap-2"> <RiMegaphoneLine size={35}/> Campaigns</h1>
                     <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
                 </div>
-
-                {/* {'Statistic Card'} */}
-                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-7 w-full mb-3">
-                    {
-                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div>Loading...</div>} handleClick={'tenants'} /> : 
-                        userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div>Loading...</div>} handleClick={'company'} /> :
-                        <CountCard title="Tenants" value={<div>Loading...</div>} />
-                    }
-                    
-                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div> Loading...</div>} handleClick={'users'} />
-                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div>Loading...</div>} handleClick={'campaigns'} />
-                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div>Loading...</div>} handleClick={'clients'} />
-                </div>
-                {/* {'Statistic Card end'} */}
 
                 <div className="w-full h-fit mb-5 rounded-md shadow-md">
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
-                            <FaTable  className="text-blue-200" size={18}/><p className="text-white text-md font-semibold">Campaigns Table</p>
+                            <FaTable  className="text-blue-200" size={18}/><p className="text-white text-md font-semibold"></p>
                         </h1>
                     </div>
                     {/* Header end */}
@@ -645,14 +630,13 @@ export default function CampaignTable() {
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">No.</th>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">Name</th>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">Client</th>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">Account</th>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">Platform</th>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">Objective</th>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">Status</th>
-                                        <th scope="col" className="px-5 border dark:border-none py-3">Company</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Name</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Client</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Account</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Objective</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Company</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
@@ -660,21 +644,20 @@ export default function CampaignTable() {
                                         currentcampaigns.length > 0 ? currentcampaigns.map((campaign, index) => {
                                             return (
                                                 <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
-                                                    <td  scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{index + 1}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.name}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.client_name}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.account_name}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.status == 1 ? "Active" : campaign.status == 3 ? "Complete" : "Draft"}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-none font-medium  whitespace-nowrap">{campaign.company_name}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.name}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.client_name}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.account_name}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.status == 1 ? "Active" : campaign.status == 3 ? "Complete" : "Draft"}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.company_name}</td>
                                                 </tr>
                                             )
                                     }) : (
                                         // Check user yang sudah difilter
                                         campaigns.length > 0 ? (
                                             // Jika data tida ditemukan
-                                            <tr className="text-center border">
+                                            <tr className="text-center border dark:border-gray-500">
                                                 <td colSpan={8} className=" py-4">
                                                     Data not found
                                                 </td>
@@ -682,7 +665,7 @@ export default function CampaignTable() {
                                         ) :
                                         (
                                             // Jika data ditemukan tapi masih loading
-                                            <tr className="text-center py-3">
+                                            <tr className="text-center py-3 border dark:border-gray-500">
                                                 <td colSpan={8}>
                                                     <LoadingCircle />
                                                 </td>
