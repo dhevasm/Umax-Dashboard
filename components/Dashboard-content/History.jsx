@@ -251,7 +251,7 @@ export default function History({ id }) {
                                 <button className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2">
                                     <RiFileExcel2Line className="relative font-medium text-lg" onClick={() => ConfirmationModal('excel')} />
                                 </button>
-                                <button className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2" disabled>
+                                <button className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2" disabled title="Not yet available">
                                     <AiOutlineFilePdf className="relative font-medium text-lg" onClick={() => ConfirmationModal('pdf')} />
                                 </button>
                             </div>

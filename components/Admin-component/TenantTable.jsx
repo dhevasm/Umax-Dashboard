@@ -690,7 +690,7 @@ export default function TenantTable() {
                     {/* <!-- Modal content --> */}
                     <div className="relative  rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 text-white ">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] text-white ">
                             <h3 className="text-xl font-semibold">
                                 {`${modeModal} Tenant`}
                             </h3>

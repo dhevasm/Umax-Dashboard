@@ -13,6 +13,7 @@ import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRigh
 import { MdDeleteForever} from "react-icons/md";
 import CreateCampaign from "../Create/CreateCampaign";
 import CampaignDetail from "../Detail/CampaignDetail";
+import { Lexend_Tera } from "next/font/google";
 
 const CampaignTable = () => {
     const tableRef = useRef(null);
@@ -243,40 +244,23 @@ const CampaignTable = () => {
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
+        setCurrentPage(1); // Reset to page 1 on filter change
     };
 
     const handleObjectiveChange = (event) => {
         setSelectedObjective(event.target.value);
+        setCurrentPage(1); // Reset to page 1 on filter change
     };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+        setCurrentPage(1); // Reset to page 1 on search change
     };
 
     const handleSortChange = (event) => {
         setDataPerPage(event.target.value);
-    }
-
-    const filteredData = tableData.filter((data) => {
-        const client_name = localStorage.getItem("name");
-        const role = localStorage.getItem("roles");
-        if(role != 'client') {
-            return (
-                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
-                (!selectedObjective || data.objective === Number(selectedObjective)) &&
-                (!searchTerm ||
-                    data.name.toLowerCase().includes(searchTerm.toLowerCase()))
-            );
-        } else {
-            return (
-                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
-                (!selectedObjective || data.objective === Number(selectedObjective)) &&
-                (!searchTerm ||
-                    data.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-                (data.client_name.toLowerCase() == client_name.toLowerCase())
-            );
-        }
-    });
+        setCurrentPage(1); // Reset to page 1 on data per page change
+    };
 
     const checkDeviceWidth = () => {
         setIsWideScreen(window.innerWidth >= 947);
@@ -284,8 +268,8 @@ const CampaignTable = () => {
 
     useEffect(() => {
         checkDeviceWidth();
-        window.addEventListener("resize", checkDeviceWidth);
-        return () => window.removeEventListener("resize", checkDeviceWidth);
+        window.addEventListener('resize', checkDeviceWidth);
+        return () => window.removeEventListener('resize', checkDeviceWidth);
     }, []);
 
     const handleOpenModal = (campaign) => {
@@ -298,8 +282,28 @@ const CampaignTable = () => {
         setSelectedCampaign(null);
     };
 
+    // Filter data before paginating
+    const filteredData = tableData.filter((data) => {
+        const client_name = localStorage.getItem('name');
+        const role = localStorage.getItem('roles');
+        if (role !== 'client') {
+            return (
+                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+                (!selectedObjective || data.objective === Number(selectedObjective)) &&
+                (!searchTerm || data.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+        } else {
+            return (
+                (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+                (!selectedObjective || data.objective === Number(selectedObjective)) &&
+                (!searchTerm || data.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+                data.client_name.toLowerCase() === client_name.toLowerCase()
+            );
+        }
+    });
+
     // Calculate total number of pages
-    const totalPages = Math.ceil(filteredData.length / dataPerPage);
+    const totalPages = searchTerm ? 1 : Math.ceil(filteredData.length / dataPerPage);
 
     // Function to change current page
     const goToPage = (page) => {
@@ -309,102 +313,69 @@ const CampaignTable = () => {
     const renderPagination = () => {
         const pageButtons = [];
         const maxButtons = 3; // Maximum number of buttons to show
-    
+
         // First page button
         pageButtons.push(
             <button
                 key="first"
-                className={`px-3 py-1 dark:text-white ${
-                    currentPage === 1 ? "cursor-not-allowed" : ""
-                } rounded-md`}
+                className={`px-3 py-1 dark:text-white ${currentPage === 1 ? 'cursor-not-allowed' : ''} rounded-md`}
                 onClick={() => goToPage(1)}
                 disabled={currentPage === 1}
             >
                 {'<<'}
             </button>
         );
-    
+
         // Previous page button
         pageButtons.push(
             <button
                 key="prev"
-                className={`px-3 py-1 dark:text-white ${
-                    currentPage === 1 ? "cursor-not-allowed" : ""
-                } rounded-md`}
+                className={`px-3 py-1 dark:text-white ${currentPage === 1 ? 'cursor-not-allowed' : ''} rounded-md`}
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1}
             >
                 {'<'}
             </button>
         );
-    
-        // Render page buttons
-        for (let i = 1; i <= totalPages; i++) {
-            // Show only maxButtons buttons around the current page
-            if (
-                i >= currentPage - Math.floor(maxButtons / 2) &&
-                i <= currentPage + Math.floor(maxButtons / 2)
-            ) {
-                pageButtons.push(
-                    <button
-                        key={i}
-                        className={`px-3 py-1 dark:text-white ${
-                            i === currentPage ? "font-bold" : ""
-                        } rounded-md`}
-                        onClick={() => goToPage(i)}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-    
+
         // Info page
         pageButtons.push(
             <span key="info" className="px-3 py-1 dark:text-white rounded-md">
                 {`Page ${currentPage} / ${totalPages}`}
             </span>
         );
-    
+
         // Next page button
         pageButtons.push(
             <button
                 key="next"
-                className={`px-3 py-1 dark:text-white ${
-                    currentPage === totalPages ? "cursor-not-allowed" : ""
-                } rounded-md`}
+                className={`px-3 py-1 dark:text-white ${currentPage === totalPages ? 'cursor-not-allowed' : ''} rounded-md`}
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
             >
                 {'>'}
             </button>
         );
-    
+
         // Last page button
         pageButtons.push(
             <button
                 key="last"
-                className={`px-3 py-1 dark:text-white ${
-                    currentPage === totalPages ? "cursor-not-allowed" : ""
-                } rounded-md`}
+                className={`px-3 py-1 dark:text-white ${currentPage === totalPages ? 'cursor-not-allowed' : ''} rounded-md`}
                 onClick={() => goToPage(totalPages)}
                 disabled={currentPage === totalPages}
             >
                 {'>>'}
             </button>
         );
-    
-        return (
-            <div className="flex justify-center gap-2 mt-4">
-                {pageButtons}
-            </div>
-        );
+
+        return <div className="flex justify-center gap-2 mt-4">{pageButtons}</div>;
     };
-       
+
     const indexOfLastCampaign = currentPage * dataPerPage;
     const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
-    const currentCampaigns = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign);
-
+    let currentCampaigns = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign)
+    
     return (
         <>
             <div className={`font-semibold text-3xl text-slate-800 dark:text-slate-200 mb-10`}>
@@ -518,7 +489,7 @@ const CampaignTable = () => {
                             )}
                         </tbody>
                     </table>
-                    <div className="flex justify-end items-center">
+                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
                         {renderPagination()}
                     </div>
 

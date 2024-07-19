@@ -419,10 +419,12 @@ export default function AccountTable() {
 
     const handleStatusChange = (event) => {
         setSelectedStatus(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+        setCurrentPage(1);
     };
 
     const filteredData = account.filter((data) => {
@@ -451,7 +453,7 @@ export default function AccountTable() {
         pageButtons.push(
             <button
                 key="first"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(1)}
@@ -465,7 +467,7 @@ export default function AccountTable() {
         pageButtons.push(
             <button
                 key="prev"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage - 1)}
@@ -475,30 +477,9 @@ export default function AccountTable() {
             </button>
         );
     
-        // Render page buttons
-        for (let i = 1; i <= totalPages; i++) {
-            // Show only maxButtons buttons around the current page
-            if (
-                i >= currentPage - Math.floor(maxButtons / 2) &&
-                i <= currentPage + Math.floor(maxButtons / 2)
-            ) {
-                pageButtons.push(
-                    <button
-                        key={i}
-                        className={`px-3 py-1 dark:text-white ${
-                            i === currentPage ? "font-bold" : ""
-                        } rounded-md`}
-                        onClick={() => goToPage(i)}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-    
         // Info page
         pageButtons.push(
-            <span key="info" className="px-3 py-1 dark:text-white rounded-md">
+            <span key="info" className="px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white rounded-md">
                 {`Page ${currentPage} / ${totalPages}`}
             </span>
         );
@@ -507,7 +488,7 @@ export default function AccountTable() {
         pageButtons.push(
             <button
                 key="next"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage + 1)}
@@ -521,7 +502,7 @@ export default function AccountTable() {
         pageButtons.push(
             <button
                 key="last"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(totalPages)}
@@ -687,24 +668,9 @@ export default function AccountTable() {
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* Pagin */}
-                        <style jsx>
-                            {
-                                `
-                                    .paginDisable{
-                                        opacity:0.5;
-                                    }
-                                `
-                            }
-
-                        </style>
-                        <div className="w-full flex justify-between items-center mb-4">
-                            <div className="mt-5 flex  gap-3 items-center w-full justify-end">
+                        <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
                                 {renderPagination()}
-                            </div>
                         </div>
-                        {/* Pagin end */}
                     </div>
                     {/* Body end */}
 
@@ -719,7 +685,7 @@ export default function AccountTable() {
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-slate-900 rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">
                                 {`${modeModal} Account`}
                             </h3>

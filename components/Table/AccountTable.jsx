@@ -200,18 +200,22 @@ const AccountTable = () => {
     
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleStatusChange = (event) => {
         setSelectedStatus(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleSortChange = (event) => {
         setDataPerPage(event.target.value);
+        setCurrentPage(1);
     }
 
     const filteredData = tableData.filter((data) => {
@@ -329,27 +333,6 @@ const AccountTable = () => {
                 {'<'}
             </button>
         );
-    
-        // Render page buttons
-        for (let i = 1; i <= totalPages; i++) {
-            // Show only maxButtons buttons around the current page
-            if (
-                i >= currentPage - Math.floor(maxButtons / 2) &&
-                i <= currentPage + Math.floor(maxButtons / 2)
-            ) {
-                pageButtons.push(
-                    <button
-                        key={i}
-                        className={`px-3 py-1 dark:text-white ${
-                            i === currentPage ? "font-bold" : ""
-                        } rounded-md`}
-                        onClick={() => goToPage(i)}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
     
         // Info page
         pageButtons.push(
@@ -503,7 +486,7 @@ const AccountTable = () => {
                         </tbody>
                     </table>
 
-                    <div className="flex justify-end mt-4">
+                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end mt-4">
                         {renderPagination()}
                     </div>
 

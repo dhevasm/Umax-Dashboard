@@ -403,14 +403,17 @@ export default function CampaignTable() {
 
     const handleStatusChange = (event) => {
         setSelectedStatus(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleObjectiveChange = (event) => {
         setSelectedObjective(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+        setCurrentPage(1);
     };
 
     const filteredData = campaigns.filter((data) => {
@@ -439,7 +442,7 @@ export default function CampaignTable() {
         pageButtons.push(
             <button
                 key="first"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(1)}
@@ -453,7 +456,7 @@ export default function CampaignTable() {
         pageButtons.push(
             <button
                 key="prev"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === 1 ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage - 1)}
@@ -463,30 +466,9 @@ export default function CampaignTable() {
             </button>
         );
     
-        // Render page buttons
-        for (let i = 1; i <= totalPages; i++) {
-            // Show only maxButtons buttons around the current page
-            if (
-                i >= currentPage - Math.floor(maxButtons / 2) &&
-                i <= currentPage + Math.floor(maxButtons / 2)
-            ) {
-                pageButtons.push(
-                    <button
-                        key={i}
-                        className={`px-3 py-1 dark:text-white ${
-                            i === currentPage ? "font-bold" : ""
-                        } rounded-md`}
-                        onClick={() => goToPage(i)}
-                    >
-                        {i}
-                    </button>
-                );
-            }
-        }
-    
         // Info page
         pageButtons.push(
-            <span key="info" className="px-3 py-1 dark:text-white rounded-md">
+            <span key="info" className="px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white rounded-md">
                 {`Page ${currentPage} / ${totalPages}`}
             </span>
         );
@@ -495,7 +477,7 @@ export default function CampaignTable() {
         pageButtons.push(
             <button
                 key="next"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(currentPage + 1)}
@@ -509,7 +491,7 @@ export default function CampaignTable() {
         pageButtons.push(
             <button
                 key="last"
-                className={`px-3 py-1 dark:text-white ${
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
                     currentPage === totalPages ? "cursor-not-allowed" : ""
                 } rounded-md`}
                 onClick={() => goToPage(totalPages)}
@@ -579,63 +561,67 @@ export default function CampaignTable() {
 
                     {/* Body */}
                     <div className="w-full h-fit bg-white dark:bg-slate-800 dark:text-white rounded-b-md p-4">
-                        <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
-                            <div className="flex">
-                                {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
-                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                        <AiOutlineFilePdf />
-                                    </IconContext.Provider>
-                                </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
-                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                        <RiFileExcel2Line />
-                                    </IconContext.Provider>
-                                </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
-                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                        <BiPlus className="text-thin"/>
-                                    </IconContext.Provider>
-                                </button>
-                                {/* Button end */}
+                        <div className="flex flex-col-reverse md:flex-row justify-between items-center w-full ">
+                            <div className="w-full flex justify-start flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
+                                <div className="flex mb-4 lg:mb-0 xl:mb-0">
+                                    {/* Button */}
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                        <IconContext.Provider value={{ className: "text-xl" }}>
+                                            <AiOutlineFilePdf />
+                                        </IconContext.Provider>
+                                    </button>
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
+                                        <IconContext.Provider value={{ className: "text-xl" }}>
+                                            <RiFileExcel2Line />
+                                        </IconContext.Provider>
+                                    </button>
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border hover:bg-gray-100 rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                        <IconContext.Provider value={{ className: "text-xl" }}>
+                                            <BiPlus className="text-thin"/>
+                                        </IconContext.Provider>
+                                    </button>
+                                    {/* Button end */}
+                                </div>
 
-                                {/* Filter by select */}
-                                <div className="mb-4">
-                                    <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
-                                    value={selectedStatus} onChange={handleStatusChange}
-                                    >
-                                        <option value="">Status</option>
-                                        <option value="2">Draft</option>
-                                        <option value="1">Active</option>
-                                        <option value="3">Completed</option>
-                                    </select>  
+                                <div className="flex">
+                                    {/* Filter by select */}
+                                    <div className="mb-4">
+                                        <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        value={selectedStatus} onChange={handleStatusChange}
+                                        >
+                                            <option value="">Status</option>
+                                            <option value="2">Draft</option>
+                                            <option value="1">Active</option>
+                                            <option value="3">Completed</option>
+                                        </select>  
+                                    </div>
+                                    <div className="mb-4">
+                                        <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                            value={selectedPlatform}
+                                            onChange={handlePlatformChange}
+                                        >
+                                            <option value="">Platform</option>
+                                            <option value="1">Meta Ads</option>
+                                            <option value="2">Google Ads</option>
+                                            <option value="3">Tiktok Ads</option>
+                                        </select>  
+                                    </div>
+                                    <div className="mb-4">
+                                        <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
+                                        <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                            value={selectedObjective}
+                                            onChange={handleObjectiveChange}
+                                        >
+                                            <option value="">Objective</option>
+                                            <option value="1">Awareness</option>
+                                            <option value="2">Concervation</option>
+                                            <option value="3">Consideration</option>
+                                        </select>
+                                    </div>
+                                    {/* Filter by select end */}
                                 </div>
-                                <div className="mb-4">
-                                    <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
-                                        value={selectedPlatform}
-                                        onChange={handlePlatformChange}
-                                    >
-                                        <option value="">Platform</option>
-                                        <option value="1">Meta Ads</option>
-                                        <option value="2">Google Ads</option>
-                                        <option value="3">Tiktok Ads</option>
-                                    </select>  
-                                </div>
-                                <div className="mb-4">
-                                    <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
-                                        value={selectedObjective}
-                                        onChange={handleObjectiveChange}
-                                    >
-                                        <option value="">Objective</option>
-                                        <option value="1">Awareness</option>
-                                        <option value="2">Concervation</option>
-                                        <option value="3">Consideration</option>
-                                    </select>
-                                </div>
-                                {/* Filter by select end */}
                             </div>
 
                             {/* Search */}
@@ -707,23 +693,9 @@ export default function CampaignTable() {
                             </table>
                         </div>
 
-                        {/* Pagin */}
-                        <style jsx>
-                            {
-                                `
-                                    .paginDisable{
-                                        opacity:0.5;
-                                    }
-                                `
-                            }
-
-                        </style>
-                        <div className="w-full flex justify-between items-center mb-4">
-                            <div className="mt-5 flex  gap-3 items-center w-full justify-end">
-                                {renderPagination()}
-                            </div>
+                        <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
+                            {renderPagination()}
                         </div>
-                        {/* Pagin end */}
                     </div>
                     {/* Body end */}
 
@@ -738,9 +710,9 @@ export default function CampaignTable() {
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:text-white dark:bg-slate-900 rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">
-                                {`${modeModal} Campaing`}
+                                {`${modeModal} Campaign`}
                             </h3>
                             <button type="button" className="text-xl bg-transparent hover:bg-blue-400 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />

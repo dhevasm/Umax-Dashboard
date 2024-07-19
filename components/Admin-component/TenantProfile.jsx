@@ -231,8 +231,8 @@ export default function TenantProfile({tenant_id}){
                     <p className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>Dashboard</a> / Tenant Profile</p>
                 </div>
 
-                <div className="rounded-sm shadow-md mt-3">
-                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant bg-no-repeat items-end px-5 py-5 rounded-t-sm">
+                <div className="rounded-sm shadow-md mt-3 rounded-t-md">
+                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant bg-no-repeat items-end px-5 py-5 rounded-t-md">
                         {
                             tenant.company ? (
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>

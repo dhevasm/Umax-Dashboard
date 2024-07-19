@@ -10,6 +10,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import { FaUser, FaUsers, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import Swal from "sweetalert2";
 
 
 export default function Navbar() {
@@ -71,16 +72,23 @@ export default function Navbar() {
         setIsHidden(!isHidden);
     };
 
-    function handleLogout(){
-        localStorage.removeItem('jwtToken');
-        router.push('/');
-    }
-
     function ProfileDropdown({ name, email, role, image }) {
-        const handleLogout = () => {
-            localStorage.removeItem('jwtToken');
-            window.location.href = '/';
-        };
+        function handleLogout(){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "you will be logged out of your account",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sign Out",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('jwtToken');
+                    router.push('/');
+                }
+            })
+        }
     
         return (
             <div className="text-black me-5 hover:cursor-pointer relative">

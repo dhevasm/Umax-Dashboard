@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Swal from 'sweetalert2';
 import { BiHome } from 'react-icons/bi';
+import * as yup from 'yup';
 
 const EditProfile = () => {
     const [selectTimezone, setSelectTimezone] = useState([]);
@@ -69,6 +70,19 @@ const EditProfile = () => {
         fetchProfileData();
     }, []);
 
+    const validationSchema = yup.object().shape({
+        image: yup.string().required('Image is Required'),
+        name: yup
+          .string()
+          .required('Username is Required'),
+        email: yup.string().required('Email is Required').email('Invalid email format'),
+        culture: yup.string().required('User Culture is Required'),
+        input_timezone: yup.string().required('User Timezone is Required'),
+        currency: yup.string().required('User Currency is Required'),
+        currency_position: yup.string().required('Currency Position is Required'),
+    });
+      
+
     const formik = useFormik({
         initialValues: {
             image: profileData.image || '',
@@ -80,17 +94,7 @@ const EditProfile = () => {
             currency: profileData.currency || '',
             currency_position: profileData.currencyPosition ? 'front' : 'back',
         },
-        validate: (values) => {
-            const errors = {};
-            if (!values.image) errors.image = 'Image is Required';
-            if (!values.name) errors.name = 'Username is Required';
-            if (!values.email) errors.email = 'Email is Required';
-            if (!values.culture) errors.culture = 'User Culture is Required';
-            if (!values.input_timezone) errors.input_timezone = 'User Timezone is Required';
-            if (!values.currency) errors.currency = 'User Currency is Required';
-            if (!values.currency_position) errors.currency_position = 'Currency Position is Required';
-            return errors;
-        },
+        validationSchema: validationSchema,
         enableReinitialize: true,
         onSubmit: async (values) => {
             setLoading(true);

@@ -121,7 +121,7 @@ const Profile = () => {
                     </ProfileSection>
                     <ProfileSection title="International">
                         <ProfileItem icon={LiaMoneyBillWaveAltSolid} label="Currencies" value={currency} />
-                        <ProfileItem icon={VscSymbolEnum} label="Currency Position" value={currencyPosition} />
+                        <ProfileItem icon={VscSymbolEnum} label="Currency Position" value={currencyPosition ? 'Left ($n)' : 'Right (n$)'} />
                         <ProfileItem icon={CiGlobe} label="Language" value={getLanguageName(language)} flag={getFlagSrc(language)} />
                         <ProfileItem icon={MdOutlineAccessTime} label="Timezone" value={timezoneName} />
                         <ProfileItem icon={GiGlobe} label="Culture" value={culture} />
