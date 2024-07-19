@@ -399,10 +399,15 @@ export default function TenantProfile({tenant_id}){
                             col-span-2">
                                 <div className="flex justify-between items-center">
                                 <div className="text-xl font-semibold text-blue-500 ">Format</div>
-                                <div className="flex items-center gap-1">
-                                    <input id="currencyposition" type="checkbox"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                    <label htmlFor="currencyposition" className="w-full py-3 ms-2 text-sm    ">Currency Position</label>
-                                </div>
+                                <div className="flex items-center gap-1 me-1">
+                                    <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
+                                    <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
+                                    <span className="text-sm font-medium ">Currency position :</span>
+                                    <span className="text-sm font-medium ">right(-$)</span>
+                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <span className="text-sm font-medium ">left($-)</span>
+                                    </label>
+                                    </div>
                                 </div>
                             <div className="w-full h-0.5 my-1 bg-gray-300"></div>
                             </div>

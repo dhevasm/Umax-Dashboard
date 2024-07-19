@@ -130,6 +130,7 @@ const Page = () => {
       }
     }
   }, [router]);
+  
 
   return (
     <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">

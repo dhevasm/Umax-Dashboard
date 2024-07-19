@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
           rel="icon"
           href="/assets/icon.png"
         />
-      </head>
+      </head> 
       <body className={inter.className}>
         {children}
       </body>
