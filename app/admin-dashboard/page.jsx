@@ -57,7 +57,7 @@ function AdminDashboard() {
     }
 
     useEffect(() => {
-        if(localStorage.getItem('color-theme') == "dark"){
+        if(localStorage.getItem('color-theme') == "dark"  || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)){
             setIsDarkMode(true)
         }else{
             setIsDarkMode(false)
