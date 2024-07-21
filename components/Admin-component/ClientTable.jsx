@@ -634,12 +634,12 @@ export default function ClientTable() {
                                 <tbody className="bg-white dark:bg-slate-800">
                                     {
                                         currentclients.length > 0 ? currentclients.map((client, index) => {
-                                            return (
+                                            return (    
                                                 <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap underline" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
                                                     <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.address}</td>
                                                     <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
-                                                        <a href={`https://wa.me/${client.contact.replace(/\D+/g, '')}`} className="text-blue-500">
+                                                        <a href={`https://wa.me/${client.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">
                                                             {client.contact}
                                                         </a>
                                                     </td>
