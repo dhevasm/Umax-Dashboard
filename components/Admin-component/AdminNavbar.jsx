@@ -109,12 +109,12 @@ function AdminNavbar({userData}){
                         </div>
                         </label>
                     </div>
-                    <div className="w-9 h-9 flex justify-center items-center rounded-full bg-[#edf3fa] dark:bg-slate-900">
+                    {/* <div className="w-9 h-9 flex justify-center items-center rounded-full bg-[#edf3fa] dark:bg-slate-900">
                         <BiBell className="text-xl" />
                     </div>
                     <div className="w-9 h-9 flex justify-center items-center rounded-full bg-[#edf3fa] dark:bg-slate-900">
                         <RiChat3Line className="text-xl" />
-                    </div>
+                    </div> */}
                     </div>
 
                     <div className="flex flex-col items-end mt-2">

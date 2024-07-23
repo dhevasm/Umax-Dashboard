@@ -78,7 +78,7 @@ export default function AdminSidebar(){
                         <IconContext.Provider value={{ className: "text-lg" }}>
                             <FaBuilding size={20}/>
                         </IconContext.Provider>
-                        MY Tenant
+                        Tenant Profile
                         </button>
                     }
                     </li>
@@ -132,7 +132,7 @@ export default function AdminSidebar(){
                     <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleLogout}>
                             <div className="flex items-center gap-2">
                                 <RiLogoutBoxLine size={20}/>
-                                Log Out
+                                Logout
                             </div>
                         </button>
                     </li>

@@ -9,9 +9,6 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-
-
-
 const ChartTwo = () => {
   const {sidebarHide,
     setSidebarHide,

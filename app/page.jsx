@@ -155,6 +155,9 @@ const Page = () => {
               onChange={formik.handleChange}
               value={formik.values.email}
             />
+            {
+              formik.errors.email ? <div className="text-red-500">{formik.errors.email}</div> : ""
+            }
             <div className="relative flex items-center">
               <input
                 type={showPassword ? "text" : "password"}
@@ -165,6 +168,9 @@ const Page = () => {
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
+              {
+              formik.errors.password ? <div className="text-red-500">{formik.errors.password}</div> : ""
+            }
               <div
                 className="absolute top-3 right-2 cursor-pointer"
                 onClick={togglePasswordVisibility}

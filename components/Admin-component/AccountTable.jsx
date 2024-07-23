@@ -535,7 +535,7 @@ export default function AccountTable() {
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
-                            <FaTable  className="text-blue-200" size={18}/><p className="text-white text-md font-semibold">Account Table</p>
+                            <FaTable  className="text-blue-200" size={18}/>
                         </h1>
                     </div>
                     {/* Header end */}
