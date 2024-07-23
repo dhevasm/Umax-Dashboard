@@ -86,6 +86,7 @@ export default function Performance({ id }) {
             setsCpr(response.data.Data[0].cpr)
             setsCpc(response.data.Data[0].cpc)
             setsOclp(response.data.Data[0].oclp)
+            console.log(response.data.Data[0].oclp)
             setsCtr(response.data.Data[0].ctr)
         } catch (error) {
             console.error(error)
@@ -161,11 +162,11 @@ export default function Performance({ id }) {
                         <SuggestionLoding key={i} />
                     ))
                     : <>
-                        <SuggestionCard Title={srar.title || ''} Desc={srar.msg} Color={srar.color || ''} Value={srar.value || ''} Target={srar.target || ''} Message={srar.message || ''} />
+                        <SuggestionCard Title={srar.title || ''} Desc={srar.msg} Color={srar.color || ''} Value={srar.value || ''} Target={srar.target || ''} Message={srar.massage || ''} />
                         <SuggestionCard Title={sroas.title || ''} Desc={sroas.msg} Color={sroas.color || ''} Value={sroas.value || ''} Target={sroas.target || ''} Message={sroas.message || ''} />
                         <SuggestionCard Title={scpr.title || ''} Desc={scpr.msg} Color={scpr.color || ''} Value={scpr.value || ''} Target={scpr.target || ''} Message={scpr.message || ''} />
                         <SuggestionCard Title={scpc.title || ''} Desc={scpc.msg} Color={scpc.color || ''} Value={scpc.value || ''} Target={scpc.target || ''} Message={scpc.message || ''} />
-                        <SuggestionCard Title={soclp.title || ''} Desc={soclp.msg} Color={soclp.color || ''} Value={soclp.value || ''} Target={soclp.target || ''} Message={soclp.message} />
+                        <SuggestionCard Title={soclp.title || ''} Desc={soclp.msg} Color={soclp.color || ''} Value={soclp.value || ''} Target={soclp.target || ''} Message={soclp.massage} />
                         <SuggestionCard Title={sctr.title || ''} Desc={sctr.msg} Color={sctr.color || ''} Value={sctr.value || ''} Target={sctr.target || ''} Message={sctr.message || ''} />
                     </>
                     }

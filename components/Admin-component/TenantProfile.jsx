@@ -261,7 +261,7 @@ export default function TenantProfile({tenant_id}){
                                 <div className="flex gap-2 items-center p-5">
                                 <FaPhone className="text-[#3d50e0]" />
                                 <div className="ml-2 dark:text-white">
-                                    Contact: <a href={`tel:${tenant.contact}`} className="text-blue-500">{tenant.contact}</a>
+                                    Contact: <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">{tenant.contact}</a>
                                 </div>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
