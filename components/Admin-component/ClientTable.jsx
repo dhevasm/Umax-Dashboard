@@ -595,7 +595,8 @@ export default function ClientTable() {
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
-                                        <option value="">Status</option>
+                                        <option value="" disabled hidden>Status</option>
+                                        <option value="">All status</option>
                                         <option value="1">Active</option>
                                         <option value="2">Inactive</option>
                                     </select>  
@@ -685,7 +686,7 @@ export default function ClientTable() {
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0]bg-blue-500 dark:bg-slate-800 text-white">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold">
                                 {`${modeModal} Client`}
                             </h3>

@@ -575,7 +575,8 @@ export default function CampaignTable() {
                                         <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedStatus} onChange={handleStatusChange}
                                         >
-                                            <option value="">Status</option>
+                                            <option value="" disabled hidden>Status</option>
+                                            <option value="">All status</option>
                                             <option value="2">Draft</option>
                                             <option value="1">Active</option>
                                             <option value="3">Completed</option>
@@ -587,7 +588,8 @@ export default function CampaignTable() {
                                             value={selectedPlatform}
                                             onChange={handlePlatformChange}
                                         >
-                                            <option value="">Platform</option>
+                                            <option value="" disabled hidden>Platform</option>
+                                            <option value="">All platform</option>
                                             <option value="1">Meta Ads</option>
                                             <option value="2">Google Ads</option>
                                             <option value="3">Tiktok Ads</option>
@@ -599,7 +601,8 @@ export default function CampaignTable() {
                                             value={selectedObjective}
                                             onChange={handleObjectiveChange}
                                         >
-                                            <option value="">Objective</option>
+                                            <option value="" disabled hidden>Objective</option>
+                                            <option value="">All objective</option>
                                             <option value="1">Awareness</option>
                                             <option value="2">Concervation</option>
                                             <option value="3">Consideration</option>

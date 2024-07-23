@@ -9,7 +9,7 @@ import jsPDF from "jspdf"
 import 'jspdf-autotable'
 import { IconContext } from "react-icons"
 import { AiOutlineFilePdf } from "react-icons/ai"
-import { FaTable } from "react-icons/fa"
+import { FaArrowAltCircleDown, FaArrowDown, FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { useRouter } from "next/navigation"
@@ -461,17 +461,23 @@ export default function UserTable() {
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
-                                        <option value="" key="" >Role</option>
-                                        <option value="admin" key={1}>Admin</option>
-                                        <option value="staff" key={2}>Staff</option>
+                                        <option value="" key={0} disabled hidden>Role 
+
+                                        </option>
+                                        <option value="" key={1}> All role </option>
+                                        <option value="admin" key={2}>Admin</option>
+                                        <option value="staff" key={3}>Staff</option>
                                     </select>  
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                    <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    {
+                                        userData.roles == 'sadmin' &&
+                                        <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     // value={selectedTenant} onChange={handleTenantChange}
                                     >
                                         <option value="0" key={0} disabled hidden>Tenant</option>
+                                        <option value="0" key={1} >All Tenant</option>
                                         {
                                             tenants.map((tenant, index) => {
                                                 return (
@@ -479,7 +485,7 @@ export default function UserTable() {
                                                 )
                                             })
                                         }
-                                    </select>
+                                    </select>}
                                 </div>
                                 {/* Filter by select end */}
                             </div>

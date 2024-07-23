@@ -238,9 +238,12 @@ export default function TenantProfile({tenant_id}){
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
                             ) : "Loading ..."
                         }
-                        <div className="self-end">
-                            <FaPen className="text-white hover:cursor-pointer" onClick={() => showModal("Edit", tenant._id)}/>
+                        { tenant.company? <div className="self-end flex gap-2 items-center text-white hover:cursor-pointer hover:underline" onClick={() => showModal("Edit", tenant._id)}>
+                            <FaPen/>
+                            Edit Tenant
                         </div>
+                        : ""    
+                    }
                     </div>
 
                     <div className="p-5 bg-white dark:bg-slate-800 rounded-b-sm">

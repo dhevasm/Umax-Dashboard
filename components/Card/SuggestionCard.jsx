@@ -24,7 +24,7 @@ export default function SuggestionCard({ Title, Desc, Value, Target, Message, Co
         <>
             {/* Suggestion Card */}
             <div className={`w-full p-7 rounded-lg shadow-lg ${background} mt-5 transition-all`}>
-                <div className="flex gap-10">
+                <div className="flex gap-5">
                     {/* Icon */}
                     <div>
                         {icon}
