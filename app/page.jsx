@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const Page = () => {
   const [error, setError] = useState();
@@ -124,9 +125,13 @@ const Page = () => {
     const roles = localStorage.getItem("roles");
     if (token) {
       if (roles === "sadmin" || roles === "admin") {
-        router.push("/admin-dashboard");
+        Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
+          router.push('/admin-dashboard');
+      });
       } else {
-        router.push("/dashboard");
+        Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
+          router.push('/dashboard');
+      });
       }
     }
   }, [router]);
