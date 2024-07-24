@@ -123,7 +123,7 @@ export default function Navbar() {
                     </Link>
                     
                     {
-                        localStorage.getItem('roles') === 'admin' && (
+                        role === 'admin' && (
                             <Link href="/admin-dashboard" className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                                 <FaTachometerAlt className="mr-2" />
                                 Admin Dashboard

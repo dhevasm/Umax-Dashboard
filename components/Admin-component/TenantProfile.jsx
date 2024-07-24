@@ -226,9 +226,9 @@ export default function TenantProfile({tenant_id}){
     return (
         <>
             <div className="w-full h-full rounded-sm">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col md:flex-row justify-between items-center">
                     <h1 className="text-2xl dark:text-white">Tenant Profile</h1>
-                    <p className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>Dashboard</a> / Tenant Profile</p>
+                    <p className="dark:text-white text-nowrap"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>Dashboard</a> / Tenant Profile</p>
                 </div>
 
                 <div className="rounded-sm shadow-md mt-3 rounded-t-md">
@@ -238,7 +238,7 @@ export default function TenantProfile({tenant_id}){
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
                             ) : "Loading ..."
                         }
-                        { tenant.company? <div className="self-end flex gap-2 items-center text-white hover:cursor-pointer hover:underline" onClick={() => showModal("Edit", tenant._id)}>
+                        { tenant.company? <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer hover:underline" onClick={() => showModal("Edit", tenant._id)}>
                             <FaPen/>
                             Edit Tenant
                         </div>
@@ -328,7 +328,6 @@ export default function TenantProfile({tenant_id}){
                             modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
                         }
                         </div>
-                        
                         </div>
                     
                     <div className="w-full h-0.5 my-3 bg-gray-300"></div>
@@ -389,7 +388,7 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">Contact {
+                                <label htmlFor="contact" className="flex mb-2 text-sm font-medium">Contact {
                                     error.contact && <p className="text-red-500 text-sm">*</p>
                                 }</label>
                                 <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>

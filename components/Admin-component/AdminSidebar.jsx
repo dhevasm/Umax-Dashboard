@@ -12,7 +12,7 @@ import Sidebar from "../Sidebar";
 import { jsx } from "react/jsx-runtime"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
-import { RiAccountBoxFill, RiArrowGoBackLine, RiBuilding2Fill, RiDashboard2Line, RiDeleteBack2Line, RiEye2Fill, RiLogoutBoxLine, RiMegaphoneFill, RiProfileFill, RiTableLine, RiUser2Fill, RiUser3Line, RiWindowLine } from "react-icons/ri"
+import { RiAccountBoxFill, RiArrowGoBackLine, RiBuilding2Fill, RiDashboard2Line, RiDeleteBack2Line, RiEye2Fill, RiLogoutBoxLine, RiMegaphoneFill, RiProfileFill, RiTableLine, RiUser2Fill, RiUser3Fill, RiUser3Line, RiWindowLine } from "react-icons/ri"
 import { VscDashboard } from "react-icons/vsc"
 import { MdDashboard } from "react-icons/md"
 
@@ -133,7 +133,7 @@ export default function AdminSidebar(){
                     <li className="mb-4">
                     <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push('/profile')}>
                             <div className="flex items-center gap-2">
-                                <RiUser3Line size={20}/>
+                                <RiUser3Fill size={20}/>
                                 Profile
                             </div>
                         </button>
