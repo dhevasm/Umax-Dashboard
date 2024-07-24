@@ -29,6 +29,8 @@ export default function UserTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const t = useTranslations('admin-users')
+    const tfile = useTranslations('swal-file')
+    const tdel = useTranslations("swal-delete")
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard} = useContext(AdminDashboardContext)
 
@@ -64,19 +66,20 @@ export default function UserTable() {
     
     function handleDelete(user_id){
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: tdel('warn'),
+            text: tdel('msg'),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: tdel('yes'),
+            cancelButtonText: tdel('no'),
           }).then((result) => {
             if (result.isConfirmed) {
             deleteuser(user_id)
             Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
+                title: tdel('success'),
+                text: tdel('suc-msg'),
                 icon: "success"
             })
             setTimeout(() => {
@@ -106,19 +109,20 @@ export default function UserTable() {
 
     function generateExcel(){
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download excel file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg-2')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`,
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -133,13 +137,14 @@ export default function UserTable() {
 
     const generatePDF = () => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download pdf file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg1')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`,
           }).then((result) => {
             if (result.isConfirmed) {
                 const doc = new jsPDF();
@@ -150,8 +155,8 @@ export default function UserTable() {
                 });
                 doc.save('DataUsers.pdf');
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -494,10 +499,10 @@ export default function UserTable() {
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
-                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">Name</th>
+                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">{t('name')}</th>
                                         <th scope="col" className="px-6 border dark:border-gray-500 py-3">Role</th>
                                         <th scope="col" className="px-6 border dark:border-gray-500 py-3">Email</th>
-                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">Company</th>
+                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">{t('company')}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
@@ -565,7 +570,7 @@ export default function UserTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium  ">Name</label>
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium  ">{t('name')}</label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
                                     disabled/>
                                 </div>
@@ -591,10 +596,10 @@ export default function UserTable() {
                                         }
                                     
                                         {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateUser}>Save Change</button> : 
+                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateUser}>{t('save')}</button> : 
                                             <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" 
                                             // onClick={creatUser}
-                                            >Submit</button>
+                                            >{t('submit')}</button>
                                         }
                                     </div>
                                         

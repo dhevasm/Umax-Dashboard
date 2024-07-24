@@ -111,77 +111,107 @@ const Setting = ({ id }) => {
                   <div key={index} className='p-6 mb-8 bg-white dark:bg-gray-800 rounded-lg'>
                       <div className='grid grid-cols-1 sm:grid-cols-2 gap-10 mb-8'>
                           <div>
-                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                  Reach Amount Ratio (RAR)
-                              </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 5%</p>
+                            <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                              Reach Amount Ratio (RAR)
+                            </label>
+                            <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 5%</p>
+                            <div className='mt-1 flex items-center'>
                               <input
-                                  type="number"
-                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
-                                  value={item.rar}
-                                  onChange={(e) => handleChange(index, 'rar', e.target.value)}
+                                type="number"
+                                className='block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-s-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                value={item.rar}
+                                onChange={(e) => handleChange(index, 'rar', e.target.value)}
                               />
+                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                                %
+                              </div>
+                            </div>
                           </div>
                           <div>
-                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                  Click Through Rate (CTR)
-                              </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 1.5%</p>
+                            <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                              Click Through Rate (CTR)
+                            </label>
+                            <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 1.5%</p>
+                            <div className='mt-1 flex items-center'>
                               <input
-                                  type="number"
-                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
-                                  value={item.ctr}
-                                  onChange={(e) => handleChange(index, 'ctr', e.target.value)}
+                                type="number"
+                                className='block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-s-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                value={item.ctr}
+                                onChange={(e) => handleChange(index, 'ctr', e.target.value)}
                               />
+                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                                %
+                              </div>
+                            </div>
                           </div>
                           <div>
-                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                  Outbound Click Landing Page (OCLP)
-                              </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 80%</p>
+                            <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                              Outbound Click Landing Page (OCLP)
+                            </label>
+                            <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 80%</p>
+                            <div className='mt-1 flex items-center'>
                               <input
-                                  type="number"
-                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
-                                  value={item.oclp}
-                                  onChange={(e) => handleChange(index, 'oclp', e.target.value)}
+                                type="number"
+                                className='block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-s-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                value={item.oclp}
+                                onChange={(e) => handleChange(index, 'oclp', e.target.value)}
                               />
+                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                                %
+                              </div>
+                            </div>
                           </div>
                           <div>
-                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                  Return on AD Spent (ROAS)
-                              </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 3.0x</p>
+                            <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                              Return on AD Spent (ROAS)
+                            </label>
+                            <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 3.0x</p>
+                            <div className='mt-1 flex items-center'>
                               <input
-                                  type="number"
-                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
-                                  value={item.roas}
-                                  onChange={(e) => handleChange(index, 'roas', e.target.value)}
+                                type="number"
+                                className='block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-s-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                                value={item.roas}
+                                onChange={(e) => handleChange(index, 'roas', e.target.value)}
                               />
+                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                                %
+                              </div>
+                            </div>
                           </div>
                           <div>
-                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                  Cost per Result (CPR)
-                              </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 5000</p>
-                              <input
-                                  type="number"
-                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
-                                  value={item.cpr}
-                                  onChange={(e) => handleChange(index, 'cpr', e.target.value)}
-                              />
+                          <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                            Cost per Result (CPR)
+                          </label>
+                          <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 5000</p>
+                          <div className='mt-1 flex items-center'>
+                            <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-s-md text-white'>
+                              Rp.
+                            </div>
+                            <input
+                              type="number"
+                              className='block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-e-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                              value={item.cpr}
+                              onChange={(e) => handleChange(index, 'cpr', e.target.value)}
+                            />
                           </div>
-                          <div>
-                              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
-                                  Cost per Click (CPC)
-                              </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 1000</p>
-                              <input
-                                  type="number"
-                                  className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
-                                  value={item.cpc}
-                                  onChange={(e) => handleChange(index, 'cpc', e.target.value)}
-                              />
+                        </div>
+                        <div>
+                          <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
+                            Cost per Click (CPC)
+                          </label>
+                          <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 1000</p>
+                          <div className='mt-1 flex items-center'>
+                            <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-s-md text-white'>
+                              Rp.
+                            </div>
+                            <input
+                              type="number"
+                              className='block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-e-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
+                              value={item.cpc}
+                              onChange={(e) => handleChange(index, 'cpc', e.target.value)}
+                            />
                           </div>
+                        </div>
                       </div>
                       <button 
                           className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'

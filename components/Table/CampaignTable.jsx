@@ -13,7 +13,7 @@ import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRigh
 import { MdDeleteForever} from "react-icons/md";
 import CreateCampaign from "../Create/CreateCampaign";
 import CampaignDetail from "../Detail/CampaignDetail";
-import { Lexend_Tera } from "next/font/google";
+import { Lexend_Tera, Rowdies } from "next/font/google";
 import { useTranslations } from "next-intl";
 
 const CampaignTable = () => {
@@ -28,6 +28,7 @@ const CampaignTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const t = useTranslations("campaigns");
+    const tfile = useTranslations('swal-file');
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -42,7 +43,7 @@ const CampaignTable = () => {
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
-        filename: `Campaigns ${dateWithTime}`,
+        filename: `${t("title")} ${dateWithTime}`,
         sheet: "DataCampaigns",
     });
 
@@ -53,12 +54,12 @@ const CampaignTable = () => {
         const filteredData = tableData.map((row, index) => ({
             No: index + 1,
             Name: row.name,
-            Client: row.client,
-            Platform: row.platform,
-            Account: row.account,
-            Objective: row.objective,
-            'Start Date': row.startdate,
-            Status: String(row.status),
+            Client: row.client_name,
+            Platform: row.platform === 1 ? "Meta Ads" : row.platform === 2 ? "Google Ads" : "Tiktok Ads",
+            Account: row.account_name,
+            Objective: row.objective === 1 ? "Awareness" : row.objective === 2 ? "Concervation" : "Consideration",
+            'Start Date': row.start_date,
+            Status: row.status === 1 ? "Active" : "Inactive",
         }));
     
         const tableColumnNames = Object.keys(filteredData[0]);
@@ -70,7 +71,7 @@ const CampaignTable = () => {
           startY: 20,
         });
     
-        doc.save(`Campaigns ${dateWithTime}.pdf`);
+        doc.save(`${t("title")} ${dateWithTime}.pdf`);
     };
 
     const handleDelete = async (_id) => {
@@ -180,41 +181,48 @@ const CampaignTable = () => {
     function ConfirmationModal(name) {
         if (name === 'pdf') {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "File will be downloaded!",
+                title: `${tfile('warn')}`,
+                text: `${tfile('msg')}`,
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, download it!'
+                confirmButtonText: `${tfile('yes')}`,
+                cancelButtonText: `${tfile('no')}`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     generatePDF();
                     Swal.fire({
-                        title: 'Downloaded!',
-                        text: 'Your file has been downloaded.',
+                        title: `${tfile('success')}`,
+                        text: `${tfile('suc-msg')}`,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                     });
                 }
             }).catch((error) => {
-                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: `${tfile('error')}`,
+                    text: `${tfile('err-msg')}`,
+                    confirmButtonColor: '#3085d6',
+                });
             });
         } else if (name === 'excel') {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "File will be downloaded!",
+                title: `${tfile('warn')}`,
+                text: `${tfile('msg')}`,
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, download it!'
+                confirmButtonText: `${tfile('yes')}`,
+                cancelButtonText: `${tfile('no')}`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     onDownload();
                     Swal.fire(
-                        'Downloaded!',
-                        'Your file has been downloaded.',
+                        `${tfile('success')}`,
+                        `${tfile('suc-msg')}`,
                         'success'
                     );
                 }
@@ -394,7 +402,7 @@ const CampaignTable = () => {
                             onChange={handleSearchChange}
                         />
                         <select
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300`}
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
                             value={selectedPlatform}
                             onChange={handlePlatformChange}
                         >
@@ -404,7 +412,7 @@ const CampaignTable = () => {
                             <option value="3">Tiktok Ads</option>
                         </select>
                         <select
-                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300`}
+                            className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
                             value={selectedObjective}
                             onChange={handleObjectiveChange}
                         >
@@ -415,7 +423,7 @@ const CampaignTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
-                        <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300"
+                        <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}
                         >

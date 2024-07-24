@@ -24,6 +24,7 @@ const AccountTable = () => {
     const [dataPerPage, setDataPerPage] = useState(10);
     const tableRef = useRef(null);
     const t = useTranslations('accounts');
+    const tfile = useTranslations('swal-file');
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
@@ -56,7 +57,7 @@ const AccountTable = () => {
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
-        filename: `Accounts ${dateWithTime}`,
+        filename: `${t('title')} ${dateWithTime}`,
         sheet: "DataAccounts",
     });
 
@@ -82,25 +83,26 @@ const AccountTable = () => {
             startY: 20,
         });
     
-        doc.save(`Account ${dateWithTime}.pdf`);
+        doc.save(`${t('title')} ${dateWithTime}.pdf`);
     };
 
     function ConfirmationModal(name) {
         if (name === 'pdf') {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "File will be downloaded!",
+                title: `${tfile('warn')}`,
+                text: `${tfile('msg')}`,
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, download it!'
+                confirmButtonText: `${tfile('yes')}`,
+                cancelButtonText: `${tfile('no')}`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     generatePDF();
                     Swal.fire({
-                        title: 'Downloaded!',
-                        text: 'Your file has been downloaded.',
+                        title: `${tfile('success')}`,
+                        text: `${tfile('suc-msg')}`,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                     });
@@ -108,26 +110,27 @@ const AccountTable = () => {
             }).catch((error) => {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong!',
+                    title: `${tfile('error')}`,
+                    text: `${tfile('err-msg')}`,
                     confirmButtonColor: '#3085d6',
                 });
             });
         } else if (name === 'excel') {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "File will be downloaded!",
+                title: `${tfile('warn')}`,
+                text: `${tfile('msg')}`,
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, download it!'
+                confirmButtonText: `${tfile('yes')}`,
+                cancelButtonText: `${tfile('no')}`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     onDownload();
                     Swal.fire(
-                        'Downloaded!',
-                        'Your file has been downloaded.',
+                        `${tfile('success')}`,
+                        `${tfile('suc-msg')}`,
                         'success'
                     );
                 }
@@ -418,7 +421,7 @@ const AccountTable = () => {
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
-                        <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-300"
+                        <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}
                         >

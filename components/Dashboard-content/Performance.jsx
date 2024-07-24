@@ -88,7 +88,6 @@ export default function Performance({ id }) {
             setsCpr(response.data.Data[0].cpr)
             setsCpc(response.data.Data[0].cpc)
             setsOclp(response.data.Data[0].oclp)
-            console.log(response.data.Data[0].oclp)
             setsCtr(response.data.Data[0].ctr)
         } catch (error) {
             console.error(error)

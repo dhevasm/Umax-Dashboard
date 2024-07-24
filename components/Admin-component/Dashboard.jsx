@@ -53,7 +53,7 @@ export default function Dashboard({ tenant_id }) {
                     <div className="w-full h-fit bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-y-auto">
                         <div className="rounded-sm bg-white dark:bg-slate-800 shadow-default sm:px-7.5 xl:pb-1">
                             <div className="flex justify-between items-center mb-5">
-                                <h4 className="mb-6 text-xl font-semibold text-black">
+                                <h4 className="mb-6 text-xl font-semibold text-black dark:text-slate-200">
                                     Top Channels
                                 </h4>
                                 <div className="flex gap-2">
@@ -91,136 +91,34 @@ export default function Dashboard({ tenant_id }) {
                                     </div>
                                 </div>
 
-                                <div className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
-                                    <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                        <div className="flex-shrink-0">
-                                            <Image src="https://react-demo.tailadmin.com/assets/brand-01-10b0313f.svg" alt="Brand" width={48} height={48} />
+                                {Array(5).fill(0).map((_, index) => (
+                                    <div key={index} className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
+                                        <div className="flex items-center gap-3 p-2.5 xl:p-5">
+                                            <div className="flex-shrink-0">
+                                                <Image src="https://react-demo.tailadmin.com/assets/brand-01-10b0313f.svg" alt="Brand" width={48} height={48} />
+                                            </div>
+                                            <p className="hidden text-black dark:text-slate-200 sm:block">
+                                                Google
+                                            </p>
                                         </div>
-                                        <p className="hidden text-black sm:block">
-                                            Google
-                                        </p>
-                                    </div>
 
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black">5K</p>
-                                    </div>
-
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-meta-3">$5000</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-black">590</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-meta-5">8%</p>
-                                    </div>
-                                </div>
-                                <div className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
-                                    <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                        <div className="flex-shrink-0">
-                                            <Image src="https://react-demo.tailadmin.com/assets/brand-01-10b0313f.svg" alt="Brand" width={48} height={48} />
+                                        <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                            <p className="text-black dark:text-slate-200">5K</p>
                                         </div>
-                                        <p className="hidden text-black sm:block">
-                                            Google
-                                        </p>
-                                    </div>
 
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black">5K</p>
-                                    </div>
-
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-meta-3">$5000</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-black">590</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-meta-5">8%</p>
-                                    </div>
-                                </div>
-                                <div className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
-                                    <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                        <div className="flex-shrink-0">
-                                            <Image src="https://react-demo.tailadmin.com/assets/brand-01-10b0313f.svg" alt="Brand" width={48} height={48} />
+                                        <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                            <p className="text-meta-3 dark:text-slate-200">$5000</p>
                                         </div>
-                                        <p className="hidden text-black sm:block">
-                                            Google
-                                        </p>
-                                    </div>
 
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black">5K</p>
-                                    </div>
-
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-meta-3">$5000</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-black">590</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-meta-5">8%</p>
-                                    </div>
-                                </div>
-                                <div className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
-                                    <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                        <div className="flex-shrink-0">
-                                            <Image src="https://react-demo.tailadmin.com/assets/brand-01-10b0313f.svg" alt="Brand" width={48} height={48} />
+                                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                            <p className="text-black dark:text-slate-200">590</p>
                                         </div>
-                                        <p className="hidden text-black sm:block">
-                                            Google
-                                        </p>
-                                    </div>
 
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black">5K</p>
-                                    </div>
-
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-meta-3">$5000</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-black">590</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-meta-5">8%</p>
-                                    </div>
-                                </div>
-                                <div className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
-                                    <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                        <div className="flex-shrink-0">
-                                            <Image src="https://react-demo.tailadmin.com/assets/brand-01-10b0313f.svg" alt="Brand" width={48} height={48} />
+                                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                            <p className="text-meta-5 dark:text-slate-200">8%</p>
                                         </div>
-                                        <p className="hidden text-black sm:block">
-                                            Google
-                                        </p>
                                     </div>
-
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black">5K</p>
-                                    </div>
-
-                                    <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-meta-3">$5000</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-black">590</p>
-                                    </div>
-
-                                    <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                        <p className="text-meta-5">8%</p>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>

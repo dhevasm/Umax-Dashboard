@@ -56,6 +56,7 @@ export default function Metrics({ id }) {
                                 Value={item.amountspent}
                                 Title={t('amount-spent')}
                                 onToggle={handleToggle}
+                                Description={t('amount-desc')}
                                 isActive={activeCard === 1}
                             />,
                             <MetricCard
@@ -64,6 +65,7 @@ export default function Metrics({ id }) {
                                 Value={item.reach}
                                 Title={t('reach')}
                                 onToggle={handleToggle}
+                                Description={t('reach-desc')}
                                 isActive={activeCard === 2}
                             />,
                             <MetricCard
@@ -72,6 +74,7 @@ export default function Metrics({ id }) {
                                 Value={item.impressions}
                                 Title={t('impressions')}
                                 onToggle={handleToggle}
+                                Description={t('impressions-desc')}
                                 isActive={activeCard === 3}
                             />,
                             <MetricCard
@@ -80,6 +83,7 @@ export default function Metrics({ id }) {
                                 Value={item.frequency}
                                 Title={t('frequency')}
                                 onToggle={handleToggle}
+                                Description={t('frequency-desc')}
                                 isActive={activeCard === 4}
                             />,
                             <MetricCard
@@ -88,6 +92,7 @@ export default function Metrics({ id }) {
                                 Value={item.rar}
                                 Title={t('rar')}
                                 onToggle={handleToggle}
+                                Description={t('rar-desc')}
                                 isActive={activeCard === 5}
                             />,
                             <MetricCard
@@ -96,6 +101,7 @@ export default function Metrics({ id }) {
                                 Value={item.cpc}
                                 Title={t('cpc')}
                                 onToggle={handleToggle}
+                                Description={t('cpc-desc')}
                                 isActive={activeCard === 6}
                             />,
                             <MetricCard
@@ -104,6 +110,7 @@ export default function Metrics({ id }) {
                                 Value={item.ctr}
                                 Title={t('ctr')}
                                 onToggle={handleToggle}
+                                Description={t('ctr-desc')}
                                 isActive={activeCard === 7}
                             />,
                             <MetricCard
@@ -112,6 +119,7 @@ export default function Metrics({ id }) {
                                 Value={item.oclp}
                                 Title={t('oclp')}
                                 onToggle={handleToggle}
+                                Description={t('oclp-desc')}
                                 isActive={activeCard === 8}
                             />,
                             <MetricCard
@@ -120,6 +128,7 @@ export default function Metrics({ id }) {
                                 Value={item.cpr}
                                 Title={t('cpr')}
                                 onToggle={handleToggle}
+                                Description={t('cpr-desc')}
                                 isActive={activeCard === 9}
                             />,
                             <MetricCard
@@ -128,6 +137,7 @@ export default function Metrics({ id }) {
                                 Value={item.atc}
                                 Title={t('atc')}
                                 onToggle={handleToggle}
+                                Description={t('atc-desc')}
                                 isActive={activeCard === 10}
                             />,
                             <MetricCard
@@ -136,6 +146,7 @@ export default function Metrics({ id }) {
                                 Value={item.roas}
                                 Title={t('roas')}
                                 onToggle={handleToggle}
+                                Description={t('roas-desc')}
                                 isActive={activeCard === 11}
                             />,
                             <MetricCard
@@ -144,6 +155,7 @@ export default function Metrics({ id }) {
                                 Value={item.realroas}
                                 Title={t('real-roas')}
                                 onToggle={handleToggle}
+                                Description={t('real-desc')}
                                 isActive={activeCard === 12}
                             />,
                         ])

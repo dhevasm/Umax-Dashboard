@@ -53,19 +53,31 @@
 
     "metrics": {
       "amount-spent":"Amount Spent",
+      "amount-desc":"Total amount of money we spend on advertisement installations",
       "reach": "Reach",
+      "reach-desc": "The number of people who view the ad",
       "impressions": "Impressions",
+      "impressions-desc": "The number of times our ads are displayed. Different from Reach, a user can be counted multiple times for seeing the same ad more than once",
       "frequency": "Frequency",
-      "rar": "RAR",
-      "cpc": "CPC",
-      "ctr": "CTR",
-      "oclp": "OCLP",
-      "cpr": "CPR",
-      "atc": "ATC",
-      "roas": "ROAS",
+      "frequency-desc": "Average number of times a user sees an ad within a certain time range. Calculated by dividing Impressions by Reach",
+      "rar": "Reach Amount Spent Ratio",
+      "rar-desc": "Measures the relationship between the number of people who view the ad and the amount of money spent on advertising it",
+      "cpc": "Cost Per Click",
+      "cpc-desc": "Calculation of the cost we spend for each link click. Calculated by dividing Amount Spent by Link Clicks",
+      "ctr": "Click Through Rate",
+      "ctr-desc": "Ratio of the number of clicks on our ads compared to the number of ads displayed. Calculated by dividing Link Clicks by Impressions",
+      "oclp": "Outbound Click Landing Page",
+      "oclp-desc": "Encourage visitors to click on links or buttons that direct them to relevant external pages or websites",
+      "cpr": "Cost Per Result",
+      "cpr-desc": "Calculation of the cost we spend for each result we get",
+      "atc": "Add To Cart",
+      "atc-desc": "Adding products or items to the shopping cart while shopping online on e-commerce websites or online stores",
+      "roas": "Return on Ad Spent",
+      "roas-desc": "Measures the amount of revenue generated per advertising expense",
       "real-roas":"Real ROAS",
+      "real-desc": "Measures the amount of real revenue generated per advertising expense",
       "date": "Start Date",
-      "desc": "Description compared to the last 7 days"
+      "desc": "compared to the last 7 days"
     },
 
     "setting": {
@@ -73,6 +85,8 @@
     },
 
     "profile": {
+      "edit-personal-information": "Edit Personal Infomation",
+      "edit-international-information": "Edit International Infomation",
       "username": "Username",
       "email": "Email",
       "role": "Roles",
@@ -80,7 +94,27 @@
       "currency_position": "Currency Position",
       "language": "Language",
       "timezone": "Timezone",
-      "culture": "Culture"
+      "culture": "Culture",
+      "save": "Save",
+      "holder-name": "Type Username here",
+      "holder-email": "Type Email here",
+      "select-culture": "Select Culture",
+      "select-timezone": "Select Timezone",
+      "select-currencies": "Select currency",
+      "select-position": "Select position",
+      "select-language": "Select language",
+      "username-error": "Username is required",
+      "email-error": "Email is required",
+      "email-error2": "Email is invalid",
+      "currencies-error": "Currencies is required",
+      "currency-position-error": "Currency Position is required",
+      "language-error": "Language is required",
+      "timezone-error": "Timezone is required",
+      "culture-error": "Culture is required",
+      "success": "Success",
+      "message": "Profile updated successfully",
+      "right": "Right",
+      "left": "Left"
     },
 
     "campaigns": {
@@ -138,6 +172,7 @@
     "admin-sidebar": {
       "dashboard": "Dashboard",
       "tenants": "Tenants",
+      "analytics": "Analytics",
       "tenant-profile": "Tenant Profile",
       "campaigns": "Campaigns",
       "accounts": "Accounts",
@@ -165,7 +200,22 @@
       "country": "Country",
       "city": "City",
       "right": "Right",
-      "left": "Left"
+      "left": "Left",
+      "holder-name": "Type company name here",
+      "holder-address": "Type company address here",
+      "holder-email": "example@gmail.com",
+      "holder-contact": "+1234567890",
+      "name-error": "Name is required",
+      "address-error": "Address is required",
+      "country-error": "Country is required",
+      "city-error": "City is required",
+      "email-error": "Email is required",
+      "email-error2": "Email is invalid",
+      "contact-error": "Contact is required",
+      "language-error": "Language is required",
+      "culture-error": "Culture is required",
+      "timezone-error": "Timezone is required",
+      "currency-error": "Currency is required"
     },
 
     "admin-users": {
@@ -178,6 +228,7 @@
       "company": "Company",
       "page": "Page",
       "save": "Save Changes",
+      "submit": "Submit",
       "not-found": "User not found"
     },
 
@@ -197,10 +248,21 @@
       "complete": "Complete",
       "company": "Company",
       "campaign_name": "Campaign Name",
-      "create": "Create",
+      "submit": "Submit",
       "save": "Save Changes",
       "page": "Page",
-      "not-found": "Campaign not found"
+      "not-found": "Campaign not found",
+      "holder-name": "Type campaign name here",
+      "select-account": "Select account",
+      "select-objective": "Select objective",
+      "select-status": "Select status",
+      "name-error": "Campaign name is required",
+      "account-error": "Account is required",
+      "objective-error": "Objective is required",
+      "status-error": "Status is required",
+      "start-date-error": "Start date is required",
+      "end-date-error": "End date is required",
+      "all-platform": "All platform"
     },
 
     "admin-accounts": {
@@ -217,7 +279,21 @@
       "submit": "Submit",
       "save": "Save Changes",
       "page": "Page",
-      "not-found": "Account not found"
+      "not-found": "Account not found",
+      "holder-name": "Type Username here",
+      "holder-email": "example@gmail.com",
+      "holder-password": "Type password here",
+      "holder-confirm": "Type confirm password here",
+      "select-client": "Select client",
+      "select-platform": "Select platform",
+      "name-error": "Username is required",
+      "email-error": "Email is required",
+      "email-error2": "Email is invalid",
+      "password-error": "Password is required",
+      "password-error2": "Password does not match",
+      "confirm-error": "Confirm password is required",
+      "client-error": "Client is required",
+      "platform-error": "Platform is required"
     },
 
     "admin-clients": {
@@ -237,6 +313,61 @@
       "submit": "Submit",
       "save": "Save Changes",
       "page": "Page",
-      "not-found": "Client not found"
+      "not-found": "Client not found",
+      "holder-name": "Type client name here",
+      "holder-email": "example@gmail.com",
+      "holder-contact": "+1234567890",
+      "holder-password": "Type password here",
+      "holder-confirm": "Type confirm password here",
+      "select-country": "Select country",
+      "select-city": "Select city",
+      "name-error": "Client name is required",
+      "email-error": "Email is required",
+      "email-error2": "Email is invalid",
+      "contact-error": "Contact is required",
+      "address-error": "Address is required",
+      "password-error": "Password is required",
+      "password-error2": "Password does not match",
+      "confirm-error": "Confirm password is required"
+    },
+
+    "swal-file": {
+      "warn": "Are you sure?",
+      "msg": "File will be downloaded!",
+      "msg1": "Are you sure want to download pdf file?",
+      "msg2": "Are you sure want to download excel file?",
+      "yes": "Yes, download it!",
+      "no": "Cancel!",
+      "success": "Downloaded",
+      "error": "Oops...",
+      "suc-msg": "Your file has been downloaded!",
+      "err-msg": "Something went wrong!"
+    },
+
+    "swal-logout": {
+      "warn": "Are you sure?",
+      "msg": "you will be logged out of your account",
+      "yes": "Logout!",
+      "no": "Cancel!"
+    },
+
+    "swal-warn": {
+      "warn1": "Already Logged In!",
+      "msg1": "Please Logout First!",
+      "warn2": "You must Login First!",
+      "msg2": "Please Login First!",
+      "warn3": "Request not allowed!",
+      "msg3": "You are not allowed to perform this action!"
+    },
+
+    "swal-delete": {
+      "warn": "Are you sure?",
+      "msg": "You won't be able to revert this!",
+      "yes": "Yes, delete it!",
+      "no": "Cancel!",
+      "success": "Deleted",
+      "error": "Oops...",
+      "suc-msg": "Deleted!",
+      "err-msg": "Something went wrong!"
     }
 }

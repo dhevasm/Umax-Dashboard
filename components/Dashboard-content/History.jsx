@@ -242,7 +242,7 @@ export default function History({ id }) {
                     ) : (
                         <>
                             <div className="w-full flex gap-3 justify-end pb-5">
-                                <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] dark:text-white text-semibold py-2 dark:bg-gray-800"
+                                <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] dark:text-white text-semibold py-2 bg-white dark:bg-gray-800"
                                     value={dataPerPage}
                                     onChange={handleSortChange}
                                 >
@@ -257,58 +257,51 @@ export default function History({ id }) {
                                     <AiOutlineFilePdf className="relative font-medium text-lg" onClick={() => ConfirmationModal('pdf')} />
                                 </button>
                             </div>
-                            <div className={`overflow-x-auto ${currentHistory.length > 0 ? 'shadow-md' : 'shadow-lg'}`}>
+                            <div className={`overflow-x-auto`}>
                                 <table className='w-full border-collapse' ref={tableRef}>
                                     <thead className={currentHistory.length > 0 ? 'bg-blue-100 dark:bg-blue-900' : 'bg-gray-100 dark:bg-slate-700 rounded-md'}>
-                                        {currentHistory.length > 0 ? (
-                                            <tr>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>No.</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('date')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('amount-spent')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('reach')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('impressions')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('frequency')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('rar')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('cpc')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('ctr')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('oclp')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('cpr')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('atc')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('roas')}</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('real-roas')}</th>
-                                            </tr>
-                                        ) : (
-                                            <tr>
-                                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 border dark:border-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    <span className="bg-gray-300 dark:bg-gray-600 text-nowrap w-20 text-transparent h-10 rounded-full animate-pulse">lorem ipsum</span>
-                                                </th>
-                                                {/* Repeat for other headers */}
-                                            </tr>
-                                        )}
+                                        <tr>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('date')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('amount-spent')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('reach')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('impressions')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('frequency')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('rar')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('cpc')}</th>
+                                            {currentHistory.length > 0 && 
+                                                <>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('ctr')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('oclp')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('cpr')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('atc')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('roas')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('real-roas')}</th>
+                                                </>
+                                            }               
+                                        </tr>  
                                     </thead>
                                     <tbody>
                                         {currentHistory.length > 0 ? (
                                             currentHistory.map((data, index) => (
-                                                <tr key={index} className='border text-center dark:border-gray-600'>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{index + 1}.</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.timestamp_update}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.amountspent}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.reach}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.impressions}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.frequency}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.rar}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.cpc}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.ctr}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.oclp}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.cpr}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.atc}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.roas}</td>
-                                                    <td className='px-4 py-2 border text-nowrap dark:border-gray-600'>{data.realroas}</td>
+                                                <tr key={index} className='border border-gray-300 text-center dark:border-gray-600'>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.timestamp_update}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.amountspent}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.reach}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.impressions}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.frequency}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.rar}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.cpc}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.ctr}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.oclp}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.cpr}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.atc}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.roas}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.realroas}</td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr>
-                                                <td className='px-4 py-2 border text-center dark:border-gray-600' colSpan='14'>
+                                                <td className='px-4 py-2 border border-gray-300 text-center dark:border-gray-600' colSpan='9'>
                                                     <LoadingCircle />
                                                 </td>
                                             </tr>

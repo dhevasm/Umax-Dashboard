@@ -53,19 +53,31 @@
 
     "metrics": {
       "amount-spent":"Pengeluaran",
+      "amount-desc":"Jumlah total biaya yang kita keluarkan untuk pemasangan iklan",
       "reach": "Jangkauan",
+      "reach-desc": "Jumlah pengunjung yang melihat iklan kami",
       "impressions": "Impressions",
+      "impressions-desc": "Jumlah iklan kita ditayangkan. Bedanya dengan Reach, user yang sama bisa dihitung melihat iklan yang sama lebih dari satu kali",
       "frequency": "Frekuensi",
-      "rar": "RAR",
-      "cpc": "CPC",
-      "ctr": "CTR",
-      "oclp": "OCLP",
-      "cpr": "CPR",
-      "atc": "ATC",
-      "roas": "ROAS",
-      "real-roas":"ROAS Nyata No fek fek",
+      "frequency-desc": "Berapa kali rata-rata seorang user melihat iklan kita ditampilkan dalam rentang waktu tertentu. Dihitung dari jumlah Impressions dibagi dengan jumlah Reach",
+      "rar": "Reach Amount Spent Ratio",
+      "rar-desc": "Mengukur hubungan antara jumlah orang yang melihat iklan dengan jumlah uang yang dihabiskan untuk iklan tersebut",
+      "cpc": "Cost Per Click",
+      "cpc-desc": "Perhitungan biaya yang kita keluarkan untuk setiap Link Clicks. Dihitung dari jumlah Amount Spent dibagi dengan jumlah Link Clicks",
+      "ctr": "Click Through Rate",
+      "ctr-desc": "Rasio jumlah klik pada iklan kita dibandingkan dengan jumlah iklan ditayangkan. Dihitung dari jumlah Link Click dibagi dengan jumlah Impressions",
+      "oclp": "Outbound Click Landing Page",
+      "oclp-desc": "Mendorong pengunjung untuk mengklik tautan atau tombol yang mengarahkan mereka ke halaman atau situs web eksternal yang relevan",
+      "cpr": "Cost Per Result",
+      "cpr-desc": "Perhitungan biaya yang kita keluarkan untuk setiap hasil yang kita dapatkan",
+      "atc": "Add To Cart",
+      "atc-desc": "Menambahkan produk atau barang ke dalam keranjang belanja saat berbelanja secara online di situs web e-commerce atau toko online",
+      "roas": "Return on Ad Spent",
+      "roas-desc": "Mengukur seberapa banyak pendapatan atau hasil yang dihasilkan dari setiap unit pengeluaran iklan",
+      "real-roas":"ROAS Asli",
+      "real-desc": "Mengukur banyak pendapatan asli yang di hasilkan tiap pengeluaran iklan",
       "date": "Tanggal mulai",
-      "desc": "dibandingkan dengan 7 hari terakhir"
+      "desc": "7 hari terakhir"
     },
 
     "setting": {
@@ -73,6 +85,8 @@
     },
 
     "profile": {
+      "edit-personal-information": "Edit Informasi Pribadi",
+      "edit-international-information": "Edit Informasi Internasional",
       "username": "Username",
       "email": "Email",
       "role": "Peran",
@@ -80,7 +94,27 @@
       "currency_position": "Posisi Mata Uang",
       "language": "Bahasa",
       "timezone": "Zona Waktu",
-      "culture": "Kultur"
+      "culture": "Kultur",
+      "save": "Simpan",
+      "holder-name": "Ketik nama disini",
+      "holder-email": "contoh@gmail.com",
+      "select-culture": "Pilih Kultur",
+      "select-timezone": "Pilih Zona Waktu",
+      "select-currencies": "Pilih Mata Uang",
+      "select-position": "Pilih Posisi",
+      "select-language": "Pilih Bahasa",
+      "username-error": "Nama tidak boleh kosong",
+      "email-error": "Email tidak boleh kosong",
+      "email-error2": "Email tidak valid",
+      "culture-error": "Kultur tidak boleh kosong",
+      "timezone-error": "Zona Waktu tidak boleh kosong",
+      "currencies-error": "Mata Uang tidak boleh kosong",
+      "currency-position-error": "Posisi Mata Uang tidak boleh kosong",
+      "language-error": "Bahasa tidak boleh kosong",
+      "success": "Berhasil",
+      "message": "Profile Berhasil diupdate!",
+      "right": "Kanan",
+      "left": "Kiri"
     },
 
     "campaigns": {
@@ -137,6 +171,7 @@
     "admin-sidebar": {
       "dashboard": "Dasbor",
       "tenants": "Penyewa",
+      "analytics": "Analisis",
       "tenant-profile": "Profil Penyewa",
       "accounts": "Akun",
       "clients": "Klien",
@@ -164,7 +199,23 @@
       "country": "Negara",
       "city": "Kota",
       "right": "Kanan",
-      "left": "Kiri"
+      "left": "Kiri",
+      "holder-name": "Ketik nama perusahaan disini",
+      "holder-address": "Ketik alamat perusahaan disini",
+      "holder-email": "contoh@gmail.com",
+      "holder-contact": "+1234567890",
+      "name-error": "Nama tidak boleh kosong",
+      "address-error": "Alamat tidak boleh kosong",
+      "country-error": "Negara tidak boleh kosong",
+      "city-error": "Kota tidak boleh kosong",
+      "email-error": "Email tidak boleh kosong",
+      "email-error2": "Email tidak valid",
+      "contact-error": "Kontak tidak boleh kosong",
+      "language-error": "Bahasa tidak boleh kosong",
+      "currency-error": "Mata Uang tidak boleh kosong",
+      "currency-position-error": "Posisi Mata Uang tidak boleh kosong",
+      "timezone-error": "Zona Waktu tidak boleh kosong",
+      "culture-error": "Kultur tidak boleh kosong"
     },
 
     "admin-users": {
@@ -177,6 +228,7 @@
       "company": "Perusahaan",
       "page": "Halaman",
       "save": "Simpan",
+      "submit": "Kirim",
       "not-found": "Pengguna tidak ditemukan"
     },
 
@@ -195,11 +247,22 @@
       "draft": "Draf",
       "complete": "Selesai",
       "company": "Perusahaan",
-      "campaign_name": "Nama Perusahaan",
-      "create": "Buat",
+      "campaign_name": "Nama Kampanye",
+      "submit": "Kirim",
       "page": "Halaman",
       "save": "Simpan",
-      "not-found": "Kampanye tidak ditemukan"
+      "not-found": "Kampanye tidak ditemukan",
+      "holder-name": "Ketik nama kampanye disini",
+      "select-account": "Pilih Akun",
+      "select-objective": "Pilih Objektif",
+      "select-status": "Pilih Status",
+      "name-error": "Kampanye tidak boleh kosong",
+      "account-error": "Akun tidak boleh kosong",
+      "objective-error": "Objektif tidak boleh kosong",
+      "status-error": "Status tidak boleh kosong",
+      "start-date-error": "Tanggal mulai tidak boleh kosong",
+      "end-date-error": "Tanggal selesai tidak boleh kosong",
+      "all-platform": "Semua Platform"
     },
 
     "admin-accounts": {
@@ -216,7 +279,21 @@
       "deactive": "Tidak Aktif",
       "submit": "Kirim",
       "save": "Simpan",
-      "not-found": "Akun tidak ditemukan"
+      "not-found": "Akun tidak ditemukan",
+      "holder-name": "Ketik nama pengguna disini",
+      "holder-email": "contoh@gmail.com",
+      "holder-password": "Ketik password disini",
+      "holder-confirm": "Ketik konfirmasi password disini",
+      "select-client": "Pilih Klien",
+      "select-platform": "Pilih Platform",
+      "name-error": "Nama tidak boleh kosong",
+      "email-error": "Email tidak boleh kosong",
+      "email-error2": "Email tidak valid",
+      "client-error": "Klien tidak boleh kosong",
+      "platform-error": "Platform tidak boleh kosong",
+      "password-error": "Password tidak boleh kosong",
+      "password-error2": "Password tidak sama",
+      "confirm-error": "Konfirmasi Password tidak boleh kosong"
     },
 
     "admin-clients": {
@@ -236,6 +313,61 @@
       "submit": "Kirim",
       "save": "Simpan",
       "page": "Halaman",
-      "not-found": "Klien tidak ditemukan"
+      "not-found": "Klien tidak ditemukan",
+      "holder-name": "Ketik nama klien disini",
+      "holder-email": "contoh@gmail.com",
+      "holder-contact": "+1234567890",
+      "holder-password": "Ketik password disini",
+      "holder-confirm": "Ketik konfirmasi password disini",
+      "select-country": "Pilih Negara",
+      "select-city": "Pilih Kota",
+      "name-error": "Klien tidak boleh kosong",
+      "email-error": "Email tidak boleh kosong",
+      "email-error2": "Email tidak valid",
+      "address-error": "Alamat tidak boleh kosong",
+      "contact-error": "Kontak tidak boleh kosong",
+      "password-error": "Password tidak boleh kosong",
+      "password-error2": "Password tidak sama",
+      "confirm-error": "Konfirmasi Password tidak boleh kosong"
+    },
+
+    "swal-file": {
+      "warn": "Apakah Anda yakin?",
+      "msg": "File akan diunduh!",
+      "msg1": "Apakah anda yakin ingin mengunduh file pdf ini?",
+      "msg2": "Apakah anda yakin ingin mengunduh file excel ini?",
+      "yes": "Ya, unduh!",
+      "no": "Batal!",
+      "success": "File diunduh!",
+      "error": "File gagal diunduh!",
+      "suc-msg": "File telah diunduh!",
+      "err-msg": "Terjadi kesalahan!"
+    },
+
+    "swal-logout": {
+      "warn": "Apakah Anda yakin?",
+      "msg": "Anda akan keluar dari sistem!",
+      "yes": "Keluar!",
+      "no": "Batal!"
+    },
+
+    "swal-warn": {
+      "warn1": "Anda Sudah Login!",
+      "msg1": "Logout terlebih dulu!",
+      "warn2": "Anda harus login terlebih dulu!",
+      "msg2": "Login terlebih dulu!",
+      "warn3": "Permintaan tidak diterima!",
+      "msg3": "Anda tidak diizinkan untuk mengakses halaman ini!"
+    },
+
+    "swal-delete": {
+      "warn": "Apakah Anda yakin?",
+      "msg": "Data akan dihapus!",
+      "yes": "Ya, hapus!",
+      "no": "Batal!",
+      "success": "Dihapus!",
+      "error": "Oops...!",
+      "suc-msg": "Data telah dihapus!",
+      "err-msg": "Terjadi kesalahan!"
     }
 }
