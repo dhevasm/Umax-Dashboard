@@ -2,7 +2,7 @@
 
 import axios from "axios"
 import { useState,useEffect, useRef, useContext } from "react"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
 import jsPDF from "jspdf"

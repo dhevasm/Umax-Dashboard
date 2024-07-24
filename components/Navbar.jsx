@@ -11,10 +11,11 @@ import { MdDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import { FaUser, FaUsers, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import Swal from "sweetalert2";
-
+import { useTranslations } from "next-intl";
 
 export default function Navbar() {
     
+    const t = useTranslations('navbar');
     const pathName = usePathname()
     const router = useRouter();
     const [activeLink, setActiveLink] = useState(pathName);
@@ -119,12 +120,12 @@ export default function Navbar() {
                     <div className="border-t border-gray-300 dark:border-gray-600"></div>
                     <Link href="/profile" className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                         <FaUser className="mr-2" />
-                        Profile
+                        {t('profile')}
                     </Link>
                     <div className="border-t border-gray-300 dark:border-gray-600"></div>
                     <a onClick={handleLogout} className="flex items-center px-2 py-1 text-[14px] mt-2 text-red-600 dark:text-red-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                         <FaSignOutAlt className="mr-2" />
-                        Logout
+                        {t('logout')}
                     </a>
                 </div>
             </div>
@@ -143,7 +144,7 @@ export default function Navbar() {
             <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <img src="assets/logo.png" alt="Logo" className="ms-4 w-[130px]" />
+                    <img src="../assets/logo.png" alt="Logo" className="ms-4 w-[130px]" />
 
                     {/* Nav Links */}
                     <div>
@@ -177,26 +178,26 @@ export default function Navbar() {
                         className={`font-semibold flex gap-1 items-center ${activeLink === "/dashboard" ? "active-link" : ""}`}
                         onClick={() => handleClick("/dashboard")}
                         >
-                        <span><MdDashboard size={20} /></span>Dashboard
+                        <span><MdDashboard size={20} /></span>{t('dashboard')}
                         </li>
                         <li
                         className={`font-semibold flex gap-1 items-center ${activeLink === "/campaigns" ? "active-link" : ""}`}
                         onClick={() => handleClick("/campaigns")}
                         >
-                        <span><BiSolidMegaphone size={20} /></span>Campaigns
+                        <span><BiSolidMegaphone size={20} /></span>{t('campaign')}
                         </li>
                         <li
                         className={`font-semibold flex gap-1 items-center ${activeLink === "/accounts" ? "active-link" : ""}`}
                         onClick={() => handleClick("/accounts")}
                         >
-                        <span><AiOutlineUser size={20} /></span>Accounts
+                        <span><AiOutlineUser size={20} /></span>{t('account')}
                         </li>
                         {role !== 'client' && (
                         <li
                             className={`font-semibold flex gap-1 items-center ${activeLink === "/clients" ? "active-link" : ""}`}
                             onClick={() => handleClick("/clients")}
                         >
-                            <span><BiGroup size={20} /></span>Clients
+                            <span><BiGroup size={20} /></span>{t('client')}
                         </li>
                         )}
                     </ul>

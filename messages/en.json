@@ -1,0 +1,242 @@
+{
+    "navbar": {
+      "dashboard": "Dashboard",
+      "account": "Account",
+      "campaign": "Campaign",
+      "client": "Client",
+      "profile": "Profile",
+      "logout": "Logout"
+    },
+
+    "sidebar":{
+      "all": "All",
+      "active": "Active",
+      "draft": "Draft",
+      "complete": "Complete",
+      "amount-spent": "Amount Spent",
+      "reach": "Reach",
+      "start-date": "Start Date",
+      "search": "Search"
+    },
+
+    "dashboard": {
+      "performence": "Performance",
+      "metrics": "Metrics",
+      "setting": "Setting",
+      "history": "History"
+    },
+
+    "performence": {
+      "last-week": "Last week",
+      "last-month": "Last month",
+      "last-year": "Last year"
+    },
+
+    "metric7": {
+      "amount-spent": "Amount Spent",
+      "amount-desc": "Total amount of money we spend on advertisement installations",
+      "reach-amount-spent-ratio": "Reach Amount Spent Ratio",
+      "rar-desc": "Measures the relationship between the number of people who view the ad and the amount of money spent on advertising it",
+      "cpr": "CPR",
+      "cpr-desc": "Calculation of the cost we spend for each result we get",
+      "oclp": "OCLP",
+      "oclp-desc": "Encourage visitors to click on links or buttons that direct them to relevant external pages or websites",
+      "ctr": "CTR",
+      "ctr-desc": "Measures the ratio of clicks on our ads compared to the number of ad impressions",
+      "atc": "ATC",
+      "atc-desc": "Measures the number of times users add products to their carts while shopping online on e-commerce sites or online stores",
+      "roas": "ROAS",
+      "roas-desc": "Adding products or items to the shopping cart while shopping online on e-commerce websites or online stores",
+      "real-roas": "Real ROAS",
+      "real-desc": "Measures the amount of real revenue generated per advertising expense"
+    },
+
+    "metrics": {
+      "amount-spent":"Amount Spent",
+      "reach": "Reach",
+      "impressions": "Impressions",
+      "frequency": "Frequency",
+      "rar": "RAR",
+      "cpc": "CPC",
+      "ctr": "CTR",
+      "oclp": "OCLP",
+      "cpr": "CPR",
+      "atc": "ATC",
+      "roas": "ROAS",
+      "real-roas":"Real ROAS",
+      "date": "Start Date",
+      "desc": "Description compared to the last 7 days"
+    },
+
+    "setting": {
+      "recommended": "Recommended value"
+    },
+
+    "profile": {
+      "username": "Username",
+      "email": "Email",
+      "role": "Roles",
+      "currencies": "Currencies",
+      "currency_position": "Currency Position",
+      "language": "Language",
+      "timezone": "Timezone",
+      "culture": "Culture"
+    },
+
+    "campaigns": {
+      "title": "Campaigns",
+      "search": "Search",
+      "name": "Name",
+      "client": "Client",
+      "platform": "Platform",
+      "account": "Account",
+      "objective": "Objective",
+      "start-date": "Start Date",
+      "status": "Status",
+      "active": "Active",
+      "draft": "Draft",
+      "complete": "Complete",
+      "page": "Page",
+      "not-found": "Campaign not found"
+    },
+
+    "accounts": {
+      "title": "Accounts",
+      "search": "Search",
+      "name": "Name",
+      "client": "Client",
+      "active": "Active",
+      "deactive": "Deactive",
+      "page": "Page",
+      "not-found": "Account not found"
+    },
+
+    "clients": {
+      "title": "Clients",
+      "search": "Search",
+      "name": "Name",
+      "email": "Email",
+      "contact": "Contact",
+      "address": "Address",
+      "status": "Status",
+      "active": "Active",
+      "deactive": "Deactive",
+      "page": "Page",
+      "not-found": "Client not found"
+    },
+
+    "admin-dashboard": {
+      "tenants": "Tenants",
+      "users": "Users",
+      "campaigns": "Campaigns",
+      "accounts": "Accounts",
+      "clients": "Clients",
+      "show-detail": "Show Detail",
+      "Campaign-by-platform": "Campaign by platform"
+    },
+
+    "admin-sidebar": {
+      "dashboard": "Dashboard",
+      "tenants": "Tenants",
+      "tenant-profile": "Tenant Profile",
+      "campaigns": "Campaigns",
+      "accounts": "Accounts",
+      "clients": "Clients",
+      "users": "Users",
+      "profile": "Profile",
+      "logout": "Logout"
+    },
+
+    "tenant-profile": {
+      "title": "Tenant Profile",
+      "tenant": "Tenant",
+      "dashboard": "Dashboard",
+      "general": "General",
+      "address": "Address",
+      "contact": "Contact",
+      "language": "Language",
+      "currency": "Currency",
+      "currency_position": "Currency Position",
+      "timezone": "Timezone",
+      "culture": "Culture",
+      "save": "Save Changes",
+      "company-name": "Company Name",
+      "company-address": "Company Address",
+      "country": "Country",
+      "city": "City",
+      "right": "Right",
+      "left": "Left"
+    },
+
+    "admin-users": {
+      "title": "USERS",
+      "users": "Users",
+      "dashboard": "Dashboard",
+      "search": "Search",
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "page": "Page",
+      "save": "Save Changes",
+      "not-found": "User not found"
+    },
+
+    "admin-campaigns": {
+      "title": "CAMPAIGNS",
+      "campaigns": "Campaigns",
+      "dashboard": "Dashboard",
+      "search": "Search",
+      "name": "Name",
+      "client": "Client",
+      "account": "Account",
+      "objective": "Objective",
+      "start-date": "Start Date",
+      "end-date": "End Date",
+      "active": "Active",
+      "draft": "Draft",
+      "complete": "Complete",
+      "company": "Company",
+      "campaign_name": "Campaign Name",
+      "create": "Create",
+      "save": "Save Changes",
+      "page": "Page",
+      "not-found": "Campaign not found"
+    },
+
+    "admin-accounts": {
+      "title": "ACCOUNTS",
+      "accounts": "Accounts",
+      "dashboard": "Dashboard",
+      "search": "Search",
+      "username": "Username",
+      "client": "Client",
+      "active": "Active",
+      "deactive": "Deactive",
+      "account_name": "Account Name",
+      "confirm_password": "Confirm Password",
+      "submit": "Submit",
+      "save": "Save Changes",
+      "page": "Page",
+      "not-found": "Account not found"
+    },
+
+    "admin-clients": {
+      "title": "CLIENTS",
+      "clients": "Clients",
+      "dashboard": "Dashboard",
+      "search": "Search",
+      "name": "Name",
+      "contact": "Contact",
+      "address": "Address",
+      "active": "Active",
+      "deactive": "Deactive",
+      "client_name": "Client Name",
+      "country": "Country",
+      "city": "City",
+      "confirm_password": "Confirm Password",
+      "submit": "Submit",
+      "save": "Save Changes",
+      "page": "Page",
+      "not-found": "Client not found"
+    }
+}

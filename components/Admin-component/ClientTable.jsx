@@ -2,7 +2,7 @@
 
 import axios from "axios"
 import { useState,useEffect, useRef, useContext } from "react"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
 import jsPDF from "jspdf"
@@ -21,6 +21,7 @@ import { MdPeopleOutline } from "react-icons/md"
 import { RiFileExcel2Fill, RiFileExcel2Line } from "react-icons/ri"
 import { BiPlus } from "react-icons/bi"
 import CountCard from "./CountCard"
+import { useTranslations } from "next-intl"
 export default function ClientTable() {
 
     const [client, setclient] = useState([])
@@ -31,6 +32,7 @@ export default function ClientTable() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const t = useTranslations("admin-clients")
 
 
     function handleShowPassword() {
@@ -506,7 +508,7 @@ export default function ClientTable() {
         // Info page
         pageButtons.push(
             <span key="info" className="px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white rounded-md">
-                {`Page ${currentPage} / ${totalPages}`}
+                {`${t("page")} ${currentPage} / ${totalPages}`}
             </span>
         );
     
@@ -554,8 +556,8 @@ export default function ClientTable() {
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-                    <h1 className="text-3xl font-bold uppercase dark:text-white flex gap-2"><MdPeopleOutline size={35}/> Client</h1>
-                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Clients</p>
+                    <h1 className="text-3xl font-bold uppercase dark:text-white flex gap-2"><MdPeopleOutline size={35}/> {t('title')}</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a>  / {t('clients')}</p>
                 </div>
 
                 <div className="w-full fit mb-5 rounded-md shadow-md">
@@ -596,8 +598,8 @@ export default function ClientTable() {
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="">Status</option>
-                                        <option value="1">Active</option>
-                                        <option value="2">Inactive</option>
+                                        <option value="1">{t("active")}</option>
+                                        <option value="2">{t("deactive")}</option>
                                     </select>  
                                 </div>
                                 {/* Filter by select end */}
@@ -624,9 +626,9 @@ export default function ClientTable() {
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Name</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Address</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Contact</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t("name")}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t("address")}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t("contact")}</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Email</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
                                     </tr>
@@ -644,7 +646,7 @@ export default function ClientTable() {
                                                         </a>
                                                     </td>
                                                     <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap"><a href={`mailto:${client.email}`} className="text-blue-500">{client.email }</a></td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.status == 1 ? "Active" : "Inactive"}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.status == 1 ? t('active') : t('deactive')}</td>
                                                 </tr>
                                             )
                                     }) : (
@@ -653,7 +655,7 @@ export default function ClientTable() {
                                             // Jika data tida ditemukan
                                             <tr className="text-center border dark:border-gray-500">
                                                 <td colSpan={8} className=" py-4">
-                                                    Data not found
+                                                    {t('not-found')}
                                                 </td>
                                             </tr>
                                         ) :
@@ -687,7 +689,7 @@ export default function ClientTable() {
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0]bg-blue-500 dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold">
-                                {`${modeModal} Client`}
+                                {`${modeModal} ${t('clients')}`}
                             </h3>
                             <button type="button" className=" text-xl bg-transparent hover:bg-blue-400  rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes/>
@@ -697,7 +699,7 @@ export default function ClientTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium ">Client Name <span className="text-red-500">*</span> </label>
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium ">{t('client_name')} <span className="text-red-500">*</span> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
                                     required
                                     onChange={(e) => setValues({...values, name: e.target.value})}/>
@@ -706,7 +708,7 @@ export default function ClientTable() {
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">Country</label>
+                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">{t('country')}</label>
                                 <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
                                     <option value="0" key={0} disabled hidden>Select Country</option>
                                     {
@@ -718,7 +720,7 @@ export default function ClientTable() {
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">City</label>
+                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}</label>
                                 <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}  onChange={(e) => setValues({...values, address: e.target.value})}>
                                     {
                                         City.length > 0 ? <option disabled value={0} key={0} hidden>Select City</option> : ""
@@ -743,7 +745,7 @@ export default function ClientTable() {
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium ">Contact <span className="text-red-500">*</span> </label>
+                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium ">{t('contact')} <span className="text-red-500">*</span> </label>
                                     <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required
                                     onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                     {
@@ -764,7 +766,7 @@ export default function ClientTable() {
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium ">Confirm Password <span className="text-red-500">*</span> </label>
+                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium ">{t('confirm_password')}<span className="text-red-500">*</span> </label>
                                     <div className="relative">
                                         <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
@@ -800,10 +802,10 @@ export default function ClientTable() {
                                 <div>
                                  {
                                             modeModal === 'Edit' ? <div className="flex gap-3">
-                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>Save Change</button>
+                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>{t('save')}</button>
                                                 <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditclientId)}><FaTrash/></button>
                                             </div> 
-                                             : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>Submit</button>
+                                             : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>{t('submit')}</button>
                                         }
                                 </div>
                                 </div>  

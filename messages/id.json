@@ -1,0 +1,241 @@
+{
+    "navbar": {
+      "dashboard": "Dasbor",
+      "account": "Akun",
+      "campaign": "Kampanye",
+      "client": "Klien",
+      "profile": "Profil",
+      "logout": "Keluar"
+    },
+
+    "sidebar":{
+      "all": "Semua",
+      "active": "Aktif",
+      "draft": "Draf",
+      "complete": "Selesai",
+      "amount-spent": "pengeluaran",
+      "reach": "Jangkauan",
+      "start-date": "Mulai Tanggal",
+      "search": "Cari"
+    },
+
+    "dashboard": {
+      "performence": "Performa",
+      "metrics": "Metrik",
+      "setting": "Pengaturan",
+      "history": "Riwayat"
+    },
+
+    "performence":{
+      "last-week": "Minggu lalu",
+      "last-month": "Sebulan lalu",
+      "last-year": "Tahun lalu"
+    },
+
+    "metric7": {
+      "amount-spent": "Pengeluaran",
+      "amount-desc": "Total pengeluaran yang kami kelola",
+      "reach-amount-spent-ratio": "Rasio Jangkauan Pengeluaran",
+      "rar-desc": "Menunjukkan rasio antara jangkauan pengeluaran dan pengeluaran yang kami kelola",
+      "cpr": "CPR",
+      "cpr-desc": "Perhitungan biaya pengeluaran untuk setiap hasil yang diperoleh",
+      "oclp": "OCLP",
+      "oclp-desc": "Mendorong pengunjung untuk mengklik link atau tombol yang mengarahkan mereka ke situs website atau situs online yang relevan",
+      "ctr": "CTR",
+      "ctr-desc": "Menunjukkan rasio klik pada iklan kami dibandingkan dengan jumlah yang dilihat",
+      "atc": "ATC",
+      "atc-desc": "Menunjukkan jumlah yang dilihat saat pengunjung menambahkan produk ke keranjang belanja online pada situs e-commerce website atau online store",
+      "roas": "ROAS",
+      "roas-desc": "Menambahkan produk atau item ke keranjang belanja pada situs e-commerce website atau online store",
+      "real-roas": "Real ROAS",
+      "real-desc": "Menunjukkan biaya pengeluaran yang diperoleh per biaya pengeluaran"
+    },
+
+    "metrics": {
+      "amount-spent":"Pengeluaran",
+      "reach": "Jangkauan",
+      "impressions": "Impressions",
+      "frequency": "Frekuensi",
+      "rar": "RAR",
+      "cpc": "CPC",
+      "ctr": "CTR",
+      "oclp": "OCLP",
+      "cpr": "CPR",
+      "atc": "ATC",
+      "roas": "ROAS",
+      "real-roas":"ROAS Nyata No fek fek",
+      "date": "Tanggal mulai",
+      "desc": "dibandingkan dengan 7 hari terakhir"
+    },
+
+    "setting": {
+      "recommended": "Rekomendasi nilai"
+    },
+
+    "profile": {
+      "username": "Username",
+      "email": "Email",
+      "role": "Peran",
+      "currencies": "Mata Uang",
+      "currency_position": "Posisi Mata Uang",
+      "language": "Bahasa",
+      "timezone": "Zona Waktu",
+      "culture": "Kultur"
+    },
+
+    "campaigns": {
+      "title": "Kampanye",
+      "search": "Cari",
+      "name": "Nama",
+      "client": "Klien",
+      "platform": "Platform",
+      "account": "Akun",
+      "objective": "Objektif",
+      "start-date": "Mulai Tanggal",
+      "status": "Status",
+      "active": "Aktif",
+      "draft": "Draf",
+      "complete": "Selesai",
+      "page": "Halaman",
+      "not-found": "Kampanye tidak ditemukan"
+    },
+
+    "accounts": {
+      "title": "Akun",
+      "search": "Cari",
+      "name": "Nama",
+      "client": "Klien",
+      "active": "Aktif",
+      "deactive": "Tidak Aktif",
+      "page": "Halaman",
+      "not-found": "Akun tidak ditemukan"
+    },
+
+    "clients": {
+      "title": "Klien",
+      "search": "Cari",
+      "name": "Nama",
+      "email": "Email",
+      "address": "Alamat",
+      "contact": "kontak",
+      "active": "Aktif",
+      "deactive": "Tidak Aktif",
+      "page": "Halaman",
+      "not-found": "Klien tidak ditemukan"
+    },
+
+    "admin-dashboard": {
+      "tenants": "Penyewa",
+      "users": "Pengguna",
+      "campaigns": "Kampanye",
+      "accounts": "Akun",
+      "clients": "Klien",
+      "show-detail": "Lihat Detail",
+      "Campaign-by-platform": "Kampanye berdasarkan platform"
+    },
+
+    "admin-sidebar": {
+      "dashboard": "Dasbor",
+      "tenants": "Penyewa",
+      "tenant-profile": "Profil Penyewa",
+      "accounts": "Akun",
+      "clients": "Klien",
+      "campaigns": "Kampanye",
+      "users": "Pengguna",
+      "profile": "Profil",
+      "logout": "Keluar"
+    },
+
+    "tenant-profile": {
+      "title": "Profil Penyewa",
+      "tenant": "Penyewa",
+      "dashboard": "Dasbor",
+      "general": "Umum",
+      "address": "Alamat",
+      "contact": "Kontak",
+      "language": "Bahasa",
+      "currency": "Mata Uang",
+      "currency_position": "Posisi Mata Uang",
+      "timezone": "Zona Waktu",
+      "culture": "Kultur",
+      "save": "Simpan",
+      "company-name": "Nama Perusahaan",
+      "company-address": "Alamat Perusahaan",
+      "country": "Negara",
+      "city": "Kota",
+      "right": "Kanan",
+      "left": "Kiri"
+    },
+
+    "admin-users": {
+      "title": "PENGGUNA",
+      "users": "Pengguna",
+      "dashboard": "Dasbor",
+      "search": "Cari",
+      "name": "Nama",
+      "email": "Email",
+      "company": "Perusahaan",
+      "page": "Halaman",
+      "save": "Simpan",
+      "not-found": "Pengguna tidak ditemukan"
+    },
+
+    "admin-campaigns": {
+      "title": "KAMpanye",
+      "campaigns": "Kampanye",
+      "dashboard": "Dasbor",
+      "search": "Cari",
+      "name": "Nama",
+      "client": "Klien",
+      "account": "Akun",
+      "objective": "Objektif",
+      "start-date": "Mulai Tanggal",
+      "end-date": "Selesai Tanggal",
+      "active": "Aktif",
+      "draft": "Draf",
+      "complete": "Selesai",
+      "company": "Perusahaan",
+      "campaign_name": "Nama Perusahaan",
+      "create": "Buat",
+      "page": "Halaman",
+      "save": "Simpan",
+      "not-found": "Kampanye tidak ditemukan"
+    },
+
+    "admin-accounts": {
+      "title": "AKUN",
+      "accounts": "Akun",
+      "dashboard": "Dasbor",
+      "search": "Cari",
+      "username": "Pengguna",
+      "account_name": "Nama Akun",
+      "confirm_password": "Konfirmasi Password",
+      "client": "Klien",
+      "page": "Halaman",
+      "active": "Aktif",
+      "deactive": "Tidak Aktif",
+      "submit": "Kirim",
+      "save": "Simpan",
+      "not-found": "Akun tidak ditemukan"
+    },
+
+    "admin-clients": {
+      "title": "Klien",
+      "clients": "Klien",
+      "dashboard": "Dasbor",
+      "search": "Cari",
+      "name": "Nama",
+      "contact": "Kontak",
+      "address": "Alamat",
+      "active": "Aktif",
+      "deactive": "Tidak Aktif",
+      "client_name": "Nama Klien",
+      "country": "Negara",
+      "city": "Kota",
+      "confirm_password": "Konfirmasi Password",
+      "submit": "Kirim",
+      "save": "Simpan",
+      "page": "Halaman",
+      "not-found": "Klien tidak ditemukan"
+    }
+}

@@ -8,28 +8,30 @@ import Map from "./Maps/Map"
 import Image from "next/image"
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi"
 import { useContext } from "react"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import { useState, useEffect } from "react"
 import LoadingCircle from "../Loading/LoadingCircle"
+import { useTranslations } from "next-intl"
 
 export default function Dashboard({ tenant_id }) {
 
+    const t = useTranslations("admin-dashboard")
     const { sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
 
     return (
         <>
             <div className="w-full h-full flex flex-wrap gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
-                    {userData.roles == "admin" ? <CountCard title="Tenants" value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
+                    {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
 
-                        userData.roles == "sadmin" ? <CountCard title="Tenants" value={dataDashboard.tenants ? dataDashboard.tenants : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} /> :
+                        userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={dataDashboard.tenants ? dataDashboard.tenants : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} /> :
 
-                            <CountCard title="Tenants" value={<div className="text-md animate-pulse">Loading...</div>} />}
+                            <CountCard title={t('tenants')} value={<div className="text-md animate-pulse">Loading...</div>} />}
 
-                    <CountCard title="Users" value={dataDashboard.users ? dataDashboard.users : <div className="text-md animate-pulse">Loading...</div>} handleClick={"users"} />
+                    <CountCard title={t('users')} value={dataDashboard.users ? dataDashboard.users : <div className="text-md animate-pulse">Loading...</div>} handleClick={"users"} />
 
-                    <CountCard title="Campaigns" value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"} />
-                    <CountCard title="Clients" value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"} />
+                    <CountCard title={t('campaigns')} value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"} />
+                    <CountCard title={t('clients')} value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"} />
                 </div>
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
                     <div className="w-full lg:w-1/3 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">

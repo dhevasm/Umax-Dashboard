@@ -10,6 +10,7 @@ import 'jspdf-autotable';
 import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from 'react-icons/bi';
 import { MdDeleteForever } from 'react-icons/md';
 import AccountDetail from '../Detail/AccountDetail';
+import { useTranslations } from 'next-intl';
 
 const AccountTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -22,6 +23,7 @@ const AccountTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const tableRef = useRef(null);
+    const t = useTranslations('accounts');
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
@@ -263,7 +265,7 @@ const AccountTable = () => {
                     fontWeight: '500', 
                 };
                 return (
-                    <span style={statusStyle}>Active</span>
+                    <span style={statusStyle}>{t("active")}</span>
                 );
             
             case 2:
@@ -277,7 +279,7 @@ const AccountTable = () => {
                     fontWeight: '500', 
                 };
                 return (
-                    <span style={statusStyle}>Deactive</span>
+                    <span style={statusStyle}>{t('deactive')}</span>
                 );
             default:
                 return "Unknown";
@@ -337,7 +339,7 @@ const AccountTable = () => {
         // Info page
         pageButtons.push(
             <span key="info" className="px-3 py-1 dark:text-white rounded-md">
-                {`Page ${currentPage} / ${totalPages}`}
+                {`${t("page")} ${currentPage} / ${totalPages}`}
             </span>
         );
     
@@ -384,7 +386,9 @@ const AccountTable = () => {
     return (
         <>
             <div className='font-semibold text-3xl text-slate-800 mb-10 dark:text-slate-200'>
-                <h1>Account</h1>
+                <h1>
+                    {t("title")}
+                </h1>
             </div>
             <div className="bg-white border dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-lg w-full h-fit p-5">
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
@@ -392,7 +396,7 @@ const AccountTable = () => {
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300`}
                             type="text"
-                            placeholder="Search"
+                            placeholder={t("search")}
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />
@@ -408,8 +412,9 @@ const AccountTable = () => {
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`} 
                             onChange={handleStatusChange}>
                             <option value="">Status</option>
-                            <option value="1">Active</option>
-                            <option value="2">Deactive Ads</option>
+                            <option value="1">{t("active")}
+                            </option>
+                            <option value="2">{t("deactive")}</option>
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
@@ -433,9 +438,9 @@ const AccountTable = () => {
                     <table className='w-full border-collapse'>
                         <thead className='bg-white dark:bg-blue-700'>
                             <tr className='text-left'>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>No.</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Name</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Client</th>
+                                {/* <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>No.</th> */}
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>{t('name')}</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>{t('client')}</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Platform</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Email</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Status</th>
@@ -446,7 +451,7 @@ const AccountTable = () => {
                             {currentAccounts.length > 0 ? (
                                 currentAccounts.map((data, index) => (
                                     <tr key={index} className='border text-center dark:border-gray-700'>
-                                        <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>{index + 1}.</td>
+                                        {/* <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>{index + 1}.</td> */}
                                         <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
                                             <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.username}`} onClick={() => handleOpenModal(data)}>
                                                 {data.username}
@@ -471,8 +476,8 @@ const AccountTable = () => {
                             ) : (
                                 tableData.length > 0 ? (
                                     <tr>
-                                        <td colSpan="6" className="text-center py-4 border border-gray-300 dark:border-gray-600">
-                                            Data Not Found
+                                        <td colSpan="6" className="text-center py-4 border border-gray-300 dark:border-gray-600 dark:text-gray-200">
+                                            {t('not-found')}
                                         </td>
                                     </tr>
                                 ) : (
@@ -494,8 +499,8 @@ const AccountTable = () => {
                         <thead className='bg-white dark:bg-gray-800'>
                             <tr className='text-left'>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>No.</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Name</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Client</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>{t('name')}</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>{t('client')}</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Platform</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Email</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Status</th>

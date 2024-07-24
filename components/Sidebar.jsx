@@ -2,7 +2,7 @@
 
 
 import { useState, useRef, useEffect, useContext, Suspense } from "react"
-
+import { useTranslations } from "next-intl"
 import SidebarCard from "./Card/SidebarCard"
 import axios from "axios"
 import SidebarLoading from "./Loading/SidebarLoading"
@@ -17,7 +17,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
     const [status, setStatus] = useState(0);
     const [hidden, setHidden] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-
+    const t = useTranslations('sidebar');
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     // Sidebar Hide Handle start
@@ -102,16 +102,16 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
                         }
                         `}
                     </style>
-                    <p className="SidebarFilterActive text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>All</p>
-                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="draft" onClick={() => handleClick(2, 'draft')}>Draft</p>
-                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="active" onClick={() => handleClick(1, 'active')}>Active</p>
-                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="complete" onClick={() => handleClick(3, 'complete')}>Complete</p>
+                    <p className="SidebarFilterActive text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>{t('all')}</p>
+                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="draft" onClick={() => handleClick(2, 'draft')}>{t('draft')}</p>
+                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="active" onClick={() => handleClick(1, 'active')}>{t('active')}</p>
+                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="complete" onClick={() => handleClick(3, 'complete')}>{t('complete')}</p>
                 </div>
 
                 {/* Search Bar */}
                 <div className="w-full flex items-center">
                     <div className="relative w-full px-2 mb-2 flex justify-center">
-                        <input className="text-black dark:bg-slate-700 dark:text-slate-100 m-1 p-2 pl-9 rounded-xl h-11 border border-gray-300 dark:border-slate-600 w-full focus:outline-none" type="text" placeholder="Search" onChange={(event) => setSearchTerm(event.target.value)} />
+                        <input className="text-black dark:bg-slate-700 dark:text-slate-100 m-1 p-2 pl-9 rounded-xl h-11 border border-gray-300 dark:border-slate-600 w-full focus:outline-none" type="text" placeholder={t('search')} onChange={(event) => setSearchTerm(event.target.value)} />
                         <div className="absolute left-6 top-4 text-gray-500 dark:text-slate-300">
                             <FaSearch className="h-4 w-4 text-[3px]" />
                         </div>

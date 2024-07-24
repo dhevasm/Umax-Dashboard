@@ -2,7 +2,7 @@
 
 import axios from "axios"
 import { useState,useEffect, useRef, useContext } from "react"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
 import jsPDF from "jspdf"
@@ -16,6 +16,7 @@ import { RiFileExcel2Line, RiMegaphoneLine } from "react-icons/ri"
 import CountCard from "./CountCard"
 import { BiPlus } from "react-icons/bi"
 import { date } from "yup"
+import { useTranslations } from "next-intl"
 
 export default function CampaignTable() {
 
@@ -28,6 +29,7 @@ export default function CampaignTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
+    const t = useTranslations("admin-campaigns");
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
 
@@ -469,7 +471,7 @@ export default function CampaignTable() {
         // Info page
         pageButtons.push(
             <span key="info" className="px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white rounded-md">
-                {`Page ${currentPage} / ${totalPages}`}
+                {`${t('page')} ${currentPage} / ${totalPages}`}
             </span>
         );
     
@@ -531,8 +533,8 @@ export default function CampaignTable() {
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-                    <h1 className="text-3xl font-bold dark:text-white uppercase flex gap-2"> <RiMegaphoneLine size={35}/> Campaigns</h1>
-                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Campaigns</p>
+                    <h1 className="text-3xl font-bold dark:text-white uppercase flex gap-2"> <RiMegaphoneLine size={35}/> {t('title')}</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a>  / {t('campaigns')}</p>
                 </div>
 
                 <div className="w-full h-fit mb-5 rounded-md shadow-md">
@@ -576,9 +578,9 @@ export default function CampaignTable() {
                                         value={selectedStatus} onChange={handleStatusChange}
                                         >
                                             <option value="">Status</option>
-                                            <option value="2">Draft</option>
-                                            <option value="1">Active</option>
-                                            <option value="3">Completed</option>
+                                            <option value="2">{t('draft')}</option>
+                                            <option value="1">{t('active')}</option>
+                                            <option value="3">{t('complete')}</option>
                                         </select>  
                                     </div>
                                     <div className="mb-4">
@@ -599,7 +601,7 @@ export default function CampaignTable() {
                                             value={selectedObjective}
                                             onChange={handleObjectiveChange}
                                         >
-                                            <option value="">Objective</option>
+                                            <option value="">{t('objective')}</option>
                                             <option value="1">Awareness</option>
                                             <option value="2">Concervation</option>
                                             <option value="3">Consideration</option>
@@ -613,7 +615,7 @@ export default function CampaignTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4 ">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className= "w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-800" placeholder="Search" 
+                                    <input type="text" id="search" name="search" className= "w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-800" placeholder={t('search')}
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     onFocus={() => setCurrentPage(1)}
@@ -630,13 +632,13 @@ export default function CampaignTable() {
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Name</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Client</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Account</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('name')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('client')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('account')}</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Objective</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('objective')}</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Company</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('company')}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
@@ -649,7 +651,7 @@ export default function CampaignTable() {
                                                     <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.account_name}</td>
                                                     <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
                                                     <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.status == 1 ? "Active" : campaign.status == 3 ? "Complete" : "Draft"}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.status == 1 ? t('active') : campaign.status == 3 ? t('complete') : t('draft')}</td>
                                                     <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.company_name}</td>
                                                 </tr>
                                             )
@@ -659,7 +661,7 @@ export default function CampaignTable() {
                                             // Jika data tida ditemukan
                                             <tr className="text-center border dark:border-gray-500">
                                                 <td colSpan={8} className=" py-4">
-                                                    Data not found
+                                                    {t('not-found')}
                                                 </td>
                                             </tr>
                                         ) :
@@ -696,7 +698,7 @@ export default function CampaignTable() {
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">
-                                {`${modeModal} Campaign`}
+                                {`${modeModal} ${t('campaigns')}`}
                             </h3>
                             <button type="button" className="text-xl bg-transparent hover:bg-blue-400 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
@@ -706,7 +708,7 @@ export default function CampaignTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className={` ${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
-                                    <label htmlFor="name" className="mb-2 text-sm font-medium  flex">Campaign Name <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('campaign_name')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
@@ -714,7 +716,7 @@ export default function CampaignTable() {
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="account" className="flex mb-2 text-sm font-medium ">account <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <label htmlFor="account" className="flex mb-2 text-sm font-medium ">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <select id="account" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) =>setValues({...values, account: e.target.value})}>
                                         <option value="" disabled hidden>Select account</option>
                                         {
@@ -740,7 +742,7 @@ export default function CampaignTable() {
 
                                 
                                 <div className="col-span-1">
-                                <label htmlFor="objective" className="flex mb-2 text-sm font-medium ">Objective <div className="text-red-500 dark:text-red-600">*</div></label>
+                                <label htmlFor="objective" className="flex mb-2 text-sm font-medium ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <select id="objective" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  "  defaultValue={""} onChange={(e) =>setValues({...values, objective: e.target.value})}>
                                         <option value="" disabled hidden>Select objective</option>
                                         <option value="1">Awareness</option>
@@ -756,9 +758,9 @@ export default function CampaignTable() {
                                 <label htmlFor="status" className="flex mb-2 text-sm font-medium ">status <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <select id="status" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  " defaultValue={""} onChange={(e) => setValues({...values, status: e.target.value})}>
                                         <option value="" disabled hidden>Select status</option>
-                                        <option value="1">Active</option>
-                                        <option value="2">Draft</option>
-                                        <option value="3">Complete</option>
+                                        <option value="1">{t('active')}</option>
+                                        <option value="2">{t('draft')}</option>
+                                        <option value="3">{t('complete')}</option>
                                     </select>
                                     {
                                         error.status ? <div className="text-red-500 dark:text-red-600 text-sm">{error.status}</div> : ""
@@ -766,7 +768,7 @@ export default function CampaignTable() {
                                 </div>
 
                                 <div className="col-span-1">
-                                <label htmlFor="start_date" className="flex mb-2 text-sm font-medium ">Start Date <div className="text-red-500 dark:text-red-600">*</div></label>
+                                <label htmlFor="start_date" className="flex mb-2 text-sm font-medium ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                 <input type="date" name="start_date" id="start_date" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
                                     required onChange={(e) => setValues({...values, start_date: e.target.value})}/>
                                     {
@@ -776,7 +778,7 @@ export default function CampaignTable() {
                                 
 
                                 <div className="col-span-1">
-                                <label htmlFor="end_date" className="flex mb-2 text-sm font-medium ">End Date <div className="text-red-500 dark:text-red-600">*</div></label>
+                                <label htmlFor="end_date" className="flex mb-2 text-sm font-medium ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                 <input type="date" name="end_date" id="end_date" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
                                     required onChange={(e) => setValues({...values, end_date: e.target.value})}/>
                                     {
@@ -791,7 +793,7 @@ export default function CampaignTable() {
                                     <div></div>
                                         {
                                             modeModal === 'Edit' ? <div className="flex gap-2">
-                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaing}>Save Change</button> 
+                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaing}>{t('save')}</button> 
                                                 <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}><FaTrash/>
                                                 </button> 
                                             </div> 

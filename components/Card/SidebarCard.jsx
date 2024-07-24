@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function SidebarCard({ platform, name, status, amountspend, reach, startdate, id, onCardClick }) {
   const [Status, setStatus] = useState("");
+  const t = useTranslations("sidebar");
 
   useEffect(() => {
     if (status == 1) {
@@ -30,9 +32,9 @@ export default function SidebarCard({ platform, name, status, amountspend, reach
         <p className={`${Status} w-3 h-3 rounded-full`}></p>
       </div>
       <div className="flex flex-col text-xs gap-1 mt-3">
-        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">Amount spent:</b> <span className="font-semibold">{amountspend}</span></p>
-        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">Reach:</b> <span className="font-semibold">{reach}</span></p>
-        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">Start Date:</b> <span className="font-semibold">{startdate}</span></p>
+        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">{t('amount-spent')}:</b> <span className="font-semibold">{amountspend}</span></p>
+        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">{t('reach')}:</b> <span className="font-semibold">{reach}</span></p>
+        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">{t('start-date')}:</b> <span className="font-semibold">{startdate}</span></p>
       </div>
     </div>
   );

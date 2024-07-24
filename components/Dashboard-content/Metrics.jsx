@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import MetricCard from "../Card/MetricCard";
 import axios from "axios";
 import MetricsLoading from "../Loading/MetricsLoading";
+import { useTranslations } from 'next-intl';
 
 export default function Metrics({ id }) {
     const [activeCard, setActiveCard] = useState(null);
     const [data, setData] = useState([]);
+    const t = useTranslations('metrics');
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
     const getMetricByCampaign = async () => {
@@ -52,7 +54,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-1`}
                                 id={1}
                                 Value={item.amountspent}
-                                Title={'Amount Spent'}
+                                Title={t('amount-spent')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 1}
                             />,
@@ -60,7 +62,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-2`}
                                 id={2}
                                 Value={item.reach}
-                                Title={'Reach'}
+                                Title={t('reach')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 2}
                             />,
@@ -68,7 +70,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-3`}
                                 id={3}
                                 Value={item.impressions}
-                                Title={'Impression'}
+                                Title={t('impressions')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 3}
                             />,
@@ -76,7 +78,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-4`}
                                 id={4}
                                 Value={item.frequency}
-                                Title={'Frequency'}
+                                Title={t('frequency')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 4}
                             />,
@@ -84,7 +86,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-5`}
                                 id={5}
                                 Value={item.rar}
-                                Title={'RAR'}
+                                Title={t('rar')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 5}
                             />,
@@ -92,7 +94,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-6`}
                                 id={6}
                                 Value={item.cpc}
-                                Title={'CPC'}
+                                Title={t('cpc')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 6}
                             />,
@@ -100,7 +102,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-7`}
                                 id={7}
                                 Value={item.ctr}
-                                Title={'CTR'}
+                                Title={t('ctr')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 7}
                             />,
@@ -108,7 +110,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-8`}
                                 id={8}
                                 Value={item.oclp}
-                                Title={'OCLP'}
+                                Title={t('oclp')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 8}
                             />,
@@ -116,7 +118,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-9`}
                                 id={9}
                                 Value={item.cpr}
-                                Title={'CPR'}
+                                Title={t('cpr')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 9}
                             />,
@@ -124,7 +126,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-10`}
                                 id={10}
                                 Value={item.atc}
-                                Title={'ATC'}
+                                Title={t('atc')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 10}
                             />,
@@ -132,7 +134,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-11`}
                                 id={11}
                                 Value={item.roas}
-                                Title={'ROAS'}
+                                Title={t('roas')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 11}
                             />,
@@ -140,7 +142,7 @@ export default function Metrics({ id }) {
                                 key={`${index}-12`}
                                 id={12}
                                 Value={item.realroas}
-                                Title={'Real ROAS'}
+                                Title={t('real-roas')}
                                 onToggle={handleToggle}
                                 isActive={activeCard === 12}
                             />,

@@ -3,10 +3,12 @@ import axios from 'axios';
 import SettingLoading from '../Loading/SettingLoading';
 import { RiRefreshLine } from 'react-icons/ri';
 import Swal from 'sweetalert2';
+import { useTranslations } from 'next-intl';
 
 const Setting = ({ id }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const t = useTranslations('setting');
   const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
   useEffect(() => {
@@ -112,7 +114,7 @@ const Setting = ({ id }) => {
                               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
                                   Reach Amount Ratio (RAR)
                               </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 5%</p>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 5%</p>
                               <input
                                   type="number"
                                   className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
@@ -124,7 +126,7 @@ const Setting = ({ id }) => {
                               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
                                   Click Through Rate (CTR)
                               </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 1.5%</p>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 1.5%</p>
                               <input
                                   type="number"
                                   className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
@@ -136,7 +138,7 @@ const Setting = ({ id }) => {
                               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
                                   Outbound Click Landing Page (OCLP)
                               </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 80%</p>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 80%</p>
                               <input
                                   type="number"
                                   className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
@@ -148,7 +150,7 @@ const Setting = ({ id }) => {
                               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
                                   Return on AD Spent (ROAS)
                               </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &gt; 3.0x</p>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &gt; 3.0x</p>
                               <input
                                   type="number"
                                   className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
@@ -160,7 +162,7 @@ const Setting = ({ id }) => {
                               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
                                   Cost per Result (CPR)
                               </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &lt; Rp. 5000</p>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 5000</p>
                               <input
                                   type="number"
                                   className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
@@ -172,7 +174,7 @@ const Setting = ({ id }) => {
                               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300'>
                                   Cost per Click (CPC)
                               </label>
-                              <p className='text-xs text-gray-500 dark:text-gray-400'>Recommended value &lt; Rp. 1000</p>
+                              <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 1000</p>
                               <input
                                   type="number"
                                   className='mt-1 block w-full border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-200'
