@@ -11,10 +11,11 @@ import { MdDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import { FaUser, FaUsers, FaCog, FaSignOutAlt, FaTachometerAlt } from 'react-icons/fa';
 import Swal from "sweetalert2";
-
+import { useTranslations } from "next-intl";
 
 export default function Navbar() {
     
+    const t = useTranslations('navbar');
     const pathName = usePathname()
     const router = useRouter();
     const [activeLink, setActiveLink] = useState(pathName);
@@ -25,6 +26,7 @@ export default function Navbar() {
     const [isHidden, setIsHidden] = useState(true)
     const [isDark, setIsDark] = useState(false)
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app'
+    const lang = localStorage.getItem('lang')
 
     const fetchUser = async () => {
         try {
@@ -45,7 +47,6 @@ export default function Navbar() {
             }
         }
     }
-
     useEffect(() => {
        if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -64,7 +65,7 @@ export default function Navbar() {
 
     const handleClick = (link) => {
         setActiveLink(link);
-        router.push(link);
+        router.push(`/${lang}${link}`);
     };
 
     const handleToggle = (e) => {
@@ -85,6 +86,10 @@ export default function Navbar() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('tenantId');
+                    localStorage.removeItem('roles');
+                    localStorage.removeItem('name');
+                    localStorage.removeItem('lang');
                     router.push('/');
                 }
             })
@@ -117,14 +122,14 @@ export default function Navbar() {
                         <p className="text-[12px] text-gray-500 dark:text-blue-500">{email}</p>
                     </div>
                     <div className="border-t border-gray-300 dark:border-gray-600"></div>
-                    <Link href="/profile" className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                    <Link href={`profile`} className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                         <FaUser className="mr-2" />
-                        Profile
+                        {t('profile')}
                     </Link>
                     
                     {
                         role === 'admin' && (
-                            <Link href="/admin-dashboard" className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                            <Link href={`admin-dashboard`} className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                                 <FaTachometerAlt className="mr-2" />
                                 Admin Dashboard
                             </Link>
@@ -135,7 +140,7 @@ export default function Navbar() {
                     <div className="border-t border-gray-300 dark:border-gray-600"></div>
                     <a onClick={handleLogout} className="flex items-center px-2 py-1 text-[14px] mt-2 text-red-600 dark:text-red-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                         <FaSignOutAlt className="mr-2" />
-                        Logout
+                        {t('logout')}
                     </a>
                 </div>
             </div>
@@ -154,63 +159,81 @@ export default function Navbar() {
             <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <img src="assets/logo.png" alt="Logo" className="ms-4 w-[130px]" />
-
-                    {/* Nav Links */}
+                    <img src="../assets/logo.png" alt="Logo" className="ms-4 w-[130px]" />
                     <div>
-                    <ul className="hidden sm:hidden md:hidden lg:flex xl:flex p-2 text-black dark:text-slate-100 gap-5">
-                        <style jsx>
-                        {`
-                            .active-link {
-                            background-color: rgba(38, 100, 235);
-                            padding: 9px 16px;
-                            border-radius: 25px;
-                            color: white;
-                            transition: background-color 0.3s, color 0.3s;
-                            }
-                            ul li {
-                            padding: 9px 16px;
-                            border-radius: 25px;
-                            transition: background-color 0.3s, color 0.3s;
-                            }
-                            ul li:hover {
-                            cursor: pointer;
-                            background-color: rgba(0, 0, 255, 0.1);
-                            color: blue;
-                            }
-                            .dark ul li:hover {
-                            background-color: rgba(255, 255, 255, 0.1);
-                            color: white;
-                            }
-                        `}
-                        </style>
-                        <li
-                        className={`font-semibold flex gap-1 items-center ${activeLink === "/dashboard" ? "active-link" : ""}`}
-                        onClick={() => handleClick("/dashboard")}
-                        >
-                        <span><MdDashboard size={20} /></span>Dashboard
-                        </li>
-                        <li
-                        className={`font-semibold flex gap-1 items-center ${activeLink === "/campaigns" ? "active-link" : ""}`}
-                        onClick={() => handleClick("/campaigns")}
-                        >
-                        <span><BiSolidMegaphone size={20} /></span>Campaigns
-                        </li>
-                        <li
-                        className={`font-semibold flex gap-1 items-center ${activeLink === "/accounts" ? "active-link" : ""}`}
-                        onClick={() => handleClick("/accounts")}
-                        >
-                        <span><AiOutlineUser size={20} /></span>Accounts
-                        </li>
-                        {role !== 'client' && (
-                        <li
-                            className={`font-semibold flex gap-1 items-center ${activeLink === "/clients" ? "active-link" : ""}`}
-                            onClick={() => handleClick("/clients")}
-                        >
-                            <span><BiGroup size={20} /></span>Clients
-                        </li>
-                        )}
-                    </ul>
+                        <ul className="hidden sm:hidden md:hidden lg:flex xl:flex p-2 text-black dark:text-slate-100 gap-5">
+                            <style jsx>
+                                {`
+                                    .active-link {
+                                        background-color: rgba(38, 100, 235);
+                                        padding: 9px 16px;
+                                        border-radius: 25px;
+                                        color: white;
+                                        transition: background-color 0.3s, color 0.3s;
+                                    }
+                                    ul li {
+                                        padding: 9px 16px;
+                                        border-radius: 25px;
+                                        transition: background-color 0.3s, color 0.3s;
+                                    }
+                                    ul li:hover:not(.active-link) {
+                                        cursor: pointer;
+                                        background-color: rgba(0, 0, 255, 0.1);
+                                        color: blue;
+                                    }
+                                    .dark ul li:hover:not(.active-link) {
+                                        background-color: rgba(255, 255, 255, 0.1);
+                                        color: white;
+                                    }
+                                `}
+                            </style>
+                            <li
+                                className={`font-semibold flex gap-1 items-center ${
+                                    activeLink.slice(3) === "/dashboard" ? "active-link" : ""
+                                }`}
+                                onClick={() => handleClick("/dashboard")}
+                            >
+                                <span>
+                                    <MdDashboard size={20} />
+                                </span>
+                                {t("dashboard")}
+                            </li>
+                            <li
+                                className={`font-semibold flex gap-1 items-center ${
+                                    activeLink.slice(3) === "/campaigns" ? "active-link" : ""
+                                }`}
+                                onClick={() => handleClick("/campaigns")}
+                            >
+                                <span>
+                                    <BiSolidMegaphone size={20} />
+                                </span>
+                                {t("campaign")}
+                            </li>
+                            <li
+                                className={`font-semibold flex gap-1 items-center ${
+                                    activeLink.slice(3) === "/accounts" ? "active-link" : ""
+                                }`}
+                                onClick={() => handleClick("/accounts")}
+                            >
+                                <span>
+                                    <AiOutlineUser size={20} />
+                                </span>
+                                {t("account")}
+                            </li>
+                            {role !== "client" && (
+                                <li
+                                    className={`font-semibold flex gap-1 items-center ${
+                                        activeLink.slice(3) === "/clients" ? "active-link" : ""
+                                    }`}
+                                    onClick={() => handleClick("/clients")}
+                                >
+                                    <span>
+                                        <BiGroup size={20} />
+                                    </span>
+                                    {t("client")}
+                                </li>
+                            )}
+                        </ul>
                     </div>
 
                     {/* Profile */}

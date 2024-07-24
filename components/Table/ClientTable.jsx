@@ -13,6 +13,7 @@ import { MdDeleteForever } from 'react-icons/md';
 import CreateClient from '../Create/CreateClient';
 import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from 'react-icons/bi';
 import ClientDetail from '../Detail/ClientDetail';
+import { useTranslations } from 'next-intl';
 
 const ClientTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -22,6 +23,7 @@ const ClientTable = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const t = useTranslations("clients");
     const [selectedClient, setSelectedClient] = useState(null);
     const tableRef = useRef(null);
     const date = new Date();
@@ -244,7 +246,7 @@ const ClientTable = () => {
             fontWeight: '500', 
             };
             return (
-            <span style={statusStyle}>Active</span>
+            <span style={statusStyle}>{t("active")}</span>
             );
         
         case 2:
@@ -258,7 +260,7 @@ const ClientTable = () => {
             fontWeight: '500', 
             };
             return (
-            <span style={statusStyle}>Deactive</span>
+            <span style={statusStyle}>{t('deactive')}</span>
             );
         default:
             return "Unknown";
@@ -318,7 +320,7 @@ const ClientTable = () => {
         // Info page
         pageButtons.push(
             <span key="info" className="px-3 py-1 dark:text-white rounded-md">
-                {`Page ${currentPage} / ${totalPages}`}
+                {`${t("page")} ${currentPage} / ${totalPages}`}
             </span>
         );
     
@@ -365,7 +367,7 @@ const ClientTable = () => {
     return (
         <>
             <div className='font-semibold text-3xl text-slate-800 mb-10 dark:text-slate-200'>
-    <h1>Clients</h1>
+            <h1>{t('title')}</h1>
             </div>
             <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-5 dark:bg-gray-800 dark:border-gray-700">
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
@@ -373,7 +375,7 @@ const ClientTable = () => {
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
                             type="text"
-                            placeholder="Search"
+                            placeholder={t('search')}
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />
@@ -383,8 +385,8 @@ const ClientTable = () => {
                             onChange={handleStatusChange}
                         >
                             <option value="">Status</option>
-                            <option value="1">Active</option>
-                            <option value="2">Deactive</option>
+                            <option value="1">{t('active')}</option>
+                            <option value="2">{t('deactive')}</option>
                         </select>
                     </div>
                     <div className="w-full flex gap-3 justify-end pb-5">
@@ -408,11 +410,11 @@ const ClientTable = () => {
                     <table className='w-full'>
                         <thead className='bg-white dark:bg-blue-700'>
                             <tr className='text-left'>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>No.</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>Name</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>Address</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>Contact</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>Email</th>
+                                {/* <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>No.</th> */}
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('name')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('address')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('contact')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('email')}</th>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>Status</th>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 hidden'>Action</th>
                             </tr>
@@ -421,7 +423,7 @@ const ClientTable = () => {
                             {currentClients.length > 0 ? (
                                 currentClients.map((data, index) => (
                                     <tr key={index} className='text-center'>
-                                        <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{index + 1}.</td>
+                                        {/* <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{index + 1}.</td> */}
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
                                             <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>
                                                 {data.name}
@@ -429,7 +431,7 @@ const ClientTable = () => {
                                         </td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.address}</td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
-                                            <a href={`tel:${data.contact}`}>{data.contact}</a>
+                                            <a href={`https://wa.me/${data.contact.replace(/\D+/g, '')}`} target='_blank'>{data.contact}</a>
                                         </td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
                                             <a href={`mailto:${data.email}`}>{data.email}</a>
@@ -447,7 +449,9 @@ const ClientTable = () => {
                                 ))
                             ) : tableData.length > 0 ? (
                                 <tr>
-                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">Data Not Found</td>
+                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">
+                                        {t('not-found')}
+                                    </td>
                                 </tr>
                             ) : (
                                 <tr>
@@ -469,9 +473,9 @@ const ClientTable = () => {
                             <tr className='text-left'>
                                 <th className='px-4 py-2 border dark:border-gray-600'>No.</th>
                                 <th className='px-4 py-2 border dark:border-gray-600'>Name</th>
-                                <th className='px-4 py-2 border dark:border-gray-600'>Address</th>
-                                <th className='px-4 py-2 border dark:border-gray-600'>Contact</th>
-                                <th className='px-4 py-2 border dark:border-gray-600'>Email</th>
+                                <th className='px-4 py-2 border dark:border-gray-600'>{t('address')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600'>{t('contact')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600'>{t('email')}</th>
                                 <th className='px-4 py-2 border dark:border-gray-600'>Status</th>
                             </tr>
                         </thead>

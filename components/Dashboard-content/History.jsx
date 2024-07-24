@@ -10,6 +10,7 @@ import { useDownloadExcel } from "react-export-table-to-excel";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
 import Swal from "sweetalert2";
+import { useTranslations } from "next-intl";
 
 export default function History({ id }) {
     const [data, setData] = useState([]);
@@ -17,6 +18,7 @@ export default function History({ id }) {
     const [dataPerPage, setDataPerPage] = useState(10);
     const tableRef = useRef(null);
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
+    const t = useTranslations("metrics");
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
@@ -261,19 +263,19 @@ export default function History({ id }) {
                                         {currentHistory.length > 0 ? (
                                             <tr>
                                                 <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>No.</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>Date</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>Amount Spent</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>Reach</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>Impressions</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>Frequency</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>RAR</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>CPC</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>CTR</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>OCLP</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>CPR</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>ATC</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>ROAS</th>
-                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>Real ROAS</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('date')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('amount-spent')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('reach')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('impressions')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('frequency')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('rar')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('cpc')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('ctr')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('oclp')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('cpr')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('atc')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('roas')}</th>
+                                                <th className='px-4 py-2 border text-nowrap dark:border-gray-600'>{t('real-roas')}</th>
                                             </tr>
                                         ) : (
                                             <tr>

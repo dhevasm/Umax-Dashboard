@@ -13,10 +13,12 @@ import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState({});
     const router = useRouter();
+    const t = useTranslations('profile')
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
@@ -50,6 +52,7 @@ const Profile = () => {
                 timezoneName: data.timezone_name,
                 culture: data.culture,
             });
+            console.log(data.language);
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
@@ -92,7 +95,7 @@ const Profile = () => {
                         </button>
                     </div>
                     <div className="absolute top-4 right-4">
-                        <a href="/profile/edit">
+                        <a href={`profile/edit`}>
                             <CiEdit className="text-white text-2xl cursor-pointer hover:text-gray-200" />
                         </a>
                     </div>
@@ -115,16 +118,16 @@ const Profile = () => {
                 </div>
                 <div className="p-6 dark:text-gray-200">
                     <ProfileSection title="Personal Information">
-                        <ProfileItem icon={MdOutlinePermContactCalendar} label="Username" value={name} />
-                        <ProfileItem icon={FaUsersCog} label="Roles" value={roles} />
-                        <ProfileItem icon={MdOutlineEmail} label="Email" value={email} />
+                        <ProfileItem icon={MdOutlinePermContactCalendar} label={t('username')} value={name} />
+                        <ProfileItem icon={FaUsersCog} label={t('role')} value={roles} />
+                        <ProfileItem icon={MdOutlineEmail} label={t('email')} value={email} />
                     </ProfileSection>
                     <ProfileSection title="International">
-                        <ProfileItem icon={LiaMoneyBillWaveAltSolid} label="Currencies" value={currency} />
-                        <ProfileItem icon={VscSymbolEnum} label="Currency Position" value={currencyPosition ? 'Left ($n)' : 'Right (n$)'} />
-                        <ProfileItem icon={CiGlobe} label="Language" value={getLanguageName(language)} flag={getFlagSrc(language)} />
-                        <ProfileItem icon={MdOutlineAccessTime} label="Timezone" value={timezoneName} />
-                        <ProfileItem icon={GiGlobe} label="Culture" value={culture} />
+                        <ProfileItem icon={LiaMoneyBillWaveAltSolid} label={t('currencies')} value={currency} />
+                        <ProfileItem icon={VscSymbolEnum} label={t('currency_position')} value={currencyPosition ? 'Left ($n)' : 'Right (n$)'} />
+                        <ProfileItem icon={CiGlobe} label={t('language')} value={getLanguageName(language)} flag={getFlagSrc(language)} />
+                        <ProfileItem icon={MdOutlineAccessTime} label={t('timezone')} value={timezoneName} />
+                        <ProfileItem icon={GiGlobe} label={t('culture')} value={culture} />
                     </ProfileSection>
                 </div>
             </div>
@@ -158,7 +161,7 @@ const getLanguageName = (language) => {
     switch (language) {
         case 'id':
             return 'Indonesia';
-        case 'us':
+        case 'en':
             return 'English';
         case 'ja':
             return 'Japanese';
@@ -171,7 +174,7 @@ const getFlagSrc = (language) => {
     switch (language) {
         case 'id':
             return '/assets/indonesia.png';
-        case 'us':
+        case 'en':
             return '/assets/us.png';
         case 'ja':
             return '/assets/japan.jpg';

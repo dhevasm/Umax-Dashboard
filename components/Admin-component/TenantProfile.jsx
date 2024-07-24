@@ -6,10 +6,11 @@ import axios from "axios"
 import { FaBuilding, FaDollarSign, FaDolly, FaEnvelope, FaFlag, FaHome, FaPen, FaPhone } from "react-icons/fa"
 import { useContext } from "react"
 import { FaTimes } from "react-icons/fa"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { CiLock } from "react-icons/ci"
 import { FiWatch } from "react-icons/fi"
+import { useTranslations } from "next-intl"
 
 export default function TenantProfile({tenant_id}){
 
@@ -17,6 +18,7 @@ export default function TenantProfile({tenant_id}){
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData} = useContext(AdminDashboardContext)
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("edit")
+    const t = useTranslations('tenant-profile')
 
     const [timezone, setTimezone] = useState([])
     const [currency, setCurrency] = useState([])
@@ -227,12 +229,12 @@ export default function TenantProfile({tenant_id}){
         <>
             <div className="w-full h-full rounded-sm">
                 <div className="flex flex-col md:flex-row justify-between items-center">
-                    <h1 className="text-2xl dark:text-white">Tenant Profile</h1>
-                    <p className="dark:text-white text-nowrap"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>Dashboard</a> / Tenant Profile</p>
+                    <h1 className="text-2xl dark:text-white">{t('title')}</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a> / {t('title')}</p>
                 </div>
 
                 <div className="rounded-sm shadow-md mt-3 rounded-t-md">
-                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant bg-no-repeat items-end px-5 py-5 rounded-t-md">
+                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant  items-end px-5 py-5 rounded-t-md">
                         {
                             tenant.company ? (
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
@@ -250,18 +252,18 @@ export default function TenantProfile({tenant_id}){
                         {tenant.address ? (
                             <>
                             <div className="flex items-center gap-5 my-5 mb-10">
-                                <h1 className="font-bold text-xl text-gray-700 dark:text-white">General</h1>
+                                <h1 className="font-bold text-xl text-gray-700 dark:text-white">{t('general')}</h1>
                                 <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-2 items-start mt-3 p-5">
                                 <FaBuilding className="text-2xl text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">Address: {tenant.address}</p>
+                                <p className="ml-2 dark:text-white">{t('address')}: {tenant.address}</p>
                             </div>
                             <div className="flex w-full flex-wrap flex-col md:flex-row gap-5 mt-5">
                                 <div className="flex gap-2 items-center p-5">
                                 <FaPhone className="text-[#3d50e0]" />
                                 <div className="ml-2 dark:text-white">
-                                    Contact: <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">{tenant.contact}</a>
+                                    {t('contact')}: <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">{tenant.contact}</a>
                                 </div>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
@@ -278,19 +280,19 @@ export default function TenantProfile({tenant_id}){
                             <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5 pb-5">
                                 <div className="flex gap-2 items-center p-5">
                                 <FaHome className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">Culture: {tenant.culture}</p>
+                                <p className="ml-2 dark:text-white">{t('culture')}: {tenant.culture}</p>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
                                 <FaFlag className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">Language: {tenant.language}</p>
+                                <p className="ml-2 dark:text-white">{t('language')}: {tenant.language}</p>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
                                 <FaDollarSign className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">Currency: {tenant.currency}</p>
+                                <p className="ml-2 dark:text-white">{t('currency')}: {tenant.currency}</p>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
                                 <FiWatch className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">Timezone: {tenant.timezone_name}</p>
+                                <p className="ml-2 dark:text-white">{t('timezone')}: {tenant.timezone_name}</p>
                                 </div>
                             </div>
                             </>
@@ -311,7 +313,7 @@ export default function TenantProfile({tenant_id}){
                     {/* <!-- Modal header --> */}
                     <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white ">
                         <h3 className="text-xl font-semibold">
-                            {`${modeModal} Tenant`}
+                            {`${modeModal} ${t('tenant')}`}
                         </h3>
                         
                         <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
@@ -321,11 +323,11 @@ export default function TenantProfile({tenant_id}){
                     {/* <!-- Modal body --> */}
                     <div className="p-4 md:p-5 dark:bg-slate-900 dark:text-white">
                         <div className="flex justify-between items-center">
-                        <div className="text-xl font-semibold text-blue-500">General</div>
+                        <div className="text-xl font-semibold text-blue-500">{t('general')}</div>
 
                         <div className="flex gap-2 items-center">
                         {
-                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
+                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>{t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
                         }
                         </div>
                         </div>
@@ -334,7 +336,7 @@ export default function TenantProfile({tenant_id}){
                 
                         <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen overflow-y-auto pb-52 md:pb-3">
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="name" className="mb-2 text-sm font-medium  flex">Company Name {
+                                <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('company-name')} {
                                     error.name && <p className="text-red-500 text-sm">*</p>
                                 }</label>
                                 <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
@@ -344,7 +346,7 @@ export default function TenantProfile({tenant_id}){
                                 }
                             </div>
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="address" className="mb-2 text-sm font-medium  flex">Company Address {
+                                <label htmlFor="address" className="mb-2 text-sm font-medium  flex">{t('company-address')} {
                                     error.address && <p className="text-red-500 text-sm">*</p>
                                 }</label>
                                 <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
@@ -355,7 +357,7 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">Country</label>
+                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">{t('country')}</label>
                                 <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
                                     <option value="0" key={0} disabled hidden>Select Country</option>
                                     {
@@ -367,7 +369,7 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">City</label>
+                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}</label>
                                 <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                     {
                                         City.length > 0 ? City.map((item, index) => (
@@ -388,7 +390,7 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="contact" className="flex mb-2 text-sm font-medium">Contact {
+                                <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">{t('contact')} {
                                     error.contact && <p className="text-red-500 text-sm">*</p>
                                 }</label>
                                 <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
@@ -403,6 +405,7 @@ export default function TenantProfile({tenant_id}){
                                 <div className="text-xl font-semibold text-blue-500 ">Format</div>
                                 <div className="flex items-center gap-1 me-1">
                                     <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
+
                                     <span className="text-sm font-medium ">Currency position :</span>
                                     <div className="flex flex-row gap-2 ">
                                         <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
@@ -417,7 +420,7 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="language" className="block mb-2 text-sm font-medium ">Language</label>
+                                <label htmlFor="language" className="block mb-2 text-sm font-medium ">{t('language')}</label>
                                 <select id="language" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                     <option value={null} index={0} disabled hidden>Select Language</option>
                                     <option value="en">English</option>
@@ -426,7 +429,7 @@ export default function TenantProfile({tenant_id}){
                             </div>
 
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="culture" className="block mb-2 text-sm font-medium ">Culture</label>
+                                <label htmlFor="culture" className="block mb-2 text-sm font-medium ">{t('culture')}</label>
                                 <select id="culture" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Culture</option>
                                     {
@@ -437,7 +440,7 @@ export default function TenantProfile({tenant_id}){
                                 </select>
                             </div>
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium ">Time Zone</label>
+                                <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium ">{t('timezone')}</label>
                                 <select id="input_timezone" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Timezone</option>
                                 {
@@ -448,7 +451,7 @@ export default function TenantProfile({tenant_id}){
                                 </select>
                             </div>
                             <div className="col-span-2 md:col-span-1">
-                                <label htmlFor="currency" className="block mb-2 text-sm font-medium ">Currency</label>
+                                <label htmlFor="currency" className="block mb-2 text-sm font-medium ">{t('currency')}</label>
                                 <select id="currency" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Currency</option>
                                 {

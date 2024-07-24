@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useContext } from "react";
-import { AdminDashboardContext } from "@/app/admin-dashboard/page";
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 

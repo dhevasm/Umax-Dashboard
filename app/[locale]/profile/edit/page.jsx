@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { IoIosArrowBack } from 'react-icons/io';
@@ -9,6 +9,8 @@ import dynamic from 'next/dynamic';
 import Swal from 'sweetalert2';
 import { BiHome } from 'react-icons/bi';
 import * as yup from 'yup';
+import { useTranslations } from 'next-intl';
+import { Router } from 'react-router-dom';
 
 const EditProfile = () => {
     const [selectTimezone, setSelectTimezone] = useState([]);
@@ -17,6 +19,8 @@ const EditProfile = () => {
     const [profileData, setProfileData] = useState({});
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const t = useTranslations('profile');
+    const [role,setRole] = useState('') 
 
     useEffect(() => {
         const fetchData = async (url, setState) => {
@@ -62,6 +66,7 @@ const EditProfile = () => {
                     timezoneName: data.timezone_name,
                     culture: data.culture,
                 });
+                setRole(data.roles)
             } catch (error) {
                 console.error('Error fetching profile data:', error.message);
             }
@@ -119,7 +124,24 @@ const EditProfile = () => {
                     },
                 });
                 setLoading(false)
-                alertNotif('Profile updated successfully!');
+                if(localStorage.getItem('lang') !== values.language){
+                    localStorage.setItem("lang", values.language)
+                    Swal.fire({
+                        title: "Profile updated successfully!",
+                        icon: "success",
+                        showCancelButton: false,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Refresh Page!"
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                            router.push(`/${localStorage.getItem('lang')}/profile/edit`);
+                        }
+                      });
+                }else{
+                    alertNotif('Profile updated successfully!');
+                }
+
             } catch (error) {
                 console.error('Error updating profile:', error.message);
                 setLoading(false)
@@ -164,6 +186,8 @@ const EditProfile = () => {
         Swal.fire({title: 'Error', text: message, icon: 'error'});
     }
 
+    let lang = localStorage.getItem('lang');
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center">
             <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-b-lg overflow-hidden">
@@ -174,9 +198,16 @@ const EditProfile = () => {
                         </button>
                     </div>
                     <div className="absolute top-4 right-4">
-                        <a href="/dashboard">
+                        {
+                            role === 'admin' || role === 'sadmin' ? (
+                                <a href={`/${lang}/admin-dashboard`}>
+                                    <BiHome className="text-white text-2xl cursor-pointer hover:text-gray-200" />
+                                </a>
+                            ) : <a href={`/${lang}/dashboard`}>
                             <BiHome className="text-white text-2xl cursor-pointer hover:text-gray-200" />
                         </a>
+                        }
+                        
                     </div>
                     <div className="flex flex-col items-center mt-10">
                         <label htmlFor="theme" className="items-center cursor-pointer hidden">
@@ -213,9 +244,9 @@ const EditProfile = () => {
                         <ProfileItem
                             icon="user"
                             label={formik.errors.name ? (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Username<span className='text-red-600'>*</span></label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('username')}<span className='text-red-600'>*</span></label>
                             ) : (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Username</label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('username')}</label>
                             )}
                             element={
                                 <input
@@ -231,9 +262,9 @@ const EditProfile = () => {
                         <ProfileItem
                             icon="email"
                             label={formik.errors.email ? (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Email<span className='text-red-600'>*</span></label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('email')}<span className='text-red-600'>*</span></label>
                             ) : (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Email</label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('email')}</label>
                             )}
                             element={
                                 <input
@@ -251,9 +282,9 @@ const EditProfile = () => {
                         <ProfileItem
                             icon="culture"
                             label={formik.errors.culture ? (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Culture<span className='text-red-600'>*</span></label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('culture')}<span className='text-red-600'>*</span></label>
                             ) : (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Culture</label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('culture')}</label>
                             )}
                             element={
                                 <select
@@ -273,9 +304,9 @@ const EditProfile = () => {
                         <ProfileItem
                             icon="timezone"
                             label={formik.errors.input_timezone ? (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Timezone<span className='text-red-600'>*</span></label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('timezone')}<span className='text-red-600'>*</span></label>
                             ) : (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Timezone</label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('timezone')}</label>
                             )}
                             element={
                                 <select
@@ -295,9 +326,9 @@ const EditProfile = () => {
                         <ProfileItem
                             icon="currency"
                             label={formik.errors.currency ? (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Currency<span className='text-red-600'>*</span></label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('currencies')}<span className='text-red-600'>*</span></label>
                             ) : (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Currency</label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('currencies')}</label>
                             )}
                             element={
                                 <select
@@ -322,9 +353,9 @@ const EditProfile = () => {
                         <ProfileItem
                             icon="position"
                             label={formik.errors.currency_position ? (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Currency Position<span className='text-red-600'>*</span></label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('currency_position')}<span className='text-red-600'>*</span></label>
                             ) : (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Currency Position</label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('currency_position')}</label>
                             )}
                             element={
                                 <select
@@ -343,9 +374,9 @@ const EditProfile = () => {
                         <ProfileItem
                             icon="language"
                             label={formik.errors.language ? (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Language<span className='text-red-600'>*</span></label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('language')}<span className='text-red-600'>*</span></label>
                             ) : (
-                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">Language</label>
+                                <label className="text-gray-700 dark:text-gray-300 font-medium mb-2">{t('language')}</label>
                             )}
                             element={
                                 <select

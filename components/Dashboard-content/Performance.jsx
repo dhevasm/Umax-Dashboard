@@ -8,6 +8,7 @@ import SuggestionLoding from "../Loading/SuggestionLoding";
 import InfoCardLoading from "../Loading/InfoCardLoading";
 import Chart from "./Chart";
 import Swal from "sweetalert2";
+import { useTranslations } from 'next-intl';
 
 export default function Performance({ id }) {
     // Variabel for Metrics
@@ -26,6 +27,7 @@ export default function Performance({ id }) {
     const [soclp, setsOclp] = useState({})
     const [sctr, setsCtr] = useState({})
 
+    const t = useTranslations();
     const [isWideScreen, setIsWideScreen] = useState(window.innerWidth >= 1060);
     const [selected, setSelected] = useState('week');
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
@@ -111,9 +113,9 @@ export default function Performance({ id }) {
                         value={selected}
                         onChange={(e) => setSelected(e.target.value)}
                     >
-                        <option disabled={id === ''} value="week">Last Week</option>
-                        <option disabled={id === ''} value="month">Last Month</option>
-                        <option disabled={id === ''} value="year">Last Year</option>
+                        <option disabled={id === ''} value="week">{t('performence.last-week')}</option>
+                        <option disabled={id === ''} value="month">{t('performence.last-month')}</option>
+                        <option disabled={id === ''} value="year">{t('performence.last-year')}</option>
                     </select>
                     </div>
                 </div>
@@ -128,10 +130,10 @@ export default function Performance({ id }) {
                             <InfoCardLoading key={i} />
                         ))
                         : <>
-                            <Infocard Color='' Title={'Amount Spent'} Value='Rp 2000.000' Desc='Jumlah total biaya yang kita keluarkan untuk pemasangan iklan' />
-                            <Infocard Color={rar.color} Title={'Reach Amount Spent Ratio'} Value={rar.value} Desc={'Mengukur hubungan antara jumlah orang yang melihat iklan dengan jumlah uang yang dihabiskan untuk iklan tersebut'} />
-                            <Infocard Color={cpr.color} Title={'CPR'} Value={cpr.value} Desc={'Perhitungan biaya yang kita keluarkan untuk setiap hasil yang kita dapatkan'} />
-                            <Infocard Color={oclp.color} Title={'OCLP'} Value={oclp.value} Desc={'Mendorong pengunjung untuk mengklik tautan atau tombol yang mengarahkan mereka ke halaman atau situs web eksternal yang relevan'} />
+                            <Infocard Color='' Title={t('metric7.amount-spent')} Value='Rp 2000.000' Desc={t('metric7.amount-desc')} />
+                            <Infocard Color={rar.color} Title={t('metric7.reach-amount-spent-ratio')} Value={rar.value} Desc={t('metric7.rar-desc')} />
+                            <Infocard Color={cpr.color} Title={t('metric7.cpr')} Value={cpr.value} Desc={t('metric7.cpr-desc')} />
+                            <Infocard Color={oclp.color} Title={t('metric7.oclp')} Value={oclp.value} Desc={t('metric7.oclp-desc')} />
                         </>
                         }
                     </div>
@@ -145,10 +147,10 @@ export default function Performance({ id }) {
                             <InfoCardLoading key={i} />
                             ))
                             : <>
-                            <Infocard Color={ctr.color} Title={'CTR'} Value={ctr.value} Desc={'Rasio jumlah klik pada iklan kita dibandingkan dengan jumlah iklan ditayangkan'} />
-                            <Infocard Color='' Title={'ATC'} Value={'180%'} Desc={'Menambahkan produk atau barang ke dalam keranjang belanja saat berbelanja secara online di situs web e-commerce atau toko online'} />
-                            <Infocard Color={roas.color} Title={'ROAS'} Value={roas.value} Desc={'Menambahkan produk atau barang ke dalam keranjang belanja saat berbelanja secara online di situs web e-commerce atau toko online'} />
-                            <Infocard Color={r_roas.color} Title={'Real ROAS'} Value={r_roas.value} Desc={'Mengukur banyak pendapatan asli yang dihasilkan tiap pengeluaran iklan'} />
+                            <Infocard Color={ctr.color} Title={t('metric7.ctr')} Value={ctr.value} Desc={t('metric7.ctr-desc')} />
+                            <Infocard Color='' Title={t('metric7.atc')} Value={'180%'} Desc={t('metric7.atc-desc')} />
+                            <Infocard Color={roas.color} Title={t('metric7.roas')} Value={roas.value} Desc={t('metric7.roas-desc')} />
+                            <Infocard Color={r_roas.color} Title={t('metric7.real-roas')} Value={r_roas.value} Desc={t('metric7.real-desc')} />
                             </>
                         }
                         </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, createContext } from "react"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 import dynamic from "next/dynamic"
+import { useTranslations } from "next-intl"
 
 // Components
 import Navbar from "@/components/Navbar"
@@ -28,6 +29,7 @@ function Dashboard() {
     const [name, setName] = useState('');
     const [platform, setPlatform] = useState('');
     const [SidebarHide, setSidebarHide] = useState(false)
+    const t = useTranslations('dashboard');
 
     useEffect(() => {
       const handleResize = () => {
@@ -119,20 +121,20 @@ function Dashboard() {
                           }
                       `}
                       </style>
-                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "performance" ? "dashboardActive" : ""}`} id="performance" onClick={() => SetActiveLink("performance")}>Performance</p>
-                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "metrics" ? "dashboardActive" : ""}`} id="metrics" onClick={() => SetActiveLink("metrics")}>Metrics</p>
-                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "history" ? "dashboardActive" : ""}`} id="history" onClick={() => SetActiveLink("history")}>History</p>
-                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "setting" ? "dashboardActive" : ""}`} id="setting" onClick={() => SetActiveLink("setting")}>Setting</p>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "performance" ? "dashboardActive" : ""}`} id="performance" onClick={() => SetActiveLink("performance")}>{t('performence')}</p>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "metrics" ? "dashboardActive" : ""}`} id="metrics" onClick={() => SetActiveLink("metrics")}>{t('metrics')}</p>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "history" ? "dashboardActive" : ""}`} id="history" onClick={() => SetActiveLink("history")}>{t('history')}</p>
+                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "setting" ? "dashboardActive" : ""}`} id="setting" onClick={() => SetActiveLink("setting")}>{t('setting')}</p>
                   </div>
                 </div>
 
                 {/* Nav Select */}
                 <div className="flex md:hidden justify-end m-10">
                   <select className="border w-full border-gray-300 py-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-1 px-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" onChange={(e) => SetActiveLink(e.target.value)}>
-                      <option value="performance">Performance</option>
-                      <option value="metrics">Metrics</option>
-                      <option value="history">History</option>
-                      <option value="setting">Setting</option>
+                      <option value="performance">{t('performence')}</option>
+                      <option value="metrics">{t('metrics')}</option>
+                      <option value="history">{t('history')}</option>
+                      <option value="setting">{t('setting')}</option>
                   </select>
                 </div>
 

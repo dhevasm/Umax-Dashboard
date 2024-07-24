@@ -2,7 +2,7 @@
 
 import axios from "axios"
 import { useState,useEffect, useRef, useContext } from "react"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
 import jsPDF from "jspdf"
@@ -17,6 +17,7 @@ import { IoMdEyeOff } from "react-icons/io"
 import { RiFileExcel2Fill, RiFileExcel2Line, RiIdCardLine } from "react-icons/ri"
 import CountCard from "./CountCard"
 import { BiPlus } from "react-icons/bi"
+import { useTranslations } from "next-intl"
 export default function AccountTable() {
 
     const [account, setaccount] = useState([])
@@ -30,6 +31,7 @@ export default function AccountTable() {
     const [dataPerPage, setDataPerPage] = useState(10);
     const passwordInput = useRef(null)
     const passwordverifyInput = useRef(null)
+    const t = useTranslations('admin-accounts')
 
     function handleShowPassword() {
         setShowPassword(!showPassword)
@@ -480,7 +482,7 @@ export default function AccountTable() {
         // Info page
         pageButtons.push(
             <span key="info" className="px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white rounded-md">
-                {`Page ${currentPage} / ${totalPages}`}
+                {`${t('page')} ${currentPage} / ${totalPages}`}
             </span>
         );
     
@@ -527,8 +529,8 @@ export default function AccountTable() {
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-                    <h1 className="text-3xl font-bold uppercase flex dark:text-white gap-2"><RiIdCardLine size={35}/> Accounts</h1>
-                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Accounts</p>
+                    <h1 className="text-3xl font-bold uppercase flex dark:text-white gap-2"><RiIdCardLine size={35}/> {t('title')}</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a>  / {t('accounts')}</p>
                 </div>
 
                 <div className="w-full h-fit mb-5 rounded-md shadow-md">
@@ -568,10 +570,9 @@ export default function AccountTable() {
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
-                                        <option value="" disabled hidden>Status</option>
-                                        <option value="">All status</option>
-                                        <option value="1">Active</option>
-                                        <option value="2">Inactive</option>
+                                        <option value="">Status</option>
+                                        <option value="1">{t('active')}</option>
+                                        <option value="2">{t('deactive')}</option>
                                     </select>  
                                 </div>
                                 <div className="mb-4">
@@ -594,7 +595,7 @@ export default function AccountTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 dark:bg-slate-800 dark:text-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
+                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 dark:bg-slate-800 dark:text-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')}
                                     defaultValue="" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
@@ -611,8 +612,8 @@ export default function AccountTable() {
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700 dark:text-white">
                                     <tr>
-                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">Username</th>
-                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">Client</th>
+                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('username')}</th>
+                                    <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('client')}</th>
                                     <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
                                     <th scope="col" className="px-5 border dark:border-gray-500 py-3">Email</th>
                                     <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
@@ -628,7 +629,7 @@ export default function AccountTable() {
                                                     <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
                                                     <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap"><a href={`mailto:${account.email
                                                     }`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? "Active" : "Inactive"}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? t('active') : t('deactive')}</td>
                                                 </tr>
                                             )
                                     }) : (
@@ -637,7 +638,7 @@ export default function AccountTable() {
                                             // Jika data tida ditemukan
                                             <tr className="text-center border dark:border-gray-500">
                                                 <td colSpan={8} className=" py-4">
-                                                    Data not found
+                                                    {t('not-found')}
                                                 </td>
                                             </tr>
                                         ) :
@@ -673,7 +674,7 @@ export default function AccountTable() {
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">
-                                {`${modeModal} Account`}
+                                {`${modeModal} ${t('accounts')}`}
                             </h3>
                             <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
@@ -683,7 +684,7 @@ export default function AccountTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="flex mb-2 text-sm font-medium  ">Account Name <div className="text-red-500 dark:text-red-600">*</div> </label>
+                                    <label htmlFor="name" className="flex mb-2 text-sm font-medium  ">{t('account_name')} <div className="text-red-500 dark:text-red-600">*</div> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type account name here"
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
@@ -698,7 +699,7 @@ export default function AccountTable() {
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="client" className="flex mb-2 text-sm font-medium ">Client <div className="text-red-500 dark:text-red-600">*</div> </label>
+                                    <label htmlFor="client" className="flex mb-2 text-sm font-medium ">{t('client')} <div className="text-red-500 dark:text-red-600">*</div> </label>
                                     <select id="client" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, client: e.target.value})}>
                                         <option value="" disabled hidden>Select Client</option>
                                         {
@@ -747,7 +748,7 @@ export default function AccountTable() {
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="flex mb-2 text-sm font-medium  ">Confirm Password <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <label htmlFor="passwordverify" className="flex mb-2 text-sm font-medium  ">{t('confirm_password')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <div className="relative">
                                         <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
@@ -771,9 +772,9 @@ export default function AccountTable() {
                                         
                                         {
                                             modeModal === 'Edit' ? <div className="flex gap-3">
-                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateAccount}>Save Change</button>
+                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateAccount}>{t('save')}</button>
                                                 <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditaccountId)}><FaTrash/></button>
-                                            </div>  : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createAccount}>Submit</button>
+                                            </div>  : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createAccount}>{t('submit')}</button>
                                                 
                                         }
                                         

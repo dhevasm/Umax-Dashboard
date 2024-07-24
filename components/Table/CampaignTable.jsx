@@ -14,6 +14,7 @@ import { MdDeleteForever} from "react-icons/md";
 import CreateCampaign from "../Create/CreateCampaign";
 import CampaignDetail from "../Detail/CampaignDetail";
 import { Lexend_Tera } from "next/font/google";
+import { useTranslations } from "next-intl";
 
 const CampaignTable = () => {
     const tableRef = useRef(null);
@@ -26,6 +27,7 @@ const CampaignTable = () => {
     const [selectedCampaign, setSelectedCampaign] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const t = useTranslations("campaigns");
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
@@ -142,7 +144,7 @@ const CampaignTable = () => {
             fontWeight: '500',
             };
             return (
-            <span style={statusStyle}>Active</span>
+            <span style={statusStyle}>{t("active")}</span>
             );
         case 2:
             statusStyle = {
@@ -155,7 +157,7 @@ const CampaignTable = () => {
             fontWeight: '500',
             };
             return (
-            <span style={statusStyle}>Draft</span>
+            <span style={statusStyle}>{t('draft')}</span>
             );
         case 3:
             statusStyle = {
@@ -168,7 +170,7 @@ const CampaignTable = () => {
             fontWeight: '500',
             };
             return (
-            <span style={statusStyle}>Completed</span>
+            <span style={statusStyle}>{t('complete')}</span>
             );
         default:
             return "Unknown";
@@ -341,7 +343,7 @@ const CampaignTable = () => {
         // Info page
         pageButtons.push(
             <span key="info" className="px-3 py-1 dark:text-white rounded-md">
-                {`Page ${currentPage} / ${totalPages}`}
+                {`${t('page')} ${currentPage} / ${totalPages}`}
             </span>
         );
 
@@ -379,7 +381,7 @@ const CampaignTable = () => {
     return (
         <>
             <div className={`font-semibold text-3xl text-slate-800 dark:text-slate-200 mb-10`}>
-                <h1>Campaigns</h1>
+                <h1>{t('title')}</h1>
                 </div>
                 <div className={`bg-white dark:bg-gray-800 ${modalIsOpen ? 'overflow-hidden' : ''} border border-gray-300 dark:border-gray-700 rounded-lg p-5`} style={{ width: "100%" }}>
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
@@ -396,7 +398,7 @@ const CampaignTable = () => {
                             value={selectedPlatform}
                             onChange={handlePlatformChange}
                         >
-                            <option value="">Platform</option>
+                            <option value="">{t('platform')}</option>
                             <option value="1">Meta Ads</option>
                             <option value="2">Google Ads</option>
                             <option value="3">Tiktok Ads</option>
@@ -433,14 +435,14 @@ const CampaignTable = () => {
                     <table className="w-full">
                         <thead className="bg-white dark:bg-blue-700">
                             <tr className="text-left">
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">No.</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Name</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Client</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Platform</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Account</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Objective</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Start Date</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">Status</th>
+                                {/* <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">No.</th> */}
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('name')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('client')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('platform')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('account')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('objective')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('start-date')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('status')}</th>
                                 <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 hidden">Action</th>
                             </tr>
                         </thead>
@@ -448,7 +450,7 @@ const CampaignTable = () => {
                             {currentCampaigns.length > 0 ? (
                                 currentCampaigns.map((data, index) => (
                                     <tr key={index} className="text-center">
-                                        <td className="px-2 py-2 border text-nowrap text-left dark:border-gray-700 dark:text-gray-200">{index + 1}.</td>
+                                        {/* <td className="px-2 py-2 border text-nowrap text-left dark:border-gray-700 dark:text-gray-200">{index + 1}.</td> */}
                                         <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
                                             <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>
                                                 <p className="underline">{data.name}</p>
@@ -478,7 +480,9 @@ const CampaignTable = () => {
                                 ))
                             ) : tableData.length > 0 ? (
                                 <tr>
-                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">Data Not Found</td>
+                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">
+                                        {t('not-found')}
+                                    </td>
                                 </tr>
                             ) : (
                                 <tr>
@@ -497,13 +501,13 @@ const CampaignTable = () => {
                         <thead className="bg-white dark:bg-gray-700">
                             <tr className="text-left">
                                 <th className="px-4 py-2 border dark:border-gray-700">No.</th>
-                                <th className="px-4 py-2 border dark:border-gray-700">Name</th>
-                                <th className="px-4 py-2 border dark:border-gray-700">Client</th>
-                                <th className="px-4 py-2 border dark:border-gray-700">Platform</th>
-                                <th className="px-4 py-2 border dark:border-gray-700">Account</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">{t('name')}</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">{t('client')}</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">{t('platform')}</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">{t('account')}</th>
                                 <th className="px-4 py-2 border dark:border-gray-700">Objective</th>
-                                <th className="px-4 py-2 border dark:border-gray-700">Start Date</th>
-                                <th className="px-4 py-2 border dark:border-gray-700">Status</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">{t('start-date')}</th>
+                                <th className="px-4 py-2 border dark:border-gray-700">{t('status')}</th>
                             </tr>
                         </thead>
                         <tbody>

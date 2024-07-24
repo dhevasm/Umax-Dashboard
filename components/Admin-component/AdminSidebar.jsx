@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useContext, useEffect } from "react"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import { IconContext } from "react-icons"
 import { FaAngleDown, FaBuilding, FaChartLine, FaServer, FaSignOutAlt, FaTachometerAlt, FaUser } from "react-icons/fa"
 import { FaAngleUp } from "react-icons/fa"
@@ -15,11 +15,13 @@ import Swal from "sweetalert2"
 import { RiAccountBoxFill, RiArrowGoBackLine, RiBuilding2Fill, RiDashboard2Line, RiDeleteBack2Line, RiEye2Fill, RiLogoutBoxLine, RiMegaphoneFill, RiProfileFill, RiTableLine, RiUser2Fill, RiUser3Fill, RiUser3Line, RiWindowLine } from "react-icons/ri"
 import { VscDashboard } from "react-icons/vsc"
 import { MdDashboard } from "react-icons/md"
+import { useTranslations } from "next-intl"
 
 export default function AdminSidebar(){
 
     const sidebarLink = useRef()
     const sideBar = useRef()
+    const t = useTranslations('admin-sidebar')
 
     const Router = useRouter()
     
@@ -51,7 +53,11 @@ export default function AdminSidebar(){
             confirmButtonText: "Sign Out"
           }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.clear()
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('tenantId');
+                localStorage.removeItem('roles');
+                localStorage.removeItem('name');
+                localStorage.removeItem('lang');
                 Router.push('/')
             }
           });
@@ -68,14 +74,14 @@ export default function AdminSidebar(){
                         <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => setChangeTable("dashboard")}>
                             <div className="flex items-center gap-2 text-slate-300 font-semibold">
                                 <MdDashboard size={20}/>
-                                Dashboard
+                                {t('dashboard')}
                             </div>
                         </button>
                     </li>
                     {
                         userData.roles == "admin" &&
                         <li className="mb-4 text-sm">
-                        <button className="flex items-center justify-betwesen w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push("/dashboard")}>
+                        <button className="flex items-center justify-betwesen w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push(`/${localStorage.getItem('lang')}/dashboard`)}>
                             <div className="flex items-center gap-2 text-slate-300 font-semibold">
                                 <FaChartLine size={20}/>
                                 Analystics
@@ -88,7 +94,7 @@ export default function AdminSidebar(){
                         <IconContext.Provider value={{ className: "text-lg" }}>
                             <FaBuilding size={20}/>
                         </IconContext.Provider>
-                        Tenant Profile
+                        {t('tenant-profile')}
                         </button>
                     }
                     </li>
@@ -98,7 +104,7 @@ export default function AdminSidebar(){
                             <IconContext.Provider value={{ className: "text-lg" }}>
                                 <RiBuilding2Fill />
                             </IconContext.Provider>
-                            Tenants
+                            {t('tenants')}
                         </button>}
                     </li>
                     <li className="mb-4">
@@ -106,35 +112,38 @@ export default function AdminSidebar(){
                         <IconContext.Provider value={{ className: "text-lg" }}>
                                 <RiProfileFill />
                         </IconContext.Provider>
-                        Users</button>
+                            {t('users')}
+                        </button>
                     </li>
                     <li className="mb-4">
                         <button onClick={() => setChangeTable("campaigns")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
                         <IconContext.Provider value={{ className: "text-lg" }}>
                                 <RiMegaphoneFill />
                         </IconContext.Provider>
-                            Campaigns</button>
+                            {t('campaigns')}
+                        </button>
                     </li>
                     <li className="mb-4">
                         <button onClick={() => setChangeTable("accounts")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
                         <IconContext.Provider value={{ className: "text-lg" }}>
                                 <RiAccountBoxFill />
                             </IconContext.Provider>
-                            Accounts</button>
+                            {t('accounts')}
+                        </button>
                     </li>
                     <li className="mb-4">
                         <button onClick={() => setChangeTable("clients")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
                         <IconContext.Provider value={{ className: "text-lg" }}>
                                 <RiEye2Fill />
                             </IconContext.Provider>
-                            Clients
+                            {t('clients')}
                         </button>
                     </li>
                     <li className="mb-4">
-                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push('/profile')}>
+                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push(`/${localStorage.getItem("lang")}/profile`)}>
                             <div className="flex items-center gap-2">
-                                <RiUser3Fill size={20}/>
-                                Profile
+                                <RiUser3Line size={20}/>
+                                {t('profile')}
                             </div>
                         </button>
                     </li>
@@ -142,7 +151,7 @@ export default function AdminSidebar(){
                     <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleLogout}>
                             <div className="flex items-center gap-2">
                                 <RiLogoutBoxLine size={20}/>
-                                Logout
+                                {t('logout')}
                             </div>
                         </button>
                     </li>

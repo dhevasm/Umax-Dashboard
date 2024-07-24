@@ -1,5 +1,5 @@
 'use client'
-import { AdminDashboardContext, SidebarContext } from "@/app/admin-dashboard/page";
+import { AdminDashboardContext, SidebarContext } from "@/app/[locale]/admin-dashboard/page";
 import { useEffect, useState, useContext, useRef } from "react"
 import { IconContext } from "react-icons";
 import { FaBars, FaMoon, FaSignOutAlt, FaSun, FaUser } from "react-icons/fa";
@@ -19,30 +19,28 @@ function AdminNavbar({userData}){
         test,
         dataDashboard,
         isDarkMode,
-        setIsDarkMode} = useContext(AdminDashboardContext)
+        setIsDarkMode,
+        navbarBrandHide,
+        setNavbarBrandHide
+    } = useContext(AdminDashboardContext)
 
     const navbarBrand = useRef()
-    useEffect(() => {
-        if (window.innerWidth <= 640) {
-            navbarBrand.current.classList.toggle("hidden")
-        } 
-    }, [changeTable])
 
     function hideHandle(){
         setSidebarHide(!sidebarHide)
-        navbarBrand.current.classList.toggle("hidden")
-    }
-
-    const checkIsMobile = () => {
-        if (typeof window !== 'undefined') {
-            if (window.innerWidth <= 640) {
-                navbarBrand.current.classList.add("hidden")
-            } 
-        }
+        setNavbarBrandHide(!navbarBrandHide)
     }
 
     useEffect(() => {
-        checkIsMobile()
+        if(navbarBrandHide){
+            navbarBrand.current.classList.add("hidden")
+        } else {
+            navbarBrand.current.classList.remove("hidden")
+        }
+    }, [navbarBrandHide])
+
+
+    useEffect(() => {
        if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             document.getElementById("theme").checked = true
@@ -73,7 +71,7 @@ function AdminNavbar({userData}){
             <nav className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
                 <div className="flex h-full">
                 <div className="w-[300px] flex h-full bg-slate-800 shadow-none items-end p-3 transition-transform" ref={navbarBrand}>
-                    <img src="assets/icon.png" alt="Logo" className="w-10 h-10 decoration-white mr-1"/>
+                    <img src="../assets/icon.png" alt="Logo" className="w-10 h-10 decoration-white mr-1"/>
                     <p className="text-white font-sans text-3xl">UMAX</p>
                 </div>
                     <button onClick={hideHandle} className="mx-5">
@@ -101,7 +99,7 @@ function AdminNavbar({userData}){
                     </button>
                     </div>
 
-                    <div className="flex items-center gap-2 me-2">
+                    <div className="flex items-center gap-2 mx-2">
                     <div className="w-16 h-9 flex justify-center items-center rounded-full">
                         <label htmlFor="theme" className="inline-flex items-center cursor-pointer me-2">
                             {
@@ -127,8 +125,8 @@ function AdminNavbar({userData}){
                     <h1 className="text-nowrap font-medium">{userData.name}</h1>
                     <p className="text-gray-500">{userData.roles}</p>
                     </div>
-                    <div className="hidden md:block">
-                    {userData.image ?  <img  src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-[50px] h-[50px] bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p>}
+                    <div className="block">
+                    {userData.image ?  <img  src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-[40px] h-[40px] bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p>}
                     </div>
                 </div>
             </nav>
@@ -136,5 +134,4 @@ function AdminNavbar({userData}){
         </>
     )
 }
-
 export default dynamic(() => Promise.resolve(AdminNavbar));

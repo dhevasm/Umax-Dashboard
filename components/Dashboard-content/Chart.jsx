@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import ApexChart from "react-apexcharts";
 
@@ -8,6 +9,7 @@ const Chart = ({ campaignID, time }) => {
     const umaxUrl = "https://umaxxnew-1-d6861606.deta.app";
     let chartUrl = "";
     let category = [];
+    const t = useTranslations();
 
     useEffect(() => {
         setSelected(time);
@@ -54,15 +56,15 @@ const Chart = ({ campaignID, time }) => {
     const Data = {
         series: [
         {
-            name: "AmountSpent",
+            name: t("metric7.amount-spent"),
             data: data.map((obj) => parseFloat(obj.amountspent.replace(/[^0-9.]/g, ""))),
         },
         {
-            name: "RAR",
+            name: t("metric7.reach-amount-spent-ratio"),
             data: data.map((obj) => parseFloat(obj.rar.replace(/[^0-9.]/g, ""))),
         },
         {
-            name: "CTR",
+            name: t("metric7.ctr"),
             data: data.map((obj) => parseFloat(obj.ctr.replace(/[^0-9.]/g, ""))),
         },
         ],

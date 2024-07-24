@@ -6,12 +6,25 @@ import Link from "next/link";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const Page = () => {
   const [error, setError] = useState();
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+
+  const getUserData = async () => {
+    const response = axios.get("https://umaxxxxx-1-r8435045.deta.app/user-by-id", {
+      headers : {
+        'Authorization' : `Bearer ${localStorage.getItem('jwtToken')}`
+      }
+    }).then((response) => {
+      localStorage.setItem('lang', response.data.Data[0].language);
+    }).catch((error) => {
+      console.log(error)  
+    })
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -69,13 +82,22 @@ const Page = () => {
           localStorage.setItem("roles", roles);
           localStorage.setItem("name", name);
 
-          if (roles == "sadmin" || roles == "admin") {
-            router.push("/admin-dashboard");
-          } else if (roles === "staff") {
-            router.push("campaigns");
-          } else {
-            router.push("/dashboard");
-          }
+          getUserData();
+          
+          setTimeout(() => {
+            let lang = localStorage.getItem("lang");
+            if(lang === null){
+              lang = "en"
+            }
+            if (roles == "sadmin" || roles == "admin") {
+              router.push(`${lang}/admin-dashboard`);
+            } else if (roles === "staff") {
+              router.push(`${lang}/campaigns`);
+            } else {
+              router.push(`${lang}/dashboard`);
+            }
+          }, 500);
+
         })
         .catch((error) => {
           // // Handle network errors
@@ -123,15 +145,16 @@ const Page = () => {
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     const roles = localStorage.getItem("roles");
+    const lang = localStorage.getItem("lang");
     if (token) {
       if (roles === "sadmin" || roles === "admin") {
         Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
-          router.push('/admin-dashboard');
+          router.push(`/${lang}/admin-dashboard`);
       });
       } else {
 
         Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
-          router.push('/dashboard');
+          router.push(`/${lang}/dashboard`);
       });
 
       }

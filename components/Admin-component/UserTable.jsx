@@ -2,7 +2,7 @@
 
 import axios from "axios"
 import { useState,useEffect, useRef, useContext } from "react"
-import { AdminDashboardContext } from "@/app/admin-dashboard/page"
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
 import jsPDF from "jspdf"
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation"
 import { RiFileExcel2Line, RiUser3Line } from "react-icons/ri"
 import CountCard from "./CountCard"
 import { BiPlus } from "react-icons/bi"
+import { useTranslations } from "next-intl"
 
 export default function UserTable() {
 
@@ -27,6 +28,7 @@ export default function UserTable() {
     const [searchTerm, setSearchTerm] = useState("")
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const t = useTranslations('admin-users')
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard} = useContext(AdminDashboardContext)
 
@@ -371,7 +373,7 @@ export default function UserTable() {
         // Info page
         pageButtons.push(
             <span key="info" className="px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white rounded-md">
-                {`Page ${currentPage} / ${totalPages}`}
+                {`${t('page')} ${currentPage} / ${totalPages}`}
             </span>
         );
     
@@ -418,8 +420,8 @@ export default function UserTable() {
         <>
             <div className="w-full dark:text-white">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-                    <h1 className="text-3xl font-bold flex dark:text-white gap-2"> <RiUser3Line size={35}/> USERS</h1>
-                    <p className="dark:text-white"><span className="hover:cursor-pointer hover:text-blue-400 dark:text-white hover:underline" onClick={() => setChangeTable("dashboard")}>Dashboard</span> / Users</p>
+                    <h1 className="text-3xl font-bold flex dark:text-white gap-2"> <RiUser3Line size={35}/> {t('title')}</h1>
+                    <p className="dark:text-white"><span className="hover:cursor-pointer hover:text-blue-400 dark:text-white hover:underline" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</span> / {t('users')}</p>
                 </div>
                 
                 {/* Main card  */}
@@ -458,7 +460,7 @@ export default function UserTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
                                         <option value="" key={0} disabled hidden>Role 
@@ -469,31 +471,13 @@ export default function UserTable() {
                                         <option value="staff" key={3}>Staff</option>
                                     </select>  
                                 </div>
-                                <div className="mb-4">
-                                    <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                    {
-                                        userData.roles == 'sadmin' &&
-                                        <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
-                                    // value={selectedTenant} onChange={handleTenantChange}
-                                    >
-                                        <option value="0" key={0} disabled hidden>Tenant</option>
-                                        <option value="0" key={1} >All Tenant</option>
-                                        {
-                                            tenants.map((tenant, index) => {
-                                                return (
-                                                    <option value={tenant.tenant_ids} key={index + 1}>{tenant.company}</option>
-                                                )
-                                            })
-                                        }
-                                    </select>}
-                                </div>
                                 {/* Filter by select end */}
                             </div>
 
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
-                                    <input type="text" className="w-full dark:bg-slate-800 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
+                                    <input type="text" className="w-full dark:bg-slate-800 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     id="search"/>
@@ -536,7 +520,7 @@ export default function UserTable() {
                                                 // Jika data tida ditemukan
                                                 <tr className="text-center border dark:border-gray-500">
                                                     <td colSpan={5} className=" py-4">
-                                                        Data not found
+                                                        {t('not-found')}
                                                     </td>
                                                 </tr>
                                             ) :
