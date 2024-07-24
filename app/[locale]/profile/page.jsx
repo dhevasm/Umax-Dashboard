@@ -95,7 +95,7 @@ const Profile = () => {
                         </button>
                     </div>
                     <div className="absolute top-4 right-4">
-                        <a href="/profile/edit">
+                        <a href={`profile/edit`}>
                             <CiEdit className="text-white text-2xl cursor-pointer hover:text-gray-200" />
                         </a>
                     </div>

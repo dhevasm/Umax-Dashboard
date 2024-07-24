@@ -228,19 +228,19 @@ export default function TenantProfile({tenant_id}){
     return (
         <>
             <div className="w-full h-full rounded-sm">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col md:flex-row justify-between items-center">
                     <h1 className="text-2xl dark:text-white">{t('title')}</h1>
                     <p className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a> / {t('title')}</p>
                 </div>
 
                 <div className="rounded-sm shadow-md mt-3 rounded-t-md">
-                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant bg-no-repeat items-end px-5 py-5 rounded-t-md">
+                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant  items-end px-5 py-5 rounded-t-md">
                         {
                             tenant.company ? (
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
                             ) : "Loading ..."
                         }
-                        { tenant.company? <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer hover:underline" onClick={() => showModal("Edit", tenant._id)}>
+                        { tenant.company? <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-800 dark:bg-slate-700 bg-blue-500 hover:bg-blue-600 p-2 rounded-md shadow-md" onClick={() => showModal("Edit", tenant._id)}>
                             <FaPen/>
                             Edit Tenant
                         </div>
@@ -316,7 +316,7 @@ export default function TenantProfile({tenant_id}){
                             {`${modeModal} ${t('tenant')}`}
                         </h3>
                         
-                        <button type="button" className="text-xl bg-transparent hover:bg-blue-400 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                        <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                             <FaTimes />
                         </button>
                     </div>
@@ -405,11 +405,14 @@ export default function TenantProfile({tenant_id}){
                                 <div className="text-xl font-semibold text-blue-500 ">Format</div>
                                 <div className="flex items-center gap-1 me-1">
                                     <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
-                                    <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
-                                    <span className="text-sm font-medium ">{t('currency_position')} :</span>
-                                    <span className="text-sm font-medium ">{t('right')}(-$)</span>
-                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                    <span className="text-sm font-medium ">{t('left')}($-)</span>
+
+                                    <span className="text-sm font-medium ">Currency position :</span>
+                                    <div className="flex flex-row gap-2 ">
+                                        <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
+                                        <div className="text-sm font-medium">right(-$)</div>
+                                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <div className="text-sm font-medium">left($-)</div>
+                                    </div>
                                     </label>
                                     </div>
                                 </div>

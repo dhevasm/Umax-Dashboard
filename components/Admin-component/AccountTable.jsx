@@ -681,14 +681,14 @@ export default function AccountTable() {
                             <h3 className="text-lg font-semibold ">
                                 {`${modeModal} ${t('accounts')}`}
                             </h3>
-                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className={`${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
+                                <div className="col-span-2">
                                     <label htmlFor="name" className="flex mb-2 text-sm font-medium  ">{t('account_name')} <div className="text-red-500 dark:text-red-600">*</div> </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>

@@ -6,14 +6,30 @@ import { RiBuildingLine, RiEyeLine, RiMegaphoneLine, RiUser2Fill, RiUser2Line, R
 import { useTranslations } from "next-intl"
 
 export default function CountCard({title, value, handleClick}){
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData} = useContext(AdminDashboardContext)
+    const {sidebarHide,
+        setSidebarHide,
+        updateCard,
+        setUpdateCard,
+        changeTable,
+        setChangeTable,
+        test,
+        dataDashboard,
+        isDarkMode,
+        setIsDarkMode,
+        navbarBrandHide,
+        setNavbarBrandHide
+    } = useContext(AdminDashboardContext)
     const t = useTranslations('admin-dashboard')
 
     function handleCardClick(table){
         setChangeTable(table)
+        if (window.innerWidth <= 640) {
+            setSidebarHide(!sidebarHide)
+            setNavbarBrandHide(!navbarBrandHide)
+        } 
     }
 
-    return (
+    return (    
         <div className={`bg-white dark:bg-slate-800 dark:text-white text-black p-4 flex flex-col shadow-lg w-full mb-3`}> 
             <div className="w-12 h-12 flex justify-center items-center rounded-full bg-slate-50">
                 {
@@ -25,8 +41,8 @@ export default function CountCard({title, value, handleClick}){
             </div>
             <div className="p-3 text-xl font-semibold">{value}
                 <div className="flex justify-between items-end">
-                <p className="text-sm text-gray-500">{title}</p>
-                <p className="text-xs text-blue-500 hover:cursor-pointer" onClick={() => handleCardClick(handleClick)}>{t('show-detail')}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-300">{title}</p>
+                <p className="text-xs text-blue-500 hover:cursor-pointer" onClick={() => handleCardClick(handleClick)}>Show Detail </p>
                 </div>
             </div>
         </div>

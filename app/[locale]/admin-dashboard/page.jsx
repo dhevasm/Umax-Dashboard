@@ -26,7 +26,7 @@ function AdminDashboard() {
     const [campaignsCount, setCampaignsCount] = useState("")
     const [clientCount, setClientCount] = useState("")
     const [isDarkMode, setIsDarkMode] = useState(true)
-
+    const [navbarBrandHide, setNavbarBrandHide] = useState(false)
     const [sidebarHide, setSidebarHide] = useState(false)
     const [updateCard, setUpdateCard] = useState(false)
     const [dataDashboard, setDataDashboard] = useState({
@@ -39,7 +39,8 @@ function AdminDashboard() {
 
     useEffect(() => {
         if (window.innerWidth <= 640) {
-            setSidebarHide(!sidebarHide)
+            setSidebarHide(true)
+            setNavbarBrandHide(true)
         } 
     }, [changeTable])
     
@@ -53,7 +54,9 @@ function AdminDashboard() {
         userData,
         dataDashboard,
         isDarkMode,
-        setIsDarkMode
+        setIsDarkMode,
+        navbarBrandHide,
+        setNavbarBrandHide
     }
 
     useEffect(() => {
@@ -63,7 +66,6 @@ function AdminDashboard() {
             setIsDarkMode(false)
         }
     }, [])
-
 
     async function getUserData() {
         const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-id', {
@@ -156,10 +158,8 @@ function AdminDashboard() {
         <>
             <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
                     <AdminNavbar userData={userData}/>
-                    <AdminSidebar />
+            <AdminSidebar />
             {/* main content */}
-
-
 
             <div className="flex w-full min-h-[100vh] justify-end bg-[#f1f5f9] dark:bg-slate-900">
                 <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-4 md:p-8`} ref={MainCard}>
@@ -176,7 +176,6 @@ function AdminDashboard() {
             </div>
         </AdminDashboardContext.Provider>
         </>
-
     )
 }
 export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false })

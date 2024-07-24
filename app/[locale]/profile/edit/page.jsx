@@ -1,6 +1,6 @@
 'use client';
 
-import React, { use, useEffect, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { IoIosArrowBack } from 'react-icons/io';
@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { BiHome } from 'react-icons/bi';
 import * as yup from 'yup';
 import { useTranslations } from 'next-intl';
+import { Router } from 'react-router-dom';
 
 const EditProfile = () => {
     const [selectTimezone, setSelectTimezone] = useState([]);
@@ -19,6 +20,7 @@ const EditProfile = () => {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const t = useTranslations('profile');
+    const [role,setRole] = useState('') 
 
     useEffect(() => {
         const fetchData = async (url, setState) => {
@@ -64,6 +66,7 @@ const EditProfile = () => {
                     timezoneName: data.timezone_name,
                     culture: data.culture,
                 });
+                setRole(data.roles)
             } catch (error) {
                 console.error('Error fetching profile data:', error.message);
             }
@@ -121,7 +124,24 @@ const EditProfile = () => {
                     },
                 });
                 setLoading(false)
-                alertNotif('Profile updated successfully!');
+                if(localStorage.getItem('lang') !== values.language){
+                    localStorage.setItem("lang", values.language)
+                    Swal.fire({
+                        title: "Profile updated successfully!",
+                        icon: "success",
+                        showCancelButton: false,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Refresh Page!"
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                            router.push(`/${localStorage.getItem('lang')}/profile/edit`);
+                        }
+                      });
+                }else{
+                    alertNotif('Profile updated successfully!');
+                }
+
             } catch (error) {
                 console.error('Error updating profile:', error.message);
                 setLoading(false)
@@ -166,6 +186,8 @@ const EditProfile = () => {
         Swal.fire({title: 'Error', text: message, icon: 'error'});
     }
 
+    let lang = localStorage.getItem('lang');
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center">
             <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-b-lg overflow-hidden">
@@ -176,9 +198,16 @@ const EditProfile = () => {
                         </button>
                     </div>
                     <div className="absolute top-4 right-4">
-                        <a href="/dashboard">
+                        {
+                            role === 'admin' || role === 'sadmin' ? (
+                                <a href={`/${lang}/admin-dashboard`}>
+                                    <BiHome className="text-white text-2xl cursor-pointer hover:text-gray-200" />
+                                </a>
+                            ) : <a href={`/${lang}/dashboard`}>
                             <BiHome className="text-white text-2xl cursor-pointer hover:text-gray-200" />
                         </a>
+                        }
+                        
                     </div>
                     <div className="flex flex-col items-center mt-10">
                         <label htmlFor="theme" className="items-center cursor-pointer hidden">

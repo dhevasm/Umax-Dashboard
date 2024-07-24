@@ -118,7 +118,7 @@ export default function TenantTable() {
         if(values.language == ""){
             errors.language = "Language is required"
         }
-        if(values.culture == ""){   
+        if(values.culture == ""){
             errors.culture = "Culture is required"
         }
         if(values.timezone == ""){
@@ -676,12 +676,12 @@ export default function TenantTable() {
                     {/* <!-- Modal content --> */}
                     <div className="relative  rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] text-white ">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white ">
                             <h3 className="text-xl font-semibold">
                                 {`${modeModal} Tenant`}
                             </h3>
                             
-                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
@@ -766,14 +766,17 @@ export default function TenantTable() {
                                     <div className="text-xl font-semibold text-blue-500 ">Format</div>
                                     <div className="flex items-center gap-1 me-1">
                                     <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
-                                    <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
+
                                     <span className="text-sm font-medium ">Currency position :</span>
-                                    <span className="text-sm font-medium ">right(-$)</span>
-                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                    <span className="text-sm font-medium ">left($-)</span>
+                                    <div className="flex flex-row gap-2 ">
+                                        <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
+                                        <div className="text-sm font-medium">right(-$)</div>
+                                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <div className="text-sm font-medium">left($-)</div>
+                                    </div>
                                     </label>
                                     </div>
-                                    </div>
+                                </div>
                                 <div className="w-full h-0.5 my-1 bg-gray-300"></div>
                                 </div>
 

@@ -55,7 +55,11 @@ export default function AdminSidebar(){
             cancelButtonText: tout('no'),
           }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.clear()
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('tenantId');
+                localStorage.removeItem('roles');
+                localStorage.removeItem('name');
+                localStorage.removeItem('lang');
                 Router.push('/')
             }
           });
@@ -79,7 +83,7 @@ export default function AdminSidebar(){
                     {
                         userData.roles == "admin" &&
                         <li className="mb-4 text-sm">
-                        <button className="flex items-center justify-betwesen w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push("/dashboard")}>
+                        <button className="flex items-center justify-betwesen w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push(`/${localStorage.getItem('lang')}/dashboard`)}>
                             <div className="flex items-center gap-2 text-slate-300 font-semibold">
                                 <FaChartLine size={20}/>
                                 {t('analytics')}
@@ -138,7 +142,7 @@ export default function AdminSidebar(){
                         </button>
                     </li>
                     <li className="mb-4">
-                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push('/profile')}>
+                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push(`/${localStorage.getItem("lang")}/profile`)}>
                             <div className="flex items-center gap-2">
                                 <RiUser3Line size={20}/>
                                 {t('profile')}

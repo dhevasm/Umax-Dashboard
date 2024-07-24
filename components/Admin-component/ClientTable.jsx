@@ -695,7 +695,7 @@ export default function ClientTable() {
                             <h3 className="text-lg font-semibold">
                                 {`${modeModal} ${t('clients')}`}
                             </h3>
-                            <button type="button" className=" text-xl bg-transparent hover:bg-blue-400  rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className=" text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes/>
                             </button>
                         </div>
@@ -711,7 +711,7 @@ export default function ClientTable() {
                                         error.name && <p className="text-red-500 text-xs">{error.name}</p>
                                     }
                                 </div>
-                                <div className="col-span-2 md:col-span-1">
+                                <div className="col-span-1">
                                 <label htmlFor="country" className="block mb-2 text-sm font-medium ">{t('country')}<span className="text-red-500">*</span></label>
                                 <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
                                     <option value="0" key={0} disabled hidden>{t('select-country')}</option>
@@ -725,7 +725,7 @@ export default function ClientTable() {
                                     error.address && <p className="text-red-500 text-xs">{error.address}</p>
                                 }
                             </div>
-                            <div className="col-span-2 md:col-span-1">
+                            <div className="col-span-1">
                                 <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}<span className="text-red-500">*</span></label>
                                 <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}  onChange={(e) => setValues({...values, address: e.target.value})}>
                                     {
