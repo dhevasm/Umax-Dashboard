@@ -581,7 +581,8 @@ export default function AccountTable() {
                                         value={selectedPlatform}
                                         onChange={handlePlatformChange}
                                     >
-                                        <option value="">Platform</option>
+                                        <option value="" disabled hidden>Platform</option>
+                                        <option value="">All platform</option>
                                         <option value="1">Meta Ads</option>
                                         <option value="2">Google Ads</option>
                                         <option value="3">Tiktok Ads</option>
@@ -690,7 +691,7 @@ export default function AccountTable() {
                                         error.name ? <p className="text-red-500 dark:text-red-600 text-sm">{error.name}</p> : ""
                                     }
                                 </div>
-                                <div className="col-span-1">
+                                <div className={`${userData.roles == "sadmin" ? "col-span-1" : "col-span-2"}`}>
                                     <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">Email <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {

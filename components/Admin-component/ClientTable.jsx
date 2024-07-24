@@ -687,7 +687,7 @@ export default function ClientTable() {
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0]bg-blue-500 dark:bg-slate-800 text-white">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold">
                                 {`${modeModal} ${t('clients')}`}
                             </h3>
@@ -718,7 +718,6 @@ export default function ClientTable() {
                                     }
                                 </select>
                             </div>
-
                             <div className="col-span-2 md:col-span-1">
                                 <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}</label>
                                 <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}  onChange={(e) => setValues({...values, address: e.target.value})}>

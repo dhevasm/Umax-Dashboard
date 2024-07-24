@@ -9,7 +9,7 @@ import { BiBell, BiGroup, BiSolidMegaphone} from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
-import { FaUser, FaUsers, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaUsers, FaCog, FaSignOutAlt, FaTachometerAlt } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { useTranslations } from "next-intl";
 
@@ -122,6 +122,17 @@ export default function Navbar() {
                         <FaUser className="mr-2" />
                         {t('profile')}
                     </Link>
+                    
+                    {
+                        role === 'admin' && (
+                            <Link href="/admin-dashboard" className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                                <FaTachometerAlt className="mr-2" />
+                                Admin Dashboard
+                            </Link>
+                        )
+                    }
+                    
+                    
                     <div className="border-t border-gray-300 dark:border-gray-600"></div>
                     <a onClick={handleLogout} className="flex items-center px-2 py-1 text-[14px] mt-2 text-red-600 dark:text-red-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                         <FaSignOutAlt className="mr-2" />

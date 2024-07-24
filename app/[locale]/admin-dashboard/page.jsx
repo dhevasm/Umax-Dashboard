@@ -162,7 +162,7 @@ function AdminDashboard() {
 
 
             <div className="flex w-full min-h-[100vh] justify-end bg-[#f1f5f9] dark:bg-slate-900">
-                <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-8`} ref={MainCard}>
+                <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-4 md:p-8`} ref={MainCard}>
                     <div>
                         {userData.roles === 'sadmin' && changeTable === "tenants" && <TenantTable />}
                         {userData.roles === 'admin' && changeTable === "company" && <TenantProfile tenant_id={userData.tenant_id} />}

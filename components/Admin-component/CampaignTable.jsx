@@ -589,7 +589,8 @@ export default function CampaignTable() {
                                             value={selectedPlatform}
                                             onChange={handlePlatformChange}
                                         >
-                                            <option value="">Platform</option>
+                                            <option value="" disabled hidden>Platform</option>
+                                            <option value="">All platform</option>
                                             <option value="1">Meta Ads</option>
                                             <option value="2">Google Ads</option>
                                             <option value="3">Tiktok Ads</option>

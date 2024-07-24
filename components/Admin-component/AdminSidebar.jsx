@@ -3,7 +3,7 @@
 import { useState, useContext, useEffect } from "react"
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import { IconContext } from "react-icons"
-import { FaAngleDown, FaBuilding, FaServer, FaSignOutAlt, FaTachometerAlt, FaUser } from "react-icons/fa"
+import { FaAngleDown, FaBuilding, FaChartLine, FaServer, FaSignOutAlt, FaTachometerAlt, FaUser } from "react-icons/fa"
 import { FaAngleUp } from "react-icons/fa"
 import { FaTable } from "react-icons/fa"
 
@@ -12,7 +12,7 @@ import Sidebar from "../Sidebar";
 import { jsx } from "react/jsx-runtime"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
-import { RiAccountBoxFill, RiArrowGoBackLine, RiBuilding2Fill, RiDashboard2Line, RiDeleteBack2Line, RiEye2Fill, RiLogoutBoxLine, RiMegaphoneFill, RiProfileFill, RiTableLine, RiUser2Fill, RiUser3Line, RiWindowLine } from "react-icons/ri"
+import { RiAccountBoxFill, RiArrowGoBackLine, RiBuilding2Fill, RiDashboard2Line, RiDeleteBack2Line, RiEye2Fill, RiLogoutBoxLine, RiMegaphoneFill, RiProfileFill, RiTableLine, RiUser2Fill, RiUser3Fill, RiUser3Line, RiWindowLine } from "react-icons/ri"
 import { VscDashboard } from "react-icons/vsc"
 import { MdDashboard } from "react-icons/md"
 import { useTranslations } from "next-intl"
@@ -74,6 +74,16 @@ export default function AdminSidebar(){
                             </div>
                         </button>
                     </li>
+                    {
+                        userData.roles == "admin" &&
+                        <li className="mb-4 text-sm">
+                        <button className="flex items-center justify-betwesen w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push("/dashboard")}>
+                            <div className="flex items-center gap-2 text-slate-300 font-semibold">
+                                <FaChartLine size={20}/>
+                                Analystics
+                            </div>
+                        </button>
+                    </li>}
                     <li className="mb-4">
                     {
                         userData.roles == "admin" && <button className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center" onClick={() => setChangeTable("company")}>

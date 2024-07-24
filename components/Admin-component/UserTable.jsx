@@ -9,7 +9,7 @@ import jsPDF from "jspdf"
 import 'jspdf-autotable'
 import { IconContext } from "react-icons"
 import { AiOutlineFilePdf } from "react-icons/ai"
-import { FaTable } from "react-icons/fa"
+import { FaArrowAltCircleDown, FaArrowDown, FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { useRouter } from "next/navigation"
@@ -463,12 +463,14 @@ export default function UserTable() {
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
-                                        <option value="" key="" >Role</option>
-                                        <option value="admin" key={1}>Admin</option>
-                                        <option value="staff" key={2}>Staff</option>
+                                        <option value="" key={0} disabled hidden>Role 
+
+                                        </option>
+                                        <option value="" key={1}> All role </option>
+                                        <option value="admin" key={2}>Admin</option>
+                                        <option value="staff" key={3}>Staff</option>
                                     </select>  
                                 </div>
-                                {/* */}
                                 {/* Filter by select end */}
                             </div>
 

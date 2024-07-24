@@ -240,9 +240,12 @@ export default function TenantProfile({tenant_id}){
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
                             ) : "Loading ..."
                         }
-                        <div className="self-end">
-                            <FaPen className="text-white hover:cursor-pointer" onClick={() => showModal("Edit", tenant._id)}/>
+                        { tenant.company? <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer hover:underline" onClick={() => showModal("Edit", tenant._id)}>
+                            <FaPen/>
+                            Edit Tenant
                         </div>
+                        : ""    
+                    }
                     </div>
 
                     <div className="p-5 bg-white dark:bg-slate-800 rounded-b-sm">
@@ -327,7 +330,6 @@ export default function TenantProfile({tenant_id}){
                             modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>{t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
                         }
                         </div>
-                        
                         </div>
                     
                     <div className="w-full h-0.5 my-3 bg-gray-300"></div>
