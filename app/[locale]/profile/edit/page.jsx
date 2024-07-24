@@ -79,12 +79,12 @@ const EditProfile = () => {
         image: yup.string().required('Image is Required'),
         name: yup
           .string()
-          .required('Username is Required'),
-        email: yup.string().required('Email is Required').email('Invalid email format'),
-        culture: yup.string().required('User Culture is Required'),
-        input_timezone: yup.string().required('User Timezone is Required'),
-        currency: yup.string().required('User Currency is Required'),
-        currency_position: yup.string().required('Currency Position is Required'),
+          .required(t('name-error')),
+        email: yup.string().required(t('email-error')).email(t('email-error2')),
+        culture: yup.string().required(t('culture-error')),
+        input_timezone: yup.string().required(t('timezone-error')),
+        currency: yup.string().required(t('currency-error')),
+        currency_position: yup.string().required(t('currency-position-error')),
     });
       
 
@@ -227,7 +227,7 @@ const EditProfile = () => {
                     </div>
                 </div>
                 <form onSubmit={formik.handleSubmit} className="p-6 dark:text-gray-200">
-                    <ProfileSection title="Edit Personal Information">
+                    <ProfileSection title={t('edit-personal-information')}>
                         {/* <ProfileItem
                             icon="image"
                             label="Profile Picture"
@@ -255,6 +255,7 @@ const EditProfile = () => {
                                     value={formik.values.name}
                                     onChange={formik.handleChange}
                                     name="name"
+                                    placeholder={t('holder-name')}
                                 />
                             }
                             error={formik.errors.name}
@@ -273,12 +274,13 @@ const EditProfile = () => {
                                     value={formik.values.email}
                                     onChange={formik.handleChange}
                                     name="email"
+                                    placeholder={t('holder-email')}
                                 />
                             }
                             error={formik.errors.email}
                         />
                     </ProfileSection>
-                    <ProfileSection title="Edit International Information">
+                    <ProfileSection title={t('edit-international-information')}>
                         <ProfileItem
                             icon="culture"
                             label={formik.errors.culture ? (
@@ -293,7 +295,7 @@ const EditProfile = () => {
                                     onChange={formik.handleChange}
                                     name="culture"
                                 >
-                                    <option value="" disabled>Select Culture</option>
+                                    <option value="" disabled>{t('select-culture')}</option>
                                     {selectCulture.map((item, index) => (
                                         <option key={index} value={item.cultureInfoCode}>{item.country}</option>
                                     ))}
@@ -315,7 +317,7 @@ const EditProfile = () => {
                                     onChange={formik.handleChange}
                                     name="input_timezone"
                                 >
-                                    <option value="" disabled>Select Timezone</option>
+                                    <option value="" disabled>{t('select-timezone')}</option>
                                     {selectTimezone.map((item, index) => (
                                         <option key={index} value={item.timezone}>{item.timezone}</option>
                                     ))}
@@ -337,7 +339,7 @@ const EditProfile = () => {
                                     onChange={formik.handleChange}
                                     name="currency"
                                 >
-                                    <option value="" disabled>Select Currency</option>
+                                    <option value="" disabled>{t('select-currencies')}</option>
                                     {selectCurrency.map((item, index) => {
                                         const [currencyCode, ...currencyNameParts] = item.currency.split('  -  ');
                                         return (
@@ -364,9 +366,9 @@ const EditProfile = () => {
                                     onChange={formik.handleChange}
                                     name="currency_position"
                                 >
-                                    <option value="" disabled>Select Position</option>
-                                    <option value="front">Left ($n)</option>
-                                    <option value="back">Right (n$)</option>
+                                    <option value="" disabled>{t('select-position')}</option>
+                                    <option value="front">{t('left')} ($n)</option>
+                                    <option value="back">{t('right')} (n$)</option>
                                 </select>
                             }
                             error={formik.errors.currency_position}
@@ -398,7 +400,7 @@ const EditProfile = () => {
                     <button type="submit" className="bg-blue-500 w-full h-12 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-600">
                         {loading ? <LoadingCircle /> : 
                         <>
-                            <p className='text-md'>Save</p>
+                            <p className='text-md'>{t('save')}</p>
                         </>}
                     </button>
                 </form>

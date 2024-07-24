@@ -7,14 +7,14 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
     const t = useTranslations('metrics');
 
     return (
-        <div className="relative bg-white dark:bg-slate-700 rounded-lg shadow-lg p-3 w-full transition-all">
-            <div className="flex items-center justify-between">
-                <div className="flex flex-col justify-center items-center gap-3">
-                    <p className="text-lg font-medium text-gray-800 dark:text-gray-200">{Title}</p>
-                    <div className="text-xl font-semibold text-blue-500">{Value}</div>
+        <div className="relative bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-400 rounded-lg shadow-sm p-4 w-full transition-all">
+            <div className="flex flex-col sm:flex-row items-start justify-between mb-3">
+                <div className="flex flex-col gap-2">
+                    <p className="text-md font-medium text-gray-500 dark:text-gray-200">{Title}</p>
+                    <div className="text-lg font-semibold text-slate-600 dark:text-slate-400">{Value}</div>
                 </div>
                 <svg 
-                    className="w-6 h-6 text-blue-500 hover:cursor-pointer" 
+                    className="w-6 h-6 text-gray-500 dark:text-gray-200 hover:cursor-pointer mt-2 sm:mt-0" 
                     onClick={() => onToggle(id)} 
                     fill="none" 
                     stroke="currentColor" 
@@ -34,12 +34,16 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
                     </div>
                 </div>
             )}
-            <div className="mt-4 flex items-center gap-2">
-                <span className="text-[10px] text-gray-500 dark:text-gray-400">Total {Title} {t('desc')}</span>
-                <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                </svg>
-                <span className="text-sm text-green-500">+2%</span>
+            <div className="w-full mt-4 flex flex-col sm:flex-row items-center gap-2">
+                <span className="text-[10px] w-full text-gray-500 dark:text-gray-400">Total {Title} {t('desc')}</span>
+                <div className="flex w-full sm:w-[20%] items-center justify-end">
+                    <div className="bg-green-500 rounded-full gap-1 px-2 flex items-center">
+                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <span className="text-xs text-white">+2.0%</span>
+                    </div>
+                </div>
             </div>
         </div>
     )

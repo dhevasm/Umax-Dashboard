@@ -32,6 +32,8 @@ export default function AccountTable() {
     const passwordInput = useRef(null)
     const passwordverifyInput = useRef(null)
     const t = useTranslations('admin-accounts')
+    const tfile = useTranslations('swal-file')
+    const tdel = useTranslations('swal-delete')
 
     function handleShowPassword() {
         setShowPassword(!showPassword)
@@ -57,29 +59,29 @@ export default function AccountTable() {
     function validateForm(){
         let errors = {}
         if(values.name == ''){
-            errors.name = 'Username is required'
+            errors.name = t('name-error')
         }
         if(!values.email.includes("@")){
-            errors.email = "Email must contain @"
+            errors.email = t('email-error2')
         }
         if(values.email == ''){
-            errors.email = 'Email is required'
+            errors.email = t('email-error')
         }
         if(values.password != values.passwordverify){
-            errors.password = 'Password not match'
-            errors.passwordverify = 'Password not match'
+            errors.password = t('password-error2')
+            errors.passwordverify = t('password-error2')
         }
         if(values.password == ''){
-            errors.password = 'Password is required'
+            errors.password = t('password-error')
         }
         if(values.passwordverify == ''){
-            errors.passwordverify = 'Password verify is required'
+            errors.passwordverify = t('confirm-error')
         }   
         if(values.client == ''){
-            errors.client = 'Client is required'
+            errors.client = t('client-error')
         }
         if(values.platform == ''){
-            errors.platform = 'Platform is required'    
+            errors.platform = t('platform-error') 
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -129,19 +131,20 @@ export default function AccountTable() {
     
     function handleDelete(account_id){
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: tdel('warn'),
+            text: tdel('msg'),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: tdel('yes'),
+            cancelButtonText: tdel('no'),
           }).then((result) => {
             if (result.isConfirmed) {
             deleteaccount(account_id)
             Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
+                title: tdel('success'),
+                text: tdel('suc-msg'),
                 icon: "success"
             })
             }
@@ -168,19 +171,20 @@ export default function AccountTable() {
 
     function generateExcel(){
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download excel file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg2')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -195,13 +199,14 @@ export default function AccountTable() {
 
     const generatePDF = () => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download pdf file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg1')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`
           }).then((result) => {
             if (result.isConfirmed) {
                 const doc = new jsPDF();
@@ -212,8 +217,8 @@ export default function AccountTable() {
                 });
                 doc.save('DataAccount.pdf');
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -685,7 +690,7 @@ export default function AccountTable() {
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
                                     <label htmlFor="name" className="flex mb-2 text-sm font-medium  ">{t('account_name')} <div className="text-red-500 dark:text-red-600">*</div> </label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type account name here"
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
                                         error.name ? <p className="text-red-500 dark:text-red-600 text-sm">{error.name}</p> : ""
@@ -693,7 +698,7 @@ export default function AccountTable() {
                                 </div>
                                 <div className={`${userData.roles == "sadmin" ? "col-span-1" : "col-span-2"}`}>
                                     <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">Email <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {
                                         error.email ? <p className="text-red-500 dark:text-red-600 text-sm">{error.email}</p> : ""
                                     }
@@ -701,7 +706,7 @@ export default function AccountTable() {
                                 <div className="col-span-1">
                                     <label htmlFor="client" className="flex mb-2 text-sm font-medium ">{t('client')} <div className="text-red-500 dark:text-red-600">*</div> </label>
                                     <select id="client" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, client: e.target.value})}>
-                                        <option value="" disabled hidden>Select Client</option>
+                                        <option value="" disabled hidden>{t('select-client')}</option>
                                         {
                                             client.length > 0 ? client.map((client, index) => {
                                                 return <option key={index} value={client._id}>{client.name}</option>
@@ -726,7 +731,7 @@ export default function AccountTable() {
                                 <div className="col-span-1">
                                     <label htmlFor="platform" className="flex mb-2 text-sm font-medium ">Platform <div classname="text-red-500 dark:text-red-600">*</div> </label>
                                     <select id="platform" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, platform: e.target.value})}>
-                                        <option value="" disabled hidden>Select platform</option>
+                                        <option value="" disabled hidden>{t('select-platform')}</option>
                                         <option value="1">Meta Ads</option>z
                                         <option value="2">Google Ads</option>
                                         <option value="3">Tiktok Ads</option>
@@ -738,7 +743,7 @@ export default function AccountTable() {
                                 <div className="col-span-2 md:col-span-1" ref={passwordInput}>
                                     <label htmlFor="password" className="flex mb-2 text-sm font-medium  ">Password <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, password: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-password')} required onChange={(e) => setValues({...values, password: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
@@ -750,7 +755,7 @@ export default function AccountTable() {
                                 <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
                                     <label htmlFor="passwordverify" className="flex mb-2 text-sm font-medium  ">{t('confirm_password')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-confirm')} required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>

@@ -97,19 +97,19 @@ export default function TenantProfile({tenant_id}){
     function validateForm(){
         let errors = {}
         if(values.name == ''){
-            errors.name = 'Name is required'
+            errors.name = t('name-error')
         }
         if(values.address == ''){
-            errors.address = 'Address is required'
+            errors.address = t('address-error')
         }
         if(values.contact == ''){
-            errors.contact = 'Contact is required'
+            errors.contact = t('contact-error')
         }
         if(!values.email.includes('@')){
-            errors.email = "Email must contain '@'"
+            errors.email = t('email-error2')
         }
         if(values.email == ''){
-            errors.email = 'Email is required'
+            errors.email = t('email-error')
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -339,7 +339,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('company-name')} {
                                     error.name && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
                                 required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                 {
                                     error.name && <p className="text-red-500 text-sm">{error.name}</p>
@@ -349,7 +349,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="address" className="mb-2 text-sm font-medium  flex">{t('company-address')} {
                                     error.address && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-address')}
                                 required onChange={(e) => setValues({...values, address: e.target.value})}/>
                                 {
                                     error.address && <p className="text-red-500 text-sm">{error.address}</p>
@@ -383,7 +383,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">Email{
                                     error.email && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                 {
                                     error.email && <p className="text-red-500 text-sm">{error.email}</p>
                                 }
@@ -393,7 +393,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">{t('contact')} {
                                     error.contact && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-contact')} required onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                 {
                                     error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
                                 }

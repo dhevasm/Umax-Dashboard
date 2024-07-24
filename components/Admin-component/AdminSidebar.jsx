@@ -22,6 +22,7 @@ export default function AdminSidebar(){
     const sidebarLink = useRef()
     const sideBar = useRef()
     const t = useTranslations('admin-sidebar')
+    const tout = useTranslations('swal-logout')
 
     const Router = useRouter()
     
@@ -44,13 +45,14 @@ export default function AdminSidebar(){
 
     function handleLogout(){
         Swal.fire({
-            title: "Are you sure?",
-            text: "you will be logged out of your account",
+            title: tout('warn'),
+            text: tout('msg'),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Sign Out"
+            confirmButtonText: tout('yes'),
+            cancelButtonText: tout('no'),
           }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem('jwtToken');
@@ -84,7 +86,7 @@ export default function AdminSidebar(){
                         <button className="flex items-center justify-betwesen w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push(`/${localStorage.getItem('lang')}/dashboard`)}>
                             <div className="flex items-center gap-2 text-slate-300 font-semibold">
                                 <FaChartLine size={20}/>
-                                Analystics
+                                {t('analytics')}
                             </div>
                         </button>
                     </li>}

@@ -30,6 +30,8 @@ export default function CampaignTable() {
     const [dataPerPage, setDataPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
     const t = useTranslations("admin-campaigns");
+    const tfile = useTranslations("swal-file");
+    const tdel = useTranslations("swal-delete");
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
 
@@ -51,22 +53,22 @@ export default function CampaignTable() {
     function validateForm(){
         let errors = {}
         if(values.name == ''){
-            errors.name = 'Campaign name is required'
+            errors.name = t('name-error')
         }
         if(values.start_date == ''){
-            errors.start_date = 'Start date is required'
+            errors.start_date = t('start-date-error')
         }
         if(values.end_date == ''){
-            errors.end_date = 'End date is required'
+            errors.end_date = t('end-date-error')
         }
         if(values.account == ''){
-            errors.account = 'Account is required'
+            errors.account = t('account-error')
         }
         if(values.objective == ''){
-            errors.objective = 'Objective is required'
+            errors.objective = t('objective-error')
         }
         if(values.status == ''){
-            errors.status = 'Status is required'
+            errors.status = t('status-error')
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -116,19 +118,20 @@ export default function CampaignTable() {
     
     function handleDelete(campaign_id){
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: tdel('warn'),
+            text: tdel('msg'),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: tdel('yes'),
+            cancelButtonText: tdel('no'),
           }).then((result) => {
             if (result.isConfirmed) {
             deleteCampaign(campaign_id)
             Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
+                title: tdel('success'),
+                text: tdel('suc-msg'),
                 icon: "success"
             })
             }
@@ -155,19 +158,20 @@ export default function CampaignTable() {
 
     function generateExcel(){
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download excel file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg2')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`,
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -183,13 +187,14 @@ export default function CampaignTable() {
 
     const generatePDF = () => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download pdf file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg1')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`,
           }).then((result) => {
             if (result.isConfirmed) {
                 const doc = new jsPDF();
@@ -200,8 +205,8 @@ export default function CampaignTable() {
                 });
                 doc.save('DataCampaign.pdf');
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -590,7 +595,7 @@ export default function CampaignTable() {
                                             onChange={handlePlatformChange}
                                         >
                                             <option value="" disabled hidden>Platform</option>
-                                            <option value="">All platform</option>
+                                            <option value="">{t('all-platform')}</option>
                                             <option value="1">Meta Ads</option>
                                             <option value="2">Google Ads</option>
                                             <option value="3">Tiktok Ads</option>
@@ -710,7 +715,7 @@ export default function CampaignTable() {
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className={` ${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
                                     <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('campaign_name')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
+                                    <input type="text" name="name" id="name" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
                                         error.name ? <div className="text-red-500 dark:text-red-600 text-sm">{error.name}</div> : ""
@@ -719,7 +724,7 @@ export default function CampaignTable() {
                                 <div className="col-span-1">
                                     <label htmlFor="account" className="flex mb-2 text-sm font-medium ">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <select id="account" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) =>setValues({...values, account: e.target.value})}>
-                                        <option value="" disabled hidden>Select account</option>
+                                        <option value="" disabled hidden>{t('select-account')}</option>
                                         {
                                             account.length > 0 ? account.map((account, index) => {
                                                 return <option key={index} value={account._id}>{account.username}</option>
@@ -745,7 +750,7 @@ export default function CampaignTable() {
                                 <div className="col-span-1">
                                 <label htmlFor="objective" className="flex mb-2 text-sm font-medium ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <select id="objective" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  "  defaultValue={""} onChange={(e) =>setValues({...values, objective: e.target.value})}>
-                                        <option value="" disabled hidden>Select objective</option>
+                                        <option value="" disabled hidden>{t('select-objective')}</option>
                                         <option value="1">Awareness</option>
                                         <option value="2">Conversion</option>
                                         <option value="3">Consideration</option>
@@ -758,7 +763,7 @@ export default function CampaignTable() {
                                 <div className="col-span-1">
                                 <label htmlFor="status" className="flex mb-2 text-sm font-medium ">status <div className="text-red-500 dark:text-red-600">*</div></label>
                                     <select id="status" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  " defaultValue={""} onChange={(e) => setValues({...values, status: e.target.value})}>
-                                        <option value="" disabled hidden>Select status</option>
+                                        <option value="" disabled hidden>{t('select-status')}</option>
                                         <option value="1">{t('active')}</option>
                                         <option value="2">{t('draft')}</option>
                                         <option value="3">{t('complete')}</option>
@@ -798,7 +803,7 @@ export default function CampaignTable() {
                                                 <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}><FaTrash/>
                                                 </button> 
                                             </div> 
-                                                : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaing}>Submit</button>
+                                                : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaing}>{t('submit')}</button>
                                         }
                                         
                                 </div>  

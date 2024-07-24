@@ -33,7 +33,8 @@ export default function ClientTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const t = useTranslations("admin-clients")
-
+    const tfile = useTranslations("swal-file")
+    const tdel = useTranslations("swal-delete")
 
     function handleShowPassword() {
         setShowPassword(!showPassword)
@@ -63,29 +64,29 @@ export default function ClientTable() {
     function validateForm(){
         let errors = {}
         if(values.name == ''){
-            errors.name = 'Name is required'
+            errors.name = t('name-error')
         }
         if(values.address == ''){
-            errors.address = 'Address is required'
+            errors.address = t('address-error')
         }
         if(values.contact == ''){
-            errors.contact = 'Contact is required'
+            errors.contact = t('contact-error')
         }
         if(!values.email.includes("@")){
-            errors.email = "Email must contain @"
+            errors.email = t('email-error2')
         }
         if(values.email == ''){
-            errors.email = 'Email is required'
+            errors.email = t('email-error')
         }
         if(values.password != values.passwordverify){
-            errors.password = 'Password not match'
-            errors.passwordverify = 'Password not match'
+            errors.password = t('password-error2')
+            errors.passwordverify = t('password-error2')
         }
         if(values.password == ''){
-            errors.password = 'Password is required'
+            errors.password = t('password-error')
         }
         if(values.passwordverify == ''){
-            errors.passwordverify = 'Password verify is required'
+            errors.passwordverify = t('confirm-error')
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -148,19 +149,20 @@ export default function ClientTable() {
     
     function handleDelete(client_id){
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: tdel('warn'),
+            text: tdel('msg'),
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: tdel('yes'),
+            cancelButtonText: tdel('no'),
           }).then((result) => {
             if (result.isConfirmed) {
             deleteclient(client_id)
             Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
+                title: tdel('success'),
+                text: tdel('suc-msg'),
                 icon: "success"
             })
             }
@@ -187,19 +189,20 @@ export default function ClientTable() {
 
     function generateExcel(){
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download excel file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg2')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -214,13 +217,14 @@ export default function ClientTable() {
 
     const generatePDF = () => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to download pdf file?",
+            title: `${tfile('warn')}`,
+            text: `${tfile('msg1')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, download it!"
+            confirmButtonText: `${tfile('yes')}`,
+            cancelButtonText: `${tfile('no')}`
           }).then((result) => {
             if (result.isConfirmed) {
                 const doc = new jsPDF();
@@ -231,8 +235,8 @@ export default function ClientTable() {
                 });
                 doc.save('Dataclient.pdf');
               Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
                 icon: "success"
               });
             }
@@ -609,7 +613,7 @@ export default function ClientTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className=" dark:bg-slate-800 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search"
+                                    <input type="text" id="search" name="search" className=" dark:bg-slate-800 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t("search")}
                                     defaultValue="" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
@@ -699,8 +703,8 @@ export default function ClientTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium ">{t('client_name')} <span className="text-red-500">*</span> </label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type client name here"
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium ">{t('client_name')}<span className="text-red-500">*</span> </label>
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
                                     required
                                     onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     {
@@ -708,21 +712,24 @@ export default function ClientTable() {
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">{t('country')}</label>
+                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">{t('country')}<span className="text-red-500">*</span></label>
                                 <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
-                                    <option value="0" key={0} disabled hidden>Select Country</option>
+                                    <option value="0" key={0} disabled hidden>{t('select-country')}</option>
                                     {
                                         Country.length > 0 ? Country.map((item, index) => (
                                             <option key={index} value={item.country}>{item.country}</option>
                                         )) : <option disabled>Loading</option>
                                     }
                                 </select>
+                                {
+                                    error.address && <p className="text-red-500 text-xs">{error.address}</p>
+                                }
                             </div>
                             <div className="col-span-1">
-                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}</label>
+                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}<span className="text-red-500">*</span></label>
                                 <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}  onChange={(e) => setValues({...values, address: e.target.value})}>
                                     {
-                                        City.length > 0 ? <option disabled value={0} key={0} hidden>Select City</option> : ""
+                                        City.length > 0 ? <option disabled value={0} key={0} hidden>{t('select-city')}</option> : ""
                                     }
                                     {
                                         City.length > 0 ? City.map((item, index) => (
@@ -736,25 +743,25 @@ export default function ClientTable() {
                             </div>
                                 
                                 <div className="col-span-1">
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium ">Email <span className="text-red-500">*</span> </label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium ">Email<span className="text-red-500">*</span> </label>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required
                                     onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {
                                         error.email && <p className="text-red-500 text-xs">{error.email}</p>
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium ">{t('contact')} <span className="text-red-500">*</span> </label>
-                                    <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required
+                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium ">{t('contact')}<span className="text-red-500">*</span> </label>
+                                    <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-contact')} required
                                     onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                     {
                                         error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1" ref={passwordInput}>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium ">Password <span className="text-red-500">*</span> </label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium ">Password<span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required 
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-password')} required 
                                         onChange={(e)=> setValues({...values, password: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
@@ -767,7 +774,7 @@ export default function ClientTable() {
                                 <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
                                     <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium ">{t('confirm_password')}<span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type password here" required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-confirm')} required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>

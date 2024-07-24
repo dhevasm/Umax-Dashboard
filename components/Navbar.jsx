@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl";
 export default function Navbar() {
     
     const t = useTranslations('navbar');
+    const tout = useTranslations('swal-logout');
     const pathName = usePathname()
     const router = useRouter();
     const [activeLink, setActiveLink] = useState(pathName);
@@ -76,13 +77,14 @@ export default function Navbar() {
     function ProfileDropdown({ name, email, role, image }) {
         function handleLogout(){
             Swal.fire({
-                title: "Are you sure?",
-                text: "you will be logged out of your account",
+                title: `${tout('warn')}`,
+                text: `${tout('msg')}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Sign Out",
+                confirmButtonText: `${tout('yes')}`,
+                cancelButtonText: `${tout('no')}`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     localStorage.removeItem('jwtToken');
@@ -239,12 +241,12 @@ export default function Navbar() {
                     {/* Profile */}
                     <div className="flex gap-3 items-center">
                         <div className="relative text-black hidden sm:flex md:flex lg:flex xl:flex dark:text-slate-100 me-3 hover:cursor-pointer">
-                            <div className="" onClick={(e) => {
+                            {/* <div className="" onClick={(e) => {
                             document.querySelector(".notif-dropdown").classList.toggle("hidden");
                             e.stopPropagation();
                             }}>
                             <BiBell size={20} />
-                            </div>
+                            </div> */}
                             <div className="notif-dropdown hidden absolute z-10 mt-2 p-5 right-5 bg-white dark:bg-slate-700 rounded-lg shadow-lg flex-col gap-3 w-[200px]">
                             <a href="/" className="hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg">Notification 1</a>
                             <a href="/" className="hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg">Notification 2</a>
