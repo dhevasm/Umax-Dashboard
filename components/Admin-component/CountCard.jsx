@@ -23,7 +23,7 @@ export default function CountCard({title, value, handleClick}){
             </div>
             <div className="p-3 text-xl font-semibold">{value}
                 <div className="flex justify-between items-end">
-                <p className="text-sm text-gray-500">{title}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-300">{title}</p>
                 <p className="text-xs text-blue-500 hover:cursor-pointer" onClick={() => handleCardClick(handleClick)}>Show Detail </p>
                 </div>
             </div>

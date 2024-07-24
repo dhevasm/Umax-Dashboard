@@ -100,7 +100,7 @@ export default function Navbar() {
                         <span className="text-blue-500">
                             {isHidden ? <IoIosArrowDown size={18} className="font-semibold text-gray-800 dark:text-slate-200" /> : <IoIosArrowUp size={18} className="font-semibold text-black dark:text-slate-200" />}
                         </span>
-                        </div>
+                        </div>  
                         <div className="text-xs text-gray-500 dark:text-gray-400">{role}</div>
                     </h1>
                 </div>

@@ -681,7 +681,7 @@ export default function TenantTable() {
                                 {`${modeModal} Tenant`}
                             </h3>
                             
-                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
