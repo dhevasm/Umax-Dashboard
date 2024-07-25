@@ -228,6 +228,12 @@ const CampaignTable = () => {
                 }
             }).catch((error) => {
                 console.error('Error:', error);
+                Swal.fire({
+                    title: tfile('error'),
+                    text: tfile('err-msg'),
+                    icon: 'error',
+                    confirmButtonText: '#3085d6'
+                })
             });
         }
     }

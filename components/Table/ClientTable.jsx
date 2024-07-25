@@ -24,6 +24,7 @@ const ClientTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const t = useTranslations("clients");
+    const tfile = useTranslations('swal-file')
     const [selectedClient, setSelectedClient] = useState(null);
     const tableRef = useRef(null);
     const date = new Date();
@@ -151,46 +152,60 @@ const ClientTable = () => {
     function ConfirmationModal(name) {
         if (name === 'pdf') {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "File will be downloaded!",
+                title: tfile('warn'),
+                text: tfile('msg'),
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, download it!'
+                confirmButtonText: tfile('yes'),
+                cancelButtonText: tfile('no')
             }).then((result) => {
                 if (result.isConfirmed) {
                     generatePDF();
                     Swal.fire({
-                        title: 'Downloaded!',
-                        text: 'Your file has been downloaded.',
+                        title: tfile('success'),
+                        text: tfile('suc-msg'),
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                     });
                 }
             }).catch((error) => {
                 console.error('Error:', error);
+                Swal.fire({
+                    title: tfile('error'),
+                    text: tfile('err-msg'),
+                    icon: 'error',
+                    confirmButtonText: '#3085d6'
+                })
             });
         } else if (name === 'excel') {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "File will be downloaded!",
+                title: tfile('warn'),
+                text: tfile('msg'),
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, download it!'
+                confirmButtonText: tfile('yes'),
+                cancelButtonText: tfile('no')
             }).then((result) => {
                 if (result.isConfirmed) {
                     onDownload();
                     Swal.fire(
-                        'Downloaded!',
-                        'Your file has been downloaded.',
+                        tfile('success'),
+                        tfile('suc-msg'),
                         'success'
                     );
                 }
             }).catch((error) => {
                 console.error('Error:', error);
+                Swal.fire({
+                    title: tfile('error'),
+                    text: tfile('err-msg'),
+                    icon: 'error',
+                    confirmButtonText: '#3085d6'
+                })
             });
         }
     }
