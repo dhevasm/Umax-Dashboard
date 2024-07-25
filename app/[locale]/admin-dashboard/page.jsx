@@ -142,7 +142,7 @@ function AdminDashboard() {
                 })
             } else if (role !== 'admin' && role !== 'sadmin') {
                 Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
-                    router.push('/dashboard')
+                    router.push(`/${localStorage.getItem('lang')}/dashboard`)
                 })
             }
         }

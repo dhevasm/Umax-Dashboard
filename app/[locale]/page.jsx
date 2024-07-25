@@ -20,7 +20,12 @@ const Page = () => {
         'Authorization' : `Bearer ${localStorage.getItem('jwtToken')}`
       }
     }).then((response) => {
-      localStorage.setItem('lang', response.data.Data[0].language);
+      if(response.data.Data[0].language) {
+        localStorage.setItem('lang', response.data.Data[0].language);
+      }else{
+        localStorage.setItem('lang', 'en');
+      }
+      console.log(response.data.Data[0])
     }).catch((error) => {
       console.log(error)  
     })
@@ -86,9 +91,6 @@ const Page = () => {
           
           setTimeout(() => {
             let lang = localStorage.getItem("lang");
-            if(lang === null){
-              lang = "en"
-            }
             if (roles == "sadmin" || roles == "admin") {
               router.push(`${lang}/admin-dashboard`);
             } else if (roles === "staff") {
