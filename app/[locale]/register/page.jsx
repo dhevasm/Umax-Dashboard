@@ -17,7 +17,7 @@ const Page = () => {
   const [count, setCount] = useState(0);
   const navigate = useRouter();
   const t = useTranslations('register');
-  const umaxUrl = 'https://umaxxxxx-1-r8435045.deta.app';
+  const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const router = useRouter();
   useEffect(() => {
@@ -116,9 +116,9 @@ const Page = () => {
     <div className="relative overflow-hidden min-h-screen flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-center">
       <div>
         <Image src="/assets/logo.png" alt="logo" className="mx-auto pb-2 w-20" width={80} height={10}/>
-     <div className='fixed z-30 bottom-5 right-5 p-3 rounded-full hover:bg-blue-600 hover:cursor-pointer bg-blue-500 text-white' onClick={() => router.back()}>
+     {/* <div className='fixed z-30 bottom-5 right-5 p-3 rounded-full hover:bg-blue-600 hover:cursor-pointer bg-blue-500 text-white' onClick={() => router.back()}>
       <FaHome className='text-2xl'/>
-     </div>
+     </div> */}
       </div>
       <div className="w-10/12 md:w-full max-w-md bg-white rounded-lg shadow-lg p-6 border-2">
         <p className="font-semibold text-base text-[#5473E3] mb-5">Register</p>

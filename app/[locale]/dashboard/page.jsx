@@ -7,15 +7,15 @@ import dynamic from "next/dynamic"
 import { useTranslations } from "next-intl"
 
 // Components
-import Navbar from "@/components/Navbar"
-import Sidebar from "@/components/Sidebar"
+import Navbar from "@/components/Client-components/Navbar"
+import Sidebar from "@/components/Client-components/Sidebar"
 
 // Dashboard Content
-const Performance = dynamic(() => import('@/components/Dashboard-content/Performance'))
-import Metrics from "@/components/Dashboard-content/Metrics"
-import History from "@/components/Dashboard-content/History"
-import Setting from "@/components/Dashboard-content/Setting"
-import PerformenceNavLoading from "@/components/Loading/PerformenceNavLoading"
+const Performance = dynamic(() => import('@/components/Client-components/Dashboard-content/Performance'))
+import Metrics from "@/components/Client-components/Dashboard-content/Metrics"
+import History from "@/components/Client-components/Dashboard-content/History"
+import Setting from "@/components/Client-components/Dashboard-content/Setting"
+import PerformenceNavLoading from "@/components/Client-components/Loading/PerformenceNavLoading"
 import Image from "next/image"
 
 export const SidebarContext = createContext()

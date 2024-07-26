@@ -38,7 +38,7 @@ const Page = () => {
             setLoading(true);
             try {
                 const response = await fetch(
-                    `https://umaxxxxx-1-r8435045.deta.app/reset-password`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/reset-password`,
                     {
                         method: 'POST',
                         headers: {

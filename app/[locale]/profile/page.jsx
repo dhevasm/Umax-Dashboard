@@ -33,7 +33,7 @@ const Profile = () => {
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('jwtToken');
-            const apiUrl = 'https://umaxxnew-1-d6861606.deta.app/user-by-id';
+            const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/user-by-id`;
             const response = await axios.get(apiUrl, {
                 headers: {
                     Authorization: `Bearer ${token}`,

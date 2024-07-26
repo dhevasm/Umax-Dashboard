@@ -30,7 +30,7 @@ const ForgotPassword = () => {
             setLoading(true); // Set loading to true when submission starts
             try {
                 const response = await fetch(
-                    `https://umaxxxxx-1-r8435045.deta.app/send-password-reset-email`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/send-password-reset-email`,
                     {
                         method: 'POST',
                         headers: {
