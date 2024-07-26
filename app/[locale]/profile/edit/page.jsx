@@ -39,16 +39,16 @@ const EditProfile = () => {
             }
         };
 
-        fetchData('https://umaxxnew-1-d6861606.deta.app/timezone', setSelectTimezone);
-        fetchData('https://umaxxnew-1-d6861606.deta.app/culture', setSelectCulture);
-        fetchData('https://umaxxnew-1-d6861606.deta.app/currency', setSelectCurrency);
+        fetchData(`${process.env.NEXT_PUBLIC_API_URL}/timezone`, setSelectTimezone);
+        fetchData(`${process.env.NEXT_PUBLIC_API_URL}/culture`, setSelectCulture);
+        fetchData(`${process.env.NEXT_PUBLIC_API_URL}/currency`, setSelectCurrency);
     }, []);
 
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
                 const token = localStorage.getItem('jwtToken');
-                const apiUrl = 'https://umaxxnew-1-d6861606.deta.app/user-by-id';
+                const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/user-by-id`;
                 const response = await axios.get(apiUrl, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ const EditProfile = () => {
         image: yup.string().required('Image is Required'),
         name: yup
           .string()
-          .required(t('name-error')),
+          .required(t('username-error')),
         email: yup.string().required(t('email-error')).email(t('email-error2')),
         culture: yup.string().required(t('culture-error')),
         input_timezone: yup.string().required(t('timezone-error')),
@@ -106,7 +106,7 @@ const EditProfile = () => {
             setLoading(true);
             try {
                 const token = localStorage.getItem('jwtToken');
-                const apiUrl = 'https://umaxxnew-1-d6861606.deta.app/profile';
+                const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/profile`;
                 const formData = new FormData();
                 formData.append('name', values.name);
                 formData.append('email', values.email);
@@ -225,7 +225,7 @@ const EditProfile = () => {
                         </div>
                         <h1 className="mt-4 text-white text-2xl font-semibold">{formik.values.name}</h1>
                         <p className="text-white text-lg">{profileData.roles}</p>
-                    </div>
+                    </div>  
                 </div>
                 <form onSubmit={formik.handleSubmit} className="p-6 dark:text-gray-200">
                     <ProfileSection title={t('edit-personal-information')}>

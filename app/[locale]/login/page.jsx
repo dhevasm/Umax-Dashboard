@@ -20,6 +20,10 @@ const Page = () => {
   const lang = pathname.slice(0, 3);
   const t = useTranslations('login')
 
+  useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_API_URL);
+  }, [])
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email(t('email-error2'))
@@ -31,7 +35,7 @@ const Page = () => {
 
   const getUserData = async (roles) => {
     try {
-      const response = await axios.get("https://umaxxxxx-1-r8435045.deta.app/user-by-id", {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-id`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         }
@@ -65,7 +69,7 @@ const Page = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch(`https://umaxxxxx-1-r8435045.deta.app/login`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
           method: "POST",
           headers: {
             accept: "application/json",
@@ -91,7 +95,7 @@ const Page = () => {
           ? "Network error. Please check your internet connection and try again."
           : "Please check your email and password.");
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     },
   });

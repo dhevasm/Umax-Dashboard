@@ -1,12 +1,12 @@
 "use client";
 
-import TableLoading from "@/components/Loading/TableLoading";
-import Navbar from "@/components/Navbar";
+import TableLoading from "@/components/Client-components/Loading/TableLoading";
+import Navbar from "@/components/Client-components/Navbar";
 import dynamic from "next/dynamic";
 import { Suspense, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-const CampaignTable = dynamic(() => import("@/components/Table/CampaignTable"), {ssr: false,});
+const CampaignTable = dynamic(() => import("@/components/Client-components/Table/CampaignTable"), {ssr: false,});
 
 const Page = () => {
     const Card = useRef(null);

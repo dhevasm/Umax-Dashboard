@@ -2,12 +2,12 @@
 
 import React, { Suspense, useEffect } from 'react'
 
-import Navbar from "@/components/Navbar"
+import Navbar from "@/components/Client-components/Navbar"
 import dynamic from "next/dynamic";
-import TableLoading from '@/components/Loading/TableLoading'
+import TableLoading from '@/components/Client-components/Loading/TableLoading'
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-const ClientTable = dynamic(() => import('@/components/Table/ClientTable'), { ssr: false });
+const ClientTable = dynamic(() => import('@/components/Client-components/Table/ClientTable'), { ssr: false });
 
 const Page = () => {
 

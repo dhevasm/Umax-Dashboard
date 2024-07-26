@@ -6,15 +6,15 @@ import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 
 // Dynamically import components
-const AdminNavbar = dynamic(() => import("@/components/Admin-component/AdminNavbar"))
-const AdminSidebar = dynamic(() => import("@/components/Admin-component/AdminSidebar"))
-const TenantTable = dynamic(() => import("@/components/Admin-component/TenantTable"))
-const UserTable = dynamic(() => import("@/components/Admin-component/UserTable"))
-const CampaignTable = dynamic(() => import("@/components/Admin-component/CampaignTable"))
-const TenantProfile = dynamic(() => import("@/components/Admin-component/TenantProfile"))
-const AccountTable = dynamic(() => import("@/components/Admin-component/AccountTable"))
-const ClientTable = dynamic(() => import("@/components/Admin-component/ClientTable"))
-const Dashboard = dynamic(() => import("@/components/Admin-component/Dashboard"))
+const AdminNavbar = dynamic(() => import("@/components/Admin-components/AdminNavbar"))
+const AdminSidebar = dynamic(() => import("@/components/Admin-components/AdminSidebar"))
+const TenantTable = dynamic(() => import("@/components/Admin-components/Tables/TenantTable"))
+const UserTable = dynamic(() => import("@/components/Admin-components/Tables/UserTable"))
+const CampaignTable = dynamic(() => import("@/components/Admin-components/Tables/CampaignTable"))
+const TenantProfile = dynamic(() => import("@/components/Admin-components/TenantProfile"))
+const AccountTable = dynamic(() => import("@/components/Admin-components/Tables/AccountTable"))
+const ClientTable = dynamic(() => import("@/components/Admin-components/Tables/ClientTable"))
+const Dashboard = dynamic(() => import("@/components/Admin-components/Dashboard"))
 
 export const AdminDashboardContext = createContext()
 
@@ -68,7 +68,7 @@ function AdminDashboard() {
     }, [])
 
     const getUserData = useCallback(async () => {
-        const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-id', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-id`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -77,19 +77,19 @@ function AdminDashboard() {
     }, [])
 
     const getUserCampaignCount = useCallback(async () => {
-        const getUsers = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-tenant', {
+        const getUsers = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
         setUsersCount(getUsers.data.Data.length)
-        const getCampaigns = await axios.get('https://umaxxxxx-1-r8435045.deta.app/campaign-by-tenant', {
+        const getCampaigns = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
         setCampaignsCount(getCampaigns.data.Data.length)
-        const getClient = await axios.get('https://umaxxxxx-1-r8435045.deta.app/client-by-tenant', {
+        const getClient = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -99,7 +99,7 @@ function AdminDashboard() {
 
     const getTenantsCount = useCallback(async () => {
         if (userData.roles === 'sadmin') {
-            const getTenants = await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
+            const getTenants = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
