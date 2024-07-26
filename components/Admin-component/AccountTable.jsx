@@ -591,7 +591,8 @@ export default function AccountTable() {
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
-                                        <option value="">Status</option>
+                                        <option value="" hidden disabled>Status</option>
+                                        <option value="">{t('all-status')}</option>
                                         <option value="1">{t('active')}</option>
                                         <option value="2">{t('deactive')}</option>
                                     </select>  
@@ -603,7 +604,7 @@ export default function AccountTable() {
                                         onChange={handlePlatformChange}
                                     >
                                         <option value="" disabled hidden>Platform</option>
-                                        <option value="">All platform</option>
+                                        <option value="">{t('all-platform')}</option>
                                         <option value="1">Meta Ads</option>
                                         <option value="2">Google Ads</option>
                                         <option value="3">Tiktok Ads</option>

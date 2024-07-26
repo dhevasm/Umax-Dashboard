@@ -262,7 +262,9 @@
       "status-error": "Status is required",
       "start-date-error": "Start date is required",
       "end-date-error": "End date is required",
-      "all-platform": "All platform"
+      "all-platform": "All platform",
+      "all-status": "All status",
+      "all-objective": "All objective"
     },
 
     "admin-accounts": {
@@ -293,7 +295,9 @@
       "password-error2": "Password does not match",
       "confirm-error": "Confirm password is required",
       "client-error": "Client is required",
-      "platform-error": "Platform is required"
+      "platform-error": "Platform is required",
+      "all-status": "All status",
+      "all-platform": "All platform"
     },
 
     "admin-clients": {
@@ -328,7 +332,8 @@
       "address-error": "Address is required",
       "password-error": "Password is required",
       "password-error2": "Password does not match",
-      "confirm-error": "Confirm password is required"
+      "confirm-error": "Confirm password is required",
+      "all-status": "All status"
     },
 
     "swal-file": {

@@ -4,6 +4,8 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { useContext } from "react";
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page";
+import { useState,useEffect } from "react";
+import axios from "axios";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -101,10 +103,6 @@ const ChartTwo = () => {
       xaxis: {
         type: "category",
         categories: [
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
           "Jan",
           "Feb",
           "Mar",
@@ -113,6 +111,10 @@ const ChartTwo = () => {
           "Jun",
           "Jul",
           "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
         ],
         axisBorder: {
           show: false,
@@ -128,19 +130,155 @@ const ChartTwo = () => {
           },
         },
         min: 0,
-        max: 100,
       },
     };
+
+    const [campaigns, setCampaigns] = useState([])
+
+    const [filteredCampaign, setFilteredCampaign] = useState({
+      "jan": 0,
+      "feb": 0,
+      "mar": 0,
+      "apr": 0,
+      "may": 0,
+      "jun": 0,
+      "jul": 0,
+      "aug": 0,
+      "sep": 0,
+      "oct": 0,
+      "nov": 0,
+      "dec": 0
+    })
+    const [filteredCampaignDone, setFilteredCampaignDone] = useState({
+      "jan": 0,
+      "feb": 0,
+      "mar": 0,
+      "apr": 0,
+      "may": 0,
+      "jun": 0,
+      "jul": 0,
+      "aug": 0,
+      "sep": 0,
+      "oct": 0,
+      "nov": 0,
+      "dec": 0
+    })
+
+    async function getCampaigns() { 
+      const res = await axios.get("https://umaxxxxx-1-r8435045.deta.app/campaign-by-tenant", {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      })
+      const data = res.data.Data
+      setCampaigns(data)
+    }  
+
+    useEffect(() => {
+      getCampaigns()
+    }, [])
+    
+    const Year = new Date().getFullYear();
+
+    async function getCountData(){
+      
+      const today = new Date().getDate();
+      const jan = campaigns.filter(campaign => campaign.start_date.includes("Jan") && campaign.start_date.includes(Year)).length
+      const feb = campaigns.filter(campaign => campaign.start_date.includes("Feb") && campaign.start_date.includes(Year)).length
+      const mar = campaigns.filter(campaign => campaign.start_date.includes("Mar") && campaign.start_date.includes(Year)).length
+      const apr = campaigns.filter(campaign => campaign.start_date.includes("Apr") && campaign.start_date.includes(Year)).length
+      const may = campaigns.filter(campaign => campaign.start_date.includes("May") && campaign.start_date.includes(Year)).length
+      const jun = campaigns.filter(campaign => campaign.start_date.includes("Jun") && campaign.start_date.includes(Year)).length
+      const jul = campaigns.filter(campaign => campaign.start_date.includes("Jul") && campaign.start_date.includes(Year)).length
+      const aug = campaigns.filter(campaign => campaign.start_date.includes("Aug") && campaign.start_date.includes(Year)).length
+      const sep = campaigns.filter(campaign => campaign.start_date.includes("Sep") && campaign.start_date.includes(Year)).length
+      const okt = campaigns.filter(campaign => campaign.start_date.includes("Okt") && campaign.start_date.includes(Year)).length
+      const nov = campaigns.filter(campaign => campaign.start_date.includes("Nov") && campaign.start_date.includes(Year)).length
+      const des = campaigns.filter(campaign => campaign.start_date.includes("Des") && campaign.start_date.includes(Year)).length
+      
+      const janDone = campaigns.filter(campaign => campaign.end_date.includes("Jan") && campaign.end_date.includes(Year)).length
+      const febDone = campaigns.filter(campaign => campaign.end_date.includes("Feb") && campaign.end_date.includes(Year)).length
+      const marDone = campaigns.filter(campaign => campaign.end_date.includes("Mar") && campaign.end_date.includes(Year)).length
+      const aprDone = campaigns.filter(campaign => campaign.end_date.includes("Apr") && campaign.end_date.includes(Year)).length
+      const mayDone = campaigns.filter(campaign => campaign.end_date.includes("May") && campaign.end_date.includes(Year)).length
+      const junDone = campaigns.filter(campaign => campaign.end_date.includes("Jun") && campaign.end_date.includes(Year)).length
+      const julDone = campaigns.filter(campaign => campaign.end_date.includes("Jul") && campaign.end_date.includes(Year)).length
+      const augDone = campaigns.filter(campaign => campaign.end_date.includes("Aug") && campaign.end_date.includes(Year)).length
+      const sepDone = campaigns.filter(campaign => campaign.end_date.includes("Sep") && campaign.end_date.includes(Year)).length
+      const oktDone = campaigns.filter(campaign => campaign.end_date.includes("Okt") && campaign.end_date.includes(Year)).length
+      const novDone = campaigns.filter(campaign => campaign.end_date.includes("Nov") && campaign.end_date.includes(Year)).length
+      const desDone = campaigns.filter(campaign => campaign.end_date.includes("Des") && campaign.end_date.includes(Year)).length
+
+      setFilteredCampaignDone({
+        "jan": janDone,
+        "feb": febDone,
+        "mar": marDone,
+        "apr": aprDone,
+        "may": mayDone,
+        "jun": junDone,
+        "jul": julDone,
+        "aug": augDone,
+        "sep": sepDone,
+        "okt": oktDone,
+        "nov": novDone,
+        "des": desDone
+      })
+
+      setFilteredCampaign({
+        "jan": jan,
+        "feb": feb,
+        "mar": mar,
+        "apr": apr,
+        "may": may,
+        "jun": jun,
+        "jul": jul,
+        "aug": aug,
+        "sep": sep,
+        "okt": okt,
+        "nov": nov,
+        "des": des
+      })
+    }
+
+    useEffect(() => {
+      getCountData()
+    }, [campaigns])
 
 
   const series = [
     {
-      name: "Product One",
-      data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
+      name: "Campaign Start",
+      data: [
+        filteredCampaign.jan,
+        filteredCampaign.feb,
+        filteredCampaign.mar,
+        filteredCampaign.apr,
+        filteredCampaign.may,
+        filteredCampaign.jun,
+        filteredCampaign.jul,
+        filteredCampaign.aug,
+        filteredCampaign.sep,
+        filteredCampaign.okt,
+        filteredCampaign.nov,
+        filteredCampaign.des,
+      ],
     },
     {
-      name: "Product Two",
-      data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+      name: "Campaign Done",
+      data: [
+        filteredCampaignDone.jan,
+        filteredCampaignDone.feb,
+        filteredCampaignDone.mar,
+        filteredCampaignDone.apr,
+        filteredCampaignDone.may,
+        filteredCampaignDone.jun,
+        filteredCampaignDone.jul,
+        filteredCampaignDone.aug,
+        filteredCampaignDone.sep,
+        filteredCampaignDone.okt,
+        filteredCampaignDone.nov,
+        filteredCampaignDone.des,
+      ],
     },
   ];
 
@@ -153,22 +291,22 @@ const ChartTwo = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary text-sm md:text-md">Total Revenue</p>
-              <p className="text-xs md:text-sm text-nowrap font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-primary text-sm md:text-md">Campaign Start</p>
+              <p className="text-xs md:text-sm text-nowrap font-medium">{`01.01.${Year} - 31.12.${Year}`}</p>
             </div>
-          </div>
+          </div>  
           <div className="flex min-w-47.5">
             <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-secondary text-sm md:text-md">Total Sales</p>
-              <p className="text-xs md:text-sm text-nowrap font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-secondary text-sm md:text-md">Campaign Done</p>
+              <p className="text-xs md:text-sm text-nowrap font-medium">{`01.01.${Year} - 31.12.${Year}`}</p>
             </div>
           </div>
         </div>
         <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-slate-50  p-1.5">
+          {/* <div className="inline-flex items-center rounded-md bg-slate-50  p-1.5">
             <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card">
               Day
             </button>
@@ -178,7 +316,7 @@ const ChartTwo = () => {
             <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card">
               Month
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 

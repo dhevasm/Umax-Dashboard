@@ -53,7 +53,7 @@ const Profile = () => {
                 timezoneName: data.timezone_name,
                 culture: data.culture,
             });
-            console.log(data.language);
+            // console.log(data.language);
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }

@@ -118,6 +118,11 @@ export default function ClientTable() {
                 passwordInput.current.classList.add("hidden")
                 passwordverifyInput.current.classList.add("hidden")
                 tenantInput.current.classList.add("hidden")
+                if(filteredclient[0].notes == "empty"){
+                    document.getElementById("notes").value = ""
+                }else{
+                    document.getElementById('notes').value = filteredclient[0].notes 
+                }
                 // console.log(client_id)
             } else{
                 Swal.fire("client not found");
@@ -132,6 +137,7 @@ export default function ClientTable() {
             document.getElementById('email').value = null  
             document.getElementById('password').value = null  
             document.getElementById('passwordverify').value = null 
+            document.getElementById('notes').value = ""
             passwordInput.current.classList.remove("hidden")
             passwordverifyInput.current.classList.remove("hidden") 
             if(userData.roles == "sadmin"){
@@ -284,6 +290,10 @@ export default function ClientTable() {
             const password = document.getElementById('password').value
             const passwordverify = document.getElementById('passwordverify').value
             const tenant_id = document.getElementById('tenant').value
+            let notes = document.getElementById('notes').value
+            if(notes == ""){
+                notes = "empty"
+            }
 
             const formData = new FormData();
             formData.append('name', name);
@@ -293,7 +303,7 @@ export default function ClientTable() {
             formData.append('status', status);
             formData.append('password', password);
             formData.append('confirm_password', passwordverify);
-            formData.append('notes', 'notes')
+            formData.append('notes', notes)
 
             let url = ""
 
@@ -320,6 +330,7 @@ export default function ClientTable() {
                 document.getElementById('email').value = null
                 document.getElementById('password').value = null
                 document.getElementById('passwordverify').value = null
+                document.getElementById('notes').value = ""
                 Swal.fire("Success", "Client created successfully", "success")
             }else{
                 Swal.fire("Error", response.detail, "error")
@@ -347,12 +358,17 @@ export default function ClientTable() {
                 const contact = `+${document.getElementById('contact').value}`
                 const email = document.getElementById('email').value
                 const status = document.getElementById('status').checked ? 1 : 2
+                let notes = document.getElementById('notes').value
+                if(notes == ""){
+                    notes = "empty"
+                }
                 const formData = new FormData();
                 formData.append('name', name);
                 formData.append('address', address);
                 formData.append('email', email);
                 formData.append('contact', contact);
                 formData.append('status', status);  
+                formData.append('notes', notes)
         
                 const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/client-edit?client_id=${EditclientId}`, formData, {
                     headers: {
@@ -368,6 +384,7 @@ export default function ClientTable() {
                     document.getElementById('city').value = 0
                     document.getElementById('contact').value = null
                     document.getElementById('email').value = null
+                    document.getElementById('password').value = null
                     Swal.fire("Success", "Client Updated", "success")
                 }else{
                     Swal.fire("Error", response.detail.ErrMsg, "error")
@@ -601,7 +618,8 @@ export default function ClientTable() {
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
-                                        <option value="">Status</option>
+                                        <option value="" disabled hidden>Status</option>
+                                        <option value="">{t('all-status')}</option>
                                         <option value="1">{t("active")}</option>
                                         <option value="2">{t("deactive")}</option>
                                     </select>  
@@ -689,7 +707,7 @@ export default function ClientTable() {
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold">
@@ -797,6 +815,11 @@ export default function ClientTable() {
                                 </div>
                             </div>
                             
+                            <div className="col-span-2">
+                                    <label htmlFor="notes" className="mb-2 text-sm font-medium">Notes</label>
+                                    <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
+                                </div>
+
                                 <div className="flex justify-between items-end">
                                 <div>
                                     <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
