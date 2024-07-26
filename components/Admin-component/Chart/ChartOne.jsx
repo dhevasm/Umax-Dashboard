@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useContext } from "react";
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page";
+import axios from "axios";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -31,7 +32,7 @@ const ChartOne = () => {
   const options = {
     colors: ["#3C50E0", "#80CAEE"],
     chart: {
-      fontFamily: "Satoshi, sans-serif",
+      fontFamily: "Satoshi, sans-serif",  
       type: "bar",
       height: 335,
       stacked: true,
@@ -70,7 +71,7 @@ const ChartOne = () => {
       enabled: false,
     },
     xaxis: {
-      categories: ["M", "T", "W", "T", "F", "S", "S"],
+      categories: ["Awareness", "Conservation", "Consideration"],
       labels: {
         style: {
           colors: isDarkMode ? '#FFFFFF' : '#000000',
@@ -103,28 +104,63 @@ const ChartOne = () => {
     
   };
 
+  const [campaigns, setCampaigns] = useState([])  
+  const [meta, setMeta] = useState(0)
+  const [google, setGoogle] = useState(0)
+  const [tiktok, setTiktok] = useState(0)
+  const [dataseries,setSeries] = useState([0,0,0])
+
+  async function getCampaigns() { 
+    const res = await axios.get("https://umaxxxxx-1-r8435045.deta.app/campaign-by-tenant", {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      },
+    })
+    const data = res.data.Data
+    setCampaigns(data)
+    // console.log(data)
+  }  
+
+  useEffect(() => {
+    const countMeta = campaigns.filter(campaign => campaign.objective === 1).length;
+    setMeta(countMeta)
+    setSeries([countMeta,google,tiktok])
+  }, [campaigns,meta])
+
+  useEffect(() => {
+    const countgoogle = campaigns.filter(campaign => campaign.objective === 2).length;
+    setGoogle(countgoogle)
+    setSeries([meta,countgoogle,tiktok])
+  }, [campaigns,google])
+
+  useEffect(() => {
+    const counttiktok = campaigns.filter(campaign => campaign.objective === 3).length;
+    setTiktok(counttiktok)
+    setSeries([meta,google,counttiktok])
+  }, [campaigns,tiktok])
+
+  useEffect(() => {
+    getCampaigns()
+  }, [])
+
   const series = [
     {
-      name: "Sales",
-      data: [44, 55, 41, 67, 22, 43, 65],
+      name: "Total Campaigns",
+      data: dataseries,
     },
-    {
-      name: "Revenue",
-      data: [13, 23, 20, 8, 13, 27, 15],
-    },
-  ];
+  ]
 
   return (
     <div className="col-span-12 rounded-sm bg-white dark:bg-slate-800 p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-xl font-semibold text-black dark:text-white">
-            Profit this week
+            Campaign Objective
           </h4>
         </div>
         <div>
           <div className="relative inline-block">
-            <select
+            {/* <select
               name="#"
               id="#"
               className="relative inline-flex appearance-none dark:text-white bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
@@ -135,7 +171,7 @@ const ChartOne = () => {
               <option value="" className="dark:bg-boxdark dark:text-white">
                 Last Week
               </option>
-            </select>
+            </select> */}
             <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
               <svg
                 width="10"

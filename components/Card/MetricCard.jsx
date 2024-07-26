@@ -8,7 +8,7 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
 
     return (
         <div className="relative bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-400 rounded-lg shadow-sm p-4 w-full transition-all">
-            <div className="flex flex-col sm:flex-row items-start justify-between mb-3">
+            <div className="flex flex-row items-start justify-between mb-3">
                 <div className="flex flex-col gap-2">
                     <p className="text-md font-medium text-gray-500 dark:text-gray-200">{Title}</p>
                     <div className="text-lg font-semibold text-slate-600 dark:text-slate-400">{Value}</div>

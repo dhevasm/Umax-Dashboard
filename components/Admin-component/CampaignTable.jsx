@@ -96,6 +96,11 @@ export default function CampaignTable() {
                 filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : 
                 filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : ""
                 document.getElementById('status').value = filteredCampaign[0].status 
+                if(filteredCampaign[0].notes == "empty"){
+                    document.getElementById("notes").value = ""
+                }else{
+                    document.getElementById('notes').value = filteredCampaign[0].notes 
+                }
                 
             } else{
                 Swal.fire("Campaign not found");
@@ -109,6 +114,7 @@ export default function CampaignTable() {
             document.getElementById('name').value = ""
             document.getElementById('start_date').value = ""
             document.getElementById('end_date').value = ""
+            document.getElementById('notes').value = ""
         }
         addModal.current.classList.remove("hidden")
     }
@@ -242,7 +248,7 @@ export default function CampaignTable() {
     useEffect(() => {
     }, [campaigns])
 
-    async function createCampaing(){
+    async function createCampaign(){
 
         if(isvalid){
             const name = document.getElementById('name').value
@@ -252,9 +258,14 @@ export default function CampaignTable() {
             const status = document.getElementById('status').value
             const start_date = document.getElementById('start_date').value
             const end_date = document.getElementById('end_date').value
-    
+
+            let notes = document.getElementById('notes').value
+            if(notes == ""){
+                notes = "empty"
+            }
+            
             console.log(tenant)
-    
+            
             const formData = new FormData();
             formData.append('name', name);
             formData.append('account_id', account);
@@ -262,7 +273,7 @@ export default function CampaignTable() {
             formData.append('status', status)
             formData.append('start_date', start_date)
             formData.append('end_date', end_date)
-            formData.append('notes', "notes")
+            formData.append('notes', notes)
             
     
             let url = ""
@@ -284,6 +295,7 @@ export default function CampaignTable() {
                 closeModal()
                 setUpdateCard(true)
                 document.getElementById('name').value = null
+                document.getElementById('notes').value = null
                 Swal.fire("Success", "Campaing created successfully", "success")
             }else{
                 Swal.fire("Error", response.detail, "error")
@@ -297,7 +309,7 @@ export default function CampaignTable() {
         }
     }
 
-    async function updateCampaing(){
+    async function updateCampaign(){
         if(EditCampaignId !== null) {
             if(isvalid){
                 const name = document.getElementById('name').value
@@ -307,6 +319,11 @@ export default function CampaignTable() {
                 const status = document.getElementById('status').value
                 const start_date = document.getElementById('start_date').value
                 const end_date = document.getElementById('end_date').value
+                let notes = document.getElementById('notes').value
+                if(notes == ""){
+                    notes = "empty"
+                }
+                
                 console.log(account)
                 console.log(EditCampaignId)
     
@@ -317,7 +334,7 @@ export default function CampaignTable() {
                 formData.append('status', status)
                 formData.append('start_date', start_date)
                 formData.append('end_date', end_date)
-                formData.append('notes', "notes")
+                formData.append('notes', notes)
         
                 const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/campaign-edit?campaign_id=${EditCampaignId}`, formData, {
                     headers: {
@@ -329,6 +346,7 @@ export default function CampaignTable() {
                     getCampaign()
                     closeModal()
                     document.getElementById('name').value = null
+                    document.getElementById('notes').value = null
                     Swal.fire("Success", "Campaign Updated", "success")
                 }else{
                     Swal.fire("Error", response.detail.ErrMsg, "error")
@@ -582,7 +600,8 @@ export default function CampaignTable() {
                                         <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedStatus} onChange={handleStatusChange}
                                         >
-                                            <option value="">Status</option>
+                                            <option value="" disabled hidden>Status</option>
+                                            <option value="">{t('all-status')}</option>
                                             <option value="2">{t('draft')}</option>
                                             <option value="1">{t('active')}</option>
                                             <option value="3">{t('complete')}</option>
@@ -607,7 +626,8 @@ export default function CampaignTable() {
                                             value={selectedObjective}
                                             onChange={handleObjectiveChange}
                                         >
-                                            <option value="">{t('objective')}</option>
+                                            <option value="" disabled hidden>{t('objective')}</option>
+                                            <option value="">{t('all-objective')}</option>
                                             <option value="1">Awareness</option>
                                             <option value="2">Concervation</option>
                                             <option value="3">Consideration</option>
@@ -700,7 +720,7 @@ export default function CampaignTable() {
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:text-white dark:bg-slate-900 rounded-lg shadow">
+                    <div className="relative bg-white dark:text-white dark:bg-slate-900 rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">
@@ -791,6 +811,11 @@ export default function CampaignTable() {
                                         error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
                                     }
                                 </div>
+
+                                <div className="col-span-2">
+                                    <label htmlFor="notes" className="mb-2 text-sm font-medium">Notes</label>
+                                    <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
+                                </div>
                                 
                                 
                                 
@@ -799,11 +824,11 @@ export default function CampaignTable() {
                                     <div></div>
                                         {
                                             modeModal === 'Edit' ? <div className="flex gap-2">
-                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaing}>{t('save')}</button> 
+                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaign}>{t('save')}</button> 
                                                 <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}><FaTrash/>
                                                 </button> 
                                             </div> 
-                                                : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaing}>{t('submit')}</button>
+                                                : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaign}>{t('submit')}</button>
                                         }
                                         
                                 </div>  

@@ -7,6 +7,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { FaHome } from 'react-icons/fa';
 
 const Page = () => {  // Component name should be capitalized
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -109,7 +110,12 @@ const Page = () => {  // Component name should be capitalized
 
   return (
     <div className="relative overflow-hidden min-h-screen flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-center">
-      <div>
+     
+     <div className='fixed z-30 bottom-5 right-5 p-3 rounded-full hover:bg-blue-600 hover:cursor-pointer bg-blue-500 text-white' onClick={() => router.back()}>
+      <FaHome className='text-2xl'/>
+     </div>
+     
+     <div>
         <img src="../assets/logo.png" alt="logo" className="mx-auto pb-2 w-20" />
       </div>
       <div

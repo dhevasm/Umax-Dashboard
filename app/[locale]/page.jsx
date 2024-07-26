@@ -14,7 +14,7 @@ const Page = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const getUserData = async () => {
+  const getUserData = async (roles) => {
     const response = axios.get("https://umaxxxxx-1-r8435045.deta.app/user-by-id", {
       headers : {
         'Authorization' : `Bearer ${localStorage.getItem('jwtToken')}`
@@ -25,7 +25,16 @@ const Page = () => {
       }else{
         localStorage.setItem('lang', 'en');
       }
-      console.log(response.data.Data[0])
+
+      let lang = localStorage.getItem("lang");
+      if (roles == "sadmin" || roles == "admin") {
+        router.push(`${lang}/admin-dashboard`);
+      } else if (roles === "staff") {
+        router.push(`${lang}/campaigns`);
+      } else {
+        router.push(`${lang}/dashboard`);
+      }
+      // console.log(response.data.Data[0]) 
     }).catch((error) => {
       console.log(error)  
     })
@@ -87,22 +96,9 @@ const Page = () => {
           localStorage.setItem("roles", roles);
           localStorage.setItem("name", name);
 
-          getUserData();
-          
-          setTimeout(() => {
-            let lang = localStorage.getItem("lang");
-            if (roles == "sadmin" || roles == "admin") {
-              router.push(`${lang}/admin-dashboard`);
-            } else if (roles === "staff") {
-              router.push(`${lang}/campaigns`);
-            } else {
-              router.push(`${lang}/dashboard`);
-            }
-          }, 500);
-
+          getUserData(roles);
         })
         .catch((error) => {
-          // // Handle network errors
           setLoading(false);
           if (error.message.includes("ERR_NAME_NOT_RESOLVED")) {
             setError(
@@ -154,11 +150,9 @@ const Page = () => {
           router.push(`/${lang}/admin-dashboard`);
       });
       } else {
-
         Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
           router.push(`/${lang}/dashboard`);
       });
-
       }
     }
   }, [router]);

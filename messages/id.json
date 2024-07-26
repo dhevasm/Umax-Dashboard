@@ -262,7 +262,9 @@
       "status-error": "Status tidak boleh kosong",
       "start-date-error": "Tanggal mulai tidak boleh kosong",
       "end-date-error": "Tanggal selesai tidak boleh kosong",
-      "all-platform": "Semua Platform"
+      "all-platform": "Semua Platform",
+      "all-status": "Semua status",
+      "all-objective": "Semua objective"
     },
 
     "admin-accounts": {
@@ -293,7 +295,9 @@
       "platform-error": "Platform tidak boleh kosong",
       "password-error": "Password tidak boleh kosong",
       "password-error2": "Password tidak sama",
-      "confirm-error": "Konfirmasi Password tidak boleh kosong"
+      "confirm-error": "Konfirmasi Password tidak boleh kosong",
+      "all-status": "Semua status",
+      "all-platform": "Semua platform"
     },
 
     "admin-clients": {
@@ -328,7 +332,8 @@
       "contact-error": "Kontak tidak boleh kosong",
       "password-error": "Password tidak boleh kosong",
       "password-error2": "Password tidak sama",
-      "confirm-error": "Konfirmasi Password tidak boleh kosong"
+      "confirm-error": "Konfirmasi Password tidak boleh kosong",
+      "all-status": "Semua status"
     },
 
     "swal-file": {
