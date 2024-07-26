@@ -11,6 +11,7 @@ import { BiHome } from 'react-icons/bi';
 import * as yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { Router } from 'react-router-dom';
+import Image from 'next/image';
 
 const EditProfile = () => {
     const [selectTimezone, setSelectTimezone] = useState([]);
@@ -217,9 +218,9 @@ const EditProfile = () => {
                         </label>
                         <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden">
                             {formik.values.image ? (
-                                <img src={`data:image/png;base64, ${profileData.image}`} className="object-cover w-full h-full" alt="Profile" />
+                                <Image src={`data:image/png;base64, ${profileData.image}`} className="object-cover w-full h-full" width={128} height={128} alt="Profile" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-300 dark:bg-gray-600 animate-pulse"></div>
+                                <Image src={'/assets/defaultProfil.jpg'} width={128} height={128} alt='Profile'/>
                             )}
                         </div>
                         <h1 className="mt-4 text-white text-2xl font-semibold">{formik.values.name}</h1>
@@ -389,6 +390,9 @@ const EditProfile = () => {
                                 >
                                     <option value="en">English</option>
                                     <option value="id">Indonesian</option>
+                                    <option value="jp">Jepang</option>
+                                    <option value="ar">Arab</option>
+                                    <option value="jv">Jawa</option>
                                 </select>
                             }
                             error={formik.errors.language}

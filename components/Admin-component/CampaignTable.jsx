@@ -1,7 +1,7 @@
 'use client'
 
 import axios from "axios"
-import { useState,useEffect, useRef, useContext } from "react"
+import { useState,useEffect, useRef, useContext, useCallback } from "react"
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
@@ -50,7 +50,7 @@ export default function CampaignTable() {
     })
     const [isvalid, setIsvalid] = useState(false)
 
-    function validateForm(){
+    const validateForm = useCallback(() => {
         let errors = {}
         if(values.name == ''){
             errors.name = t('name-error')
@@ -72,11 +72,11 @@ export default function CampaignTable() {
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
-    }
+    }, [values, t])
 
     useEffect(() => {
         validateForm()
-    }, [values])
+    }, [values, validateForm])
 
     function showModal(mode, campaign_id = null ){
         setModeModal(mode)
@@ -392,7 +392,8 @@ export default function CampaignTable() {
         if(userData.roles == "admin"){
             tenantInput.current.classList.add("hidden")
         }
-    }, [])
+    })
+    
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);

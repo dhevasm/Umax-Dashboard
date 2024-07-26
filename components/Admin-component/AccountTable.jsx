@@ -1,7 +1,7 @@
 'use client'
 
 import axios from "axios"
-import { useState,useEffect, useRef, useContext } from "react"
+import { useState,useEffect, useRef, useContext, useCallback } from "react"
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
@@ -56,7 +56,7 @@ export default function AccountTable() {
     })
     const [isvalid, setIsvalid] = useState(false)
 
-    function validateForm(){
+    const validateForm = useCallback(() => {
         let errors = {}
         if(values.name == ''){
             errors.name = t('name-error')
@@ -85,11 +85,11 @@ export default function AccountTable() {
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
-    }
+    }, [values, t])
 
     useEffect(() => {
         validateForm()
-    }, [values])
+    }, [values, validateForm])
 
 
     function showModal(mode, account_id = null ){
@@ -108,6 +108,11 @@ export default function AccountTable() {
                 document.getElementById('status').checked = filteredaccount[0].status == 1 ? true : false
                 passwordInput.current.classList.add("hidden")
                 passwordverifyInput.current.classList.add("hidden")
+                if(filteredaccount[0].notes == "empty"){
+                    document.getElementById("notes").value = ""
+                }else{
+                    document.getElementById('notes').value = filteredaccount[0].notes 
+                }
             } else{
                 Swal.fire("Campaing not found");
             }
@@ -122,6 +127,7 @@ export default function AccountTable() {
             document.getElementById("platform").value = ""
             passwordInput.current.classList.remove("hidden")
             passwordverifyInput.current.classList.remove("hidden")
+            document.getElementById('notes').value = ""
         }
         addModal.current.classList.remove("hidden")
     }
@@ -264,6 +270,10 @@ export default function AccountTable() {
             const passwordverify = document.getElementById('passwordverify').value
             const status = document.getElementById('status').checked ? 1 : 2
             const tenant_id = document.getElementById('tenant').value
+            let notes = document.getElementById('notes').value
+            if(notes == ""){
+                notes = "empty"
+            }
 
             const formData = new FormData();
             formData.append('username', name);
@@ -273,7 +283,7 @@ export default function AccountTable() {
             formData.append('password', password);
             formData.append('confirm_password', passwordverify);
             formData.append('status', status);
-            formData.append('notes', "notes");
+            formData.append('notes', notes);
     
             let url = ""
     
@@ -297,6 +307,7 @@ export default function AccountTable() {
                 document.getElementById('email').value = null
                 document.getElementById('password').value = null
                 document.getElementById('passwordverify').value = null
+                document.getElementById('notes').value = null
                 Swal.fire("Success", "Account created successfully", "success")
             }else{
                 Swal.fire("Error", response.detail, "error")
@@ -320,6 +331,10 @@ export default function AccountTable() {
                 const password = document.getElementById('password').value
                 const passwordverify = document.getElementById('passwordverify').value
                 const status = document.getElementById('status').checked ? 1 : 2
+                let notes = document.getElementById('notes').value
+                if(notes == ""){
+                    notes = "empty"
+                }
 
                 const formData = new FormData();
                 formData.append('name', name);
@@ -329,7 +344,7 @@ export default function AccountTable() {
                 formData.append('password', password);
                 formData.append('confirm_password', passwordverify);
                 formData.append('status', status);
-                formData.append('notes', "notes");
+                formData.append('notes', notes);
             
                     const response = await axios.put(`https://umaxxxxx-1-r8435045.deta.app/account-edit?account_id=${EditaccountId}`, formData, {
                         headers: {
@@ -344,6 +359,7 @@ export default function AccountTable() {
                         document.getElementById('email').value = null
                         document.getElementById('password').value = null
                         document.getElementById('passwordverify').value = null
+                        document.getElementById('notes').value = null
                         Swal.fire("Success", "Campaing Updated", "success")
                     }else{
                         Swal.fire("Error", response.detail.ErrMsg, "error")
@@ -408,7 +424,7 @@ export default function AccountTable() {
         if(userData.roles == "admin"){
             tenantInput.current.classList.add("hidden")
         }
-    }, [])
+    })
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
@@ -675,7 +691,7 @@ export default function AccountTable() {
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-slate-900 rounded-md shadow">
+                    <div className="relative bg-white dark:bg-slate-900 rounded-md shadow max-h-[100vh] overflow-auto pb-3">
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
                             <h3 className="text-lg font-semibold ">
@@ -763,6 +779,11 @@ export default function AccountTable() {
                                     {
                                         error.passwordverify ? <p className="text-red-500 dark:text-red-600 text-sm">{error.passwordverify}</p> : ""
                                     }
+                                </div>
+
+                                <div className="col-span-2">
+                                    <label htmlFor="notes" className="mb-2 text-sm font-medium">Notes</label>
+                                    <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                 </div>
 
                             </div>

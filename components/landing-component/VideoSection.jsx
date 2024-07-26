@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { MdClose } from 'react-icons/md';
+import { RiCloseLargeFill } from 'react-icons/ri';
 
 const VideoSection = () => {
   const [videoOpen, setVideoOpen] = useState(false);
@@ -272,7 +274,7 @@ const VideoSection = () => {
               className="absolute top-0 right-0 text-white"
               onClick={() => setVideoOpen(false)}
             >
-              X
+              <RiCloseLargeFill size={30}/>
             </button>
           </div>
         </div>

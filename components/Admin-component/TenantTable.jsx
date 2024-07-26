@@ -1,7 +1,7 @@
 'use client'
 
 import axios from "axios"
-import { useState,useEffect, useRef, useContext } from "react"
+import { useState,useEffect, useRef, useContext, useCallback } from "react"
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import Swal from "sweetalert2"
 import { useDownloadExcel } from "react-export-table-to-excel"
@@ -101,7 +101,7 @@ export default function TenantTable() {
     })
     const [isvalid, setIsvalid] = useState(false)
 
-    function validateForm(){
+    const validateForm = useCallback(() => {
         let errors = {}
         if(values.name == ''){
             errors.name = 'Name is required'
@@ -135,11 +135,11 @@ export default function TenantTable() {
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
-        }
+    }, [values])
 
     useEffect(() => {
         validateForm()
-    }, [values])
+    }, [values, validateForm])
     
 
     
@@ -272,7 +272,7 @@ export default function TenantTable() {
 
     useEffect(() => {
         getTenants()
-    }, [])
+    })
 
     async function createTenant(){
         if(isvalid){
@@ -474,7 +474,7 @@ export default function TenantTable() {
             nextButton.current.classList.remove("paginDisable");
             lastPageButton.current.classList.remove("paginDisable");
         }
-    }, [currentPage]);
+    }, [currentPage, itemsPerPage, totalPages]);
 
     function handleNextButton(){
         if(currentPage < totalPages){

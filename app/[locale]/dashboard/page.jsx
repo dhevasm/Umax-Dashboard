@@ -16,6 +16,7 @@ import Metrics from "@/components/Dashboard-content/Metrics"
 import History from "@/components/Dashboard-content/History"
 import Setting from "@/components/Dashboard-content/Setting"
 import PerformenceNavLoading from "@/components/Loading/PerformenceNavLoading"
+import Image from "next/image"
 
 export const SidebarContext = createContext()
 // export const campaignIDContext = createContext()
@@ -100,7 +101,7 @@ function Dashboard() {
                     <PerformenceNavLoading />
                 ) : (
                     <div className="flex gap-3 items-center md:flex-row flex-col">
-                    <img src={`../assets/${platform === 1 ? 'meta.svg' : platform === 2 ? 'google.svg' : platform === 3 ? 'tiktok.svg' : null}`} className="w-[50px]" alt="" />
+                    <Image src={`../assets/${platform === 1 ? 'meta.svg' : platform === 2 ? 'google.svg' : platform === 3 ? 'tiktok.svg' : null}`} className="" width={40} height={40} alt="" />
                     <p className="text-2xl font-semibold">{name}</p>
                     </div>
                 )}
@@ -140,10 +141,10 @@ function Dashboard() {
 
                 {/* Content */}
                 <div className="m-10">
-                {activeContent === "performance" && <Performance key={campaignID} id={campaignID} />}
-                {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID} />}
-                {activeContent === "history" && <History key={campaignID} id={campaignID} />}
-                {activeContent === "setting" && <Setting key={campaignID} id={campaignID} />}
+                  {activeContent === "performance" && <Performance key={campaignID} id={campaignID} />}
+                  {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID} />}
+                  {activeContent === "history" && <History key={campaignID} id={campaignID} />}
+                  {activeContent === "setting" && <Setting key={campaignID} id={campaignID} />}
                 </div>
             </div>
         </div>

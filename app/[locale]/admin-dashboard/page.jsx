@@ -1,8 +1,11 @@
 'use client'
-import { useState, useEffect, createContext, useRef } from "react"
+import { useState, useEffect, useCallback, createContext, useRef } from "react"
 import axios from "axios"
-
 import dynamic from "next/dynamic"
+import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
+
+// Dynamically import components
 const AdminNavbar = dynamic(() => import("@/components/Admin-component/AdminNavbar"))
 const AdminSidebar = dynamic(() => import("@/components/Admin-component/AdminSidebar"))
 const TenantTable = dynamic(() => import("@/components/Admin-component/TenantTable"))
@@ -12,14 +15,11 @@ const TenantProfile = dynamic(() => import("@/components/Admin-component/TenantP
 const AccountTable = dynamic(() => import("@/components/Admin-component/AccountTable"))
 const ClientTable = dynamic(() => import("@/components/Admin-component/ClientTable"))
 const Dashboard = dynamic(() => import("@/components/Admin-component/Dashboard"))
-import { useRouter } from "next/navigation"
-import Swal from "sweetalert2"
 
 export const AdminDashboardContext = createContext()
 
 function AdminDashboard() {
     const router = useRouter()
-
     const [userData, setUserData] = useState([])
     const [tenantsCount, setTenantsCount] = useState("")
     const [usersCount, setUsersCount] = useState("")
@@ -41,7 +41,7 @@ function AdminDashboard() {
         if (window.innerWidth <= 640) {
             setSidebarHide(true)
             setNavbarBrandHide(true)
-        } 
+        }
     }, [changeTable])
     
     const AdminDashboardContextValue = {
@@ -60,23 +60,23 @@ function AdminDashboard() {
     }
 
     useEffect(() => {
-        if(localStorage.getItem('color-theme') == "dark"  || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)){
+        if(localStorage.getItem('color-theme') === "dark" || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)){
             setIsDarkMode(true)
-        }else{
+        } else {
             setIsDarkMode(false)
         }
     }, [])
 
-    async function getUserData() {
+    const getUserData = useCallback(async () => {
         const response = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-id', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
         setUserData(response.data.Data[0])
-    }
+    }, [])
 
-    async function getUserCampaignCount() {
+    const getUserCampaignCount = useCallback(async () => {
         const getUsers = await axios.get('https://umaxxxxx-1-r8435045.deta.app/user-by-tenant', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -95,9 +95,9 @@ function AdminDashboard() {
             }
         })
         setClientCount(getClient.data.Data.length)
-    }
+    }, [])
 
-    async function getTenantsCount() {
+    const getTenantsCount = useCallback(async () => {
         if (userData.roles === 'sadmin') {
             const getTenants = await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
                 headers: {
@@ -106,12 +106,12 @@ function AdminDashboard() {
             })
             setTenantsCount(getTenants.data.Data.length)
         }
-    }
+    }, [userData.roles])
 
     useEffect(() => {
         getUserData()
         getUserCampaignCount()
-    }, [])
+    }, [getUserData, getUserCampaignCount])
 
     useEffect(() => {
         setDataDashboard({
@@ -120,7 +120,7 @@ function AdminDashboard() {
             campaigns: campaignsCount,
             clients: clientCount
         })
-    },[clientCount, tenantsCount, campaignsCount, usersCount])
+    }, [clientCount, tenantsCount, campaignsCount, usersCount])
 
     const MainCard = useRef(null)
 
@@ -130,7 +130,7 @@ function AdminDashboard() {
             getUserCampaignCount()
             setUpdateCard(false)
         }
-    }, [updateCard])
+    }, [updateCard, getTenantsCount, getUserCampaignCount])
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -148,34 +148,28 @@ function AdminDashboard() {
         }
     }, [router]);
 
-    if (typeof window !== "undefined" && updateCard) {
-        getTenantsCount()
-        getUserCampaignCount()
-        setUpdateCard(false)
-    }
-
     return(
         <>
             <AdminDashboardContext.Provider value={AdminDashboardContextValue}>
-                    <AdminNavbar userData={userData}/>
-            <AdminSidebar />
-            {/* main content */}
-
-            <div className="flex w-full min-h-[100vh] justify-end bg-[#f1f5f9] dark:bg-slate-900">
-                <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-4 md:p-8`} ref={MainCard}>
-                    <div>
-                        {userData.roles === 'sadmin' && changeTable === "tenants" && <TenantTable />}
-                        {userData.roles === 'admin' && changeTable === "company" && <TenantProfile tenant_id={userData.tenant_id} />}
-                        {changeTable === "users" && <UserTable />}
-                        {changeTable === "campaigns" && <CampaignTable />}
-                        {changeTable === "accounts" && <AccountTable />}
-                        {changeTable === "clients" && <ClientTable />}
-                        {changeTable === "dashboard" && <Dashboard />}
+                <AdminNavbar userData={userData}/>
+                <AdminSidebar />
+                {/* main content */}
+                <div className="flex w-full min-h-[100vh] justify-end bg-[#f1f5f9] dark:bg-slate-900">
+                    <div className={`w-full ${sidebarHide ? 'md:w-full' : 'md:w-[calc(100%-300px)]'} mt-[85px] p-4 md:p-8`} ref={MainCard}>
+                        <div>
+                            {userData.roles === 'sadmin' && changeTable === "tenants" && <TenantTable />}
+                            {userData.roles === 'admin' && changeTable === "company" && <TenantProfile tenant_id={userData.tenant_id} />}
+                            {changeTable === "users" && <UserTable />}
+                            {changeTable === "campaigns" && <CampaignTable />}
+                            {changeTable === "accounts" && <AccountTable />}
+                            {changeTable === "clients" && <ClientTable />}
+                            {changeTable === "dashboard" && <Dashboard />}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </AdminDashboardContext.Provider>
+            </AdminDashboardContext.Provider>
         </>
     )
 }
+
 export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false })

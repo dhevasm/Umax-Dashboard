@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import SettingLoading from '../Loading/SettingLoading';
 import { RiRefreshLine } from 'react-icons/ri';
@@ -11,11 +11,7 @@ const Setting = ({ id }) => {
   const t = useTranslations('setting');
   const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
-  useEffect(() => {
-    getMetricByCampaign();
-  }, []);
-
-  const getMetricByCampaign = async () => {
+  const getMetricByCampaign = useCallback(async () => {
     if (!id) {
       console.warn('No campaign ID provided');
       return;
@@ -37,7 +33,11 @@ const Setting = ({ id }) => {
       console.error("Error fetching data:", error.message);
       setLoading(false);
     }
-  };
+  }, [id, umaxUrl]);
+
+  useEffect(() => {
+    getMetricByCampaign();
+  }, [getMetricByCampaign]);
 
   const handleChange = (index, field, value) => {
     const newData = [...data]; // Create a copy of the data array

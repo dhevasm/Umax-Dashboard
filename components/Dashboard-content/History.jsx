@@ -88,7 +88,7 @@ export default function History({ id }) {
         } catch (error) {
             console.error("Error fetching data:", error.message);
         }
-    }, [id, currentPage]);
+    }, [id, currentPage, dataPerPage]);
 
     useEffect(() => {
         getMetricByCampaign();

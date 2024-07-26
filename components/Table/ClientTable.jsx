@@ -57,7 +57,7 @@ const ClientTable = () => {
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
-        filename: `DataClients ${dateWithTime}`,
+        filename: `${t('title')} ${dateWithTime}`,
         sheet: "DataClients",
     });
 
@@ -83,7 +83,7 @@ const ClientTable = () => {
           startY: 20,
         });
     
-        doc.save(`Client ${dateWithTime}.pdf`);
+        doc.save(`${t('title')} ${dateWithTime}.pdf`);
     };
 
     const handleDelete = async (_id) => {

@@ -369,5 +369,60 @@
       "error": "Oops...!",
       "suc-msg": "Data telah dihapus!",
       "err-msg": "Terjadi kesalahan!"
+    },
+
+    "register": {
+      "sign-up": "Daftar",
+      "back": "Kembali",
+      "holder-name": "Nama",
+      "holder-email": "contoh@gmail.com",
+      "holder-confirm": "Konfirmasi Password",
+      "select-role": "Pilih Role",
+      "name-error": "Nama tidak boleh kosong",
+      "email-error": "Email tidak boleh kosong",
+      "email-error-2": "Email tidak valid",
+      "password-error":"Password tidak boleh kosong",
+      "password-error2":"Password tidak sama",
+      "confirm-error":"Konfirmasi Password tidak boleh kosong",
+      "role-error": "Pilih Role Pengguna"
+    },
+
+    "login": {
+      "sign-in": "Masuk",
+      "email-error":"Email tidak boleh kosong",
+      "email-error2":"Email tidak valid",
+      "password-error":"Password tidak boleh kosong",
+      "password-error2": "Masukan paling tidak 6 karakter",
+      "forgot-password": "Lupa Password?",
+      "check-credential": "Periksa Email dan Password anda."
+    },
+
+    "forgot-password": {
+      "email-placeholder": "Email",
+      "email-error":"Email tidak valid",
+      "email-required":"Email tidak boleh kosong",
+      "reset-email-sent": "Silahkan cek email Anda. Token telah dikirim ke alamat email Anda.",
+      "reset-email-error": "Gagal mengirim email reset. Silahkan coba lagi.",
+      "ok": "OK",
+      "submit": "Kirim",
+      "error-title": "Gagal",
+      "success-title": "Berhasil"
+    },
+
+    "reset-password": {
+      "token-placeholder": "Token",
+      "token-required": "Token diperlukan",
+      "new-password-placeholder": "Kata Sandi Baru",
+      "password-required": "Kata sandi baru diperlukan",
+      "password-min": "Kata sandi harus terdiri dari minimal 8 karakter",
+      "konfirmasi-password-placeholder": "Konfirmasi Kata Sandi",
+      "password-confirmation-required": "Konfirmasi kata sandi diperlukan",
+      "password-match": "Kata sandi harus cocok",
+      "success-title": "Berhasil",
+      "success-message": "Kata sandi telah berhasil diperbarui. Silakan masuk dengan kata sandi baru Anda.",
+      "error-title": "Kesalahan",
+      "error-message": "Terjadi kesalahan saat memperbarui kata sandi Anda. Silakan coba lagi.",
+      "submit": "Kirim",
+      "ok": "OK"
     }
 }

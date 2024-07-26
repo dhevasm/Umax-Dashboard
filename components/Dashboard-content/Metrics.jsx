@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import MetricCard from "../Card/MetricCard";
 import axios from "axios";
 import MetricsLoading from "../Loading/MetricsLoading";
@@ -10,7 +10,8 @@ export default function Metrics({ id }) {
     const t = useTranslations('metrics');
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
-    const getMetricByCampaign = async () => {
+    // Memoize getMetricByCampaign with useCallback
+    const getMetricByCampaign = useCallback(async () => {
         if (!id) {
             console.warn("No campaign ID provided");
             return;
@@ -29,11 +30,11 @@ export default function Metrics({ id }) {
         } catch (error) {
             console.error("Error fetching data:", error.message);
         }
-    };
+    }, [id, umaxUrl]);
 
     useEffect(() => {
         getMetricByCampaign();
-    }, [id]); // Trigger useEffect whenever id changes
+    }, [getMetricByCampaign]); // Trigger useEffect whenever getMetricByCampaign changes
 
     const handleToggle = (id) => {
         setActiveCard(activeCard === id ? null : id);
@@ -49,7 +50,7 @@ export default function Metrics({ id }) {
                         ? Array(12).fill(0).map((_, index) => (
                             <MetricsLoading key={index + 1} />
                         ))
-                        : data.flatMap((item, index) => [
+                        : data.map((item, index) => [
                             <MetricCard
                                 key={`${index}-1`}
                                 id={1}

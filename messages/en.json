@@ -369,5 +369,61 @@
       "error": "Oops...",
       "suc-msg": "Deleted!",
       "err-msg": "Something went wrong!"
+    },
+
+    "register":{
+      "sign-up": "Sign Up",
+      "back": "Back",
+      "holder-name": "Name",
+      "holder-email": "example@gmail.com",
+      "holder-confirm": "Confirm Password",
+      "select-role": "Select Role",
+      "name-error": "Name is required",
+      "email-error": "Email is required",
+      "email-error-2": "Invalid Email Address",
+      "password-error":"Password is required",
+      "password-error2":"Password does not match",
+      "confirm-error":"Password confirmation is required",
+      "role-error": "Please select Role"
+    },
+
+    "login":{
+      "sign-in": "Sign In",
+      "email-error":"Email is required",
+      "email-error2": "Invalid Email Address",  
+      "password-error": "Password is required",
+      "password-error2": "Password must be at least 6 characters",
+      "forgot-password": "Forgot Password?",
+      "check-credential": "Please check your email and password."
+    },
+
+    "forgot-password": {
+        "email-placeholder": "Email",
+        "email-error":"Invalid Email Address",
+        "email-required":"Email is required",
+        "reset-email-sent": "Please check your email. A token has been sent to your email address.",
+        "reset-email-error": "Failed to send reset email. Please try again.",
+        "ok": "OK",
+        "submit": "Submit",
+        "error-title": "Failed",
+        "success-title": "Success"
+    },
+
+    "reset-password": {
+        "token-placeholder": "Token",
+        "token-required": "Token is required",
+        "new-password-placeholder": "New Password",
+        "password-required": "New password is required",
+        "password-min": "Password must be at least 8 characters",
+        "konfirmasi-password-placeholder": "Confirm Password",
+        "password-confirmation-required": "Password confirmation is required",
+        "password-match": "Passwords must match",
+        "success-title": "Success",
+        "success-message": "Password has been successfully updated. Please log in with your new password.",
+        "error-title": "Error",
+        "error-message": "There was an error updating your password. Please try again.",
+        "submit": "Submit",
+        "ok": "OK"
     }
+  
 }

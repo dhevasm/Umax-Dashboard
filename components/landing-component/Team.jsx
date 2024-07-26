@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 const Team = () => {
@@ -27,7 +28,7 @@ const Team = () => {
                     <div className="w-full px-4 sm:w-1/2 lg:w-1/4">
                         <div className="mx-auto mb-10 max-w-[200px]">
                         <div className="mb-4 overflow-hidden rounded-[5px]">
-                            <img src="src/assets/images/team/team-05/image-01.jpg" alt="image" className="w-full" />
+                            <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/team/team-05/image-01.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="text-center">
                             <h4 className="mb-1 text-base font-semibold text-dark dark:text-white">
@@ -61,7 +62,7 @@ const Team = () => {
                     <div className="w-full px-4 sm:w-1/2 lg:w-1/4">
                         <div className="mx-auto mb-10 max-w-[200px]">
                         <div className="mb-4 overflow-hidden rounded-[5px]">
-                            <img src="src/assets/images/team/team-05/image-02.jpg" alt="image" className="w-full" />
+                            <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/team/team-05/image-02.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="text-center">
                             <h4 className="mb-1 text-base font-semibold text-dark dark:text-white">
@@ -95,7 +96,7 @@ const Team = () => {
                     <div className="w-full px-4 sm:w-1/2 lg:w-1/4">
                         <div className="mx-auto mb-10 max-w-[200px]">
                         <div className="mb-4 overflow-hidden rounded-[5px]">
-                            <img src="src/assets/images/team/team-05/image-03.jpg" alt="image" className="w-full" />
+                            <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/team/team-05/image-03.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="text-center">
                             <h4 className="mb-1 text-base font-semibold text-dark dark:text-white">
@@ -129,7 +130,7 @@ const Team = () => {
                     <div className="w-full px-4 sm:w-1/2 lg:w-1/4">
                         <div className="mx-auto mb-10 max-w-[200px]">
                         <div className="mb-4 overflow-hidden rounded-[5px]">
-                            <img src="src/assets/images/team/team-05/image-04.jpg" alt="image" className="w-full" />
+                            <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/team/team-05/image-04.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="text-center">
                             <h4 className="mb-1 text-base font-semibold text-dark dark:text-white">

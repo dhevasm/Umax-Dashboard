@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 export default function SidebarCard({ platform, name, status, amountspend, reach, startdate, id, onCardClick }) {
   const [Status, setStatus] = useState("");
@@ -22,9 +23,11 @@ export default function SidebarCard({ platform, name, status, amountspend, reach
     >
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-3">
-          <img 
-            src={`../assets/${platform === 1 ? 'meta.svg' : platform === 2 ? 'google.svg' : platform === 3 ? 'tiktok.svg' : ''}`} 
-            className="w-6 h-6" 
+          <Image 
+            src={`/assets/${platform === 1 ? 'meta.svg' : platform === 2 ? 'google.svg' : platform === 3 ? 'tiktok.svg' : ''}`} 
+            className=""
+            width={23}
+            height={23} 
             alt={`${name} logo`} 
           />
           <p className="font-semibold text-md text-gray-600 dark:text-slate-200">{name}</p>

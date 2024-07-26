@@ -403,7 +403,7 @@ const CampaignTable = () => {
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 text-[15px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-200`}
                             type="text"
-                            placeholder="Search"
+                            placeholder={t('search')}
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />

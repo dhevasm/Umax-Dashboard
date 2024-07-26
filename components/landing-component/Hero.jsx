@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 const Hero = () => {
@@ -69,21 +70,27 @@ const Hero = () => {
                 </h6>
                 <div className="flex max-w-[550px] items-center">
                   <div className="w-full py-3 mr-4">
-                    <img
+                    <Image
                       src="../assets/ayroui.svg"
                       alt="ayroui"
+                      width={200}
+                      height={10}
                     />
                   </div>
                   <div className="w-full py-3 mr-4">
-                    <img
+                    <Image
                       src="../assets/graygrids.svg"
                       alt="graygrids"
+                      width={200}
+                      height={10}
                     />
                   </div>
                   <div className="w-full py-3 mr-4">
-                    <img
+                    <Image
                       src="../assets/uideck.svg"
                       alt="uideck"
+                      width={200}
+                      height={10}
                     />
                   </div>
                 </div>
@@ -94,10 +101,13 @@ const Hero = () => {
           <div className="w-full px-4 lg:w-6/12">
             <div className="lg:ml-auto lg:text-right">
               <div className="relative z-10 inline-block pt-11 lg:pt-0">
-                <img
-                  src="../assets/hero-image-01.png"
+                <Image
+                  src="/assets/hero-image-01.png"
                   alt="hero"
                   className="max-w-full lg:ml-auto"
+                  layout='responsive'
+                  width={450}
+                  height={200}
                 />
                 <span className="absolute -left-8 -bottom-8 z-[-1]">
                   <svg

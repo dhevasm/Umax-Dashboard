@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { RiBellLine, RiChat3Line} from "react-icons/ri";
 import { BiBell } from "react-icons/bi";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 function AdminNavbar({userData}){
 
@@ -71,7 +72,7 @@ function AdminNavbar({userData}){
             <nav className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
                 <div className="flex h-full">
                 <div className="w-[300px] flex h-full bg-slate-800 shadow-none items-end p-3 transition-transform" ref={navbarBrand}>
-                    <img src="../assets/icon.png" alt="Logo" className="w-10 h-10 decoration-white mr-1"/>
+                    <Image src="/assets/icon.png" alt="Logo" className="w-10 h-10 decoration-white mr-1" width={40} height={40}/>
                     <p className="text-white font-sans text-3xl">UMAX</p>
                 </div>
                     <button onClick={hideHandle} className="mx-5">
@@ -85,7 +86,7 @@ function AdminNavbar({userData}){
                 // }}
                 >
                     <div className="hidden absolute top-16 right-10 p-5 bg-white rounded-lg shadow-lg" id="profileDropDown">
-                    {userData.image ?  <img src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-20 h-20 bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p> }
+                    {userData.image ?  <Image src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-20 h-20 bg-slate-200 rounded-full" width={80} height={80} /> : <p className="animate-pulse">Loading...</p> }
                     <h1 className="font-bold text-lg">{userData.name}</h1><p className="text-md">{userData.roles}</p>
                     <div className="w-full h-0.5 bg-gray-400 my-3 px-5"></div>
                     <button className="text-md flex items-center gap-2" onClick={() => Router.push('/profile')} >
@@ -126,7 +127,7 @@ function AdminNavbar({userData}){
                     <p className="text-gray-500">{userData.roles}</p>
                     </div>
                     <div className="block">
-                    {userData.image ?  <img  src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-[40px] h-[40px] bg-slate-200 rounded-full" /> : <p className="animate-pulse">Loading...</p>}
+                    {userData.image ?  <Image src={`data:image/png;base64, ${userData.image}`} alt="profile" className="w-[40px] h-[40px] bg-slate-200 rounded-full" width={40} height={40} /> : <p className="animate-pulse">Loading...</p>}
                     </div>
                 </div>
             </nav>

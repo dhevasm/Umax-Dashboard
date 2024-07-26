@@ -1,20 +1,21 @@
+import Image from 'next/image'
 import React from 'react'
 
 const Testimoni = () => {
   return (
     <div>
-        <section className="pt-20 pb-7 dark:bg-dark lg:pt-[120px] lg:pb-14 px-20">
+        <section className="pt-20 pb-7 dark:bg-slate-900 lg:pt-[120px] lg:pb-14 px-20">
             <div className="container mx-auto">
                 <div className="flex flex-wrap justify-center -mx-4">
                 <div className="w-full px-4">
                     <div className="mb-[60px] max-w-[510px] lg:mb-[70px]">
-                    <span className="block mb-2 text-lg font-semibold text-primary">
+                    <span className="block mb-2 text-lg font-semibold text-blue-600">
                         Testimonials
                     </span>
-                    <h2 className="text-dark dark:text-white mb-3 text-3xl leading-[1.2] font-bold sm:text-4xl md:text-[40px]">
+                    <h2 className="text-gray-800 dark:text-white mb-3 text-3xl leading-[1.2] font-bold sm:text-4xl md:text-[40px]">
                         What our Clients Says
                     </h2>
-                    <p className="text-base text-body-color dark:text-dark-6">
+                    <p className="text-base text-body-color dark:text-slate-200">
                         There are many variations of passages of Lorem Ipsum available
                         but the majority have suffered alteration in some form.
                     </p>
@@ -23,21 +24,21 @@ const Testimoni = () => {
                 </div>
                 <div className="flex flex-wrap justify-center -mx-4">
                 <div className="w-full px-4 md:w-1/2">
-                    <div className="shadow-testimonial-6 dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-dark-2 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
+                    <div className="shadow-md dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-slate-800 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
                     <div className="flex items-center mb-10">
                         <div className="mr-5 h-20 w-full max-w-[80px] overflow-hidden rounded md:h-[60px] md:max-w-[60px] lg:h-20 lg:max-w-[80px]">
-                        <img src="src/assets/images/testimonials/testimonial-05/image-01.jpg" alt="image" className="w-full" />
+                        <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/testimonials/testimonial-05/image-01.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="w-full">
                         <h5 className="mb-1 text-lg font-semibold text-dark dark:text-white">
                             Jason Keys
                         </h5>
-                        <p className="text-xs text-body-color dark:text-dark-6">
+                        <p className="text-xs text-body-color dark:text-slate-300">
                             Founder @ Dreampeet.
                         </p>
                         </div>
                     </div>
-                    <p className="text-base text-body-color dark:text-dark-6">
+                    <p className="text-base text-body-color dark:text-white">
                         “I believe in lifelong learning and Learn. is a great place to
                         learn from experts. I{"'"}ve learned a lot and recommend it to all
                         my friends and familys.”
@@ -54,21 +55,21 @@ const Testimoni = () => {
                     </div>
                 </div>
                 <div className="w-full px-4 md:w-1/2">
-                    <div className="shadow-testimonial-6 dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-dark-2 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
+                    <div className="shadow-md dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-slate-800 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
                     <div className="flex items-center mb-10">
                         <div className="mr-5 h-20 w-full max-w-[80px] overflow-hidden rounded md:h-[60px] md:max-w-[60px] lg:h-20 lg:max-w-[80px]">
-                        <img src="src/assets/images/testimonials/testimonial-05/image-02.jpg" alt="image" className="w-full" />
+                        <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/testimonials/testimonial-05/image-03.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="w-full">
                         <h5 className="mb-1 text-lg font-semibold text-dark dark:text-white">
                             Anee Doe
                         </h5>
-                        <p className="text-xs text-body-color dark:text-dark-6">
+                        <p className="text-xs text-body-color dark:text-slate-300">
                             CEO @ Trorex.
                         </p>
                         </div>
                     </div>
-                    <p className="text-base text-body-color dark:text-dark-6">
+                    <p className="text-base text-body-color dark:text-white">
                         “I believe in lifelong learning and Learn. is a great place to
                         learn from experts. I{"'"}ve learned a lot and recommend it to all
                         my friends and familys.”
@@ -85,21 +86,21 @@ const Testimoni = () => {
                     </div>
                 </div>
                 <div className="w-full px-4 md:w-1/2">
-                    <div className="shadow-testimonial-6 dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-dark-2 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
+                    <div className="shadow-md dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-slate-800 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
                     <div className="flex items-center mb-10">
                         <div className="mr-5 h-20 w-full max-w-[80px] overflow-hidden rounded md:h-[60px] md:max-w-[60px] lg:h-20 lg:max-w-[80px]">
-                        <img src="src/assets/images/testimonials/testimonial-05/image-03.jpg" alt="image" className="w-full" />
+                        <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/testimonials/testimonial-05/image-02.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="w-full">
                         <h5 className="mb-1 text-lg font-semibold text-dark dark:text-white">
                             Dipali Dow
                         </h5>
-                        <p className="text-xs text-body-color dark:text-dark-6">
+                        <p className="text-xs text-body-color dark:text-slate-300">
                             Founder @ Cradow.
                         </p>
                         </div>
                     </div>
-                    <p className="text-base text-body-color dark:text-dark-6">
+                    <p className="text-base text-body-color dark:text-white">
                         “I believe in lifelong learning and Learn. is a great place to
                         learn from experts. I{"'"}ve learned a lot and recommend it to all
                         my friends and familys.”
@@ -116,21 +117,21 @@ const Testimoni = () => {
                     </div>
                 </div>
                 <div className="w-full px-4 md:w-1/2">
-                    <div className="shadow-testimonial-6 dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-dark-2 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
+                    <div className="shadow-md dark:shadow-none relative mb-10 overflow-hidden rounded-[10px] bg-white dark:bg-slate-800 p-8 sm:p-10 md:py-10 md:px-6 lg:p-10">
                     <div className="flex items-center mb-10">
                         <div className="mr-5 h-20 w-full max-w-[80px] overflow-hidden rounded md:h-[60px] md:max-w-[60px] lg:h-20 lg:max-w-[80px]">
-                        <img src="src/assets/images/testimonials/testimonial-05/image-04.jpg" alt="image" className="w-full" />
+                        <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/testimonials/testimonial-05/image-04.jpg" alt="image" className="w-full" width={3000} height={5000}/>
                         </div>
                         <div className="w-full">
                         <h5 className="mb-1 text-lg font-semibold text-dark dark:text-white">
                             John Doe
                         </h5>
-                        <p className="text-xs text-body-color dark:text-dark-6">
+                        <p className="text-xs text-body-color dark:text-slate-300">
                             Founder @ Poettry.
                         </p>
                         </div>
                     </div>
-                    <p className="text-base text-body-color dark:text-dark-6">
+                    <p className="text-base text-body-color dark:text-white">
                         “I believe in lifelong learning and Learn. is a great place to
                         learn from experts. I{"'"}ve learned a lot and recommend it to all
                         my friends and familys.”

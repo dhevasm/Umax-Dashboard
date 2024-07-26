@@ -12,6 +12,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { FaUser, FaUsers, FaCog, FaSignOutAlt, FaTachometerAlt } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 export default function Navbar() {
     
@@ -100,7 +101,7 @@ export default function Navbar() {
         return (
             <div className="text-black me-5 hover:cursor-pointer relative">
                 <div className="flex items-center">
-                    <img src={`data:image/png;base64, ${image}`} alt="Profile" className="w-11 h-11 rounded-full mr-2" />
+                    <Image src={`data:image/png;base64, ${image}`} alt="Profile" className="w-11 h-11 rounded-full mr-2" width={10} height={10} />
                     <h1 onClick={handleToggle} className="flex flex-col cursor-pointer">
                         <div className="text-sm flex gap-1 items-end font-medium">
                         <p className="dark:text-slate-100">{name}</p>
@@ -161,7 +162,7 @@ export default function Navbar() {
             <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <img src="../assets/logo.png" alt="Logo" className="ms-4 w-[130px]" />
+                    <Image src="/assets/logo.png" alt="Logo" className="ms-4" width={130} height={10}/>
                     <div>
                         <ul className="hidden sm:hidden md:hidden lg:flex xl:flex p-2 text-black dark:text-slate-100 gap-5">
                             <style jsx>

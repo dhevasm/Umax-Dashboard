@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState({});
@@ -107,9 +108,9 @@ const Profile = () => {
                         </label>
                         <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden">
                             {image ? (
-                                <img src={`data:image/png;base64,${image}`} className="object-cover w-full h-full" alt="Profile" />
+                                <Image src={`data:image/png;base64,${image}`} className="object-cover w-full h-full" width={128} height={128} alt="Profile" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-300 dark:bg-gray-600 animate-pulse"></div>
+                                <Image src={'/assets/defaultProfil.jpg'} width={128} height={128} alt='Profile'/>
                             )}
                         </div>
                         <h1 className="mt-4 text-white text-2xl font-semibold">{name}</h1>
@@ -150,7 +151,7 @@ const ProfileItem = ({ icon: Icon, label, value, flag }) => (
         <div>
             <h3 className="text-gray-700 dark:text-gray-300 font-medium">{label}</h3>
             <div className="flex gap-2">
-                {flag && <img src={flag} className="w-5 h-5 mt-1" alt="" />}
+                {flag && <Image src={flag} className="w-5 h-5 mt-1" width={20} height={20} alt="" />}
                 <p className="text-gray-500 dark:text-gray-400">{value}</p>
             </div>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Infocard from "../Card/Infocard";
 import SuggestionCard from "../Card/SuggestionCard";
 import axios from "axios";
@@ -32,7 +32,7 @@ export default function Performance({ id }) {
     const [selected, setSelected] = useState('week');
     const umaxUrl = 'https://umaxxnew-1-d6861606.deta.app';
 
-    const fetchMetrics = async () => {
+    const fetchMetrics = useCallback(async () => {
         if (!id) {
             console.warn('No campaign ID provided');
             return;
@@ -55,11 +55,11 @@ export default function Performance({ id }) {
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [id, umaxUrl]);
 
     useEffect(() => {
         fetchMetrics();
-    }, [id]);
+    }, [fetchMetrics]);
 
     const checkDeviceWidth = () => {
         setIsWideScreen(window.innerWidth >= 1060);
@@ -70,7 +70,7 @@ export default function Performance({ id }) {
         return () => window.removeEventListener("resize", checkDeviceWidth);
     }, []);
 
-    const fetchSuggestions = async () => {
+    const fetchSuggestions = useCallback(async () => {
         if (!id) {
             console.warn('No campaign ID provided');
             return;
@@ -92,11 +92,11 @@ export default function Performance({ id }) {
         } catch (error) {
             console.error(error)
         }
-    }
+    }, [id, umaxUrl]);
 
     useEffect(() => {
         fetchSuggestions()
-    }, [id])
+    }, [fetchSuggestions])
 
     return (
         <>

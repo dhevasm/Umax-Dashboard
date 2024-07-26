@@ -1,7 +1,6 @@
 'use client'
 
-
-import { useState, useRef, useEffect, useContext, Suspense } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { useTranslations } from "next-intl"
 import SidebarCard from "./Card/SidebarCard"
 import axios from "axios"
@@ -9,9 +8,7 @@ import SidebarLoading from "./Loading/SidebarLoading"
 import { FaSearch } from 'react-icons/fa';
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io"
 
-
-export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHide }) {
-
+export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHide }) {
     const [campaigns, setCampaigns] = useState([]);
     const sidebar = useRef(null);
     const [status, setStatus] = useState(0);
@@ -36,7 +33,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
     // Sidebar Link active end
 
     // fetch Campaign
-    const fetchMetrics = async () => {
+    const fetchMetrics = useCallback(async () => {
         try {
             const response = await axios.get(`${umaxUrl}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
                 headers: {
@@ -49,7 +46,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [status, umaxUrl]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -61,7 +58,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide , setSidebarHi
             clearTimeout(timeoutId);
             controller.abort();
         };
-    }, [status]);
+    }, [fetchMetrics]);
 
     const filteredCampaigns = campaigns.filter(campaign => {
         if (status === 0) {

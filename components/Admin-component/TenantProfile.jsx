@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { IconContext } from "react-icons"
 import axios from "axios"
 import { FaBuilding, FaDollarSign, FaDolly, FaEnvelope, FaFlag, FaHome, FaPen, FaPhone } from "react-icons/fa"
@@ -40,7 +40,7 @@ export default function TenantProfile({tenant_id}){
 
     useEffect(() => {
         getTenant()
-    }, [])
+    })
 
     function showModal(mode, tenant_id = null ){
         setModeModal(mode)
@@ -94,7 +94,7 @@ export default function TenantProfile({tenant_id}){
     })
     const [isvalid, setIsvalid] = useState(false)
 
-    function validateForm(){
+    const validateForm = useCallback(() => {
         let errors = {}
         if(values.name == ''){
             errors.name = t('name-error')
@@ -113,11 +113,11 @@ export default function TenantProfile({tenant_id}){
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
-        }
+    }, [values, t])
 
     useEffect(() => {
         validateForm()
-    }, [values])
+    }, [values, validateForm])
 
     async function updateTenant(){
         if(tenant !== null) {

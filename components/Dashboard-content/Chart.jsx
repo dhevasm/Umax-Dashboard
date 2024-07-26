@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import ApexChart from "react-apexcharts";
 
@@ -108,7 +109,7 @@ const Chart = ({ campaignID, time }) => {
             </div>
             :
             <div className="w-full h-full flex justify-center items-center pb-10">
-                <img src="/assets/NotFound.png" className="h-80 w-80 animate-pulse"/>
+                <Image src="/assets/NotFound.png" className="animate-pulse" width={320} height={320} alt="Campaign Not Selected"/>
             </div>
             }
 
