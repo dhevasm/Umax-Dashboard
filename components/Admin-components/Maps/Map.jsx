@@ -32,9 +32,9 @@ const Map = () => {
       getClient()
     }, [])
 
-    useEffect(() => {
-      console.log(client)
-    }, [client])
+    // useEffect(() => {
+    //   console.log(client)
+    // }, [client])
 
   const data = [
     { country: "cn", value: 0 }, // china

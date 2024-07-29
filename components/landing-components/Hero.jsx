@@ -9,12 +9,10 @@ const Hero = () => {
           <div className="w-full px-4 lg:w-5/12">
             <div className="hero-content">
               <h1 className="mb-3 text-4xl font-bold leading-snug text-dark sm:text-[42px] lg:text-[40px] xl:text-[42px] dark:text-white">
-                Startup Site Template <br/> Built-with TailGrids Components
+              Pantau dan Analisa Iklan Anda dalam Satu Tempat
               </h1>
               <p className="mb-8 max-w-[480px] text-base dark:text-slate-300 text-body-color">
-                With TailGrids, business and students thrive together. Business
-                can perfectly match their staffing to changing demand throughout
-                the dayed.
+              Dengan UMAX Dashboard, Anda dapat memantau dan menganalisa performa iklan dari Google Ads, Meta Ads, dan TikTok Ads secara real-time. Ambil keputusan yang lebih baik dan tingkatkan kinerja kampanye Anda.
               </p>
               <ul className="flex flex-wrap items-center">
                 <li>

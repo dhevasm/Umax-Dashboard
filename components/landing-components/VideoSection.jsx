@@ -15,12 +15,10 @@ const VideoSection = () => {
                 Watch Our Intro Video
               </span>
               <h2 className="mb-6 text-3xl font-bold leading-snug text-white sm:text-4xl sm:leading-snug md:text-[40px] md:leading-snug">
-                Making world a better place for you and us
+              Pelajari Cara Menggunakan Aplikasi Kami dengan Mudah
               </h2>
               <p className="text-base leading-relaxed text-white mb-9">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-                at quam fringilla, scelerisque nisl in, accumsan diam. Quisque
-                sollicitudin risus eu tortor euismod imperdiet.
+              Tonton video tutorial kami untuk memahami cara menganalisa iklan dari Google Ads, Meta Ads, dan TikTok Ads dengan aplikasi UMAX Dashboard. Klik di sini untuk menonton!
               </p>
               <a
                 href="javascript:void(0)"

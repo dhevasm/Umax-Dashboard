@@ -15,9 +15,7 @@ const Contact = () => {
                         GET IN TOUCH WITH US
                     </h2>
                     <p className="text-base leading-relaxed text-body-color dark:text-slate-200 mb-9">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eius tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                        adiqua minim veniam quis nostrud exercitation ullamco
+                    Butuh bantuan atau ingin tahu lebih banyak tentang aplikasi kami? Hubungi tim dukungan kami di 0812-1212-2388 atau kirim pesan melalui formulir kontak. Kami siap membantu Anda!
                     </p>
                     <div className="mb-8 flex w-full max-w-[370px]">
                         <div className="dark:bg-blue-950 bg-blue-50 text-blue-600 mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded sm:h-[70px] sm:max-w-[70px]">
@@ -30,7 +28,7 @@ const Contact = () => {
                             Our Location
                         </h4>
                         <p className="text-base text-body-color dark:text-slate-300">
-                            99 S.t Jomblo Park Pekanbaru 28292. Indonesia
+                        Ruko Modern Kav A16-A17, Jl Loncat Indah, Tasikmadu, Kota Malang 65143
                         </p>
                         </div>
                     </div>
@@ -54,7 +52,7 @@ const Contact = () => {
                             Phone Number
                         </h4>
                         <p className="text-base text-body-color dark:text-slate-300">
-                            (+62)81 414 257 9980
+                            0812-1212-2388
                         </p>
                         </div>
                     </div>
@@ -69,7 +67,7 @@ const Contact = () => {
                             Email Address
                         </h4>
                         <p className="text-base text-body-color dark:text-slate-300">
-                            info@yourdomain.com
+                            suratkita@gmail.com
                         </p>
                         </div>
                     </div>

@@ -39,10 +39,10 @@ const Service = () => {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
-                Marketing Solutions
+                Integrasi <br />  Multi-Platform
               </h4>
-              <p className="text-body-color dark:text-slate-200">
-                Lorem Ipsum is simply dummy text of the printing and industry.
+              <p className="text-body-color text-justify dark:text-slate-200">
+              UMAX Dashboard mengintegrasikan data iklan dari berbagai platform seperti Google Ads, Meta Ads, dan TikTok Ads. Ini memungkinkan Anda untuk melihat performa iklan Anda secara menyeluruh dalam satu dashboard yang mudah digunakan.
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>
@@ -69,10 +69,10 @@ const Service = () => {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
-                Business Analytics
+              Analisis Mendalam dan Laporan Terperinci
               </h4>
-              <p className="text-body-color dark:text-slate-200">
-                Lorem Ipsum is simply dummy text of the printing and industry.
+              <p className="text-body-color text-justify dark:text-slate-200">
+              Dapatkan wawasan mendalam tentang performa iklan Anda dengan analisis yang komprehensif. UMAX Dashboard menyediakan laporan terperinci yang membantu Anda memahami metrik kunci, dan membuat keputusan yang lebih cerdas untuk kampanye iklan Anda.
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>
@@ -103,10 +103,11 @@ const Service = () => {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
-                UX & UI Design
+              Optimasi Kampanye Berbasis Data
               </h4>
-              <p className="text-body-color dark:text-slate-200">
-                Lorem Ipsum is simply dummy text of the printing and industry.
+              <p className="text-body-color text-justify dark:text-slate-200">
+              Dengan alat analisis yang kuat, UMAX Dashboard membantu Anda mengoptimalkan kampanye iklan Anda berdasarkan data yang akurat. Temukan peluang untuk meningkatkan ROI, kurangi biaya iklan yang tidak efektif, dan maksimalkan hasil dari setiap kampanye.
+
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>

@@ -20,9 +20,9 @@ const Page = () => {
   const lang = pathname.slice(0, 3);
   const t = useTranslations('login')
 
-  useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_API_URL);
-  }, [])
+  // useEffect(() => {
+  //   console.log(process.env.NEXT_PUBLIC_API_URL);
+  // }, [])
 
   const validationSchema = Yup.object({
     email: Yup.string()
