@@ -3,7 +3,7 @@ import React from "react";
 const PricingSection = () => {
   return (
     // ====== Pricing Section Start ======
-    <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-20">
+    <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-20" id="payment">
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full px-4">

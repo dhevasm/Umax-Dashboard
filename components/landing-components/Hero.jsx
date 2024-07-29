@@ -1,26 +1,30 @@
 import Image from 'next/image';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 const Hero = () => {
+  const t = useTranslations("landing")
+
+
   return (
-    <div className="relative bg-white dark:bg-slate-900 pt-[120px] pb-[110px] lg:pt-[150px] px-20">
+    <div className="relative bg-white dark:bg-slate-900 pt-[70px] md:pt-[120px] pb-[110px] lg:pt-[150px] px-12 md:px-20" id='home'>
       <div className="container mx-auto">
-        <div className="flex flex-wrap -mx-4">
-          <div className="w-full px-4 lg:w-5/12">
+        <div className="flex flex-col-reverse md:flex-row gap-5 flex-nowrap">
+          <div className="w-full md:px-4 lg:w-5/12">
             <div className="hero-content">
-              <h1 className="mb-3 text-4xl font-bold leading-snug text-dark sm:text-[42px] lg:text-[40px] xl:text-[42px] dark:text-white">
-              Pantau dan Analisa Iklan Anda dalam Satu Tempat
+              <h1 className="mb-3 md:text-4xl font-bold leading-snug text-dark text-xl lg:text-[40px] xl:text-[42px] dark:text-white">
+             {t("hero_title")}
               </h1>
               <p className="mb-8 max-w-[480px] text-base dark:text-slate-300 text-body-color">
-              Dengan UMAX Dashboard, Anda dapat memantau dan menganalisa performa iklan dari Google Ads, Meta Ads, dan TikTok Ads secara real-time. Ambil keputusan yang lebih baik dan tingkatkan kinerja kampanye Anda.
+              {t("hero_desc")}
               </p>
-              <ul className="flex flex-wrap items-center">
+              <ul className="flex flex-wrap items-center justify-center md:justify-start">
                 <li>
                   <a
-                    href="javascript:void(0)"
+                    href={`en/login`}
                     className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-center text-white rounded-md bg-blue-600 hover:bg-blue-dark lg:px-7"
                   >
-                    Get Started
+                    {t("hero_button")}
                   </a>
                 </li>
                 <li>
@@ -57,7 +61,7 @@ const Hero = () => {
                         />
                       </svg>
                     </span>
-                    Download App
+                   {t("download_button")}
                   </a>
                 </li>
               </ul>

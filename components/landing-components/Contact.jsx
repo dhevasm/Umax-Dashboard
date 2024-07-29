@@ -1,21 +1,26 @@
+'use client'
 import React from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useTranslations } from 'next-intl'
 
 const Contact = () => {
+const t = useTranslations("landing");
+
   return (
     <div>
-        <section className="relative z-10 overflow-hidden bg-white dark:bg-slate-900 py-20 px-20 lg:py-[120px]">
+        <section className="relative z-10 overflow-hidden bg-white dark:bg-slate-900 py-20 px-20 lg:py-[120px]" id='contact'>
             <div className="container mx-auto">
                 <div className="flex flex-wrap -mx-4 lg:justify-between">
                 <div className="w-full px-4 lg:w-1/2 xl:w-6/12">
                     <div className="mb-12 max-w-[570px] lg:mb-0">
                     <span className="block mb-4 text-base font-semibold text-blue-600">
-                        Contact Us
+                        {t("contact-us")}
                     </span>
                     <h2 className="text-gray-800 dark:text-white mb-6 text-[32px] font-bold uppercase sm:text-[40px] lg:text-[36px] xl:text-[40px]">
-                        GET IN TOUCH WITH US
+                        {t("contact-title")}
                     </h2>
                     <p className="text-base leading-relaxed text-body-color dark:text-slate-200 mb-9">
-                    Butuh bantuan atau ingin tahu lebih banyak tentang aplikasi kami? Hubungi tim dukungan kami di 0812-1212-2388 atau kirim pesan melalui formulir kontak. Kami siap membantu Anda!
+                    {t("contact-desc")}
                     </p>
                     <div className="mb-8 flex w-full max-w-[370px]">
                         <div className="dark:bg-blue-950 bg-blue-50 text-blue-600 mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded sm:h-[70px] sm:max-w-[70px]">
@@ -25,7 +30,7 @@ const Contact = () => {
                         </div>
                         <div className="w-full">
                         <h4 className="mb-1 text-xl font-bold text-dark dark:text-white">
-                            Our Location
+                            {t("contact-location")}
                         </h4>
                         <p className="text-base text-body-color dark:text-slate-300">
                         Ruko Modern Kav A16-A17, Jl Loncat Indah, Tasikmadu, Kota Malang 65143
@@ -49,7 +54,7 @@ const Contact = () => {
                         </div>
                         <div className="w-full">
                         <h4 className="mb-1 text-xl font-bold text-dark dark:text-white">
-                            Phone Number
+                            {t("contact-phone")}
                         </h4>
                         <p className="text-base text-body-color dark:text-slate-300">
                             0812-1212-2388
@@ -64,7 +69,7 @@ const Contact = () => {
                         </div>
                         <div className="w-full">
                         <h4 className="mb-1 text-xl font-bold text-dark dark:text-white">
-                            Email Address
+                            {t("contact-email")}
                         </h4>
                         <p className="text-base text-body-color dark:text-slate-300">
                             suratkita@gmail.com
@@ -74,23 +79,23 @@ const Contact = () => {
                     </div>
                 </div>
                 <div className="w-full px-4 lg:w-1/2 xl:w-5/12">
-                    <div className="relative p-8 bg-white rounded-lg shadow-lg dark:bg-slate-800 sm:p-12">
+                    <div className="relative p-8 bg-white rounded-lg shadow-lg dark:bg-slate-800 dark:text-white sm:p-12">
                     <form>
                         <div className="mb-6">
-                        <input type="text" placeholder="Your Name" className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
+                        <input type="text" placeholder={t("your-name")} id='name' className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
                         </div>
                         <div className="mb-6">
-                        <input type="email" placeholder="Your Email" className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
+                        <input type="email" placeholder={t("your-email")} id='email' className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
                         </div>
                         <div className="mb-6">
-                        <input type="text" placeholder="Your Phone" className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
+                        <input type="text" placeholder={t('your-phone')} id='phonenumber' className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
                         </div>
                         <div className="mb-6">
-                        <textarea rows={6} placeholder="Your Message" className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none" defaultValue={""} />
+                        <textarea rows={6} placeholder={t('your-message')} id='message' className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none" defaultValue={""} />
                         </div>
                         <div>
                         <button type="submit" className="w-full p-3 text-white transition border rounded border-blue-600 bg-blue-700 hover:bg-opacity-90">
-                            Send Message
+                            {t("send-message")}
                         </button>
                         </div>
                     </form>

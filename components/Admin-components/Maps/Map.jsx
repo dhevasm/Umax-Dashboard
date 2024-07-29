@@ -29,12 +29,41 @@ const Map = () => {
     }  
 
     useEffect(() => {
+      getCultureList()
       getClient()
     }, [])
 
-    // useEffect(() => {
-    //   console.log(client)
-    // }, [client])
+    useEffect(() => {
+      console.log(client)
+      getClientCount()
+    }, [client])
+
+    const [clientCount,setClientCount] = useState({})
+    const [culture, setCulture] = useState([])
+
+    const getCultureList = async () => {
+      await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        setCulture(response.data)
+    })
+    }
+
+    useEffect(() => {
+      console.log(culture)
+    }, [culture])
+
+    const getClientCount = () => {
+        client.map((item) => {
+          const country = item.address.split(",")[item.address.split(",").length - 1]
+          let code = ""
+          // culture.forEach((item) => {
+          //   if(item.country === country) {
+          //     return item
+          //   }
+          // })
+          console.log(code)
+        })
+    }
+
 
   const data = [
     { country: "cn", value: 0 }, // china

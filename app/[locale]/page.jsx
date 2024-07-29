@@ -16,15 +16,25 @@ import Footer from '@/components/landing-components/Footer'
 const page = () => {
   return (
     <div className='max-w-screen'>
+      <style>
+        {
+          `
+        html{
+            scroll-behavior: smooth;  
+          }
+        `
+        }
+        
+      </style>
       <Navbar />
-      <Hero />
+      <Hero/>
       <Service />
       <VideoSection />
       <PricingSection />
-      <Team />
+      {/* <Team /> */}
       {/* <Faq /> */}
       {/* <Call /> */}
-      <Testimoni />
+      {/* <Testimoni /> */}
       <Contact />
       <Footer />
     </div>

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { RiCloseLargeFill } from 'react-icons/ri';
+import { useTranslations } from 'next-intl';
 
 const VideoSection = () => {
   const [videoOpen, setVideoOpen] = useState(false);
+  const t = useTranslations("landing");
 
   return (
     <section className="relative overflow-hidden bg-blue-600">
@@ -12,19 +14,19 @@ const VideoSection = () => {
           <div className="w-full px-4 lg:w-1/2">
             <div className="max-w-[490px] py-[100px] lg:py-[140px]">
               <span className="block mb-3 text-base font-semibold text-white">
-                Watch Our Intro Video
+               {t("vidio-subtitle")}
               </span>
               <h2 className="mb-6 text-3xl font-bold leading-snug text-white sm:text-4xl sm:leading-snug md:text-[40px] md:leading-snug">
-              Pelajari Cara Menggunakan Aplikasi Kami dengan Mudah
+              {t("vidio-title")}
               </h2>
               <p className="text-base leading-relaxed text-white mb-9">
-              Tonton video tutorial kami untuk memahami cara menganalisa iklan dari Google Ads, Meta Ads, dan TikTok Ads dengan aplikasi UMAX Dashboard. Klik di sini untuk menonton!
+              {t("vidio-desc")}
               </p>
               <a
                 href="javascript:void(0)"
                 className="inline-block py-3 text-base font-medium text-white border border-white rounded-full px-9 hover:bg-white hover:text-primary"
               >
-                Know More
+                {t("vidio-button")}
               </a>
             </div>
           </div>
