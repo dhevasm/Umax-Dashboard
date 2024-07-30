@@ -264,7 +264,7 @@ const ChartTwo = () => {
       ],
     },
     {
-      name: "Campaign Done",
+      name: "Campaign End",
       data: [
         filteredCampaignDone.jan,
         filteredCampaignDone.feb,
@@ -300,7 +300,7 @@ const ChartTwo = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-secondary text-sm md:text-md">Campaign Done</p>
+              <p className="font-semibold text-secondary text-sm md:text-md">Campaign End</p>
               <p className="text-xs md:text-sm text-nowrap font-medium">{`01.01.${Year} - 31.12.${Year}`}</p>
             </div>
           </div>
