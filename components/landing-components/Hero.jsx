@@ -105,7 +105,6 @@ const Hero = () => {
                   src="/assets/hero-image-01.png"
                   alt="hero"
                   className="max-w-full lg:ml-auto"
-                  layout='responsive'
                   width={450}
                   height={200}
                 />

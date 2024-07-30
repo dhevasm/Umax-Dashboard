@@ -19,6 +19,7 @@ import Image from 'next/image';
 const Profile = () => {
     const [profileData, setProfileData] = useState({});
     const router = useRouter();
+    const role = localStorage.getItem('roles');
     const t = useTranslations('profile')
 
     useEffect(() => {
@@ -53,7 +54,7 @@ const Profile = () => {
                 timezoneName: data.timezone_name,
                 culture: data.culture,
             });
-            // console.log(data.language);
+            console.log(data.currency);
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
@@ -95,11 +96,13 @@ const Profile = () => {
                             <IoIosArrowBack className="text-white text-2xl cursor-pointer hover:text-gray-200" onClick={() => router.back()} />
                         </button>
                     </div>
-                    <div className="absolute top-4 right-4">
-                        <a href={`profile/edit`}>
-                            <CiEdit className="text-white text-2xl cursor-pointer hover:text-gray-200" />
-                        </a>
-                    </div>
+                    {role != 'client' && (
+                        <div className="absolute top-4 right-4">
+                            <a href={`profile/edit`}>
+                                <CiEdit className="text-white text-2xl cursor-pointer hover:text-gray-200" />
+                            </a>
+                        </div>
+                    )}
                     <div className="flex flex-col items-center mt-10">
                         <label htmlFor="theme" className="items-center cursor-pointer hidden">
                             <input type="checkbox" value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
@@ -117,19 +120,21 @@ const Profile = () => {
                         <p className="text-white text-lg">{roles}</p>
                     </div>
                 </div>
-                <div className="p-6 dark:text-gray-200">
+                <div className={`p-6 dark:text-gray-200`}>
                     <ProfileSection title="Personal Information">
                         <ProfileItem icon={MdOutlinePermContactCalendar} label={t('username')} value={name} />
-                        <ProfileItem icon={FaUsersCog} label={t('role')} value={roles} />
                         <ProfileItem icon={MdOutlineEmail} label={t('email')} value={email} />
+                        {role != 'client' && <ProfileItem icon={FaUsersCog} label={t('role')} value={roles} />}
                     </ProfileSection>
-                    <ProfileSection title="International">
-                        <ProfileItem icon={LiaMoneyBillWaveAltSolid} label={t('currencies')} value={currency} />
-                        <ProfileItem icon={VscSymbolEnum} label={t('currency_position')} value={currencyPosition ? 'Left ($n)' : 'Right (n$)'} />
-                        <ProfileItem icon={CiGlobe} label={t('language')} value={getLanguageName(language)} flag={getFlagSrc(language)} />
-                        <ProfileItem icon={MdOutlineAccessTime} label={t('timezone')} value={timezoneName} />
-                        <ProfileItem icon={GiGlobe} label={t('culture')} value={culture} />
-                    </ProfileSection>
+                    {role != 'client' && (
+                        <ProfileSection title="International">
+                            <ProfileItem icon={LiaMoneyBillWaveAltSolid} label={t('currencies')} value={currency} />
+                            <ProfileItem icon={VscSymbolEnum} label={t('currency_position')} value={currencyPosition ? 'Left ($n)' : 'Right (n$)'} />
+                            <ProfileItem icon={CiGlobe} label={t('language')} value={getLanguageName(language)} flag={getFlagSrc(language)} />
+                            <ProfileItem icon={MdOutlineAccessTime} label={t('timezone')} value={timezoneName} />
+                            <ProfileItem icon={GiGlobe} label={t('culture')} value={culture} />
+                        </ProfileSection>
+                    )}
                 </div>
             </div>
         </div>

@@ -71,9 +71,10 @@ function AdminNavbar({userData}){
         <>
             <nav className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
                 <div className="flex h-full">
-                <div className="w-[300px] flex h-full bg-slate-800 shadow-none items-end p-3 transition-transform" ref={navbarBrand}>
-                    <Image src="/assets/icon.png" alt="Logo" className="w-10 h-10 decoration-white mr-1" width={40} height={40}/>
-                    <p className="text-white font-sans text-3xl">UMAX</p>
+                <div className="w-[300px] flex h-full bg-slate-800 shadow-none items-center p-3 transition-transform" ref={navbarBrand}>
+                    <Image src="/assets/icon.png" alt="Logo" className="w-[60px] h-[60px] decoration-white" width={40} height={40}/>
+                    {/* <p className="text-white font-sans text-3xl">UMAX</p> */}
+                    <Image src="/assets/logo.png" alt="Logo" className="w-[140px] h-10 decoration-white mr-1 mt-2" width={150} height={40}/>
                 </div>
                     <button onClick={hideHandle} className="mx-5">
                     <FaBars className="text-2xl" />
