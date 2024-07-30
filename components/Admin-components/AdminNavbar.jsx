@@ -100,7 +100,7 @@ function AdminNavbar({userData}){
                     </button>
                     </div>
 
-                    <div className="flex items-center gap-2 mx-2">
+                    <div className=" flex items-center gap-2 ms-20">
                     <div className="w-16 h-9 flex justify-center items-center rounded-full">
                         <label htmlFor="theme" className="inline-flex items-center cursor-pointer me-2">
                             {
@@ -109,7 +109,7 @@ function AdminNavbar({userData}){
                         {/* <input type="checkbox" value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme}/>
                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                         </div> */}
-                        <input data-hs-theme-switch class="relative w-[3.25rem] h-7 bg-blue-200 checked:bg-none checked:bg-gray-700 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 ring-1 ring-transparent focus:border-slate-700 focus:ring-slate-700 focus:outline-none appearance-none
+                        <input data-hs-theme-switch className="relative w-[3.25rem] h-7 bg-blue-200 checked:bg-none checked:bg-gray-700 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 ring-1 ring-transparent focus:border-slate-700 focus:ring-slate-700 focus:outline-none appearance-none
                         before:inline-block before:size-6 before:bg-white checked:before:bg-gray-500 before:translate-x-0 checked:before:translate-x-full before:shadow before:rounded-full before:transform before:ring-0 before:transition before:ease-in-out before:duration-200
                         after:absolute after:end-1.5 after:top-[calc(50%-0.40625rem)] after:w-[.8125rem] after:h-[.8125rem] after:bg-no-repeat after:bg-[right_center] after:bg-[length:.8125em_.8125em] after:transform after:transition-all after:ease-in-out after:duration-200 after:opacity-70 checked:after:start-1.5 checked:after:end-auto" type="checkbox" id="theme" onChange={handleTheme}></input>
                         </label>

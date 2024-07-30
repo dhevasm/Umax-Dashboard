@@ -47,6 +47,9 @@ export default function TenantTable() {
             const filteredTenant = tenantMemo.filter(tenant => tenant._id === tenant_id);
             if(filteredTenant.length > 0){
                 // console.log(filteredTenant[0])
+
+                setValues({name: filteredTenant[0].company, address: filteredTenant[0].address, contact:filteredTenant[0].contact, email: filteredTenant[0].email, language:filteredTenant[0].language, culture: filteredTenant[0].culture, timezone: filteredTenant[0].timezone_name, currency: filteredTenant[0].currency, country:filteredTenant[0].address, city:filteredTenant[0].address})
+                setError({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country :'', city:''})
                 
                 let isFullAdress = false;
                 setEditTenantId(tenant_id)
@@ -58,15 +61,12 @@ export default function TenantTable() {
                 document.getElementById('currency').value = filteredTenant[0].currency
                 document.getElementById('input_timezone').value = filteredTenant[0].timezone_name
                 document.getElementById('currencyposition').checked = filteredTenant[0].currency_position
-                setValues({name: filteredTenant[0].company, address: filteredTenant[0].address, contact: filteredTenant[0].contact, email: filteredTenant[0].email, language: filteredTenant[0].language, culture: filteredTenant[0].culture, timezone: filteredTenant[0].timezone_name, currency: filteredTenant[0].currency, country:filteredTenant[0].country, city:filteredTenant[0].city})
-                setError({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country :'', city:''})
                 document.getElementById('country').value = filteredTenant[0].address.split(" - ")[2]
                 handleCityList(filteredTenant[0].address.split(" - ")[2])
                 setTimeout(() => {
                     document.getElementById('city').value = filteredTenant[0].address.split(" - ")[1]
                     document.getElementById('contact').value = filteredTenant[0].contact.slice(1)
                 }, 300);
-                
             } else{
                 Swal.fire("Tenant not found");
             }
@@ -78,6 +78,12 @@ export default function TenantTable() {
             document.getElementById('address').value = null
             document.getElementById('contact').value = null
             document.getElementById('email').value = null  
+            document.getElementById('language').value = ""  
+            document.getElementById('culture').value = ""  
+            document.getElementById('input_timezone').value = ""  
+            document.getElementById('currency').value = ""  
+            document.getElementById('country').value = ""  
+            document.getElementById('city').value = ""   
         }
         addModal.current.classList.remove("hidden")
     }
@@ -258,7 +264,7 @@ export default function TenantTable() {
     }
 
     async function getTenants(){
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}tenant-get-all`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
@@ -316,6 +322,12 @@ export default function TenantTable() {
                 document.getElementById('address').value = null
                 document.getElementById('contact').value = null
                 document.getElementById('email').value = null
+                document.getElementById('language').value = ""  
+                document.getElementById('culture').value = ""  
+                document.getElementById('input_timezone').value = ""  
+                document.getElementById('currency').value = ""  
+                document.getElementById('country').value = ""  
+                document.getElementById('city').value = ""  
                 Swal.fire("Success", "Tenant created successfully", "success")
             }else{
                 Swal.fire("Error", response.detail, "error")
@@ -360,17 +372,23 @@ export default function TenantTable() {
                 }
             })
     
-            if(response.data.Output == "Data Updated Successfully"){
-                getTenants()
-                closeModal()
-                document.getElementById('name').value = null
-                document.getElementById('address').value = null
-                document.getElementById('contact').value = null
-                document.getElementById('email').value = null
-                Swal.fire("Success", "Tenant Updated", "success")
-            }else{
-                Swal.fire("Error", response.detail.ErrMsg, "error")
-            }
+                if(response.data.Output == "Data Updated Successfully"){
+                    getTenants()
+                    closeModal()
+                    document.getElementById('name').value = null
+                    document.getElementById('address').value = null
+                    document.getElementById('contact').value = null
+                    document.getElementById('email').value = null
+                    document.getElementById('language').value = ""  
+                    document.getElementById('culture').value = ""  
+                    document.getElementById('input_timezone').value = ""  
+                    document.getElementById('currency').value = ""  
+                    document.getElementById('country').value = ""  
+                    document.getElementById('city').value = ""  
+                    Swal.fire("Success", "Tenant Updated", "success")
+                }else{
+                    Swal.fire("Error", response.detail.ErrMsg, "error")
+                }
             }else{
                 Swal.fire("Failed!","Please fill all required fields!", "error")
             }
@@ -589,23 +607,20 @@ export default function TenantTable() {
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Client</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Account</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Objective</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Company</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
                                     {
                                         filteredData.length > 0 ? filteredData.map((tenant, index) => {
                                             return (
-                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
-                                                    <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">{tenant.company}</td>
+                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
+                                                    <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap underline"  onClick={() => showModal("Edit", tenant._id)}>{tenant.company}</td>
                                                     <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">{tenant.address}</td>
                                                     <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">
                                                         <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
                                                     </td>
                                                     <td scope="row" className="px-6 py-3 font-medium  whitespace-nowrap">
-                                                        <a className="text-blue-500" href={`tel:${tenant.contact}`}>{String(tenant.contact)}</a>
+                                                        <a className="text-blue-500" href={`https://wa.me/${tenant.contact.slice(1)}`} target="_blank">{String(tenant.contact)}</a>
                                                     </td>
                                                 </tr>
                                             )

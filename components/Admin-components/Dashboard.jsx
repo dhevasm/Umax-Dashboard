@@ -41,7 +41,9 @@ export default function Dashboard({ tenant_id }) {
     }
 
     useEffect(() => {
-        fetchCampaigns()
+        if(userData.roles == "admin"){
+            fetchCampaigns()
+        }
     }, [])
 
     // useEffect(() => {
@@ -70,6 +72,10 @@ export default function Dashboard({ tenant_id }) {
         document.querySelector(".filterselect").classList.remove("filterselect")
         setFilterCampaign(value)
     }
+
+    // useEffect(() => {
+    //     console.log(dataDashboard)
+    // }, [dataDashboard])
 
     return (
         <>

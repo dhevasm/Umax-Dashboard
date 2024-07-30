@@ -111,7 +111,8 @@ function AdminDashboard() {
     useEffect(() => {
         getUserData()
         getUserCampaignCount()
-    }, [getUserData, getUserCampaignCount])
+        getTenantsCount()
+    }, [getUserData, getUserCampaignCount, getTenantsCount])
 
     useEffect(() => {
         setDataDashboard({
@@ -121,6 +122,10 @@ function AdminDashboard() {
             clients: clientCount
         })
     }, [clientCount, tenantsCount, campaignsCount, usersCount])
+
+    // useEffect(() => {
+    //     console.log(tenantsCount)
+    // }, [tenantsCount])
 
     const MainCard = useRef(null)
 
