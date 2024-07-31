@@ -110,7 +110,7 @@ export default function UserTable() {
     function generateExcel(){
         Swal.fire({
             title: `${tfile('warn')}`,
-            text: `${tfile('msg-2')}`,
+            text: `${tfile('msg2')}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",

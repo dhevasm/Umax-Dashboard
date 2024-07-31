@@ -22,6 +22,7 @@ const EditProfile = () => {
     const router = useRouter();
     const t = useTranslations('profile');
     const [role,setRole] = useState('') 
+    const roles = localStorage.getItem('roles');
 
     useEffect(() => {
         const fetchData = async (url, setState) => {
@@ -56,17 +57,31 @@ const EditProfile = () => {
                     },
                 });
                 const data = response.data.Data[0];
-                setProfileData({
-                    name: data.name,
-                    image: data.image,
-                    roles: data.roles,
-                    email: data.email,
-                    currency: data.currency,
-                    currencyPosition: data.currency_position,
-                    language: data.language,
-                    timezoneName: data.timezone_name,
-                    culture: data.culture,
-                });
+                if(roles === 'client'){
+                    setProfileData({
+                        name: data.name,
+                        image: data.image,
+                        roles: data.roles,
+                        email: data.email,
+                        currency: 'Rp',
+                        currencyPosition: data.currency_position,
+                        language: data.language,
+                        timezoneName: 'Asia/Jakarta',
+                        culture: 'id_ID',
+                    });
+                } else {
+                    setProfileData({
+                        name: data.name,
+                        image: data.image,
+                        roles: data.roles,
+                        email: data.email,
+                        currency: data.currency,
+                        currencyPosition: data.currency_position,
+                        language: data.language,
+                        timezoneName: data.timezone_name,
+                        culture: data.culture,
+                    });
+                }
                 setRole(data.roles)
             } catch (error) {
                 console.error('Error fetching profile data:', error.message);
@@ -84,7 +99,7 @@ const EditProfile = () => {
         email: yup.string().required(t('email-error')).email(t('email-error2')),
         culture: yup.string().required(t('culture-error')),
         input_timezone: yup.string().required(t('timezone-error')),
-        currency: yup.string().required(t('currency-error')),
+        currency: yup.string().required(t('currencies-error')),
         currency_position: yup.string().required(t('currency-position-error')),
     });
       
@@ -189,6 +204,22 @@ const EditProfile = () => {
 
     let lang = localStorage.getItem('lang');
 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const token = localStorage.getItem('jwtToken')
+            const role = localStorage.getItem('roles')
+            if (!token) {
+                Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
+                    router.push('/')
+                })
+            } else if (role == 'client') {
+                Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
+                    router.back()
+                })
+            }
+        }
+    }, [router]);
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center">
             <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-b-lg overflow-hidden">
@@ -228,7 +259,7 @@ const EditProfile = () => {
                     </div>  
                 </div>
                 <form onSubmit={formik.handleSubmit} className="p-6 dark:text-gray-200">
-                    <ProfileSection title={t('edit-personal-information')}>
+                    <ProfileSection title={t('edit-personal-information')} display={true}>
                         {/* <ProfileItem
                             icon="image"
                             label="Profile Picture"
@@ -281,7 +312,7 @@ const EditProfile = () => {
                             error={formik.errors.email}
                         />
                     </ProfileSection>
-                    <ProfileSection title={t('edit-international-information')}>
+                    <ProfileSection title={t('edit-international-information')} display={roles != 'client' ? true : false}>
                         <ProfileItem
                             icon="culture"
                             label={formik.errors.culture ? (
@@ -413,8 +444,8 @@ const EditProfile = () => {
     );
 };
 
-const ProfileSection = ({ title, children }) => (
-    <div className="mb-6">
+const ProfileSection = ({ title, children, display }) => (
+    <div className={`${display ? 'block' : 'hidden'} mb-6`}>
         <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">{title}</h2>
         <div className="grid sm:grid-cols-2 gap-4">
             {children}

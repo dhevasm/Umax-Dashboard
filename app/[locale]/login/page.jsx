@@ -77,7 +77,6 @@ const Page = () => {
           },
           body: new URLSearchParams(values).toString(),
         });
-
         if (!response.ok) throw new Error("Login failed");
 
         const data = await response.json();
