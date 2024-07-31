@@ -40,58 +40,6 @@ export default function TenantTable() {
     const [alldial, setDial] = useState([])
     const [DialCountry, setDialCountry] = useState([])
 
-    function showModal(mode, tenant_id = null ){
-        setModeModal(mode)
-        if(mode == "Edit"){
-            deleteButton.current.classList.remove("hidden")
-            const filteredTenant = tenantMemo.filter(tenant => tenant._id === tenant_id);
-            if(filteredTenant.length > 0){
-                // console.log(filteredTenant[0])
-
-                setValues({name: filteredTenant[0].company, address: filteredTenant[0].address, contact:filteredTenant[0].contact, email: filteredTenant[0].email, language:filteredTenant[0].language, culture: filteredTenant[0].culture, timezone: filteredTenant[0].timezone_name, currency: filteredTenant[0].currency, country:filteredTenant[0].address, city:filteredTenant[0].address})
-                setError({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country :'', city:''})
-                
-                let isFullAdress = false;
-                setEditTenantId(tenant_id)
-                document.getElementById('name').value = filteredTenant[0].company
-                document.getElementById('address').value = filteredTenant[0].address
-                document.getElementById('email').value = filteredTenant[0].email
-                document.getElementById('language').value = filteredTenant[0].language
-                document.getElementById('culture').value = filteredTenant[0].culture
-                document.getElementById('currency').value = filteredTenant[0].currency
-                document.getElementById('input_timezone').value = filteredTenant[0].timezone_name
-                document.getElementById('currencyposition').checked = filteredTenant[0].currency_position
-                document.getElementById('country').value = filteredTenant[0].address.split(" - ")[2]
-                handleCityList(filteredTenant[0].address.split(" - ")[2])
-                setTimeout(() => {
-                    document.getElementById('city').value = filteredTenant[0].address.split(" - ")[1]
-                    document.getElementById('contact').value = filteredTenant[0].contact.slice(1)
-                }, 300);
-            } else{
-                Swal.fire("Tenant not found");
-            }
-        }else if(mode == "Create") {
-            setValues({name: '', address: '', contact: '', email: '', language:'', culture: '', timezone: '', currency: '', country:'', city:''})
-            setError({name: '', address: '', contact: '', email: '', language:'', culture: '', timezone: '', currency: '', country:'', city:''})
-            deleteButton.current.classList.add("hidden")
-            document.getElementById('name').value = null
-            document.getElementById('address').value = null
-            document.getElementById('contact').value = null
-            document.getElementById('email').value = null  
-            document.getElementById('language').value = ""  
-            document.getElementById('culture').value = ""  
-            document.getElementById('input_timezone').value = ""  
-            document.getElementById('currency').value = ""  
-            document.getElementById('country').value = ""  
-            document.getElementById('city').value = ""   
-        }
-        addModal.current.classList.remove("hidden")
-    }
-    function closeModal(){
-        addModal.current.classList.add("hidden")
-    }
-
-    // Validasi Form 
     const [values, setValues] = useState({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country:'', city:''})
     const [error, setError] = useState({
         name: '',
@@ -107,19 +55,75 @@ export default function TenantTable() {
     })
     const [isvalid, setIsvalid] = useState(false)
 
+    function showModal(mode, tenant_id = null ){
+        setModeModal(mode)
+        if(mode == "Edit"){
+            deleteButton.current.classList.remove("hidden")
+            const filteredTenant = tenantMemo.filter(tenant => tenant._id === tenant_id);
+            if(filteredTenant.length > 0){
+                // console.log(filteredTenant[0])
+                
+                let isFullAdress = false;
+                setEditTenantId(tenant_id)
+                document.getElementById('name').value = filteredTenant[0].company
+                document.getElementById('address').value = filteredTenant[0].address
+                document.getElementById('email').value = filteredTenant[0].email
+                document.getElementById('language').value = filteredTenant[0].language
+                document.getElementById('culture').value = filteredTenant[0].culture
+                document.getElementById('currency').value = filteredTenant[0].currency
+                document.getElementById('input_timezone').value = filteredTenant[0].timezone_name
+                document.getElementById('currencyposition').checked = filteredTenant[0].currency_position
+                document.getElementById('country').value = filteredTenant[0].address.split(" - ")[2]
+                handleCityList(filteredTenant[0].address.split(" - ")[2])
+                setValues({name: filteredTenant[0].company, address: filteredTenant[0].address, contact:filteredTenant[0].contact, email: filteredTenant[0].email, language:filteredTenant[0].language, culture: filteredTenant[0].culture, timezone: filteredTenant[0].timezone_name, currency: filteredTenant[0].currency, country:filteredTenant[0].address, city:filteredTenant[0].address})
+                setError({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country :'', city:''})
+                setTimeout(() => {
+                    document.getElementById('city').value = filteredTenant[0].address.split(" - ")[1]
+                    document.getElementById('contact').value = filteredTenant[0].contact.slice(1)
+                }, 300);
+            } else{
+                Swal.fire("Tenant not found");
+            }
+        }else if(mode == "Create") {
+            setValues({name: '', address: '', contact: '', email: '', language:'', culture: '', timezone: '', currency: '', country:'', city:''})
+            setError({name: '', address: '', contact: '', email: '', language:'', culture: '', timezone: '', currency: '', country:'', city:''})
+            deleteButton.current.classList.add("hidden")
+            document.getElementById('name').value = ""
+            document.getElementById('address').value = ""
+            document.getElementById('contact').value = ""
+            document.getElementById('email').value = ""  
+            document.getElementById('language').value = ""  
+            document.getElementById('culture').value = ""  
+            document.getElementById('input_timezone').value = ""  
+            document.getElementById('currency').value = ""  
+            document.getElementById('country').value = ""  
+            document.getElementById('city').value = ""   
+        }
+        addModal.current.classList.remove("hidden")
+    }
+    function closeModal(){
+        addModal.current.classList.add("hidden")
+    }
+
+    // Validasi Form 
+    
+
     const validateForm = useCallback(() => {
         let errors = {}
-        if(values.name == ''){
+        if(values.name == ""){
             errors.name = 'Name is required'
         }
-        if(values.address == ''){
+        if(values.address == ""){
             errors.address = 'Address is required'
         }
-        if(values.contact == ''){
+        if(values.contact == ""){
             errors.contact = 'Contact is required'
         }
-        if(values.email == ''){
+        if(values.email == ""){
             errors.email = 'Email is required'
+        }
+        if(!values.email.includes("@")){
+            errors.email = "Email must contain @"
         }
         if(values.language == ""){
             errors.language = "Language is required"
@@ -689,7 +693,7 @@ export default function TenantTable() {
 
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
-                    <div className="relative  rounded-lg shadow">
+                    <div className="relative  rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white ">
                             <h3 className="text-xl font-semibold">
@@ -716,16 +720,22 @@ export default function TenantTable() {
                             
                             </div>
                         
-                        <div className="w-full h-0.5 my-3 bg-gray-300"></div>
+                        <div className="w-full h-0.5 my-3 bg-gray-300">
+
+                        </div>
                        
-                            <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen overflow-y-auto pb-52 md:pb-3">
+                            <div className="grid gap-4 mb-4 grid-cols-2 pb-20 md:pb-3">
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="name" className="mb-2 text-sm font-medium  flex">Company Name {
                                         error.name && <p className="text-red-500 text-sm">*</p>
-                                    }</label>
+                                    }
+                                    </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     
+                                {
+                                    error.name && <p className="text-red-500 text-xs">{error.name}</p>
+                                }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="address" className="mb-2 text-sm font-medium  flex">Company Address {
@@ -733,6 +743,9 @@ export default function TenantTable() {
                                     }</label>
                                     <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
                                     required onChange={(e) => setValues({...values, address: e.target.value})}/>
+                                     {
+                                    error.address && <p className="text-red-500 text-xs">{error.address}</p>
+                                }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
@@ -747,6 +760,9 @@ export default function TenantTable() {
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
+                                    {
+                                    error.country && <p className="text-red-500 text-xs">{error.country}</p>
+                                }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
@@ -759,6 +775,9 @@ export default function TenantTable() {
                                             )) : <option  value="" hidden disabled>Please Select Country</option>
                                         }
                                     </select>
+                                    {
+                                    error.city && <p className="text-red-500 text-xs">{error.city}</p>
+                                }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
@@ -766,6 +785,9 @@ export default function TenantTable() {
                                         error.email && <p className="text-red-500 text-sm">*</p>
                                     }</label>
                                     <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    {
+                                    error.email && <p className="text-red-500 text-xs">{error.email}</p>
+                                }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
@@ -773,6 +795,9 @@ export default function TenantTable() {
                                         error.contact && <p className="text-red-500 text-sm">*</p>
                                     }</label>
                                     <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                    {
+                                    error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
+                                }
                                 </div>
 
                                 <div className="
@@ -788,6 +813,9 @@ export default function TenantTable() {
                                         <div className="text-sm font-medium">right(-$)</div>
                                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                         <div className="text-sm font-medium">left($-)</div>
+                                        {
+                                    error.currency_position && <p className="text-red-500 text-xs">{error.currency_position}</p>
+                                }
                                     </div>
                                     </label>
                                     </div>
@@ -803,9 +831,9 @@ export default function TenantTable() {
                                         <option value="en">English</option>
                                         <option value="id">Indonesia</option>
                                     </select>
-                                    {/* {
+                                    {
                                         error.language && <p className="text-red-500 text-xs">{error.language}</p>
-                                    } */}
+                                    }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
@@ -819,9 +847,9 @@ export default function TenantTable() {
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
-                                    {/* {
+                                    {
                                         error.culture && <p className="text-red-500 text-xs">{error.culture}</p>
-                                    } */}
+                                    }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="input_timezone" className="flex mb-2 text-sm font-medium ">Time Zone {
@@ -834,9 +862,9 @@ export default function TenantTable() {
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
-                                    {/* {
+                                    {
                                         error.timezone && <p className="text-red-500 text-xs">{error.timezone}</p>
-                                    } */}
+                                    }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="currency" className="flex mb-2 text-sm font-medium ">Currency {
@@ -849,9 +877,9 @@ export default function TenantTable() {
                                             )) : <option disabled>Loading</option>
                                         }
                                     </select>
-                                    {/* {
+                                    {
                                         error.currency && <p className="text-red-500 text-xs">{error.currency}</p>
-                                    } */}
+                                    }
                                     </div>
                                 </div>
                             </div>

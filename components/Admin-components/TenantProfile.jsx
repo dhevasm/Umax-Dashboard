@@ -47,7 +47,6 @@ export default function TenantProfile({tenant_id}){
         if(mode == "Edit"){
             if(tenant !== null) {
                 // console.log(filteredTenant[0])
-                
                 let isFullAdress = false;
                 document.getElementById('name').value = tenant.company
                 document.getElementById('address').value = tenant.address
@@ -309,7 +308,7 @@ export default function TenantProfile({tenant_id}){
              <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none0 bg-opacity-75 z-50">
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                 {/* <!-- Modal content --> */}
-                <div className="relative bg-white rounded-lg shadow">
+                <div className="relative bg-white rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
                     {/* <!-- Modal header --> */}
                     <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white ">
                         <h3 className="text-xl font-semibold">
@@ -333,8 +332,7 @@ export default function TenantProfile({tenant_id}){
                         </div>
                     
                     <div className="w-full h-0.5 my-3 bg-gray-300"></div>
-                
-                        <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen overflow-y-auto pb-52 md:pb-3">
+                        <div className="grid gap-4 mb-4 grid-cols-2 max-h-screen md:pb-3">
                             <div className="col-span-2 md:col-span-1">
                                 <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('company-name')} {
                                     error.name && <p className="text-red-500 text-sm">*</p>
