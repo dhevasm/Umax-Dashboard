@@ -177,15 +177,15 @@ export default function TenantProfile({tenant_id}){
     // }, [tenant])
 
     async function getSelectFrontend(){
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/timezone').then((response) => {
+        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
             setTimezone(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/currency').then((response) => {
+        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/currency`).then((response) => {
             setCurrency(response.data)
         })
 
-        await axios.get('https://umaxxnew-1-d6861606.deta.app/culture').then((response) => {
+        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/culture`).then((response) => {
             setCulture(response.data)
         })
 

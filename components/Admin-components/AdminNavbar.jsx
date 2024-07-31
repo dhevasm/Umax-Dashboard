@@ -107,7 +107,7 @@ function AdminNavbar({userData}){
                     </button>
                     </div>
 
-                    <div className="flex items-center gap-2 mx-2">
+                    <div className=" flex items-center gap-2 ms-20">
                     <div className="w-16 h-9 flex justify-center items-center rounded-full">
                         <label htmlFor="theme" className="inline-flex items-center cursor-pointer me-2">
                             {

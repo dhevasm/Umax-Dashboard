@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 const Navbar = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -11,6 +12,7 @@ const Navbar = () => {
   const [lang, setLang] = useState('id');
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations('landing');
 
   const handleNavbarToggle = () => {
     setNavbarOpen(prevState => !prevState);
@@ -75,22 +77,28 @@ const Navbar = () => {
                   <span className="relative my-[6px] block h-[2px] w-[30px] bg-body-color bg-black dark:bg-white"></span>
                   <span className="relative my-[6px] block h-[2px] w-[30px] bg-body-color bg-black dark:bg-white"></span>
                 </button>
-                <nav className={`absolute right-4 top-full w-full max-w-[250px] rounded-lg bg-white py-5 px-6 shadow transition-all lg:static lg:block lg:w-full lg:max-w-full lg:bg-transparent lg:shadow-none dark:bg-dark-2 lg:dark:bg-transparent ${navbarOpen ? 'block' : 'hidden'}`}>
+                <nav className={`absolute right-4 top-full w-full max-w-[250px] rounded-lg bg-white dark:bg-slate-700 py-5 px-6 shadow transition-all lg:static lg:block lg:w-full lg:max-w-full lg:bg-transparent lg:shadow-none dark:bg-dark-2 lg:dark:bg-transparent ${navbarOpen ? 'block' : 'hidden'}`}>
                   <ul className="block lg:flex">
                     <li>
-                      <a href="javascript:void(0)" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">Home</a>
+                      <a href="#home" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t('home')}</a>
                     </li>
                     <li>
-                      <a href="javascript:void(0)" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">Payment</a>
+                      <a href="#payment" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("payment")}</a>
                     </li>
                     <li>
-                      <a href="javascript:void(0)" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">Features</a>
+                      <a href="#feature" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("feature")}</a>
+                    </li>
+                    <li>
+                      <a href="#contact" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("contact")}</a>
+                    </li>
+                    <li className='block md:hidden'>
+                      <a href={`${lang}/login`} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("login")}</a>
                     </li>
                   </ul>
                 </nav>
               </div>
               <div className="justify-end hidden pr-16 sm:flex lg:pr-0">
-                <a href={`${lang}/login`} className="py-3 text-base font-medium px-7 text-dark dark:text-white hover:text-blue-600 mr-5">Login</a>
+                <a href={`${lang}/login`} className="py-3 text-base font-medium px-7 text-dark dark:text-white hover:text-blue-600 mr-5">{t("login")}</a>
                 <select name="" id="" className="rounded-full px-2 border" onChange={handleLangChange} value={lang}>
                   <option value="id">
                     Indonesia

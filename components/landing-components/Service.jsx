@@ -1,21 +1,23 @@
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 const Service = () => {
+  const t = useTranslations('landing');
+
   return (
     <section className="pt-20 pb-12 lg:pt-[120px] dark:bg-slate-900 lg:pb-[90px] px-20">
-      <div className="container mx-auto">
+      <div className="container mx-auto" id='feature'>
         <div className="flex flex-wrap -mx-4">
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
               <span className="block mb-2 text-lg font-semibold text-blue-600">
-                What we Serve
+                {t('service-subtitle')}
               </span>
               <h2 className="text-dark dark:text-white mb-3 text-3xl leading-[1.2] font-bold sm:text-4xl md:text-[40px]">
-                Our Best Services
+                {t('service-title')}
               </h2>
               <p className="text-base dark:text-slate-200">
-                There are many variations of passages of Lorem Ipsum available
-                but the majority have suffered alteration in some form.
+                {t('service-body')}
               </p>
             </div>
           </div>
@@ -39,10 +41,10 @@ const Service = () => {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
-                Marketing Solutions
+               {t("service-title-1")}
               </h4>
-              <p className="text-body-color dark:text-slate-200">
-                Lorem Ipsum is simply dummy text of the printing and industry.
+              <p className="text-body-color text-justify dark:text-slate-200">
+              {t("service-body-1")}
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>
@@ -69,10 +71,10 @@ const Service = () => {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
-                Business Analytics
+              {t("service-title-2")}
               </h4>
-              <p className="text-body-color dark:text-slate-200">
-                Lorem Ipsum is simply dummy text of the printing and industry.
+              <p className="text-body-color text-justify dark:text-slate-200">
+              {t("service-body-2")}
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>
@@ -103,10 +105,10 @@ const Service = () => {
                 </svg>
               </div>
               <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
-                UX & UI Design
+              {t("service-title-3")}
               </h4>
-              <p className="text-body-color dark:text-slate-200">
-                Lorem Ipsum is simply dummy text of the printing and industry.
+              <p className="text-body-color text-justify dark:text-slate-200">
+              {t("service-body-3")}
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>
