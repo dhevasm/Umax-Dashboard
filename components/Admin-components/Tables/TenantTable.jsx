@@ -258,7 +258,7 @@ export default function TenantTable() {
     }
 
     async function getTenants(){
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}tenant-get-all`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }

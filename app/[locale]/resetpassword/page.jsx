@@ -83,7 +83,13 @@ const Page = () => {
     return (
         <div className="relative min-h-screen flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-center px-4">
             <div className="mb-4">
-                <Image src="/assets/logo.png" alt="logo" className="mx-auto pb-2 w-20" width={80} height={10}/>
+                <Image
+                    src="/assets/logo.png"
+                    alt="logo"
+                    className="mx-auto pb-2 w-20"
+                    width={80} 
+                    height={10}
+                />
             </div>
             <div className="flex flex-col items-center justify-center w-full max-w-md">
                 <form

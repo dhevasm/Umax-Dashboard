@@ -166,7 +166,13 @@ export default function Navbar() {
             <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <Image src="/assets/logo.png" alt="Logo" className="ms-4" width={130} height={10}/>
+                    <Image
+                        src="/assets/logo.png"
+                        alt="Logo"
+                        className="w-[140px] h-10 decoration-white mr-1 mt-2"
+                        width={140}
+                        height={40}
+                    />
                     <div>
                         <ul className="hidden sm:hidden md:hidden lg:flex xl:flex p-2 text-black dark:text-slate-100 gap-5">
                             <style jsx>

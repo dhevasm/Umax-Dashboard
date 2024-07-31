@@ -45,6 +45,8 @@ function AdminDashboard() {
     }, [changeTable])
     
     const AdminDashboardContextValue = {
+        tenantsCount,
+        setTenantsCount,
         sidebarHide,
         setSidebarHide,
         updateCard,
@@ -97,14 +99,17 @@ function AdminDashboard() {
         setClientCount(getClient.data.Data.length)
     }, [])
 
-    const getTenantsCount = useCallback(async () => {
+    useEffect(() => {
         if (userData.roles === 'sadmin') {
-            const getTenants = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-                }
-            })
-            setTenantsCount(getTenants.data.Data.length)
+            const fetchTenantsCount = async () => {
+                const getTenants = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                    }
+                })
+                setTenantsCount(getTenants.data.Data.length)
+            }
+            fetchTenantsCount()
         }
     }, [userData.roles])
 
@@ -126,11 +131,10 @@ function AdminDashboard() {
 
     useEffect(() => {
         if (typeof window !== "undefined" && updateCard) {
-            getTenantsCount()
             getUserCampaignCount()
             setUpdateCard(false)
         }
-    }, [updateCard, getTenantsCount, getUserCampaignCount])
+    }, [updateCard, getUserCampaignCount])
 
     useEffect(() => {
         if (typeof window !== "undefined") {
