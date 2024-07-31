@@ -115,7 +115,13 @@ const Page = () => {
   return (
     <div className="relative overflow-hidden min-h-screen flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-center">
       <div>
-        <Image src="/assets/logo.png" alt="logo" className="mx-auto pb-2 w-20" width={80} height={10}/>
+        <Image
+          src="/assets/logo.png"
+          alt="logo"
+          className="mx-auto pb-2 w-20"
+          width={80} 
+          height={10}
+        />
      {/* <div className='fixed z-30 bottom-5 right-5 p-3 rounded-full hover:bg-blue-600 hover:cursor-pointer bg-blue-500 text-white' onClick={() => router.back()}>
       <FaHome className='text-2xl'/>
      </div> */}

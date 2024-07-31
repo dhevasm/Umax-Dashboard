@@ -18,17 +18,18 @@ export default function Navbar() {
     
     const t = useTranslations('navbar');
     const tout = useTranslations('swal-logout');
-    const pathName = usePathname()
+    const pathName = usePathname();
     const router = useRouter();
     const [activeLink, setActiveLink] = useState(pathName);
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [role, setRole] = useState('')
-    const [image, setImage] = useState('')
-    const [isHidden, setIsHidden] = useState(true)
-    const [isDark, setIsDark] = useState(false)
-    const umaxUrl = process.env.NEXT_PUBLIC_API_URL
-    const lang = localStorage.getItem('lang')
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [role, setRole] = useState('');
+    const [image, setImage] = useState('');
+    const [isHidden, setIsHidden] = useState(true);
+    const [isDark, setIsDark] = useState(false);
+    const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
+    const roles = localStorage.getItem('roles');
+    const [lang, setLang] = useState(roles != 'client' ? 'en' : localStorage.getItem('lang') || 'en');
 
     const fetchUser = async () => {
         try {
@@ -38,32 +39,33 @@ export default function Navbar() {
                 },
             });
             response.data.Data.map(item => {
-                setName(item.name)
-                setEmail(item.email)
-                setRole(item.roles)
-                setImage(item.image)
+                setName(item.name);
+                setEmail(item.email);
+                setRole(item.roles);
+                setImage(item.image);
             });
         } catch (error) {
             if (error.name !== 'AbortError') {
                 console.error(error);
             }
         }
-    }
-    useEffect(() => {
-       if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            setIsDark(true)
-            localStorage.setItem('color-theme', 'dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-            setIsDark(false)
-            localStorage.setItem('color-theme', 'light')
-        }
-    }, [])
+    };
 
     useEffect(() => {
-        fetchUser()
-    }, [])
+        if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            setIsDark(true);
+            localStorage.setItem('color-theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            setIsDark(false);
+            localStorage.setItem('color-theme', 'light');
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
     const handleClick = (link) => {
         setActiveLink(link);
@@ -76,7 +78,7 @@ export default function Navbar() {
     };
 
     function ProfileDropdown({ name, email, role, image }) {
-        function handleLogout(){
+        function handleLogout() {
             Swal.fire({
                 title: `${tout('warn')}`,
                 text: `${tout('msg')}`,
@@ -95,7 +97,7 @@ export default function Navbar() {
                     localStorage.removeItem('lang');
                     router.push('/');
                 }
-            })
+            });
         }
     
         return (
@@ -116,7 +118,7 @@ export default function Navbar() {
                     <div className="flex flex-col mb-2">
                         <div className="flex justify-between">
                             <p className="font-bold text-[14px] text-gray-800 dark:text-slate-100">{name}</p>
-                            <label htmlFor="theme" className="inline-flex sm:hidden md:hidden lg:hidden xl:hidden items-center cursor-pointer">
+                            <label htmlFor="theme" className="inline-flex items-center cursor-pointer">
                                 <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
                                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                                 </div>
@@ -130,15 +132,12 @@ export default function Navbar() {
                         {t('profile')}
                     </Link>
                     
-                    {
-                        role === 'admin' && (
-                            <Link href={`admin-dashboard`} className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
-                                <FaTachometerAlt className="mr-2" />
-                                Admin Dashboard
-                            </Link>
-                        )
-                    }
-                    
+                    {role === 'admin' && (
+                        <Link href={`admin-dashboard`} className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                            <FaTachometerAlt className="mr-2" />
+                            Admin Dashboard
+                        </Link>
+                    )}
                     
                     <div className="border-t border-gray-300 dark:border-gray-600"></div>
                     <a onClick={handleLogout} className="flex items-center px-2 py-1 text-[14px] mt-2 text-red-600 dark:text-red-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
@@ -151,10 +150,15 @@ export default function Navbar() {
     }
 
     function handleTheme(){
-        document.documentElement.classList.toggle("dark")
+        document.documentElement.classList.toggle("dark");
         setIsDark(!isDark);
-        localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
+        localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     }
+
+    const changeLanguage = (lang) => {
+        setLang(lang);
+        router.push(`/${lang}${activeLink.slice(3)}`);
+    };
 
     return (
         <>
@@ -162,7 +166,13 @@ export default function Navbar() {
             <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <Image src="/assets/logo.png" alt="Logo" className="ms-4" width={130} height={10}/>
+                    <Image
+                        src="/assets/logo.png"
+                        alt="Logo"
+                        className="w-[140px] h-10 decoration-white mr-1 mt-2"
+                        width={140}
+                        height={40}
+                    />
                     <div>
                         <ul className="hidden sm:hidden md:hidden lg:flex xl:flex p-2 text-black dark:text-slate-100 gap-5">
                             <style jsx>
@@ -223,7 +233,7 @@ export default function Navbar() {
                                 </span>
                                 {t("account")}
                             </li>
-                            {role !== "client" && (
+                            {roles !== "client" && (
                                 <li
                                     className={`font-semibold flex gap-1 items-center ${
                                         activeLink.slice(3) === "/clients" ? "active-link" : ""
@@ -240,34 +250,33 @@ export default function Navbar() {
                     </div>
 
                     {/* Profile */}
-                    <div className="flex gap-3 items-center">
+                    <div className="flex gap-2 items-center">
+                        {roles === 'client' && (
+                            activeLink.includes("id") ? 
+                                <button onClick={() => changeLanguage('en')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                    {'ID'}
+                                </button>
+                            : 
+                                <button onClick={() => changeLanguage('id')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                    {'EN'}
+                                </button>
+                        )}
+                        {/* <p className="text-white">{lang}</p> */}
                         <div className="relative text-black hidden sm:flex md:flex lg:flex xl:flex dark:text-slate-100 me-3 hover:cursor-pointer">
-                            {/* <div className="" onClick={(e) => {
-                            document.querySelector(".notif-dropdown").classList.toggle("hidden");
-                            e.stopPropagation();
-                            }}>
-                            <BiBell size={20} />
-                            </div> */}
                             <div className="notif-dropdown hidden absolute z-10 mt-2 p-5 right-5 bg-white dark:bg-slate-700 rounded-lg shadow-lg flex-col gap-3 w-[200px]">
                             <a href="/" className="hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg">Notification 1</a>
                             <a href="/" className="hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg">Notification 2</a>
                             <a href="/" className="hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg">Notification 3</a>
                             </div>
                         </div>
-                        <label htmlFor="theme" className="hidden sm:inline-flex md:inline-flex lg:inline-flex xl:inline-flex items-center cursor-pointer">
-                            <input type="checkbox" value="" checked={isDark} id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
-                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-                            </div>
-                        </label>
-                    {name === '' ? (
-                        <UserInfoLoading />
-                    ) : (
-                        <ProfileDropdown name={name} email={email} role={role} image={image} />
-                    )}
+                        {name === '' ? (
+                            <UserInfoLoading />
+                        ) : (
+                            <ProfileDropdown name={name} email={email} role={role} image={image} />
+                        )}
                     </div>
                 </div>
             </nav>
         </>
-    )
+    );
 }
-

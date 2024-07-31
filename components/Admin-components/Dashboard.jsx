@@ -21,7 +21,7 @@ import { FaArrowUp } from "react-icons/fa"
 export default function Dashboard({ tenant_id }) {
 
     const t = useTranslations("admin-dashboard")
-    const { sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
+    const { sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard, tenantsCount } = useContext(AdminDashboardContext)
     const [campaigns, setCampaigns] = useState([])
     const [filter, setFilter] = useState("reach")
 
@@ -83,7 +83,7 @@ export default function Dashboard({ tenant_id }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
                     {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
 
-                        userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={dataDashboard.tenants ? dataDashboard.tenants : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} /> :
+                        userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={tenantsCount ? tenantsCount : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} /> :
 
                             <CountCard title={t('tenants')} value={<div className="text-md animate-pulse">Loading...</div>} />}
 

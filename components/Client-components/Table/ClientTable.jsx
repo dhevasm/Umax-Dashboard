@@ -446,10 +446,10 @@ const ClientTable = () => {
                                         </td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.address}</td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
-                                            <a href={`https://wa.me/${data.contact.replace(/\D+/g, '')}`} target='_blank'>{data.contact}</a>
+                                            <a href={`https://wa.me/${data.contact.replace(/\D+/g, '')}`} title={`Message ${data.name} on Whatsapp`} target='_blank'>{data.contact.replace(/\D+/g, '')}</a>
                                         </td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
-                                            <a href={`mailto:${data.email}`}>{data.email}</a>
+                                            <a href={`mailto:${data.email}`} title={`Email ${data.name}`}>{data.email}</a>
                                         </td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'><StatusBadge status={data.status} /></td>
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap hidden justify-center gap-1'>
