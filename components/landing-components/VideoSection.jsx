@@ -23,7 +23,7 @@ const VideoSection = () => {
               {t("vidio-desc")}
               </p>
               <a
-                href="javascript:void(0)"
+                href=""
                 className="inline-block py-3 text-base font-medium text-white border border-white rounded-full px-9 hover:bg-white hover:text-primary"
               >
                 {t("vidio-button")}
@@ -36,7 +36,7 @@ const VideoSection = () => {
       <div className="top-0 right-0 z-10 w-full h-full lg:absolute lg:w-1/2">
         <div className="flex items-center justify-center w-full h-full bg-bg-tenant bg-no-repeat bg-cover">
           <a
-            href="javascript:void(0)"
+            href=""
             onClick={() => setVideoOpen(true)}
             className="absolute z-40 flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 md:h-[100px] md:w-[100px]"
           >

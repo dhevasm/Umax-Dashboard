@@ -239,7 +239,7 @@ export default function TenantProfile({tenant_id}){
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
                             ) : "Loading ..."
                         }
-                        { tenant.company? <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-800 dark:bg-slate-700 bg-blue-500 hover:bg-blue-600 p-2 rounded-md shadow-md" onClick={() => showModal("Edit", tenant._id)}>
+                        { tenant.company? <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-800 dark:bg-slate-700 bg-[#3d50e0] hover:bg-blue-600 p-2 rounded-md shadow-md" onClick={() => showModal("Edit", tenant._id)}>
                             <FaPen/>
                             Edit Tenant
                         </div>
@@ -256,19 +256,19 @@ export default function TenantProfile({tenant_id}){
                             </div>
                             <div className="flex flex-col md:flex-row gap-2 items-start mt-3 p-5">
                                 <FaBuilding className="text-2xl text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">{t('address')}: {tenant.address}</p>
+                                <p className="dark:text-white"><span className="font-semibold">{t('address')}:</span> {tenant.address}</p>
                             </div>
                             <div className="flex w-full flex-wrap flex-col md:flex-row gap-5 mt-5">
                                 <div className="flex gap-2 items-center p-5">
                                 <FaPhone className="text-[#3d50e0]" />
                                 <div className="ml-2 dark:text-white">
-                                    {t('contact')}: <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">{tenant.contact}</a>
+                                    <span className="font-semibold">{t('contact')}:</span> <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">{tenant.contact}</a>
                                 </div>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
                                 <FaEnvelope className="text-[#3d50e0]" />
                                 <div className="ml-2 dark:text-white">
-                                    Email: <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
+                                    <span className="font-semibold">Email:</span> <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
                                 </div>
                                 </div>
                             </div>
@@ -279,19 +279,19 @@ export default function TenantProfile({tenant_id}){
                             <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5 pb-5">
                                 <div className="flex gap-2 items-center p-5">
                                 <FaHome className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">{t('culture')}: {tenant.culture}</p>
+                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('culture')}:</span> {tenant.culture}</p>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
                                 <FaFlag className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">{t('language')}: {tenant.language}</p>
+                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('language')}:</span> {tenant.language}</p>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
                                 <FaDollarSign className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">{t('currency')}: {tenant.currency}</p>
+                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('currency')}:</span> {tenant.currency}</p>
                                 </div>
                                 <div className="flex gap-2 items-center p-5">
                                 <FiWatch className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white">{t('timezone')}: {tenant.timezone_name}</p>
+                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('timezone')}:</span> {tenant.timezone_name}</p>
                                 </div>
                             </div>
                             </>
