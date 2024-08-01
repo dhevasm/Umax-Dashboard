@@ -6,12 +6,15 @@ import { useContext } from "react";
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page";
 import { useState,useEffect } from "react";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 const ChartTwo = () => {
+
+  const t = useTranslations("admin-dashboard");
   const {sidebarHide,
     setSidebarHide,
     updateCard,
@@ -242,12 +245,12 @@ const ChartTwo = () => {
 
     useEffect(() => {
       getCountData()
-    }, [campaigns])
+    })
 
 
   const series = [
     {
-      name: "Campaign Start",
+      name: t('campaign-start'),
       data: [
         filteredCampaign.jan,
         filteredCampaign.feb,
@@ -264,7 +267,7 @@ const ChartTwo = () => {
       ],
     },
     {
-      name: "Campaign End",
+      name: t('campaign-end'),
       data: [
         filteredCampaignDone.jan,
         filteredCampaignDone.feb,
@@ -291,7 +294,7 @@ const ChartTwo = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary text-sm md:text-md">Campaign Start</p>
+              <p className="font-semibold text-primary text-sm md:text-md">{t('campaign-start')}</p>
               <p className="text-xs md:text-sm text-nowrap font-medium">{`01.01.${Year} - 31.12.${Year}`}</p>
             </div>
           </div>  
@@ -300,7 +303,7 @@ const ChartTwo = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-secondary text-sm md:text-md">Campaign End</p>
+              <p className="font-semibold text-secondary text-sm md:text-md">{t('campaign-end')}</p>
               <p className="text-xs md:text-sm text-nowrap font-medium">{`01.01.${Year} - 31.12.${Year}`}</p>
             </div>
           </div>

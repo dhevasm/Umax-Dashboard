@@ -12,7 +12,7 @@ import { useState, useEffect } from "react"
 import LoadingCircle from "../Client-components/Loading/LoadingCircle"
 import { useTranslations } from "next-intl"
 import axios from "axios"
-import { Image } from "next/image"
+import Image from "next/image"
 import { IconContext } from "react-icons"
 import { RiAdvertisementFill, RiGoogleFill, RiGoogleLine, RiMetaLine, RiTiktokFill, RiTiktokLine } from "react-icons/ri"
 import { reach } from "yup"
@@ -44,7 +44,7 @@ export default function Dashboard({ tenant_id }) {
         if(userData.roles == "admin"){
             fetchCampaigns()
         }
-    }, [])
+    })
 
     // useEffect(() => {
     //     console.log(campaigns)
@@ -52,7 +52,7 @@ export default function Dashboard({ tenant_id }) {
 
     useEffect(() => {
         setFilterCampaign("reach")
-    }, [campaigns])
+    })
 
     const setFilterCampaign = (filterset) => {
         let filteredCampaigns = []
@@ -130,15 +130,15 @@ export default function Dashboard({ tenant_id }) {
                                     <button className="rounded-full bg-slate-100 px-3 py-2 filterselect" onClick={(e) =>{
                                         handlechangeFiilter("reach")
                                         e.target.classList.add("filterselect")
-                                         }}>Reach</button>
+                                         }}>{t('reach')}</button>
                                     <button className="rounded-full bg-slate-100 px-3 py-2" onClick={(e) => {
                                         handlechangeFiilter("amountspent")
                                         e.target.classList.add("filterselect")
-                                    }}>Amount Spend</button>
+                                    }}>{t('amount-spent')}</button>
                                     <button className="rounded-full bg-slate-100 px-3 py-2" onClick={(e) => {
                                         handlechangeFiilter("impressions")
                                         e.target.classList.add("filterselect")
-                                    }}>Impressions</button>
+                                    }}>{t('impressions')}</button>
                                 </div>
                             </div>
 
@@ -146,27 +146,27 @@ export default function Dashboard({ tenant_id }) {
                                 <div className="grid grid-cols-3 rounded-sm bg-slate-100 sm:grid-cols-5">
                                     <div className="p-2.5 xl:p-5">
                                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                                            Campaign
+                                            {t('campaigns')}
                                         </h5>
                                     </div>
                                     <div className="p-2.5 text-center xl:p-5">
                                         <h5 className={`text-sm font-medium uppercase xsm:text-base ${filter == "amountspent" ? "text-blue-500" : ""}`}>
-                                            Amount Spent
+                                            {t('amount-spent')}
                                         </h5>
                                     </div>
                                     <div className="p-2.5 text-center xl:p-5">
                                     <h5 className={`text-sm font-medium uppercase xsm:text-base ${filter == "reach" ? "text-blue-500" : ""}`}>
-                                            Reach
+                                            {t('reach')}
                                         </h5>
                                     </div>
                                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
                                     <h5 className={`text-sm font-medium uppercase xsm:text-base ${filter == "impressions" ? "text-blue-500" : ""}`}>
-                                            Impressions 
+                                            {t('impressions')}
                                         </h5>
                                     </div>
                                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
                                         <h5 className="text-sm font-medium uppercase xsm:text-base">
-                                             Start date
+                                            {t('start-date')}
                                         </h5>
                                     </div>
                                 </div>
@@ -175,7 +175,7 @@ export default function Dashboard({ tenant_id }) {
                                     <div key={index} className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
                                         <div className="flex items-center gap-3 p-2.5 xl:p-5">
                                             <div className="flex-shrink-0">
-                                                <img src={`/assets/${data.campaign_platform === 1 ? 'meta.svg' : data.campaign_platform === 2 ? 'google.svg' : 
+                                                <Image src={`/assets/${data.campaign_platform === 1 ? 'meta.svg' : data.campaign_platform === 2 ? 'google.svg' : 
                                                 data.campaign_platform === 3 ? 'tiktok.svg' : '' 
                                                 }`}  
                                                 width={45}

@@ -89,7 +89,7 @@ const EditProfile = () => {
         };
 
         fetchProfileData();
-    }, []);
+    });
 
     const validationSchema = yup.object().shape({
         image: yup.string().required('Image is Required'),
@@ -143,12 +143,12 @@ const EditProfile = () => {
                 if(localStorage.getItem('lang') !== values.language){
                     localStorage.setItem("lang", values.language)
                     Swal.fire({
-                        title: "Profile updated successfully!",
+                        title: t('message'),
                         icon: "success",
                         showCancelButton: false,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
-                        confirmButtonText: "Refresh Page!"
+                        confirmButtonText: t('refresh')
                       }).then((result) => {
                         if (result.isConfirmed) {
                             router.push(`/${localStorage.getItem('lang')}/profile/edit`);
@@ -419,11 +419,8 @@ const EditProfile = () => {
                                     onChange={formik.handleChange}
                                     name="language"
                                 >
-                                    <option value="en">English</option>
-                                    <option value="id">Indonesian</option>
-                                    <option value="jp">Jepang</option>
-                                    <option value="ar">Arab</option>
-                                    <option value="jv">Jawa</option>
+                                    <option value="en">{t('english')}</option>
+                                    <option value="id">{t('indonesian')}</option>
                                 </select>
                             }
                             error={formik.errors.language}

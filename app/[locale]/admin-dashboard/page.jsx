@@ -116,8 +116,7 @@ function AdminDashboard() {
     useEffect(() => {
         getUserData()
         getUserCampaignCount()
-        getTenantsCount()
-    }, [getUserData, getUserCampaignCount, getTenantsCount])
+    }, [getUserData, getUserCampaignCount])
 
     useEffect(() => {
         setDataDashboard({

@@ -3,6 +3,7 @@ import WorldMap from "react-svg-worldmap";
 import { useContext } from 'react';
 import { AdminDashboardContext } from '@/app/[locale]/admin-dashboard/page';
 import axios from 'axios';
+import { useTranslations } from 'next-intl';
 
 const Map = () => {
   const {sidebarHide,
@@ -17,6 +18,7 @@ const Map = () => {
     setIsDarkMode} = useContext(AdminDashboardContext)
 
     const [client, setClient] = useState([])
+    const t = useTranslations("admin-dashboard")
 
     async function getClient() { 
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-by-tenant`, {
@@ -63,7 +65,7 @@ const Map = () => {
 
      useEffect(() => {
       getClientCount()
-    } , [client])
+    })
 
     const getClientCount = () => {
       client.map((item) => {
@@ -81,7 +83,7 @@ const Map = () => {
 
     return (
       <>
-        <div className='text-black dark:text-white'>Clients Country</div>
+        <div className='text-black font-semibold text-xl dark:text-white'>{t('clients-country')}</div>
         <div className="App flex justify-center overflow-auto w-full h-[370px]  ">
           {
             data.length != 0 ? <WorldMap className="transition-transform"

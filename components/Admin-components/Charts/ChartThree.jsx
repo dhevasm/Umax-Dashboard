@@ -3,6 +3,7 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 const options = {
   chart: {
@@ -48,6 +49,7 @@ const options = {
 
 const ChartThree = () => {
 
+  const t = useTranslations("admin-dashboard")
   const [campaigns, setCampaigns] = useState([])  
   const [meta, setMeta] = useState(0)
   const [google, setGoogle] = useState(0)
@@ -92,7 +94,7 @@ const ChartThree = () => {
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
           <h5 className="text-xl font-semibold ">
-            Campaign by Platform
+            {t("campaign-by-platform")}
           </h5>
         </div>
         <div>

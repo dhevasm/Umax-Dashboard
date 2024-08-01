@@ -189,4 +189,4 @@ const getFlagSrc = (language) => {
     }
 };
 
-export default dynamic(() => Promise.resolve(Profile), { ssr: false });
+export default Profile;

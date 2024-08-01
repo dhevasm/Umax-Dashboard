@@ -5,10 +5,13 @@ import dynamic from "next/dynamic";
 import { useContext } from "react";
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const ChartOne = () => {
+
+  const t = useTranslations('admin-dashboard');
   const {sidebarHide,
     setSidebarHide,
     updateCard,
@@ -145,7 +148,7 @@ const ChartOne = () => {
 
   const series = [
     {
-      name: "Total Campaigns",
+      name: t('total-campaigns'),
       data: dataseries,
     },
   ]
@@ -155,7 +158,7 @@ const ChartOne = () => {
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-xl font-semibold text-black dark:text-white">
-            Campaign Objective
+            {t("campaign-objective")}
           </h4>
         </div>
         <div>

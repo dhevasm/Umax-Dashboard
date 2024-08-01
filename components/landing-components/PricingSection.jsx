@@ -1,6 +1,9 @@
+import { useTranslations } from "next-intl";
 import React from "react";
 
 const PricingSection = () => {
+  const t = useTranslations("landing");
+
   return (
     // ====== Pricing Section Start ======
     <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-20" id="payment">
@@ -9,13 +12,13 @@ const PricingSection = () => {
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
               <span className="block mb-2 text-lg font-semibold text-blue-600">
-                Pricing Table
+                {t('pricing-table')}
               </span>
               <h2 className="mb-3 text-3xl leading-[1.208] font-bold text-dark dark:text-white sm:text-4xl md:text-[40px]">
-                Our Pricing Plan
+                {t('our-pricing-plan')}
               </h2>
               <p className="text-base text-gray-500 dark:text-gray-300">
-                There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.
+                {t('pricing-desc')}
               </p>
             </div>
           </div>
@@ -55,7 +58,7 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                href="javascript:void(0)"
+                href=""
                 className="block w-full p-3 text-base dark:text-white font-medium text-center transition bg-transparent border rounded-md border-stroke dark:border-gray-600 text-primary hover:border-primary hover:bg-blue-600 hover:text-white"
               >
                 Choose Personal
@@ -358,7 +361,7 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                href="javascript:void(0)"
+                href=""
                 className="block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Business
@@ -445,7 +448,7 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                href="javascript:void(0)"
+                href=""
                 className="block w-full p-3 text-base dark:text-white font-medium text-center transition bg-transparent border rounded-md border-stroke dark:border-gray-600 text-primary hover:border-primary hover:bg-blue-600 hover:text-white"
               >
                 Choose Professional

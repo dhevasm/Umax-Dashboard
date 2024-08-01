@@ -17,10 +17,10 @@ const Call = () => {
                 </div>
                 <div className="w-full px-4 lg:w-1/2">
                 <div className="flex flex-wrap lg:justify-end">
-                    <a href="javascript:void(0)" className="inline-flex py-3 my-1 mr-4 text-base font-medium transition bg-white rounded-md hover:bg-shadow-1 text-primary px-7">
+                    <a href="" className="inline-flex py-3 my-1 mr-4 text-base font-medium transition bg-white rounded-md hover:bg-shadow-1 text-primary px-7">
                     Get Pro Version
                     </a>
-                    <a href="javascript:void(0)" className="inline-flex py-3 my-1 text-base font-medium text-white transition rounded-md bg-secondary px-7 hover:bg-opacity-90">
+                    <a href="" className="inline-flex py-3 my-1 text-base font-medium text-white transition rounded-md bg-secondary px-7 hover:bg-opacity-90">
                     Start Free Trial
                     </a>
                 </div>

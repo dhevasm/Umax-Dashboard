@@ -4,7 +4,7 @@
     "feature" : "Feature",
     "payment" : "Payment",
     "contact" : "Contact",
-    "login" : "login",
+    "login" : "Login",
     "hero_title" : "Monitor and Analyze Your Ads in One Place",
     "hero_desc" : " With UMAX Dashboard, you can monitor and analyze advertising performance from Google Ads, Meta Ads, and TikTok Ads in real-time. Make better decisions and improve your campaign performance.",
     "hero_button" : "Get Started",
@@ -22,7 +22,7 @@
     "vidio-subtitle" : "Watch Our Intro Video",
     "vidio-desc" : "Watch our video tutorial to understand how to analyze ads from Google Ads, Meta Ads, and TikTok Ads with the UMAX Dashboard application. Click here to watch!",
     "vidio-button" : "Know more",
-    "contact-us" : "Kontak Us",
+    "contact-us" : "Contact Us",
     "contact-title" : "GET IN TOUCH WITH US",
     "contact-desc" : "Need help or want to know more about our app? Call our support team at 0812-1212-2388 or send a message via the contact form. We are ready to help you!", 
     "contact-location" : "Our Location",
@@ -32,8 +32,13 @@
     "your-email" : "Your Email",
     "your-phone" : "Your Phone Number",
     "your-message" : "Your Message",
-    "send-message" : "Send Message"
-    
+    "send-message" : "Send Message",
+    "please-fill" : "Please fill in the Blanks",
+    "success": "Message sent successfully",
+    "error": "Message failed to send",
+    "pricing-table": "Pricing Table",
+    "our-pricing-plan": "Our Pricing Plan",
+    "pricing-desc": "There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
   },
     "navbar": {
       "dashboard": "Dashboard",
@@ -41,6 +46,7 @@
       "campaign": "Campaign",
       "client": "Client",
       "profile": "Profile",
+      "admin-dashboard": "Admin Dashboard",
       "logout": "Logout"
     },
 
@@ -149,8 +155,11 @@
       "culture-error": "Culture is required",
       "success": "Success",
       "message": "Profile updated successfully",
+      "refresh": "Refresh Page",
       "right": "Right",
-      "left": "Left"
+      "left": "Left",
+      "english": "English",
+      "indonesian": "Indonesian"
     },
 
     "campaigns": {
@@ -162,12 +171,14 @@
       "account": "Account",
       "objective": "Objective",
       "start-date": "Start Date",
+      "note": "Note",
       "status": "Status",
       "active": "Active",
       "draft": "Draft",
       "complete": "Complete",
       "page": "Page",
-      "not-found": "Campaign not found"
+      "not-found": "Campaign not found", 
+      "details-of": "Details of"
     },
 
     "accounts": {
@@ -175,10 +186,12 @@
       "search": "Search",
       "name": "Name",
       "client": "Client",
+      "note": "Note",
       "active": "Active",
       "deactive": "Deactive",
       "page": "Page",
-      "not-found": "Account not found"
+      "not-found": "Account not found",
+      "details-of":"Details of"
     },
 
     "clients": {
@@ -188,11 +201,13 @@
       "email": "Email",
       "contact": "Contact",
       "address": "Address",
+      "note": "Note",
       "status": "Status",
       "active": "Active",
       "deactive": "Deactive",
       "page": "Page",
-      "not-found": "Client not found"
+      "not-found": "Client not found",
+      "details-of":"Details of"
     },
 
     "admin-dashboard": {
@@ -202,7 +217,17 @@
       "accounts": "Accounts",
       "clients": "Clients",
       "show-detail": "Show Detail",
-      "Campaign-by-platform": "Campaign by platform"
+      "campaign-by-platform": "Campaign by platform",
+      "campaign-objective": "Campaign Objective",
+      "total-campaigns": "Total Campaigns",
+      "clients-country": "Clients by Country",
+      "campaign-start": "Campaign Start",
+      "campaign-end": "Campaign End",
+      "top-5-campaigns": "Top 5 Campaigns",
+      "amount-spent": "Amount Spent",
+      "reach": "Reach",
+      "impressions": "Impressions",
+      "start-date": "Start Date"
     },
 
     "admin-sidebar": {
