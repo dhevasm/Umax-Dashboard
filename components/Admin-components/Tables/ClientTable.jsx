@@ -359,7 +359,7 @@ export default function ClientTable() {
                 const email = document.getElementById('email').value
                 const status = document.getElementById('status').checked ? 1 : 2
                 let notes = document.getElementById('notes').value
-                if(notes == ""){
+                if(notes == ""){    
                     notes = "empty"
                 }
                 const formData = new FormData();

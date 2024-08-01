@@ -1,5 +1,8 @@
 import { useTranslations } from "next-intl";
 import React from "react";
+import axios from "axios";
+import { useState,useEffect, useContext } from "react";
+import midtransClient from 'midtrans-client';
 
 const PricingSection = () => {
   const t = useTranslations("landing");
@@ -7,8 +10,9 @@ const PricingSection = () => {
   return (
     // ====== Pricing Section Start ======
     <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-20" id="payment">
+      <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}></script>
       <div className="container mx-auto">
-        <div className="flex flex-wrap -mx-4">
+        <div className="flex flex-wrap -mx-4">  
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
               <span className="block mb-2 text-lg font-semibold text-blue-600">
@@ -361,7 +365,9 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                href=""
+                onClick={() => {
+                  snap.pay("026838e7-b01d-44ee-a60f-5314a4b82ae6")
+                }}
                 className="block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Business
