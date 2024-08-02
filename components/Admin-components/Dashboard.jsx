@@ -38,7 +38,7 @@ export default function Dashboard({ tenant_id }) {
 
     useEffect(() => {
         if(userData.roles == "admin"){
-            fetchCampaigns()
+            getCampaign()
         }
     })
 
