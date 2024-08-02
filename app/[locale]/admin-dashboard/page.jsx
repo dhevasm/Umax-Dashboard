@@ -145,11 +145,11 @@ function AdminDashboard() {
             const token = localStorage.getItem('jwtToken')
             const role = localStorage.getItem('roles')
             if (!token) {
-                Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
-                    router.push('/')
+                Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
+                    router.push('/en/login')
                 })
             } else if (role !== 'admin' && role !== 'sadmin') {
-                Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
+                Swal.fire('Authorization failed', 'Request Denied', 'error').then(() => {
                     router.push(`/${localStorage.getItem('lang')}/dashboard`)
                 })
             }

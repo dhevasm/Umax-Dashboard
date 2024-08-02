@@ -21,8 +21,8 @@ const Hero = () => {
               <ul className="flex flex-wrap items-center justify-center md:justify-start">
                 <li>
                   <a
-                    href={`en/login`}
-                    className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-center text-white rounded-md bg-blue-600 hover:bg-blue-dark lg:px-7"
+                    href="#payment"
+                    className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-center text-white rounded-md bg-blue-600 hover:bg-blue-700 lg:px-7"
                   >
                     {t("hero_button")}
                   </a>

@@ -60,7 +60,7 @@ export default function AdminSidebar(){
                 localStorage.removeItem('roles');
                 localStorage.removeItem('name');
                 localStorage.removeItem('lang');
-                Router.push('/')
+                Router.push(`/en/login`)
             }
           });
     }

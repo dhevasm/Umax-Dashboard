@@ -299,16 +299,13 @@ export default function TenantProfile({tenant_id}){
                             <p>Loading...</p>
                         )}
                     </div>
-
                 </div>             
-
             </div>
-
              {/* <!-- Main modal --> */}
              <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none0 bg-opacity-75 z-50">
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                 {/* <!-- Modal content --> */}
-                <div className="relative bg-white rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
+                <div className="relative bg-white rounded-lg shadow max-h-[100vh] overflow-auto">
                     {/* <!-- Modal header --> */}
                     <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white ">
                         <h3 className="text-xl font-semibold">

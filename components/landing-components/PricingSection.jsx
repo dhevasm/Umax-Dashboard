@@ -28,9 +28,9 @@ const PricingSection = () => {
 
   const handleSubmit = async (event) => {
       let price = [
-        950000,
-        320000,
-        400000
+        0,
+        3200000,
+        4000000
       ]
 
       event.preventDefault();
@@ -92,7 +92,7 @@ const PricingSection = () => {
 
   return (
     // ====== Pricing Section Start ======
-    <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-20" id="payment">
+    <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-2 md:px-20" id="payment">
       
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">  
@@ -118,10 +118,7 @@ const PricingSection = () => {
                 Personal
               </span>
               <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
-                <span>$59</span>
-                <span className="text-base font-medium text-body-color dark:text-gray-300">
-                  / year
-                </span>
+                <span>Free</span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
                 Perfect for using in a personal website or a client project.
@@ -600,7 +597,7 @@ const PricingSection = () => {
             {showModal && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="absolute inset-0 bg-black opacity-50"></div>
-                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg p-8 max-h-[80vh]">
+                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg p-8 h-[520px]">
                   <h2 className="text-2xl font-bold mb-4">Complete Your Payment</h2>
                   <div className="w-full h-0.5 bg-gray-400 my-5"></div>
                   <div className="text-gray-500 dark:text-gray-300">
@@ -644,9 +641,9 @@ const PricingSection = () => {
                           value={formValues.phone_number}
                         />
                         <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe} disabled>
-                          <option value="1">Personal Package ($59/year)</option>
-                          <option value="2">Business Package ($199/year)</option>
-                          <option value="3">Professional Package ($256/year)</option>
+                          <option value="1">Personal Plan ($59/year)</option>
+                          <option value="2">Business Plan ($199/year)</option>
+                          <option value="3">Professional Plan ($256/year)</option>
                         </select>
 
                         <div className="flex justify-end gap-5">

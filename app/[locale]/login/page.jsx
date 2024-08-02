@@ -118,18 +118,18 @@ const Page = () => {
     }
   }, [error]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-    const roles = localStorage.getItem("roles");
-    const lang = localStorage.getItem("lang");
-    if (token) {
-      Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
-        router.push(roles === "sadmin" || roles === "admin"
-          ? `/${lang}/admin-dashboard`
-          : `/${lang}/dashboard`);
-      });
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("jwtToken");
+  //   const roles = localStorage.getItem("roles");
+  //   const lang = localStorage.getItem("lang");
+  //   if (token) {
+  //     Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
+  //       router.push(roles === "sadmin" || roles === "admin"
+  //         ? `/${lang}/admin-dashboard`
+  //         : `/${lang}/dashboard`);
+  //     });
+  //   }
+  // }, [router]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);

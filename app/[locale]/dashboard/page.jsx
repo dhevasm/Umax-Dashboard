@@ -79,8 +79,8 @@ function Dashboard() {
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-        Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
-            router.push('/');
+        Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
+            router.push('/en/login');
         });
         }
     }, [router]);

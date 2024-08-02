@@ -5,7 +5,7 @@ const Service = () => {
   const t = useTranslations('landing');
 
   return (
-    <section className="pt-20 pb-12 lg:pt-[120px] dark:bg-slate-900 lg:pb-[90px] px-20">
+    <section className="pt-20 pb-12 lg:pt-[120px] dark:bg-slate-900 lg:pb-[90px] px-3 md:px-20">
       <div className="container mx-auto" id='feature'>
         <div className="flex flex-wrap -mx-4">
           <div className="w-full px-4">
@@ -24,7 +24,7 @@ const Service = () => {
         </div>
         <div className="flex flex-wrap justify-center -mx-4">
           <div className="w-full px-4 sm:w-4/5 md:w-1/2 lg:w-1/3">
-            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px]">
+            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[400px]">
               <div className="relative z-10 inline-flex items-center mx-auto mb-10 h-11">
                 <span className="bg-primary absolute -right-3 top-0 z-[-1] h-[34px] w-[34px] rounded-full opacity-10"></span>
                 <svg
@@ -50,7 +50,7 @@ const Service = () => {
             </div>
           </div>
           <div className="w-full px-4 sm:w-4/5 md:w-1/2 lg:w-1/3">
-            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px]">
+            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[400px]">
               <div className="relative z-10 inline-flex items-center mx-auto mb-10 h-11">
                 <span className="bg-primary absolute -right-3 top-0 z-[-1] h-[34px] w-[34px] rounded-full opacity-10"></span>
                 <svg
@@ -80,7 +80,7 @@ const Service = () => {
             </div>
           </div>
           <div className="w-full px-4 sm:w-4/5 md:w-1/2 lg:w-1/3">
-            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px]">
+            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[400px]">
               <div className="relative z-10 inline-flex items-center mx-auto mb-10 h-11">
                 <span className="bg-primary absolute -right-3 top-0 z-[-1] h-[34px] w-[34px] rounded-full opacity-10"></span>
                 <svg

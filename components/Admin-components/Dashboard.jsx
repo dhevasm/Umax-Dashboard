@@ -40,11 +40,11 @@ export default function Dashboard({ tenant_id }) {
         if(userData.roles == "admin"){
             getCampaign()
         }
-    })
+    }, [])
 
     useEffect(() => {
         setFilterCampaign("reach")
-    })
+    }, [])
 
     const setFilterCampaign = (filterset) => {
         let filteredCampaigns = []
@@ -118,18 +118,6 @@ export default function Dashboard({ tenant_id }) {
                                             `
                                         }
                                     </style>
-                                    <button className="rounded-full bg-slate-100 px-3 py-2 filterselect" onClick={(e) =>{
-                                        handlechangeFiilter("reach")
-                                        e.target.classList.add("filterselect")
-                                         }}>{t('reach')}</button>
-                                    <button className="rounded-full bg-slate-100 px-3 py-2" onClick={(e) => {
-                                        handlechangeFiilter("amountspent")
-                                        e.target.classList.add("filterselect")
-                                    }}>{t('amount-spent')}</button>
-                                    <button className="rounded-full bg-slate-100 px-3 py-2" onClick={(e) => {
-                                        handlechangeFiilter("impressions")
-                                        e.target.classList.add("filterselect")
-                                    }}>{t('impressions')}</button>
                                 </div>
                             </div>
 
@@ -141,17 +129,17 @@ export default function Dashboard({ tenant_id }) {
                                         </h5>
                                     </div>
                                     <div className="p-2.5 text-center xl:p-5">
-                                        <h5 className={`text-sm font-medium uppercase xsm:text-base ${filter == "amountspent" ? "text-blue-500" : ""}`}>
+                                        <h5 className={`hover:cursor-pointer text-sm font-medium uppercase xsm:text-base ${filter == "amountspent" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("amountspent")}>
                                             {t('amount-spent')}
                                         </h5>
                                     </div>
                                     <div className="p-2.5 text-center xl:p-5">
-                                    <h5 className={`text-sm font-medium uppercase xsm:text-base ${filter == "reach" ? "text-blue-500" : ""}`}>
+                                    <h5 className={`hover:cursor-pointer text-sm font-medium uppercase xsm:text-base ${filter == "reach" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("reach")}>
                                             {t('reach')}
                                         </h5>
                                     </div>
                                     <div className="hidden p-2.5 text-center sm:block xl:p-5">
-                                    <h5 className={`text-sm font-medium uppercase xsm:text-base ${filter == "impressions" ? "text-blue-500" : ""}`}>
+                                    <h5 className={`hover:cursor-pointer text-sm font-medium uppercase xsm:text-base ${filter == "impressions" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("impressions")}>
                                             {t('impressions')}
                                         </h5>
                                     </div>
