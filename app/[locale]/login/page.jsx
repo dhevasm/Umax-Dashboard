@@ -69,6 +69,11 @@ const Page = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
+        if (!navigator.onLine) {
+          // Jika pengguna offline
+          throw new Error("Network error: Please check your internet connection.");
+        }
+    
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
           method: "POST",
           headers: {
@@ -77,26 +82,33 @@ const Page = () => {
           },
           body: new URLSearchParams(values).toString(),
         });
-        if (!response.ok) throw new Error("Login failed");
-
+    
+        if (!response.ok) {
+          // Menggunakan response.status untuk deteksi kesalahan tertentu jika perlu
+          throw new Error("Login failed: Invalid email or password.");
+        }
+    
         const data = await response.json();
         const { Token, Data } = data;
         const { tenant_id: tenantID, roles, name } = Data;
-
+    
         localStorage.setItem("jwtToken", Token);
         localStorage.setItem("tenantId", tenantID);
         localStorage.setItem("roles", roles);
         localStorage.setItem("name", name);
-
+    
         getUserData(roles);
       } catch (error) {
-        setError(error.message.includes("ERR_NAME_NOT_RESOLVED")
-          ? "Network error. Please check your internet connection and try again."
-          : "Please check your email and password.");
+        if (error.message.includes("Network error")) {
+          setError("Network error: Please check your internet connection.");
+        } else {
+          setError("Please check your email and password.");
+        }
       } finally {
         setLoading(false);
       }
-    },
+    }
+    
   });
 
   useEffect(() => {

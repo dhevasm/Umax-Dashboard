@@ -57,7 +57,7 @@ const Navbar = () => {
         <div className="container mx-auto">
           <div className="relative flex items-center justify-between -mx-4">
             <div className="max-w-full px-4 w-60">
-              <a href="javascript:void(0)" className="block w-full py-5">
+              <a href="" className="block w-full py-5">
               <Image
                   src="/assets/logo.png"
                   alt="Logo"

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import React from "react";
 import axios from "axios";
 import { useState,useEffect, useContext } from "react";
@@ -5,6 +6,7 @@ import Image from "next/image";
 import Snap from "midtrans-client/lib/snap";
 
 const PricingSection = () => {
+  const t = useTranslations("landing");
 
   const [showModal, setShowModal] = useState(false);
   const [Subscribe, setSubscribe] = useState(1);
@@ -97,13 +99,13 @@ const PricingSection = () => {
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
               <span className="block mb-2 text-lg font-semibold text-blue-600">
-                Pricing Table
+                {t('pricing-table')}
               </span>
               <h2 className="mb-3 text-3xl leading-[1.208] font-bold text-dark dark:text-white sm:text-4xl md:text-[40px]">
-                Our Pricing Plan
+                {t('our-pricing-plan')}
               </h2>
               <p className="text-base text-gray-500 dark:text-gray-300">
-                There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.
+                {t('pricing-desc')}
               </p>
             </div>
           </div>

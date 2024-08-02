@@ -29,7 +29,7 @@ const Hero = () => {
                 </li>
                 <li>
                   <a
-                    href="javascript:void(0)"
+                    href=""
                     className="inline-flex items-center justify-center py-3 px-5 text-center text-base font-medium text-[#464646] dark:text-white hover:text-primary"
                   >
                     <span className="mr-2">

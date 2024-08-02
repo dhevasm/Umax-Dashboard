@@ -9,7 +9,7 @@
     "hero_desc" : " Dengan UMAX Dashboard, Anda dapat memantau dan menganalisa performa iklan dari Google Ads, Meta Ads, dan TikTok Ads secara real-time. Ambil keputusan yang lebih baik dan tingkatkan kinerja kampanye Anda.",
     "hero_button" : "Coba Sekarang",
     "download_button" : "Unduh Aplikasi",
-    "service-title-1" : "Integrasi Multi-Platform",
+    "service-title-1" : "Multi-Platform Integration",
     "service-title-2" : "Analisis Mendalam dan Laporan Terperinci",
     "service-title-3" : "Optimasi Kampanye Berbasis Data",
     "service-body-1" : "UMAX Dashboard mengintegrasikan data iklan dari berbagai platform seperti Google Ads, Meta Ads, dan TikTok Ads. Ini memungkinkan Anda untuk melihat performa iklan Anda secara menyeluruh dalam satu dashboard yang mudah digunakan.",
@@ -32,7 +32,13 @@
     "your-email" : "Email Anda",
     "your-phone" : "Nomer hp anda",
     "your-message" : "Pesan Anda",
-    "send-message" : "Kirim Pesan"
+    "send-message" : "Kirim Pesan",
+    "please-fill" : "Mohon isi semua kolom",
+    "success": "Pesan terkirim",
+    "error": "Pesan gagal terkirim",
+    "pricing-table": "Tabel Harga",
+    "our-pricing-plan": "Tabel Harga Kami",
+    "pricing-desc": "Ada banyak varian pengkajianan dari Lorem Ipsum yang tersedia tapi sebagian telah mengalami transformasi dalam beberapa bentuk."
   },
     "navbar": {
       "dashboard": "Dasbor",
@@ -40,6 +46,7 @@
       "campaign": "Kampanye",
       "client": "Klien",
       "profile": "Profil",
+      "admin-dashboard": "Dasbor Admin",
       "logout": "Keluar"
     },
 
@@ -147,9 +154,12 @@
       "currency-position-error": "Posisi Mata Uang tidak boleh kosong",
       "language-error": "Bahasa tidak boleh kosong",
       "success": "Berhasil",
-      "message": "Profile Berhasil diupdate!",
+      "message": "Profil Berhasil diupdate!",
+      "refresh": "Segarkan Halaman",
       "right": "Kanan",
-      "left": "Kiri"
+      "left": "Kiri",
+      "english": "Inggris",
+      "indonesian": "Indonesia"
     },
 
     "campaigns": {
@@ -161,12 +171,14 @@
       "account": "Akun",
       "objective": "Objektif",
       "start-date": "Mulai Tanggal",
+      "note": "Catatan",
       "status": "Status",
       "active": "Aktif",
       "draft": "Draf",
       "complete": "Selesai",
       "page": "Halaman",
-      "not-found": "Kampanye tidak ditemukan"
+      "not-found": "Kampanye tidak ditemukan",
+      "details-of": "Detail dari"
     },
 
     "accounts": {
@@ -174,10 +186,12 @@
       "search": "Cari",
       "name": "Nama",
       "client": "Klien",
+      "note": "Catatan",
       "active": "Aktif",
       "deactive": "Tidak Aktif",
       "page": "Halaman",
-      "not-found": "Akun tidak ditemukan"
+      "not-found": "Akun tidak ditemukan",
+      "details-of": "Detail dari"
     },
 
     "clients": {
@@ -187,10 +201,12 @@
       "email": "Email",
       "address": "Alamat",
       "contact": "kontak",
+      "note": "Catatan",
       "active": "Aktif",
       "deactive": "Tidak Aktif",
       "page": "Halaman",
-      "not-found": "Klien tidak ditemukan"
+      "not-found": "Klien tidak ditemukan",
+      "details-of": "Detail dari"
     },
 
     "admin-dashboard": {
@@ -200,7 +216,17 @@
       "accounts": "Akun",
       "clients": "Klien",
       "show-detail": "Lihat Detail",
-      "Campaign-by-platform": "Kampanye berdasarkan platform"
+      "campaign-by-platform": "Kampanye berdasarkan platform",
+      "campaign-objective": "Objektif Kampanye",
+      "total-campaigns": "Total Kampanye",
+      "clients-country": "Klien berdasarkan Negara",
+      "campaign-start": "Kampanye mulai",
+      "campaign-end": "Kampanye selesai",
+      "top-5-campaigns": "Top 5 Kampanye",
+      "amount-spent": "Pengeluaran",
+      "reach": "Cakupan",
+      "impressions": "Tayangan",
+      "start-date": "Tanggal Mulai"
     },
 
     "admin-sidebar": {
@@ -299,7 +325,7 @@
       "end-date-error": "Tanggal selesai tidak boleh kosong",
       "all-platform": "Semua Platform",
       "all-status": "Semua status",
-      "all-objective": "Semua objective"
+      "all-objective": "Semua Objektif"
     },
 
     "admin-accounts": {

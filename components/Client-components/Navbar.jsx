@@ -29,7 +29,7 @@ export default function Navbar() {
     const [isDark, setIsDark] = useState(false);
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
     const roles = localStorage.getItem('roles');
-    const [lang, setLang] = useState(roles != 'client' ? 'en' : localStorage.getItem('lang') || 'en');
+    const [lang, setLang] = useState(localStorage.getItem('lang'));
 
     const fetchUser = async () => {
         try {
@@ -65,7 +65,7 @@ export default function Navbar() {
 
     useEffect(() => {
         fetchUser();
-    }, []);
+    });
 
     const handleClick = (link) => {
         setActiveLink(link);

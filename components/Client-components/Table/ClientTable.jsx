@@ -227,7 +227,7 @@ const ClientTable = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    });
 
     const filteredData = tableData.filter((data) => {
         return (
@@ -440,7 +440,7 @@ const ClientTable = () => {
                                     <tr key={index} className='text-center'>
                                         {/* <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{index + 1}.</td> */}
                                         <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
-                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.nama}`} onClick={() => handleOpenModal(data)}>
+                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.nama}`} onClick={() => handleOpenModal(data)}>
                                                 {data.name}
                                             </button>
                                         </td>

@@ -53,7 +53,7 @@ const AccountTable = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    });
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
@@ -462,7 +462,7 @@ const AccountTable = () => {
                                     <tr key={index} className='border text-center dark:border-gray-700'>
                                         {/* <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>{index + 1}.</td> */}
                                         <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
-                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.username}`} onClick={() => handleOpenModal(data)}>
+                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.username}`} onClick={() => handleOpenModal(data)}>
                                                 {data.username}
                                             </button>
                                         </td>

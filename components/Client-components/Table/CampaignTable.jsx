@@ -256,7 +256,7 @@ const CampaignTable = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    });
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
@@ -466,7 +466,7 @@ const CampaignTable = () => {
                                     <tr key={index} className="text-center">
                                         {/* <td className="px-2 py-2 border text-nowrap text-left dark:border-gray-700 dark:text-gray-200">{index + 1}.</td> */}
                                         <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
-                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`Detail of ${data.name}`} onClick={() => handleOpenModal(data)}>
+                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data)}>
                                                 <p className="underline">{data.name}</p>
                                             </button>
                                         </td>
