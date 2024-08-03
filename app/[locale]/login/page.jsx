@@ -137,7 +137,7 @@ const Page = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">
-      <div className="w-full max-w-md mx-auto">
+      <div className="w-full md:max-w-md mx-auto">
         <Image
           src="/assets/logo.png"
           alt="logo"
@@ -151,7 +151,6 @@ const Page = () => {
             className="w-10/12 md:w-full p-6 bg-white rounded-lg shadow-lg border-2"
           >
             <p className="font-semibold text-xl text-[#5473E3] mb-5">Login</p>
-
             <input
               type="email"
               name="email"
@@ -176,10 +175,10 @@ const Page = () => {
               {formik.errors.password && <div className="text-red-500">{formik.errors.password}</div>}
 
               <div
-                className="absolute top-3 right-2 cursor-pointer"
+                className="absolute top-5 right-8 cursor-pointer"
                 onClick={togglePasswordVisibility}
               >
-                {showPassword ? <AiOutlineEye size={15} /> : <AiOutlineEyeInvisible size={15} />}
+                {showPassword ? <AiOutlineEye size={27} /> : <AiOutlineEyeInvisible size={27} />}
               </div>
             </div>
 
@@ -194,17 +193,18 @@ const Page = () => {
 
             <button
               type="submit"
-              className="w-full h-12 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
+              className="w-full h-12 rounded-md bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
             >
               {loading ? <LoadingCircle /> : t('sign-in')}
             </button>
 
             <div className="flex justify-between items-center">
+              <div></div>
               <Link
                 href={`${lang}/forgotpassword`}
                 className="mt-3 text-[#5473E3] hover:text-[#2347C5] hover:underline"
               >
-                <p className="text-[#5473E3] mb-2 mt-2">{t('forgot-password')}</p>
+                <p className="text-[#5473E3]">{t('forgot-password')}</p>
               </Link>
             </div>
           </form>

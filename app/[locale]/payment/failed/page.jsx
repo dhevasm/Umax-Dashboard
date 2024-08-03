@@ -21,17 +21,17 @@ const FailedPage = () => {
     }, [order_id])
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-200">
+        <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">
             <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-center">
                 <div className='flex w-full justify-center my-3'>
-                    <FaCheckCircle size={50} className='text-2xl font-bold text-green-500' />
+                    <FaExclamationCircle size={50} className='text-2xl font-bold text-red-500' />
                 </div>
-                <h2 className="text-4xl font-semibold text-gray-800 mb-2">Payment Success</h2>
+                <h2 className="text-4xl font-semibold text-gray-800 mb-2">Payment Failed</h2>
                 <p className="text-gray-600 mb-4">
                     Unfortunately, we couldn&apos;t process your payment. Please try again or contact support.
                 </p>
-                <button onClick={() => Router.back()} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition duration-300">
-                    Create New Tenant
+                <button onClick={() => Router.push("/")} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition duration-300">
+                    Back to Page
                 </button>
             </div>
         </div>

@@ -58,7 +58,7 @@ const PricingSection = () => {
           if (!response.ok) {
               const errorData = await response.json();
               console.error('Server Error:', errorData);
-              alert('Failed to submit form. Check console for details.');
+              alert('Your email has aready purchased a plan!');
               return;
           }
 
@@ -90,10 +90,39 @@ const PricingSection = () => {
     snap.pay(token)
   }
 
+  const uncompletedpayment = async(order_id) =>{
+    const url = process.env.NEXT_PUBLIC_API_URL;
+    const formData = new URLSearchParams({
+      order_id: order_id,
+    }).toString();
+
+    try {
+      const response = await fetch(`${url}/token-from-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server Error:', errorData);
+        alert('Order id not found!');
+        return;
+      }
+
+      const data = await response.json();
+      setSnapToken(data.token);
+    } catch (error) {
+      console.error('Network Error:', error);
+      alert('Network error occurred. Please try again.');
+    }
+  }
+
   return (
     // ====== Pricing Section Start ======
     <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-2 md:px-20" id="payment">
-      
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">  
           <div className="w-full px-4">
@@ -106,6 +135,12 @@ const PricingSection = () => {
               </h2>
               <p className="text-base text-gray-500 dark:text-gray-300">
                 {t('pricing-desc')}
+                <br />
+                <br />
+                Have uncompleted payment? <a onClick={() => {
+                  const order_id = prompt("Enter your order ID");
+                  uncompletedpayment(order_id)
+                }} className="text-blue-500 underline hover:cursor-pointer">check your order id</a>
               </p>
             </div>
           </div>
@@ -641,7 +676,7 @@ const PricingSection = () => {
                           value={formValues.phone_number}
                         />
                         <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe} disabled>
-                          <option value="1">Personal Plan ($59/year)</option>
+                          <option value="1">Personal Plan (Free)</option>
                           <option value="2">Business Plan ($199/year)</option>
                           <option value="3">Professional Plan ($256/year)</option>
                         </select>
@@ -664,7 +699,7 @@ const PricingSection = () => {
                           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="submit"
                         >
-                          Subscribe {Subscribe === 1 ? '($59/year)' : Subscribe === 2 ? "($199/year)" : Subscribe === 3 ? '($256/year)' : "(Select Package)"}
+                         {Subscribe === 1 ? 'Get (Free)' : Subscribe === 2 ? "Subscribe ($199/year)" : Subscribe === 3 ? 'Subscribe ($256/year)' : "(Select Package)"}
                         </button>
                         <button
                           onClick={closeModal}
