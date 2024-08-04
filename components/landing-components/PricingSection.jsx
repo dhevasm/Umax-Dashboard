@@ -4,9 +4,12 @@ import axios from "axios";
 import { useState,useEffect, useContext } from "react";
 import Image from "next/image";
 import Snap from "midtrans-client/lib/snap";
+import { useRouter } from "next/navigation";
 
 const PricingSection = () => {
   const t = useTranslations("landing");
+
+  const Router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
   const [Subscribe, setSubscribe] = useState(1);
@@ -137,10 +140,10 @@ const PricingSection = () => {
                 {t('pricing-desc')}
                 <br />
                 <br />
-                Have uncompleted payment? <a onClick={() => {
+                Have order id? <a onClick={() => {
                   const order_id = prompt("Enter your order ID");
                   uncompletedpayment(order_id)
-                }} className="text-blue-500 underline hover:cursor-pointer">check your order id</a>
+                }} className="text-blue-500 underline hover:cursor-pointer">click me</a>
               </p>
             </div>
           </div>
@@ -177,8 +180,8 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                onClick={() => openModal(1)}
-                className="block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
+                onClick={() => Router.push('/en/tenant-register?order_id=free')}
+                className=" hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Personal
               </a>
@@ -481,7 +484,7 @@ const PricingSection = () => {
               </div>
               <a
                 onClick={() => openModal(2)}
-                className="block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
+                className="hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Business
               </a>
@@ -568,7 +571,7 @@ const PricingSection = () => {
               </div>
               <a
                 onClick={() => openModal(3)}
-                className="block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
+                className="hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Professional
               </a>
@@ -633,13 +636,13 @@ const PricingSection = () => {
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="absolute inset-0 bg-black opacity-50"></div>
                 <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg p-8 h-[520px]">
-                  <h2 className="text-2xl font-bold mb-4">Complete Your Payment</h2>
+                  <h2 className="text-2xl font-bold mb-4 text-black dark:text-white">Complete Your Payment</h2>
                   <div className="w-full h-0.5 bg-gray-400 my-5"></div>
                   <div className="text-gray-500 dark:text-gray-300">
                     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                       <div className="flex gap-5">
                         <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="First Name"
                           name="first_name"
@@ -648,7 +651,7 @@ const PricingSection = () => {
                           required
                         />
                         <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="Last Name"
                           name="last_name"
@@ -658,7 +661,7 @@ const PricingSection = () => {
                         />
                       </div>
                       <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="email"
                           placeholder="Input your email"
                           name="email"
@@ -667,7 +670,7 @@ const PricingSection = () => {
                           value={formValues.email}
                         />
                       <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="number"
                           placeholder="Input phone number"
                           name="phone_number"
@@ -675,7 +678,7 @@ const PricingSection = () => {
                           onChange={handleChange}
                           value={formValues.phone_number}
                         />
-                        <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe} disabled>
+                        <select className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe} disabled>
                           <option value="1">Personal Plan (Free)</option>
                           <option value="2">Business Plan ($199/year)</option>
                           <option value="3">Professional Plan ($256/year)</option>
@@ -684,7 +687,7 @@ const PricingSection = () => {
                         <div className="flex justify-end gap-5">
                             <div className="flex gap-2">
                                 <input type="radio" name="method" value="midtrans" defaultChecked/>
-                                <label htmlFor="midtrans" >
+                                <label htmlFor="midtrans">
                                   <img src="assets/Midtrans.png" alt="Midtrans" width={100} height={100}/>
                                 </label>
                               </div>

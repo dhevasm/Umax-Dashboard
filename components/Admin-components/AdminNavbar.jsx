@@ -2,12 +2,14 @@
 import { AdminDashboardContext, SidebarContext } from "@/app/[locale]/admin-dashboard/page";
 import { useEffect, useState, useContext, useRef } from "react"
 import { IconContext } from "react-icons";
-import { FaBars, FaMoon, FaSignOutAlt, FaSun, FaUser } from "react-icons/fa";
+import { FaBars, FaBell, FaBuilding, FaCheck, FaMoon, FaSignOutAlt, FaSun, FaTimes, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { RiBellLine, RiChat3Line} from "react-icons/ri";
 import { BiBell } from "react-icons/bi";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 function AdminNavbar({userData}){
 
@@ -24,6 +26,8 @@ function AdminNavbar({userData}){
         navbarBrandHide,
         setNavbarBrandHide
     } = useContext(AdminDashboardContext)
+    const [requestlist, setRequestList] = useState([]);
+    const [requestCount, setRequestCount] = useState(0);
 
     const navbarBrand = useRef()
 
@@ -40,6 +44,16 @@ function AdminNavbar({userData}){
         }
     }, [navbarBrandHide])
 
+    async function getRequestList(){
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/request-list`, {
+            headers: {
+                authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+        })
+        setRequestList(res.data.Output)
+        setRequestCount(res.data.Output.length)
+    }
+
 
     useEffect(() => {
        if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -51,6 +65,7 @@ function AdminNavbar({userData}){
             document.getElementById("theme").checked = false
             localStorage.setItem('color-theme', 'light')
         }
+        getRequestList()
     }, [])
 
     const Router = useRouter()
@@ -66,6 +81,165 @@ function AdminNavbar({userData}){
         localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
     }
 
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const handleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const handleReject = (request_id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, Reject it!"
+          }).then(async(result) => {
+            if (result.isConfirmed) {
+                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,{
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                    },
+                }).then((response) => {
+                    if(!response.IsError){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Request Rejected',
+                        }).then(() => {
+                            getRequestList()
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.ErrorMessage,
+                        })
+                    }
+                })
+            }
+          });
+
+        
+        
+    }
+
+    const createUser = async(datatenant, tenant_id, request_id) => {
+        const formData = new FormData();
+                formData.append('name', datatenant.username);
+                formData.append('email', datatenant.email);
+                formData.append('password', datatenant.password);
+                formData.append('confirm_password', datatenant.password);
+                formData.append('role', "admin");
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${tenant_id}`, formData, {
+                    headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                    }
+                }).then( async(res) => {
+                    if (res.data.Output === "Registration Successfully") {
+                        console.log("user register success")
+                        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,{
+                            headers: {
+                                authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                            },
+                        }).then((response) => {
+                            if(!response.IsError){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Register new user & new tenant successfully',
+                                }).then(() => {
+                                    getRequestList()
+                                })
+                            }else{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.ErrorMessage,
+                                })
+                            }
+                        })
+                    }
+                })
+    }
+
+    const getTenantID = async(datatenant, request_id) => {
+        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`,{
+            headers: {
+                authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+        }).then(async(response) => {
+            if(!response.IsError){
+                // console.log(response.data.Data)
+                const data = response.data.Data
+                const tenant_id = data.filter((tenant) => tenant.company === datatenant.company)[0]._id
+                // console.log(tenant_id)
+                createUser(datatenant, tenant_id, request_id)
+                }
+            })
+    }
+
+    const createTenant = async(data, request_id) => {
+        const formData = new FormData();
+        console.log("creating company" + data.company)
+        formData.append('company', data.company);
+        formData.append('address', data.companyaddress);
+        formData.append('email', data.companyemail);
+        formData.append('contact', data.companycontact);
+        formData.append('language', data.language);
+        formData.append('culture', data.culture);
+        formData.append('currency', data.currency);
+        formData.append('input_timezone', data.timezone_name);
+        formData.append('currency_position', data.currency_position);
+
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/tenant-create`, formData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            }
+        })
+
+        if(response.data.Output == "Registration Successfully"){
+            console.log("tenant register success")
+        }else{
+            console.log("tenant register failed")
+            return;
+        }
+
+        getTenantID(data, request_id)
+    }
+
+    const handleAccept = (request_id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Accept it!"
+          }).then( async(result) => {
+            if (result.isConfirmed) {
+                await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/request-accept?request_id=${request_id}`,{
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                    },
+                }).then((response) => {
+                    if(!response.IsError){
+                        createTenant(response.data.Data, request_id)
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.ErrorMessage,
+                        })
+                    }
+                })
+                // alert(request_id)
+            }
+          });
+    }
+
+    
 
     return (
         <>
@@ -108,6 +282,7 @@ function AdminNavbar({userData}){
                     </div>
 
                     <div className=" flex items-center gap-2 ms-20">
+                    
                     <div className="w-16 h-9 flex justify-center items-center rounded-full">
                         <label htmlFor="theme" className="inline-flex items-center cursor-pointer me-2">
                             {
@@ -121,12 +296,52 @@ function AdminNavbar({userData}){
                         after:absolute after:end-1.5 after:top-[calc(50%-0.40625rem)] after:w-[.8125rem] after:h-[.8125rem] after:bg-no-repeat after:bg-[right_center] after:bg-[length:.8125em_.8125em] after:transform after:transition-all after:ease-in-out after:duration-200 after:opacity-70 checked:after:start-1.5 checked:after:end-auto" type="checkbox" id="theme" onChange={handleTheme}></input>
                         </label>
                     </div>
-                    {/* <div className="w-9 h-9 flex justify-center items-center rounded-full bg-[#edf3fa] dark:bg-slate-900">
-                        <BiBell className="text-xl" />
-                    </div>
-                    <div className="w-9 h-9 flex justify-center items-center rounded-full bg-[#edf3fa] dark:bg-slate-900">
-                        <RiChat3Line className="text-xl" />
-                    </div> */}
+                    
+                    {
+                        userData.roles === "sadmin" && (
+                            <button className="text-md flex items-center gap-2" onClick={handleDropdown}>
+                                <FaBell className="text-2xl text-blue-500 ms-3" />
+                                <span className="relative top-0 right-5 bg-red-500 text-white rounded-full px-1 text-xs">{requestCount}</span>
+                            </button>
+                        )
+                    }
+                    
+                    {showDropdown && (
+                        <div className="absolute top-20 right-20 p-5 w-[270px] h-[270px] overflow-y-auto bg-white rounded-lg shadow-lg">
+                            <ul className="space-y-2">
+                                {
+                                    requestlist.length === 0 && (
+                                        <p className="text-center">No Request</p>
+                                    )
+                                }
+                                {
+                                    requestlist.map((request, index) => (
+                                        <>
+                                        <li key={index} className="flex items-center w-full justify-between">
+                                            <div className="text-xl flex gap-3 items-center">
+                                                <FaBuilding className="text-blue-500 mr-2" />
+                                                <div className="flex flex-col">
+                                                <p className="text-sm font-bold">{request.company} {request.subscription ? "(Paid)" : "(Free)"}</p>
+                                                <p className="text-xs ">{request.email}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="text-xl flex gap-3">
+                                                <button>
+                                                    <FaCheck className="text-green-500" onClick={() => handleAccept(request._id)}/>
+                                                </button>
+                                                <button>
+                                                    <FaTimes className="text-red-500" onClick={() => handleReject(request._id)}/>
+                                                </button>
+                                            </div>
+                                        </li>
+                                        <div className="w-full h-0.5 bg-gray-400"></div>
+                                        </>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    )}
                     </div>
 
                     <div className="flex flex-col items-end mt-2">

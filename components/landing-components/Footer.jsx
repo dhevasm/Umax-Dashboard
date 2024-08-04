@@ -1,5 +1,7 @@
+"use client"
 import Image from 'next/image'
 import React from 'react'
+import Link from 'next/link'
 
 const Footer = () => {
   return (
@@ -11,7 +13,7 @@ const Footer = () => {
                         <div className="w-full px-4 lg:w-1/2">
                             <div className="w-full mb-5 max-w-[470px]">
                                 <h3 className="text-2xl font-bold text-white sm:text-[28px] sm:leading-snug">
-                                    Signup for latest news and insights from TailGrids UI
+                                    Signup for latest news and insights from Umax Dashboard
                                 </h3>
                             </div>
                         </div>
@@ -127,24 +129,24 @@ const Footer = () => {
                             <h4 className="text-lg font-semibold text-white mb-9">Contact Us</h4>
                             <ul>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
+                                    <Link href={"https://wa.me/6281212122388"} target='_blank' className="inline-block text-base leading-loose text-white/70 mb-2">
                                         +0812-1212-2388
-                                    </span>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
+                                    <Link href={"mailto:suratkita@gmail.com"} className="inline-block text-base leading-loose text-white/70 mb-2">
                                         suratkita@gmail.com
-                                    </span>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
+                                    <Link href={"https://ubig.co.id"} target='_blank' className="inline-block text-base leading-loose text-white/70 mb-2">
                                         ubig.co.id
-                                    </span>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
+                                    <Link href={"https://www.google.com/maps?sca_esv=9267af3241730e66&sca_upv=1&rlz=1C1ONGR_enID1037ID1037&sxsrf=ADLYWIK90hxbmGCOKIdtDp2nmSUBUg1ozw:1722582345654&lsig=AB86z5VlZ0IJm7LN4VqASAEKSYB4&shndl=-1&shem=lsde,vslcca&kgs=1710c6c08c50f5a1&um=1&ie=UTF-8&fb=1&gl=id&sa=X&geocode=KV8tQDwPgnguMUtF11K-rBhO&daddr=Ruko+Modern+Kav+A16-A17,+Tasikmadu,+Kec.+Lowokwaru,+Kota+Malang,+Jawa+Timur+65143"} className="inline-block text-base leading-loose text-white/70 mb-2" target='_blank'>
                                     Ruko Modern Kav A16-A17, Jl Loncat Indah, Tasikmadu, Kota Malang 65143
-                                    </span>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

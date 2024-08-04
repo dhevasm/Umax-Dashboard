@@ -18,6 +18,7 @@ import { RiAdvertisementFill, RiGoogleFill, RiGoogleLine, RiMetaLine, RiTiktokFi
 import { reach } from "yup"
 import { FaArrowUp } from "react-icons/fa"
 
+
 export default function Dashboard({ tenant_id }) {
 
     const t = useTranslations("admin-dashboard")
@@ -26,24 +27,20 @@ export default function Dashboard({ tenant_id }) {
     const [filter, setFilter] = useState("reach")
 
     const getCampaign = async() => {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
+            await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
                 headers: {
                     'accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
                 }
-            });
-            setCampaigns(response.data.Data);
+            }).then((response) => {
+                setCampaigns(response.data.Data);
+            })
     }
 
     useEffect(() => {
-        if(userData.roles == "admin"){
-            getCampaign()
-        }
-    }, [])
-
-    useEffect(() => {
         setFilterCampaign("reach")
+        getCampaign()
     }, [])
 
     const setFilterCampaign = (filterset) => {
@@ -79,23 +76,22 @@ export default function Dashboard({ tenant_id }) {
                             <CountCard title={t('tenants')} value={<div className="text-md animate-pulse">Loading...</div>} />}
 
                     <CountCard title={t('users')} value={dataDashboard.users ? dataDashboard.users : <div className="text-md animate-pulse">Loading...</div>} handleClick={"users"} />
-
                     <CountCard title={t('campaigns')} value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"} />
                     <CountCard title={t('clients')} value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"} />
                 </div>
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
-                    <div className="w-full lg:w-1/3 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartOne />
                     </div>
-                    <div className="w-full lg:w-2/3 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full flex justify-center lg:w-2/3 h-[200px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartTwo />
                     </div>
                 </div>
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
-                    <div className="w-full lg:w-3/5 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <Map />
                     </div>
-                    <div className="w-full lg:w-2/5 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full flex justify-center lg:w-2/5 h-[370px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartThree />
                     </div>
                 </div>

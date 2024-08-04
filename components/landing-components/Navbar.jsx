@@ -108,7 +108,7 @@ const Navbar = () => {
                     Indonesia
                   </option>
                   <option value="en">
-                    Inggris
+                    English
                   </option>
                 </select>
               </div>

@@ -6,6 +6,7 @@ import { FaCheckCircle } from 'react-icons/fa'
 import { useSearchParams } from 'next/navigation'
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import { Snap } from 'midtrans-client'
 
 const SuccessPage = () => {  
     const Router = useRouter()
@@ -59,8 +60,6 @@ const SuccessPage = () => {
             verifyPayment(order_id)
         }
     }, [order_id])
-
-
 
     const handleCopyToClipboard = () => {
         navigator.clipboard.writeText(order_id).then(() => {
@@ -118,6 +117,36 @@ const SuccessPage = () => {
         });
     }
 
+    const continuePayment = async() => {
+        const url = process.env.NEXT_PUBLIC_API_URL;
+    const formData = new URLSearchParams({
+      order_id: order_id,
+    }).toString();
+
+    try {
+      const response = await fetch(`${url}/token-from-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server Error:', errorData);
+        alert('Order id not found!');
+        return;
+      }
+
+      const data = await response.json();
+      snap.pay(data.token)
+    } catch (error) {
+      console.error('Network Error:', error);
+      alert('Network error occurred. Please try again.');
+    }
+    }
+
     return (
         <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">
             { status == "settlement" && (
@@ -133,7 +162,7 @@ const SuccessPage = () => {
                         This is your order ID: <span onClick={handleCopyToClipboard} className="hover:underline font-semibold text-blue-500 cursor-pointer">{order_id}</span>
                     </p>
                     
-                    <button onClick={() => Router.push("/")} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition duration-300">
+                    <button onClick={() => Router.push(`/en/tenant-register?order_id=${order_id}`)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition duration-300">
                         Register your tenant
                     </button>
                 </div>
@@ -154,8 +183,8 @@ const SuccessPage = () => {
                         <br />
                         This is your order ID: <span onClick={handleCopyToClipboard} className="hover:underline font-semibold text-blue-500 cursor-pointer">{order_id}</span>
                     </p>
-                    <button onClick={() => snap.pay(snapToken)} className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded transition duration-300 mb-3">
-                        Complete Payment
+                    <button onClick={continuePayment} id='continue' className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded transition duration-300 mb-3">
+                        Complete your payment
                     </button>
                     <button onClick={cancelPayment} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded transition duration-300">
                         Cancel Payment & back to page
