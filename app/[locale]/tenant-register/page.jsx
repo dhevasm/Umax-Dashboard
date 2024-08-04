@@ -127,7 +127,7 @@ export default function TenantRegisterPage() {
         formDat.append('culture', formData.culture);
         formDat.append('currency', formData.currency);
         formDat.append('currency_position', formData.currencyPosition == "true" ? true : false);
-        formDat.append('subscription',true);
+        formDat.append('subscription', searchParams.get('order_id') != "free" ? true : false);
         formDat.append('input_timezone', formData.timezone);
         
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/register-request`, formDat , {
