@@ -19,9 +19,11 @@ import { reach } from "yup"
 import { FaArrowUp } from "react-icons/fa"
 import { map } from "leaflet"
 
+
 export default function Dashboard({ tenant_id }) {
-    const t = useTranslations('admin-dashboard')
-    const { userData, dataDashboard, tenantsCount } = useContext(AdminDashboardContext)
+
+    const t = useTranslations("admin-dashboard")
+    const { sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard, tenantsCount } = useContext(AdminDashboardContext)
     const [campaigns, setCampaigns] = useState([])
     const [filter, setFilter] = useState("reach")
     const [chartData, setChartData] = useState([])
@@ -29,7 +31,7 @@ export default function Dashboard({ tenant_id }) {
     const getCampaign = async() => {
             await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
                 headers: {
-                    'Accept': 'application/json',
+                    'accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
                 }
@@ -43,40 +45,27 @@ export default function Dashboard({ tenant_id }) {
         getCampaign()
     }, [])
 
-    useEffect(() => {
-        setFilterCampaign(filter)
-    }, [filter])
-
-    const setFilterCampaign = useCallback((filterset) => {
-        const sortedCampaigns = [...campaigns].sort((a, b) => {
-            const getValue = (data, key) => parseInt(data[key].replace(/\./g, ''))
-            switch (filterset) {
-                case 'amountspent':
-                    return getValue(b, 'amountspent') - getValue(a, 'amountspent')
-                case 'reach':
-                    return getValue(b, 'reach') - getValue(a, 'reach')
-                case 'impressions':
-                    return getValue(b, 'impressions') - getValue(a, 'impressions')
-                default:
-                    return 0
-            }
-        })
-        setCampaigns(sortedCampaigns)
-    }, [campaigns])
-
-    const handleFilterChange = (value) => {
+    const setFilterCampaign = (filterset) => {
+        let filteredCampaigns = []
+        if(filterset === "reach"){
+            filteredCampaigns = campaigns.sort((a, b) => parseInt(b.reach.replace(/\./g, "")) - parseInt(a.reach.replace(/\./g, "")));
+        }else if (filterset === "amountspent"){
+            filteredCampaigns = campaigns.sort((a, b) => parseInt(b.amountspent.slice(3).replace(/\./g, "")) - parseInt(a.amountspent.slice(3).replace(/\./g, "")));
+        }else if(filterset === "impressions"){
+            filteredCampaigns = campaigns.sort((a, b) => parseInt(b.impressions.replace(/\./g, "")) - parseInt(a.impressions.replace(/\./g, "")));
+        }
+        setCampaigns(filteredCampaigns);
+    }
+    
+    const handlechangeFiilter = (value) => {
+        // console.log(value)
         setFilter(value)
+        setFilterCampaign(value)
     }
 
-    function LoadingCircle() {
-        return (
-            <div className="flex justify-center items-center h-20">
-                <div className="relative">
-                    <div className="w-10 h-10 border-4 border-[#1C2434] dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
-                </div>
-            </div>
-        )
-    }
+    // useEffect(() => {
+    //     console.log(dataDashboard)
+    // }, [dataDashboard])
 
     async function getChartData() { 
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chart-data`, {
@@ -120,26 +109,28 @@ export default function Dashboard({ tenant_id }) {
                         <ChartThree chartData={chartData} />
                     </div>
                 </div>
-            </div>
-            {userData.roles === 'admin' && (
-                <div className="w-full h-fit flex flex-col gap-7 mb-3">
+                {
+                    userData.roles == "admin" ? <div className="w-full h-fit flex flex-col gap-7 mb-3">
                     <div className="w-full h-fit bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-y-auto">
                         <div className="rounded-sm bg-white dark:bg-slate-800 shadow-default sm:px-7.5 xl:pb-1">
                             <div className="flex justify-between items-center mb-5">
                                 <h4 className="mb-6 text-xl font-semibold text-black dark:text-slate-200">
-                                    {t('top-5-campaigns')}
+                                    Top 5 Campaigns
                                 </h4>
                                 <div className="flex gap-2">
                                     <style>
-                                        {`
-                                        .filterselect {
-                                            background-color: #3d50e0;
-                                            color: white;
+                                        {
+                                            `
+                                            .filterselect{
+                                                background-color: #3d50e0;
+                                                color: white;
+                                            }
+                                            `
                                         }
-                                        `}
                                     </style>
                                 </div>
                             </div>
+
                             <div className="flex flex-col overflow-y-auto">
                                 <div className="grid grid-cols-3 rounded-sm bg-slate-100 sm:grid-cols-5">
                                     <div className="p-2.5 xl:p-5">
@@ -168,48 +159,48 @@ export default function Dashboard({ tenant_id }) {
                                         </h5>
                                     </div>
                                 </div>
-                                {campaigns.length > 0 ? (
-                                    campaigns.slice(0, 5).map((data, index) => (
-                                        <div key={index} className="grid grid-cols-3 sm:grid-cols-5 border-b">
-                                            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-                                                <div className="flex-shrink-0">
-                                                    <Image
-                                                        src={`/assets/${data.campaign_platform === 1 ? 'meta.svg' : data.campaign_platform === 2 ? 'google.svg' : data.campaign_platform === 3 ? 'tiktok.svg' : ''}`}
-                                                        width={45}
-                                                        height={45}
-                                                        alt="Logo"
-                                                    />
-                                                </div>
-                                                <p className="hidden text-black dark:text-slate-200 sm:block">
-                                                    {data.campaign_name}
-                                                </p>
+
+                                { campaigns && campaigns.map((data, index) => (
+                                    <div key={index} className={`grid grid-cols-3 sm:grid-cols-5 border-b`}>
+                                        <div className="flex items-center gap-3 p-2.5 xl:p-5">
+                                            <div className="flex-shrink-0">
+                                                <Image src={`/assets/${data.campaign_platform === 1 ? 'meta.svg' : data.campaign_platform === 2 ? 'google.svg' : 
+                                                data.campaign_platform === 3 ? 'tiktok.svg' : '' 
+                                                }`}  
+                                                width={45}
+                                                height={45}
+                                                alt="Logo"/>
                                             </div>
-                                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                                <p className="text-black dark:text-slate-200">{data.amountspent}</p>
-                                            </div>
-                                            <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                                <p className="text-meta-3 dark:text-slate-200">{data.reach}</p>
-                                            </div>
-                                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                                <p className="text-meta-5 dark:text-slate-200">{data.impressions}</p>
-                                            </div>
-                                            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                                                <p className="text-black dark:text-slate-200">{data.start_date}</p>
-                                            </div>
+                                            <p className="hidden text-black dark:text-slate-200 sm:block">
+                                                {data.campaign_name}
+                                            </p>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div className="w-full">
-                                        <div className="flex w-full items-center justify-center p-2.5 xl:p-5">
-                                            <LoadingCircle />
+
+                                        <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                            <p className="text-black dark:text-slate-200">{data.amountspent}</p>
                                         </div>
+
+                                        <div className="flex items-center justify-center p-2.5 xl:p-5">
+                                            <p className="text-meta-3 dark:text-slate-200">{data.reach}</p>
+                                        </div>
+                                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                            <p className="text-meta-5 dark:text-slate-200">{data.impressions}</p>
+                                        </div>
+
+                                        <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                                            <p className="text-black dark:text-slate-200">{data.start_date}</p>
+                                        </div>
+
                                     </div>
-                                )}
+                                )).slice(0,5)}
                             </div>
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+                : ""
+                }
+                
+            </div>
+        </>
     )
 }
