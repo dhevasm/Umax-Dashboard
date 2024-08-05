@@ -45,8 +45,12 @@ export default function AdminSidebar() {
             cancelButtonText: tout('no'),
         }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.clear();
-                Router.push(`/en/login`)
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('tenantId');
+                localStorage.removeItem('roles');
+                localStorage.removeItem('name');
+                localStorage.removeItem('lang');
+                router.push(`/en/login`)
             }
         });
     };
