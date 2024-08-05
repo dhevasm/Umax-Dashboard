@@ -17,7 +17,7 @@ const Page = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const lang = pathname.slice(0, 3);
+  const [lang, setLang] = useState(pathname.slice(0, 3));
   const t = useTranslations('login')
 
   // useEffect(() => {
@@ -41,6 +41,40 @@ const Page = () => {
         }
       });
 
+      if (!localStorage.getItem('locationChecked') && roles == 'client') {
+        const fetchLocation = async () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+              const { latitude, longitude } = position.coords;
+              try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+                const data = await response.json();
+                console.log(data)
+  
+                if (data.address.country_code !== 'id') {
+                  localStorage.setItem('lang', 'en');
+                  setLang('en');
+                } else {
+                  localStorage.setItem('lang', 'id');
+                  setLang('id');
+                }
+                localStorage.setItem('locationChecked', 'true');
+              } catch (error) {
+                console.error('Error fetching location:', error);
+              }
+            }, (error) => {
+              console.error('Error getting geolocation:', error);
+              localStorage.setItem('locationChecked', 'true');
+            });
+          } else {
+            console.error('Geolocation not supported');
+            localStorage.setItem('locationChecked', 'true');
+          }
+        };
+  
+        fetchLocation();
+      }
+      
       const language = response.data.Data[0]?.language || 'en';
       localStorage.setItem('lang', language);
 
@@ -101,11 +135,13 @@ const Page = () => {
       } catch (error) {
         if (error.message.includes("Network error")) {
           setError("Network error: Please check your internet connection.");
+          setLoading(false);
         } else {
           setError("Please check your email and password.");
+          setLoading(false);
         }
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     }
     

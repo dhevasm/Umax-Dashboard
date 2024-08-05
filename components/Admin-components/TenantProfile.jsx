@@ -227,77 +227,127 @@ export default function TenantProfile({tenant_id}){
     return (
         <>
             <div className="w-full h-full rounded-sm">
-                <div className="flex flex-col md:flex-row justify-between items-center">
-                    <h1 className="text-2xl dark:text-white">{t('title')}</h1>
+                <div className="flex flex-col sm:flex-row md:flex-row lg:flex-row xl:flex-row justify-between items-center">
+                    <h1 className="text-2xl dark:text-white font-bold uppercase">{t('title')}</h1>
                     <p className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a> / {t('title')}</p>
                 </div>
 
-                <div className="rounded-sm shadow-md mt-3 rounded-t-md">
-                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant  items-end px-5 py-5 rounded-t-md">
+                <div className="rounded-sm mt-3 rounded-t-md">
+                    <div className="w-full flex justify-between h-[30vh] bg-bg-tenant gap-4 items-end px-5 py-5 rounded-t-md">
                         {
                             tenant.company ? (
                                 <h1 className="font-bold text-2xl text-white drop-shadow-xl">{tenant.company}</h1>
-                            ) : "Loading ..."
+                            ) : (
+                                <div className="w-64 h-8 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+                            )
                         }
-                        { tenant.company? <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-800 dark:bg-slate-700 bg-[#3d50e0] hover:bg-blue-600 p-2 rounded-md shadow-md" onClick={() => showModal("Edit", tenant._id)}>
-                            <FaPen/>
-                            Edit Tenant
-                        </div>
-                        : ""    
-                    }
+
+                        {
+                            tenant.company ? (
+                                <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-800 dark:bg-slate-700 bg-[#3d50e0] hover:bg-blue-600 p-2 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
+                                    <FaPen />
+                                    {t('edit-profile')}
+                                </div>
+                            ) : (
+                                <div className="w-32 h-8 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse flex items-center justify-center">
+                                    {/* You can add a placeholder icon here if needed */}
+                                </div>
+                            )
+                        }
+
                     </div>
 
                     <div className="p-5 bg-white dark:bg-slate-800 rounded-b-sm">
-                        {tenant.address ? (
-                            <>
-                            <div className="flex items-center gap-5 my-5 mb-10">
-                                <h1 className="font-bold text-xl text-gray-700 dark:text-white">{t('general')}</h1>
-                                <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
-                            </div>
-                            <div className="flex flex-col md:flex-row gap-2 items-start mt-3 p-5">
-                                <FaBuilding className="text-2xl text-[#3d50e0]" />
-                                <p className="dark:text-white"><span className="font-semibold">{t('address')}:</span> {tenant.address}</p>
-                            </div>
-                            <div className="flex w-full flex-wrap flex-col md:flex-row gap-5 mt-5">
-                                <div className="flex gap-2 items-center p-5">
-                                <FaPhone className="text-[#3d50e0]" />
-                                <div className="ml-2 dark:text-white">
-                                    <span className="font-semibold">{t('contact')}:</span> <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">{tenant.contact}</a>
+                        {
+                            tenant.address ? (
+                                <>
+                                    <div className="flex items-center gap-5 my-5 mb-10">
+                                        <h1 className="font-bold text-xl text-gray-700 dark:text-white">{t('general')}</h1>
+                                        <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
+                                    </div>
+                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                        <FaBuilding className="text-xl text-[#3d50e0]" />
+                                        <p className="dark:text-white">
+                                            <span className="font-semibold">{t('address')}</span><br />
+                                            {tenant.address}
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                        <FaPhone className="text-[#3d50e0]" />
+                                        <div className="ml-2 dark:text-white">
+                                            <span className="font-semibold">{t('contact')}</span> <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500 font-semibold"><br />
+                                            {tenant.contact}</a>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                        <FaEnvelope className="text-[#3d50e0]" />
+                                        <div className="ml-2 dark:text-white">
+                                            <span className="font-semibold">Email</span> <a href={`mailto:${tenant.email}`} className="text-blue-500 font-semibold"><br />{tenant.email}</a>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-5 my-5 mb-10">
+                                        <h1 className="font-bold text-xl text-gray-700 dark:text-white">FORMAT</h1>
+                                        <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
+                                    </div>
+                                    <div className="grid grid-cols-1 md-grid-cols-2 lg:grid-cols-2 xl:grid-cols-2    justify-between gap-5 mt-5 pb-5 bg-white dark:bg-gray-800 rounded-lg">
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                            <FaHome className="text-xl text-[#3d50e0]" />
+                                            <p className="ml-2 dark:text-white">
+                                                <span className="font-semibold">{t('culture')}</span><br /> {tenant.culture}
+                                            </p>
+                                        </div>
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                            <FaFlag className="text-xl text-[#3d50e0]" />
+                                            <p className="ml-2 dark:text-white">
+                                                <span className="font-semibold">{t('language')}</span><br /> {tenant.language}
+                                            </p>
+                                        </div>
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                            <FaDollarSign className="text-xl text-[#3d50e0]" />
+                                            <p className="ml-2 dark:text-white">
+                                                <span className="font-semibold">{t('currency')}</span><br /> {tenant.currency}
+                                            </p>
+                                        </div>
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                            <FiWatch className="text-xl text-[#3d50e0]" />
+                                            <p className="ml-2 dark:text-white">
+                                                <span className="font-semibold">{t('timezone')}</span><br /> {tenant.timezone_name}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-5 my-5 mb-10">
+                                        <div className="w-32 h-6 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse"></div>
+                                        <div className="w-full h-0.5 bg-gradient-to-r from-blue-300 to-[#3d50e0] animate-pulse"></div>
+                                    </div>
+                                    <div className="flex flex-col md:flex-row gap-5 mt-3 bg-gray-200 dark:bg-gray-700 rounded-lg p-5">
+                                        <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse"></div>
+                                        <div className="ml-4 flex-1">
+                                            <div className="w-3/4 h-4 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse mb-2"></div>
+                                            <div className="w-1/2 h-4 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col md:flex-row gap-5 mt-5 bg-gray-200 dark:bg-gray-700 rounded-lg p-5">
+                                        <div className="flex gap-4 items-center">
+                                            <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse"></div>
+                                            <div className="ml-4 flex-1">
+                                                <div className="w-3/4 h-4 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse mb-2"></div>
+                                                <div className="w-1/2 h-4 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse"></div>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-4 items-center">
+                                            <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse"></div>
+                                            <div className="ml-4 flex-1">
+                                                <div className="w-3/4 h-4 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse mb-2"></div>
+                                                <div className="w-1/2 h-4 bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                </div>
-                                <div className="flex gap-2 items-center p-5">
-                                <FaEnvelope className="text-[#3d50e0]" />
-                                <div className="ml-2 dark:text-white">
-                                    <span className="font-semibold">Email:</span> <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
-                                </div>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-5 my-5 mb-10">
-                                <h1 className="font-bold text-xl text-gray-700 dark:text-white">Format</h1>
-                                <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
-                            </div>
-                            <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5 pb-5">
-                                <div className="flex gap-2 items-center p-5">
-                                <FaHome className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('culture')}:</span> {tenant.culture}</p>
-                                </div>
-                                <div className="flex gap-2 items-center p-5">
-                                <FaFlag className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('language')}:</span> {tenant.language}</p>
-                                </div>
-                                <div className="flex gap-2 items-center p-5">
-                                <FaDollarSign className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('currency')}:</span> {tenant.currency}</p>
-                                </div>
-                                <div className="flex gap-2 items-center p-5">
-                                <FiWatch className="text-[#3d50e0]" />
-                                <p className="ml-2 dark:text-white"><span className="font-semibold">{t('timezone')}:</span> {tenant.timezone_name}</p>
-                                </div>
-                            </div>
-                            </>
-                        ) : (
-                            <p>Loading...</p>
-                        )}
+                            )
+                        }
                     </div>
                 </div>             
             </div>
@@ -307,7 +357,7 @@ export default function TenantProfile({tenant_id}){
                 {/* <!-- Modal content --> */}
                 <div className="relative bg-white rounded-lg shadow max-h-[100vh] overflow-auto">
                     {/* <!-- Modal header --> */}
-                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-blue-500 dark:bg-slate-800 text-white ">
+                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3d50e0] dark:bg-slate-800 text-white ">
                         <h3 className="text-xl font-semibold">
                             {`${modeModal} ${t('tenant')}`}
                         </h3>
@@ -319,11 +369,11 @@ export default function TenantProfile({tenant_id}){
                     {/* <!-- Modal body --> */}
                     <div className="p-4 md:p-5 dark:bg-slate-900 dark:text-white">
                         <div className="flex justify-between items-center">
-                        <div className="text-xl font-semibold text-blue-500">{t('general')}</div>
+                        <div className="text-xl font-semibold text-[#3d50e0]">{t('general')}</div>
 
                         <div className="flex gap-2 items-center">
                         {
-                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>{t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
+                            modeModal === 'Edit' ? <button className="bg-[#3d50e0] hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>{t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
                         }
                         </div>
                         </div>
@@ -397,13 +447,13 @@ export default function TenantProfile({tenant_id}){
 
                             <div className="
                             col-span-2">
-                                <div className="flex justify-between items-center">
-                                <div className="text-xl font-semibold text-blue-500 ">Format</div>
-                                <div className="flex items-center gap-1 me-1">
+                                <div className="flex justify-between items-center   gap-5">
+                                <div className="text-xl w-[50%] font-semibold text-[#3d50e0] ">FORMAT</div>
+                                <div className="flex w-[50%] justify-start items-center gap-1 me-1 py-3">
                                     <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
 
                                     <span className="text-sm font-medium ">Currency position :</span>
-                                    <div className="flex flex-row gap-2 ">
+                                    <div className="flex flex-row gap-2 items-center">
                                         <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
                                         <div className="text-sm font-medium">right(-$)</div>
                                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>

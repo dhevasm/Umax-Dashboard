@@ -1,49 +1,39 @@
 'use client'
 
-import { useState, useContext, useEffect } from "react"
-import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
-import { IconContext } from "react-icons"
-import { FaAngleDown, FaBuilding, FaChartLine, FaServer, FaSignOutAlt, FaTachometerAlt, FaUser } from "react-icons/fa"
-import { FaAngleUp } from "react-icons/fa"
-import { FaTable } from "react-icons/fa"
+import { useState, useContext, useEffect, useRef } from "react";
+import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page";
+import { IconContext } from "react-icons";
+import { FaBuilding, FaChartLine, FaSignOutAlt, FaTachometerAlt } from "react-icons/fa";
+import { RiAccountBoxFill, RiBuilding2Fill, RiProfileFill, RiMegaphoneFill, RiEye2Fill, RiLogoutBoxLine } from "react-icons/ri";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 
-import { useRef } from "react"
-import Sidebar from "../Client-components/Sidebar";
-import { jsx } from "react/jsx-runtime"
-import { useRouter } from "next/navigation"
-import Swal from "sweetalert2"
-import { RiAccountBoxFill, RiArrowGoBackLine, RiBuilding2Fill, RiDashboard2Line, RiDeleteBack2Line, RiEye2Fill, RiLogoutBoxLine, RiMegaphoneFill, RiProfileFill, RiTableLine, RiUser2Fill, RiUser3Fill, RiUser3Line, RiWindowLine } from "react-icons/ri"
-import { VscDashboard } from "react-icons/vsc"
-import { MdDashboard } from "react-icons/md"
-import { useTranslations } from "next-intl"
+export default function AdminSidebar() {
+    const sidebarLink = useRef(null);
+    const sideBar = useRef(null);
+    const t = useTranslations('admin-sidebar');
+    const tout = useTranslations('swal-logout');
+    const router = useRouter();
 
-export default function AdminSidebar(){
-
-    const sidebarLink = useRef()
-    const sideBar = useRef()
-    const t = useTranslations('admin-sidebar')
-    const tout = useTranslations('swal-logout')
-
-    const Router = useRouter()
-    
-    const [minimizedSidebar, setMinimizedSidebar] = useState(false)
-    const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData} = useContext(AdminDashboardContext)
+    const [minimizedSidebar, setMinimizedSidebar] = useState(false);
+    const { sidebarHide, setSidebarHide, setChangeTable, userData } = useContext(AdminDashboardContext);
 
     useEffect(() => {
         if (sidebarHide) {
-            sideBar.current.classList.add('-translate-x-full')
+            sideBar.current.classList.add('-translate-x-full');
         } else {
-            sideBar.current.classList.remove('-translate-x-full')
+            sideBar.current.classList.remove('-translate-x-full');
         }
-    }, [sidebarHide])
+    }, [sidebarHide]);
 
+    const handleSidebarLink = () => {
+        setMinimizedSidebar(prev => !prev);
+        sidebarLink.current.classList.toggle('hidden');
+    };
 
-    function handleSidebarLink(){
-        setMinimizedSidebar(!minimizedSidebar)
-        sidebarLink.current.classList.toggle('hidden')
-    }
-
-    function handleLogout(){
+    const handleLogout = () => {
         Swal.fire({
             title: tout('warn'),
             text: tout('msg'),
@@ -53,112 +43,101 @@ export default function AdminSidebar(){
             cancelButtonColor: "#d33",
             confirmButtonText: tout('yes'),
             cancelButtonText: tout('no'),
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-                localStorage.removeItem('jwtToken');
-                localStorage.removeItem('tenantId');
-                localStorage.removeItem('roles');
-                localStorage.removeItem('name');
-                localStorage.removeItem('lang');
+                localStorage.clear();
                 Router.push(`/en/login`)
             }
-          });
-    }
+        });
+    };
 
-    return(
-        <>
-            <div className="fixed z-10 bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
-                <ul className="pt-28 pl-3 uppercase ms-5">
-                    <li className="mb-4 ms-2 text-slate-400 font-semibold">
-                        Menu
-                    </li>
-                    <li className="mb-4 text-sm">
-                        <button className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => setChangeTable("dashboard")}>
-                            <div className="flex items-center gap-2 text-slate-300 font-semibold">
-                                <MdDashboard size={20}/>
-                                {t('dashboard')}
+    const sidebarItems = [
+        {
+            key: 'dashboard',
+            icon: <FaTachometerAlt size={13} />,
+            text: t('dashboard'),
+            onClick: () => setChangeTable("dashboard")
+        },
+        userData.roles === "admin" && {
+            key: 'analytics',
+            icon: <FaChartLine size={13} />,
+            text: t('analytics'),
+            link: `/${localStorage.getItem("lang")}/dashboard`
+        },
+        userData.roles === "admin" && {
+            key: 'tenant-profile',
+            icon: <FaBuilding size={13} />,
+            text: t('tenant-profile'),
+            onClick: () => setChangeTable("company")
+        },
+        userData.roles === "sadmin" && {
+            key: 'tenants',
+            icon: <RiBuilding2Fill />,
+            text: t('tenants'),
+            onClick: () => setChangeTable("tenants")
+        },
+        {
+            key: 'users',
+            icon: <RiProfileFill />,
+            text: t('users'),
+            onClick: () => setChangeTable("users")
+        },
+        {
+            key: 'campaigns',
+            icon: <RiMegaphoneFill />,
+            text: t('campaigns'),
+            onClick: () => setChangeTable("campaigns")
+        },
+        {
+            key: 'accounts',
+            icon: <RiAccountBoxFill />,
+            text: t('accounts'),
+            onClick: () => setChangeTable("accounts")
+        },
+        {
+            key: 'clients',
+            icon: <RiEye2Fill />,
+            text: t('clients'),
+            onClick: () => setChangeTable("clients")
+        },
+        {
+            key: 'profile',
+            icon: <RiProfileFill />,
+            text: t('profile'),
+            link: `/${localStorage.getItem("lang")}/profile`
+        },
+        {
+            key: 'logout',
+            icon: <RiLogoutBoxLine />,
+            text: t('logout'),
+            onClick: handleLogout
+        }
+    ];
+
+    return (
+        <div className="fixed z-10 bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
+            <ul className="pt-28 pl-3 uppercase ms-5">
+                <li className="mb-4 ms-2 text-slate-400 font-semibold">
+                    Menu
+                </li>
+                {sidebarItems.map(item => item && (
+                    <li key={item.key} className="mb-4 text-sm">
+                        <button
+                            className="flex items-center justify-between w-full px-4 py-2 text-sm rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]"
+                            onClick={item.onClick}
+                        >
+                            <div className="flex items-center gap-2 text-slate-300">
+                                {item.icon}
+                                {item.link ? (
+                                    <Link href={item.link}>{item.text}</Link>
+                                ) : (
+                                    item.text
+                                )}
                             </div>
                         </button>
                     </li>
-                    {
-                        userData.roles == "admin" &&
-                        <li className="mb-4 text-sm">
-                        <button className="flex items-center justify-betwesen w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push(`/${localStorage.getItem('lang')}/dashboard`)}>
-                            <div className="flex items-center gap-2 text-slate-300 font-semibold">
-                                <FaChartLine size={20}/>
-                                {t('analytics')}
-                            </div>
-                        </button>
-                    </li>}
-                    <li className="mb-4">
-                    {
-                        userData.roles == "admin" && <button className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center" onClick={() => setChangeTable("company")}>
-                        <IconContext.Provider value={{ className: "text-lg" }}>
-                            <FaBuilding size={20}/>
-                        </IconContext.Provider>
-                        {t('tenant-profile')}
-                        </button>
-                    }
-                    </li>
-                    <li className="mb-4">
-                        { userData.roles == "sadmin" &&
-                        <button onClick={() => setChangeTable("tenants")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
-                            <IconContext.Provider value={{ className: "text-lg" }}>
-                                <RiBuilding2Fill />
-                            </IconContext.Provider>
-                            {t('tenants')}
-                        </button>}
-                    </li>
-                    <li className="mb-4">
-                        <button onClick={() => setChangeTable("users")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
-                        <IconContext.Provider value={{ className: "text-lg" }}>
-                                <RiProfileFill />
-                        </IconContext.Provider>
-                            {t('users')}
-                        </button>
-                    </li>
-                    <li className="mb-4">
-                        <button onClick={() => setChangeTable("campaigns")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
-                        <IconContext.Provider value={{ className: "text-lg" }}>
-                                <RiMegaphoneFill />
-                        </IconContext.Provider>
-                            {t('campaigns')}
-                        </button>
-                    </li>
-                    <li className="mb-4">
-                        <button onClick={() => setChangeTable("accounts")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
-                        <IconContext.Provider value={{ className: "text-lg" }}>
-                                <RiAccountBoxFill />
-                            </IconContext.Provider>
-                            {t('accounts')}
-                        </button>
-                    </li>
-                    <li className="mb-4">
-                        <button onClick={() => setChangeTable("clients")} className="px-4 py-2 w-full text-slate-300 text-sm  hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48] flex gap-2 items-center">
-                        <IconContext.Provider value={{ className: "text-lg" }}>
-                                <RiEye2Fill />
-                            </IconContext.Provider>
-                            {t('clients')}
-                        </button>
-                    </li>
-                    <li className="mb-4">
-                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={() => Router.push(`/${localStorage.getItem("lang")}/profile`)}>
-                            <div className="flex items-center gap-2">
-                                <RiUser3Line size={20}/>
-                                {t('profile')}
-                            </div>
-                        </button>
-                    </li>
-                    <li className="mb-4">
-                    <button className="flex items-center text-slate-300 justify-between w-full px-4 py-2 text-sm font-medium  rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]" onClick={handleLogout}>
-                            <div className="flex items-center gap-2">
-                                <RiLogoutBoxLine size={20}/>
-                                {t('logout')}
-                            </div>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </>
-    )
+                ))}
+            </ul>
+        </div>
+    );
 }

@@ -23,6 +23,7 @@ const ClientTable = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [isLoading, setIsLoading] = useState(true);
     const t = useTranslations("clients");
     const tfile = useTranslations('swal-file')
     const [selectedClient, setSelectedClient] = useState(null);
@@ -41,6 +42,7 @@ const ClientTable = () => {
 
     const fetchData = async () => {
         try {
+            setIsLoading(true);
             const token = localStorage.getItem('jwtToken');
             const response = await axios.get(`${umaxUrl}/client-by-tenant`, {
                 headers: {
@@ -52,6 +54,8 @@ const ClientTable = () => {
             setTableData(response.data.Data);
         } catch (error) {
             console.error("Error fetching data:", error.message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -227,7 +231,7 @@ const ClientTable = () => {
 
     useEffect(() => {
         fetchData();
-    });
+    }, []);
 
     const filteredData = tableData.filter((data) => {
         return (
@@ -435,46 +439,50 @@ const ClientTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentClients.length > 0 ? (
-                                currentClients.map((data, index) => (
-                                    <tr key={index} className='text-center'>
-                                        {/* <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{index + 1}.</td> */}
-                                        <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
-                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.nama}`} onClick={() => handleOpenModal(data)}>
-                                                {data.name}
-                                            </button>
-                                        </td>
-                                        <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.address}</td>
-                                        <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
-                                            <a href={`https://wa.me/${data.contact.replace(/\D+/g, '')}`} title={`Message ${data.name} on Whatsapp`} target='_blank'>{data.contact.replace(/\D+/g, '')}</a>
-                                        </td>
-                                        <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
-                                            <a href={`mailto:${data.email}`} title={`Email ${data.name}`}>{data.email}</a>
-                                        </td>
-                                        <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'><StatusBadge status={data.status} /></td>
-                                        <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap hidden justify-center gap-1'>
-                                            <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
-                                                <BiEdit size={25}/>
-                                            </button>
-                                            <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
-                                                <MdDeleteForever size={25}/>
-                                            </button>
+                            {
+                                isLoading ? (
+                                    // Jika data sedang loading
+                                    <tr>
+                                        <td colSpan="6" className="text-center dark:border-gray-700">
+                                            <LoadingCircle />
                                         </td>
                                     </tr>
-                                ))
-                            ) : tableData.length > 0 ? (
-                                <tr>
-                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">
-                                        {t('not-found')}
-                                    </td>
-                                </tr>
-                            ) : (
-                                <tr>
-                                    <td colSpan="8" className="text-center dark:border-gray-700">
-                                        <LoadingCircle />
-                                    </td>
-                                </tr>
-                            )}
+                                ) : currentClients.length > 0 ? (
+                                    // Jika data ditemukan
+                                    currentClients.map((data, index) => (
+                                        <tr key={index} className='text-center'>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
+                                                <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data)}>
+                                                    {data.name}
+                                                </button>
+                                            </td>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.address}</td>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
+                                                <a href={`https://wa.me/${data.contact.replace(/\D+/g, '')}`} title={`Message ${data.name} on WhatsApp`} target='_blank' rel='noopener noreferrer'>{data.contact}</a>
+                                            </td>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
+                                                <a href={`mailto:${data.email}`} title={`Email ${data.name}`}>{data.email}</a>
+                                            </td>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'><StatusBadge status={data.status} /></td>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap hidden justify-center gap-1'>
+                                                <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
+                                                    <BiEdit size={25}/>
+                                                </button>
+                                                <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
+                                                    <MdDeleteForever size={25}/>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    // Jika tidak ada data yang ditemukan setelah loading selesai
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">
+                                            {t('not-found')}
+                                        </td>
+                                    </tr>
+                                )
+                            }
                         </tbody>
                     </table>
 

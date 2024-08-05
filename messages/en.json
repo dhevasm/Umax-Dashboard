@@ -9,7 +9,7 @@
     "hero_desc" : " With UMAX Dashboard, you can monitor and analyze advertising performance from Google Ads, Meta Ads, and TikTok Ads in real-time. Make better decisions and improve your campaign performance.",
     "hero_button" : "Get Started",
     "download_button" : "Download App",
-    "service-title-1" : "Multi-Platform Integration",
+    "service-title-1" : "integrated with multiple \n platforms",
     "service-title-2" : "In-depth Analysis and Detailed Reports",
     "service-title-3" : "Data Driven Campaign Optimization",
     "service-body-1" : "UMAX Dashboard integrates advertising data from multiple platforms such as Google Ads, Meta Ads, and TikTok Ads. This allows you to view your ad performance holistically in one easy-to-use dashboard.",
@@ -234,7 +234,7 @@
       "dashboard": "Dashboard",
       "tenants": "Tenants",
       "analytics": "Analytics",
-      "tenant-profile": "Tenant Profile",
+      "tenant-profile": "Company Profile",
       "campaigns": "Campaigns",
       "accounts": "Accounts",
       "clients": "Clients",
@@ -244,10 +244,10 @@
     },
 
     "tenant-profile": {
-      "title": "Tenant Profile",
-      "tenant": "Tenant",
+      "title": "Company Profile",
+      "tenant": "Company",
       "dashboard": "Dashboard",
-      "general": "General",
+      "general": "GENERAL",
       "address": "Address",
       "contact": "Contact",
       "language": "Language",
@@ -276,7 +276,8 @@
       "language-error": "Language is required",
       "culture-error": "Culture is required",
       "timezone-error": "Timezone is required",
-      "currency-error": "Currency is required"
+      "currency-error": "Currency is required",
+      "edit-profile": "Edit Profile"
     },
 
     "admin-users": {

@@ -1,3 +1,4 @@
+'use client'
 import * as React from "react";
 import WorldMap from "react-svg-worldmap";
 import { useContext } from "react";

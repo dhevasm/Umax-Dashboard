@@ -116,7 +116,6 @@ const ChartTwo = ({chartData}) => {
       return (
           <Line data={data} options={options}  />
       );
-   
 };
 
 export default ChartTwo;

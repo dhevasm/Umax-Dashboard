@@ -29,6 +29,8 @@ export default function AccountTable() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectLoading, setSelectLoading] = useState(true)
     const passwordInput = useRef(null)
     const passwordverifyInput = useRef(null)
     const t = useTranslations('admin-accounts')
@@ -244,6 +246,7 @@ export default function AccountTable() {
     }
 
     async function getaccount(){
+        setIsLoading(true)
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/account-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -251,6 +254,7 @@ export default function AccountTable() {
         })
         setaccount(response.data.Data)
         setaccountMemo(response.data.Data)
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -383,6 +387,7 @@ export default function AccountTable() {
     const [tenant, setTenant] = useState([])
 
     async function getSelectFrontend(){
+        setSelectLoading(true)
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
             setTimezone(response.data)
         })
@@ -411,7 +416,7 @@ export default function AccountTable() {
                 setTenant(response.data.Data)
             })
         }
-
+        setSelectLoading(false)
     }
 
     const tenantInput = useRef(null)
@@ -424,7 +429,7 @@ export default function AccountTable() {
         if(userData.roles == "admin"){
             tenantInput.current.classList.add("hidden")
         }
-    })
+    }, [])
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
@@ -643,36 +648,34 @@ export default function AccountTable() {
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800 dark:text-white">
                                     {
-                                        currentaccounts.length > 0 ? currentaccounts.map((account, index) => {
-                                            return (
-                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 hover:cursor-pointer dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 dark:text-white whitespace-nowrap underline font-semibold" title="Click to edit" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.client_name}</td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap"><a href={`mailto:${account.email
-                                                    }`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? t('active') : t('deactive')}</td>
-                                                </tr>
-                                            )
-                                    }) : (
-                                        // Check user yang sudah difilter
-                                        account.length > 0 ? (
-                                            // Jika data tida ditemukan
-                                            <tr className="text-center border dark:border-gray-500">
-                                                <td colSpan={8} className=" py-4">
-                                                    {t('not-found')}
-                                                </td>
-                                            </tr>
-                                        ) :
-                                        (
-                                            // Jika data ditemukan tapi masih loading
+                                        isLoading ? (
+                                            // Jika data sedang loading
                                             <tr className="text-center py-3 border dark:border-gray-500">
                                                 <td colSpan={8}>
                                                     <LoadingCircle />
                                                 </td>
                                             </tr>
+                                        ) : (
+                                            currentaccounts.length > 0 ? (
+                                                // Jika data ditemukan
+                                                currentaccounts.map((account, index) => (
+                                                    <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 hover:cursor-pointer dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 dark:text-white whitespace-nowrap underline font-semibold" title="Click to edit" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.client_name}</td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap"><a href={`mailto:${account.email}`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? t('active') : t('deactive')}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                // Jika tidak ada data setelah loading
+                                                <tr className="text-center border dark:border-gray-500">
+                                                    <td colSpan={8} className="py-4">
+                                                        {t('not-found')}
+                                                    </td>
+                                                </tr>
+                                            )
                                         )
-                                    )
                                     }
                                 </tbody>
                             </table>
@@ -725,9 +728,18 @@ export default function AccountTable() {
                                     <select id="client" className="bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-none  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, client: e.target.value})}>
                                         <option value="" disabled hidden>{t('select-client')}</option>
                                         {
-                                            client.length > 0 ? client.map((client, index) => {
-                                                return <option key={index} value={client._id}>{client.name}</option>
-                                            }) : <option key={0} value={0}>Loading...</option>
+                                            selectLoading ? (
+                                                // Jika data sedang loading
+                                                <option disabled key={0} value={0}>Loading clients list...</option>
+                                            ) : client.length > 0 ? (
+                                                // Jika data ditemukan
+                                                client.map((client, index) => (
+                                                    <option key={index} value={client._id}>{client.name}</option>
+                                                ))
+                                            ) : (
+                                                // Jika tidak ada data
+                                                <option disabled key={0} value={0}>No clients found</option>
+                                            )
                                         }
                                     </select>
                                     {

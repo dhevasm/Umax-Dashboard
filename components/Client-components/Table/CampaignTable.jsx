@@ -27,6 +27,7 @@ const CampaignTable = () => {
     const [selectedCampaign, setSelectedCampaign] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [isLoading, setIsLoading] = useState(true);
     const t = useTranslations("campaigns");
     const tfile = useTranslations('swal-file');
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -240,23 +241,27 @@ const CampaignTable = () => {
 
     const fetchData = async () => {
         try {
-        const token = localStorage.getItem("jwtToken");
-        const response = await axios.get(`${umaxUrl}/campaign-by-tenant`, {
-            headers: {
-            accept: "application/json",
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: `Bearer ${token}`,
-            },
+            setIsLoading(true);
+            const token = localStorage.getItem("jwtToken");
+            const response = await axios.get(`${umaxUrl}/campaign-by-tenant`, {
+                headers: {
+                accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                Authorization: `Bearer ${token}`,
+                },
         });
         setTableData(response.data.Data);
+        setIsLoading(false);
         } catch (error) {
-        console.error("Error fetching data:", error.message);
+            console.error("Error fetching data:", error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
         fetchData();
-    });
+    }, []);
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
@@ -461,50 +466,54 @@ const CampaignTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentCampaigns.length > 0 ? (
-                                currentCampaigns.map((data, index) => (
-                                    <tr key={index} className="text-center">
-                                        {/* <td className="px-2 py-2 border text-nowrap text-left dark:border-gray-700 dark:text-gray-200">{index + 1}.</td> */}
-                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
-                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data)}>
-                                                <p className="underline">{data.name}</p>
-                                            </button>
-                                        </td>
-                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.client_name}</td>
-                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
-                                            {data.platform === 1 ? "Meta Ads" : data.platform === 2 ? "Google Ads" : "Tiktok Ads"}
-                                        </td>
-                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.account_name}</td>
-                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
-                                            {data.objective === 1 ? "Awareness" : data.objective === 2 ? "Concervation" : "Consideration"}
-                                        </td>
-                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.start_date}</td>
-                                        <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
-                                            <StatusBadge status={data.status} />
-                                        </td>
-                                        <td className="px-2 py-2 border text-nowrap hidden gap-1 justify-center dark:border-gray-700 dark:text-gray-200">
-                                            <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
-                                                <BiEdit size={25} />
-                                            </button>
-                                            <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
-                                                <MdDeleteForever size={25} />
-                                            </button>
+                            {
+                                isLoading ? (
+                                    // Jika data sedang loading
+                                    <tr>
+                                        <td colSpan="8" className="text-center dark:border-gray-700">
+                                            <LoadingCircle />
                                         </td>
                                     </tr>
-                                ))
-                            ) : tableData.length > 0 ? (
-                                <tr>
-                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">
-                                        {t('not-found')}
-                                    </td>
-                                </tr>
-                            ) : (
-                                <tr>
-                                    <td colSpan="8" className="text-center dark:border-gray-700">
-                                        <LoadingCircle />
-                                    </td>
-                                </tr>
-                            )}
+                                ) : currentCampaigns.length > 0 ? (
+                                    // Jika data ditemukan
+                                    currentCampaigns.map((data, index) => (
+                                        <tr key={index} className="text-center">
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                                <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data)}>
+                                                    <p className="underline">{data.name}</p>
+                                                </button>
+                                            </td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.client_name}</td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                                {data.platform === 1 ? "Meta Ads" : data.platform === 2 ? "Google Ads" : "Tiktok Ads"}
+                                            </td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.account_name}</td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                                {data.objective === 1 ? "Awareness" : data.objective === 2 ? "Conservation" : "Consideration"}
+                                            </td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.start_date}</td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                                <StatusBadge status={data.status} />
+                                            </td>
+                                            <td className="px-2 py-2 border text-nowrap hidden gap-1 justify-center dark:border-gray-700 dark:text-gray-200">
+                                                <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
+                                                    <BiEdit size={25} />
+                                                </button>
+                                                <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
+                                                    <MdDeleteForever size={25} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    // Jika tidak ada data yang ditemukan setelah loading selesai
+                                    <tr>
+                                        <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">
+                                            {t('not-found')}
+                                        </td>
+                                    </tr>
+                                )
+                            }
                         </tbody>
                     </table>
                     <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">

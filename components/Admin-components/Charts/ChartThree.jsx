@@ -99,8 +99,7 @@ return (
   <Doughnut data={data} options={options} />
 </div>
 );
-    
-
+   
 }
 
  

@@ -14,9 +14,46 @@ const Navbar = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState('id');
+  const [locationChecked, setLocationChecked] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('landing');
+
+  useEffect(() => {
+    if (!localStorage.getItem('locationChecked')) {
+      const fetchLocation = async () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+              const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+              const data = await response.json();
+              console.log(data)
+
+              if (data.address.country_code !== 'id') {
+                setLang('en');
+                router.push(`/en`);
+              } else {
+                setLang('id');
+                router.push(`/id`);
+              }
+              localStorage.setItem('locationChecked', 'true');
+            } catch (error) {
+              console.error('Error fetching location:', error);
+            }
+          }, (error) => {
+            console.error('Error getting geolocation:', error);
+            localStorage.setItem('locationChecked', 'true');
+          });
+        } else {
+          console.error('Geolocation not supported');
+          localStorage.setItem('locationChecked', 'true');
+        }
+      };
+
+      fetchLocation();
+    }
+  }, [locationChecked, router]);
 
   const handleNavbarToggle = () => {
     setNavbarOpen(prevState => !prevState);
@@ -51,9 +88,9 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const currentLang = pathname.split('/')[1];
+    const currentLang = pathname.split('/')[1] || 'id';
     setLang(currentLang);
-  }, [pathname]);
+  }, [pathname]); 
 
   return (
     <div>
@@ -141,3 +178,4 @@ const Navbar = () => {
 }
 
 export default Navbar;
+

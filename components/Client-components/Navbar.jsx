@@ -9,7 +9,7 @@ import { BiBell, BiGroup, BiSolidMegaphone} from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
-import { FaUser, FaUsers, FaCog, FaSignOutAlt, FaTachometerAlt } from 'react-icons/fa';
+import { FaUser, FaUsers, FaCog, FaSignOutAlt, FaTachometerAlt, FaMoon, FaSun } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -27,6 +27,7 @@ export default function Navbar() {
     const [image, setImage] = useState('');
     const [isHidden, setIsHidden] = useState(true);
     const [isDark, setIsDark] = useState(false);
+    const [locationChecked, setLocationChecked] = useState(false);
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
     const roles = localStorage.getItem('roles');
     const [lang, setLang] = useState(localStorage.getItem('lang'));
@@ -50,6 +51,42 @@ export default function Navbar() {
             }
         }
     };
+
+    useEffect(() => {
+        if (!localStorage.getItem('locationChecked') && roles == 'client') {
+          const fetchLocation = async () => {
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(async (position) => {
+                const { latitude, longitude } = position.coords;
+                try {
+                  const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+                  const data = await response.json();
+                  console.log(data)
+    
+                  if (data.address.country_code !== 'id') {
+                    setLang('en');
+                    router.push(`/en`);
+                  } else {
+                    setLang('id');
+                    router.push(`/id`);
+                  }
+                  localStorage.setItem('locationChecked', 'true');
+                } catch (error) {
+                  console.error('Error fetching location:', error);
+                }
+              }, (error) => {
+                console.error('Error getting geolocation:', error);
+                localStorage.setItem('locationChecked', 'true');
+              });
+            } else {
+              console.error('Geolocation not supported');
+              localStorage.setItem('locationChecked', 'true');
+            }
+          };
+    
+          fetchLocation();
+        }
+      }, [locationChecked, router]);
 
     useEffect(() => {
         if(localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -95,6 +132,7 @@ export default function Navbar() {
                     localStorage.removeItem('roles');
                     localStorage.removeItem('name');
                     localStorage.removeItem('lang');
+                    localStorage.removeItem('locationChecked');
                     router.push('/');
                 }
             });
@@ -251,6 +289,14 @@ export default function Navbar() {
 
                     {/* Profile */}
                     <div className="flex gap-2 items-center">
+                        <label htmlFor="theme" className="inline-flex items-center cursor-pointer" hidden={roles == 'client'}>
+                            {
+                                isDark ? <FaMoon className="text-lg text-white me-2"/> : <FaSun className="text-xl text-blue-500 me-2"/>
+                            }
+                            <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
+                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            </div>
+                        </label>
                         {roles === 'client' && (
                             activeLink.includes("id") ? 
                                 <button onClick={() => changeLanguage('en')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
@@ -261,7 +307,6 @@ export default function Navbar() {
                                     {'EN'}
                                 </button>
                         )}
-                        {/* <p className="text-white">{lang}</p> */}
                         <div className="relative text-black hidden sm:flex md:flex lg:flex xl:flex dark:text-slate-100 me-3 hover:cursor-pointer">
                             <div className="notif-dropdown hidden absolute z-10 mt-2 p-5 right-5 bg-white dark:bg-slate-700 rounded-lg shadow-lg flex-col gap-3 w-[200px]">
                             <a href="/" className="hover:bg-gray-100 dark:hover:bg-slate-600 p-2 rounded-lg">Notification 1</a>
