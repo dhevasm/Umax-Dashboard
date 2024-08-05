@@ -29,7 +29,7 @@ ChartJS.register(
   Legend
 );
 
-const ChartTwo = () => {
+const ChartTwo = ({chartData}) => {
 
   const t = useTranslations("admin-dashboard");
   const {sidebarHide,
@@ -46,21 +46,10 @@ const ChartTwo = () => {
     const [start, setStart] = useState([]);
     const [end, setEnd] = useState([]);
 
-      async function getChartData() { 
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chart-data`, {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
-        })
-        const data = res.data.Output
-        setStart(data.line_start)
-        setEnd(data.line_end)
-        // console.log(data)
-      }  
-
       useEffect(() => {
-        getChartData()
-      }, [])
+        setStart(chartData.line_start)
+        setEnd(chartData.line_end)
+      }, [chartData])
 
       const data = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],

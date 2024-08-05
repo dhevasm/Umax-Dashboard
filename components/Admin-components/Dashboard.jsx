@@ -17,6 +17,7 @@ import { IconContext } from "react-icons"
 import { RiAdvertisementFill, RiGoogleFill, RiGoogleLine, RiMetaLine, RiTiktokFill, RiTiktokLine } from "react-icons/ri"
 import { reach } from "yup"
 import { FaArrowUp } from "react-icons/fa"
+import { map } from "leaflet"
 
 
 export default function Dashboard({ tenant_id }) {
@@ -25,6 +26,7 @@ export default function Dashboard({ tenant_id }) {
     const { sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard, tenantsCount } = useContext(AdminDashboardContext)
     const [campaigns, setCampaigns] = useState([])
     const [filter, setFilter] = useState("reach")
+    const [chartData, setChartData] = useState([])
 
     const getCampaign = async() => {
             await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
@@ -65,34 +67,46 @@ export default function Dashboard({ tenant_id }) {
     //     console.log(dataDashboard)
     // }, [dataDashboard])
 
+    async function getChartData() { 
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chart-data`, {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        })
+        const data = res.data.Output
+        setChartData(data)
+        // console.log(data)
+      }  
+  
+      useEffect(() => {
+        getChartData()
+      }, [])
+
     return (
         <>
             <div className="w-full h-full flex flex-wrap gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
                     {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
-
                         userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={tenantsCount ? tenantsCount : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} /> :
-
                             <CountCard title={t('tenants')} value={<div className="text-md animate-pulse">Loading...</div>} />}
-
-                    <CountCard title={t('users')} value={dataDashboard.users ? dataDashboard.users : <div className="text-md animate-pulse">Loading...</div>} handleClick={"users"} />
-                    <CountCard title={t('campaigns')} value={dataDashboard.campaigns ? dataDashboard.campaigns : <div className="text-md animate-pulse">Loading...</div>} handleClick={"campaigns"} />
-                    <CountCard title={t('clients')} value={dataDashboard.clients ? dataDashboard.clients : <div className="text-md animate-pulse">Loading...</div>} handleClick={"clients"} />
-                </div>
+                    <CountCard title={t('users')} value={dataDashboard.users} handleClick={"users"} />
+                    <CountCard title={t('campaigns')} value={dataDashboard.campaigns } handleClick={"campaigns"} />
+                    <CountCard title={t('clients')} value={dataDashboard.clients } handleClick={"clients"} />
+                </div>  
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
                     <div className="w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
-                        <ChartOne />
+                        <ChartOne chartData={chartData} />
                     </div>
                     <div className="w-full flex justify-center lg:w-2/3 h-[200px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
-                        <ChartTwo />
+                        <ChartTwo chartData={chartData} />
                     </div>
                 </div>
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
                     <div className="w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
-                        <Map />
+                        <Map/>
                     </div>
                     <div className="w-full flex justify-center lg:w-2/5 h-[370px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
-                        <ChartThree />
+                        <ChartThree chartData={chartData} />
                     </div>
                 </div>
                 {

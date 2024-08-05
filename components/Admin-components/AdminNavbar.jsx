@@ -307,7 +307,7 @@ function AdminNavbar({userData}){
                     }
                     
                     {showDropdown && (
-                        <div className="absolute top-20 right-20 p-5 w-[270px] h-[270px] overflow-y-auto bg-white rounded-lg shadow-lg">
+                        <div className="absolute text-black dark:text-white top-20 right-20 p-5 w-[270px] h-[270px] overflow-y-auto bg-white dark:bg-slate-700 rounded-lg shadow-lg">
                             <ul className="space-y-2">
                                 {
                                     requestlist.length === 0 && (

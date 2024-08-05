@@ -11,7 +11,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ChartThree = () => {
+const ChartThree = ({chartData}) => {
   const t = useTranslations("admin-dashboard");
   const {sidebarHide,
     setSidebarHide,
@@ -28,22 +28,11 @@ const ChartThree = () => {
   const [google, setGoogle] = useState(0);
   const [tiktok, setTiktok] = useState(0);
 
-    async function getChartData() { 
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chart-data`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      const data = res.data.Output
-      setMeta(data.donut)
-      setGoogle(data.donut2)
-      setTiktok(data.donut3)
-      // console.log(data)
-    }  
-
     useEffect(() => {
-      getChartData()
-    }, [])
+      setMeta(chartData.donut)
+      setGoogle(chartData.donut2)
+      setTiktok(chartData.donut3)
+    }, [chartData])
 
     const data = {
       labels: ["Meta", "Google", "Tiktok"],

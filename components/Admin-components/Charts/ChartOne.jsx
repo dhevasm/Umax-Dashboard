@@ -10,7 +10,7 @@ import { AdminDashboardContext } from '@/app/[locale]/admin-dashboard/page';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const ChartOne = () => {
+const ChartOne = ({chartData}) => {
   const t = useTranslations("admin-dashboard");
   const {sidebarHide,
     setSidebarHide,
@@ -27,22 +27,12 @@ const ChartOne = () => {
   const [conversion, setConversion] = useState(0);
   const [consideration, setConsideration] = useState(0);
 
-    async function getChartData() { 
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chart-data`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      const data = res.data.Output
-      setAwareness(data.bar)
-      setConversion(data.bar2)
-      setConsideration(data.bar3)
-      // console.log(data)
-    }  
-
     useEffect(() => {
-      getChartData()
-    }, [])
+      setAwareness(chartData.bar)
+      setConversion(chartData.bar2)
+      setConsideration(chartData.bar3)
+    }, [chartData])
+
 
     const data = {
       labels: ["awareness", "conversion", "consideration"],
