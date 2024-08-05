@@ -46,7 +46,7 @@ export default function AdminSidebar() {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.clear();
-                router.push('/');
+                Router.push(`/en/login`)
             }
         });
     };

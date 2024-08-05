@@ -33,10 +33,10 @@ const VideoSection = () => {
         </div>
       </div>
 
+      {/* vidio */}
       <div className="top-0 right-0 z-10 w-full h-full lg:absolute lg:w-1/2">
         <div className="flex items-center justify-center w-full h-full bg-bg-tenant bg-no-repeat bg-cover">
           <a
-            href=""
             onClick={() => setVideoOpen(true)}
             className="absolute z-40 flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 md:h-[100px] md:w-[100px]"
           >
@@ -57,7 +57,7 @@ const VideoSection = () => {
         </div>
       </div>
 
-      <span className="absolute left-0 top-0 z-[-1]">
+      {/* <span className="absolute left-0 top-0 z-[-1]">
         <svg
           width="644"
           height="489"
@@ -256,7 +256,7 @@ const VideoSection = () => {
             fill="white"
           />
         </svg>
-      </span>
+      </span> */}
 
       {videoOpen && (
         <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-90">

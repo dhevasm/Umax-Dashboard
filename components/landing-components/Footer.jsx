@@ -1,5 +1,7 @@
+"use client"
 import Image from 'next/image'
 import React from 'react'
+import Link from 'next/link'
 
 const Footer = () => {
   return (
@@ -11,7 +13,7 @@ const Footer = () => {
                         <div className="w-full px-4 lg:w-1/2">
                             <div className="w-full mb-5 max-w-[470px]">
                                 <h3 className="text-2xl font-bold text-white sm:text-[28px] sm:leading-snug">
-                                    Signup for latest news and insights from TailGrids UI
+                                    Signup for latest news and insights from Umax Dashboard
                                 </h3>
                             </div>
                         </div>
@@ -39,8 +41,11 @@ const Footer = () => {
                 <div className="flex flex-wrap justify-center -mx-4">
                     <div className="w-full px-4 sm:w-2/3 lg:w-4/12 2xl:w-3/12">
                         <div className="w-full mb-10">
-                            <a href="" className="mb-6 inline-block max-w-[160px]">
-                                <Image src="https://demo.tailgrids.com/templates/startup/build/src/assets/images/logo/logo-white.svg" alt="logo" className="max-w-full" width={160} height={160}/>
+                            <a href="" className="mb-6  max-w-[160px] flex gap-3 items-center">
+                                <img src="assets/iconBlue.png" alt="logo" className="max-w-full bg-white p-3 rounded-full" width={58} height={58}/>
+                                <h1 className='text-white font-bold text-xl'>
+                                UMAX Dasboard
+                                </h1>
                             </a>
                             <p className="text-base mb-7 text-white/70">
                                 We create digital experiences for brands and companies by using
@@ -67,7 +72,7 @@ const Footer = () => {
                     </div>
                     <div className="w-full px-4 sm:w-1/2 lg:w-2/12 2xl:w-2/12">
                         <div className="w-full mb-10">
-                            <h4 className="text-lg font-semibold text-white mb-9">TailGrids</h4>
+                            <h4 className="text-lg font-semibold text-white mb-9">Umax</h4>
                             <ul>
                                 <li>
                                     <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
@@ -124,24 +129,24 @@ const Footer = () => {
                             <h4 className="text-lg font-semibold text-white mb-9">Contact Us</h4>
                             <ul>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
-                                        +123 456 7890
-                                    </span>
+                                    <Link href={"https://wa.me/6281212122388"} target='_blank' className="inline-block text-base leading-loose text-white/70 mb-2">
+                                        +0812-1212-2388
+                                    </Link>
                                 </li>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
-                                        info@yourdomain.com
-                                    </span>
+                                    <Link href={"mailto:suratkita@gmail.com"} className="inline-block text-base leading-loose text-white/70 mb-2">
+                                        suratkita@gmail.com
+                                    </Link>
                                 </li>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
-                                        www.tailgrids.com
-                                    </span>
+                                    <Link href={"https://ubig.co.id"} target='_blank' className="inline-block text-base leading-loose text-white/70 mb-2">
+                                        ubig.co.id
+                                    </Link>
                                 </li>
                                 <li>
-                                    <span className="inline-block text-base leading-loose text-white/70 mb-2">
-                                        123 Business Centre London SW1A 1AA
-                                    </span>
+                                    <Link href={"https://www.google.com/maps?sca_esv=9267af3241730e66&sca_upv=1&rlz=1C1ONGR_enID1037ID1037&sxsrf=ADLYWIK90hxbmGCOKIdtDp2nmSUBUg1ozw:1722582345654&lsig=AB86z5VlZ0IJm7LN4VqASAEKSYB4&shndl=-1&shem=lsde,vslcca&kgs=1710c6c08c50f5a1&um=1&ie=UTF-8&fb=1&gl=id&sa=X&geocode=KV8tQDwPgnguMUtF11K-rBhO&daddr=Ruko+Modern+Kav+A16-A17,+Tasikmadu,+Kec.+Lowokwaru,+Kota+Malang,+Jawa+Timur+65143"} className="inline-block text-base leading-loose text-white/70 mb-2" target='_blank'>
+                                    Ruko Modern Kav A16-A17, Jl Loncat Indah, Tasikmadu, Kota Malang 65143
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -152,7 +157,8 @@ const Footer = () => {
                 <div className="flex justify-between -mx-4">
                     <div className="w-full px-4 text-center sm:w-auto">
                         <p className="text-base text-white/70">
-                            &copy; 2024 TailGrids. All Rights Reserved.
+                            {/* &copy;  */}
+                            @2024 Umax Dashboard. All Rights Reserved.
                         </p>
                     </div>
                     <div className="w-full px-4 text-center sm:w-auto">

@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { useState,useEffect, useContext } from "react";
-import midtransClient from 'midtrans-client';
 import Image from "next/image";
-import Script from "next/script";
+import Snap from "midtrans-client/lib/snap";
+import { useRouter } from "next/navigation";
 
 const PricingSection = () => {
 
@@ -85,10 +85,123 @@ const PricingSection = () => {
     snap.pay(token)
   }
 
+  const Router = useRouter();
+
+  const [showModal, setShowModal] = useState(false);
+  const [Subscribe, setSubscribe] = useState(1);
+  const [snapToken, setSnapToken] = useState(null);
+  const [formValues, setFormValues] = useState({
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone_number: '',
+  });
+
+  const handleChange = (event) => {
+      const { name, value } = event.target;
+      setFormValues({
+          ...formValues,
+          [name]: value,
+      });
+  };
+
+  const handleSubmit = async (event) => {
+      let price = [
+        0,
+        3200000,
+        4000000
+      ]
+
+      event.preventDefault();
+      const url = process.env.NEXT_PUBLIC_API_URL;
+
+      // Convert form values to URL-encoded format
+      const formData = new URLSearchParams({
+          first_name: formValues.first_name,
+          last_name: formValues.last_name,
+          email: formValues.email,
+          phone_number: formValues.phone_number,
+          price: price[Subscribe - 1],
+          product_name : Subscribe === 1 ? 'Personal plan' : Subscribe === 2 ? 'Business plan' : 'Professional plan',
+      }).toString();
+
+      try {
+          const response = await fetch(`${url}/payment`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: formData,
+          });
+
+          if (!response.ok) {
+              const errorData = await response.json();
+              console.error('Server Error:', errorData);
+              alert('Your email has aready purchased a plan!');
+              return;
+          }
+
+          const data = await response.json();
+          setSnapToken(data.token);
+      } catch (error) {
+          console.error('Network Error:', error);
+          alert('Network error occurred. Please try again.');
+      }
+  };
+
+  const openModal = (Subscribe) => {
+    setSubscribe(Subscribe);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if(snapToken !== null) {
+      handlePayment(snapToken)
+    }
+  }, [snapToken])
+
+  const handlePayment = (token) => {
+    closeModal()
+    snap.pay(token)
+  }
+
+  const uncompletedpayment = async(order_id) =>{
+    const url = process.env.NEXT_PUBLIC_API_URL;
+    const formData = new URLSearchParams({
+      order_id: order_id,
+    }).toString();
+
+    try {
+      const response = await fetch(`${url}/token-from-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server Error:', errorData);
+        alert('Order id not found!');
+        return;
+      }
+
+      const data = await response.json();
+      setSnapToken(data.token);
+    } catch (error) {
+      console.error('Network Error:', error);
+      alert('Network error occurred. Please try again.');
+    }
+  }
+
   return (
     // ====== Pricing Section Start ======
-    <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-20" id="payment">
-      <Script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} />
+    <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-2 md:px-20" id="payment">
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">  
           <div className="w-full px-4">
@@ -100,12 +213,18 @@ const PricingSection = () => {
                 Our Pricing Plan
               </h2>
               <p className="text-base text-gray-500 dark:text-gray-300">
-                There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.
+                {t('pricing-desc')}
+                <br />
+                <br />
+                Have order id? <a onClick={() => {
+                  const order_id = prompt("Enter your order ID");
+                  uncompletedpayment(order_id)
+                }} className="text-blue-500 underline hover:cursor-pointer">click me</a>
               </p>
             </div>
           </div>
         </div>
-
+        
         <div className="flex flex-wrap justify-center -mx-4">
           <div className="w-full px-4 md:w-1/2 lg:w-1/3">
             <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
@@ -113,10 +232,7 @@ const PricingSection = () => {
                 Personal
               </span>
               <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
-                <span>$59</span>
-                <span className="text-base font-medium text-body-color dark:text-gray-300">
-                  / year
-                </span>
+                <span>Free</span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
                 Perfect for using in a personal website or a client project.
@@ -140,9 +256,11 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                onClick={() => openModal(1)}
-                className="block w-full p-3 text-base dark:text-white font-medium text-center transition bg-transparent border rounded-md border-stroke dark:border-gray-600 text-primary hover:border-primary hover:bg-blue-600 hover:text-white"
-              >
+                onClick={(e) => {
+                    e.currentTarget.innerHTML = "Loading..."
+                   Router.push('/en/tenant-register?order_id=free')
+                }}
+                className=" hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
                 Choose Personal
               </a>
 
@@ -444,7 +562,7 @@ const PricingSection = () => {
               </div>
               <a
                 onClick={() => openModal(2)}
-                className="block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
+                className="hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Business
               </a>
@@ -531,8 +649,7 @@ const PricingSection = () => {
               </div>
               <a
                 onClick={() => openModal(3)}
-                className="block w-full p-3 text-base dark:text-white font-medium text-center transition bg-transparent border rounded-md border-stroke dark:border-gray-600 text-primary hover:border-primary hover:bg-blue-600 hover:text-white"
-              >
+                className="hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
                 Choose Professional
               </a>
 
@@ -595,14 +712,14 @@ const PricingSection = () => {
             {showModal && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="absolute inset-0 bg-black opacity-50"></div>
-                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg p-8 max-h-[80vh]">
-                  <h2 className="text-2xl font-bold mb-4">Complete Your Payment</h2>
+                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg p-8 h-[520px]">
+                  <h2 className="text-2xl font-bold mb-4 text-black dark:text-white">Complete Your Payment</h2>
                   <div className="w-full h-0.5 bg-gray-400 my-5"></div>
                   <div className="text-gray-500 dark:text-gray-300">
                     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                       <div className="flex gap-5">
                         <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="First Name"
                           name="first_name"
@@ -611,7 +728,7 @@ const PricingSection = () => {
                           required
                         />
                         <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="Last Name"
                           name="last_name"
@@ -621,7 +738,7 @@ const PricingSection = () => {
                         />
                       </div>
                       <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="email"
                           placeholder="Input your email"
                           name="email"
@@ -630,25 +747,22 @@ const PricingSection = () => {
                           value={formValues.email}
                         />
                       <input
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          type="number"
+                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="Input phone number"
                           name="phone_number"
                           required
                           onChange={handleChange}
                           value={formValues.phone_number}
                         />
-                        <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe}>
-                          <option value="1">Personal Package ($59/year)</option>
-                          <option value="2">Business Package ($199/year)</option>
-                          <option value="3">Professional Package ($256/year)</option>
+                        <select className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe} disabled>
+                          <option value="1">Personal Plan (Free)</option>
+                          <option value="2">Business Plan ($199/year)</option>
+                          <option value="3">Professional Plan ($256/year)</option>
                         </select>
-
                         <div className="flex justify-end gap-5">
                             <div className="flex gap-2">
                                 <input type="radio" name="method" value="midtrans" defaultChecked/>
-                                <label htmlFor="midtrans" >
-                                  <img src="assets/Midtrans.png" alt="Midtrans" width={100} height={100}/>
+                                <label htmlFor="midtrans">
                                 </label>
                               </div>
                               <div className="flex gap-2">
@@ -662,13 +776,12 @@ const PricingSection = () => {
                           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="submit"
                         >
-                          Subscribe
-                        </button>
+                         {Subscribe === 1 ? 'Get (Free)' : Subscribe === 2 ? "Subscribe ($199/year)" : Subscribe === 3 ? 'Subscribe ($256/year)' : "(Select Package)"}
                         <button
                           onClick={closeModal}
                           className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
                                 >
-                          Close
+                          Cancel
                         </button>
                         </div>
                     </form>

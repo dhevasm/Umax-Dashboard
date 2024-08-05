@@ -79,24 +79,39 @@ function AdminDashboard() {
     }, [])
 
     const getUserCampaignCount = useCallback(async () => {
+        setUsersCount("Loading...")
+        setCampaignsCount("Loading...")
+        setClientCount("Loading...")
         const getUsers = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
-        setUsersCount(getUsers.data.Data.length)
+        if(getUsers.data.Data.length > 0){
+            setUsersCount(getUsers.data.Data.length)
+        }else{
+            setUsersCount(0)
+        }
         const getCampaigns = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
-        setCampaignsCount(getCampaigns.data.Data.length)
+        if(getCampaigns.data.Data.length > 0){
+            setCampaignsCount(getCampaigns.data.Data.length)
+        }else{
+            setCampaignsCount(0)
+        }
         const getClient = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
-        setClientCount(getClient.data.Data.length)
+        if(getClient.data.Data.length > 0){
+            setClientCount(getClient.data.Data.length)
+        }else{
+            setClientCount(0)
+        }
     }, [])
 
     useEffect(() => {
@@ -119,6 +134,7 @@ function AdminDashboard() {
     }, [getUserData, getUserCampaignCount])
 
     useEffect(() => {
+
         setDataDashboard({
             tenants: tenantsCount,
             users: usersCount,
@@ -145,11 +161,11 @@ function AdminDashboard() {
             const token = localStorage.getItem('jwtToken')
             const role = localStorage.getItem('roles')
             if (!token) {
-                Swal.fire('You Must Login First', 'Nice Try!', 'error').then(() => {
-                    router.push('/')
+                Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
+                    router.push('/en/login')
                 })
             } else if (role !== 'admin' && role !== 'sadmin') {
-                Swal.fire('Request Denied', 'Nice Try!', 'error').then(() => {
+                Swal.fire('Authorization failed', 'Request Denied', 'error').then(() => {
                     router.push(`/${localStorage.getItem('lang')}/dashboard`)
                 })
             }

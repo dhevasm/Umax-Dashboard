@@ -15,7 +15,7 @@ import Footer from '@/components/landing-components/Footer'
 
 const page = () => {
   return (
-    <div className='max-w-screen'>
+    <div className='max-w-screen overflow-x-hidden'>
       <style>
         {
           `

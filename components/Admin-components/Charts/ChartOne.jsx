@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { useContext } from "react";
-import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page";
-import axios from "axios";
-import { useTranslations } from "next-intl";
+import React, { useState, useEffect } from 'react'
+import { Bar, Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, Colors } from 'chart.js';
+import axios from 'axios';
+import { useTranslations } from 'next-intl';
+import { useContext } from 'react';
+import { AdminDashboardContext } from '@/app/[locale]/admin-dashboard/page';
 
-const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const ChartOne = () => {
-
-  const t = useTranslations('admin-dashboard');
+const ChartOne = ({chartData}) => {
+  const t = useTranslations("admin-dashboard");
   const {sidebarHide,
     setSidebarHide,
     updateCard,
@@ -22,196 +22,73 @@ const ChartOne = () => {
     dataDashboard,
     isDarkMode,
     setIsDarkMode} = useContext(AdminDashboardContext)
-  // const theme = typeof window !== 'undefined' ? localStorage.getItem('color-theme') : 'light';
 
-  // useEffect(() => {
-  //   if(theme === 'dark'){
-  //     setIsDarkMode(true);
-  //   } else {
-  //     setIsDarkMode(false);
-  //   }
-  // }, [theme]);
+  const [awareness, setAwareness] = useState(0);
+  const [conversion, setConversion] = useState(0);
+  const [consideration, setConsideration] = useState(0);
 
-  const options = {
-    colors: ["#3C50E0", "#80CAEE"],
-    chart: {
-      fontFamily: "Satoshi, sans-serif",  
-      type: "bar",
-      height: 335,
-      stacked: true,
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
-      background: isDarkMode ? "#1E293B" : "#ffffff",
-      foreColor: isDarkMode ? "#FFFFFF" : "#000000",
-    },
-    responsive: [
-      {
-        breakpoint: 1536,
-        options: {
-          plotOptions: {
-            bar: {
-              borderRadius: 0,
-              columnWidth: "25%",
-            },
+    useEffect(() => {
+      setAwareness(chartData.bar)
+      setConversion(chartData.bar2)
+      setConsideration(chartData.bar3)
+    }, [chartData])
+
+
+    const data = {
+      labels: ["awareness", "conversion", "consideration"],
+      datasets: [
+          {
+              label: 'Campaign',
+              data: [awareness, conversion, consideration],
+              backgroundColor: '#1368DE',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+              barThickness: 30,
           },
-        },
-      },
-    ],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        borderRadius: 0,
-        columnWidth: "25%",
-        borderRadiusApplication: "end",
-        borderRadiusWhenStacked: "last",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    xaxis: {
-      categories: ["Awareness", "Conservation", "Consideration"],
-      labels: {
-        style: {
-          colors: isDarkMode ? '#FFFFFF' : '#000000',
-        },
-      },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: isDarkMode ? '#FFFFFF' : '#000000',
-        },
-      },
-    },
-    legend: {
-      position: "top",
-      horizontalAlign: "left",
-      fontFamily: "Satoshi",
-      fontWeight: 500,
-      fontSize: "14px",
-      markers: {
-        radius: 99,
-      },
-      labels: {
-        colors: isDarkMode ? '#FFFFFF' : '#000000',
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    
+      ],
   };
 
-  const [campaigns, setCampaigns] = useState([])  
-  const [meta, setMeta] = useState(0)
-  const [google, setGoogle] = useState(0)
-  const [tiktok, setTiktok] = useState(0)
-  const [dataseries,setSeries] = useState([0,0,0])
-
-  async function getCampaigns() { 
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign-by-tenant`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-      },
-    })
-    const data = res.data.Data
-    setCampaigns(data)
-    // console.log(data)
-  }  
-
-  useEffect(() => {
-    const countMeta = campaigns.filter(campaign => campaign.objective === 1).length;
-    setMeta(countMeta)
-    setSeries([countMeta,google,tiktok])
-  }, [campaigns,meta])
-
-  useEffect(() => {
-    const countgoogle = campaigns.filter(campaign => campaign.objective === 2).length;
-    setGoogle(countgoogle)
-    setSeries([meta,countgoogle,tiktok])
-  }, [campaigns,google])
-
-  useEffect(() => {
-    const counttiktok = campaigns.filter(campaign => campaign.objective === 3).length;
-    setTiktok(counttiktok)
-    setSeries([meta,google,counttiktok])
-  }, [campaigns,tiktok])
-
-  useEffect(() => {
-    getCampaigns()
-  }, [])
-
-  const series = [
-    {
-      name: t('total-campaigns'),
-      data: dataseries,
-    },
-  ]
-
-  return (
-    <div className="col-span-12 rounded-sm bg-white dark:bg-slate-800 p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-      <div className="mb-4 justify-between gap-4 sm:flex">
-        <div>
-          <h4 className="text-xl font-semibold text-black dark:text-white">
-            {t("campaign-objective")}
-          </h4>
-        </div>
-        <div>
-          <div className="relative inline-block">
-            {/* <select
-              name="#"
-              id="#"
-              className="relative inline-flex appearance-none dark:text-white bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
-            >
-              <option value="" className="dark:bg-boxdark dark:text-white">
-                This Week
-              </option>
-              <option value="" className="dark:bg-boxdark dark:text-white">
-                Last Week
-              </option>
-            </select> */}
-            <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
-              <svg
-                width="10"
-                height="6"
-                viewBox="0 0 10 6"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.47072 1.08816C0.47072 1.02932 0.500141 0.955772 0.54427 0.911642C0.647241 0.808672 0.809051 0.808672 0.912022 0.896932L4.85431 4.60386C4.92785 4.67741 5.06025 4.67741 5.14851 4.60386L9.09079 0.896932C9.19376 0.793962 9.35557 0.808672 9.45854 0.911642C9.56151 1.01461 9.5468 1.17642 9.44383 1.27939L5.50155 4.98632C5.22206 5.23639 4.78076 5.23639 4.51598 4.98632L0.558981 1.27939C0.50014 1.22055 0.47072 1.16171 0.47072 1.08816Z"
-                  fill="#637381"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M1.22659 0.546578L5.00141 4.09604L8.76422 0.557869C9.08459 0.244537 9.54201 0.329403 9.79139 0.578788C10.112 0.899434 10.0277 1.36122 9.77668 1.61224L9.76644 1.62248L5.81552 5.33722C5.36257 5.74249 4.6445 5.7544 4.19352 5.32924C4.19327 5.32901 4.19377 5.32948 4.19352 5.32924L0.225953 1.61241C0.102762 1.48922 -4.20186e-08 1.31674 -3.20269e-08 1.08816C-2.40601e-08 0.905899 0.0780105 0.712197 0.211421 0.578787C0.494701 0.295506 0.935574 0.297138 1.21836 0.539529L1.22659 0.546578ZM4.51598 4.98632C4.78076 5.23639 5.22206 5.23639 5.50155 4.98632L9.44383 1.27939C9.5468 1.17642 9.56151 1.01461 9.45854 0.911642C9.35557 0.808672 9.19376 0.793962 9.09079 0.896932L5.14851 4.60386C5.06025 4.67741 4.92785 4.67741 4.85431 4.60386L0.912022 0.896932C0.809051 0.808672 0.647241 0.808672 0.54427 0.911642C0.500141 0.955772 0.47072 1.02932 0.47072 1.08816C0.47072 1.16171 0.50014 1.22055 0.558981 1.27939L4.51598 4.98632Z"
-                  fill="#637381"
-                />
-              </svg>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="p-3">
-        <div id="chartTwo" className="-mb-9 -ml-5">
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="bar"
-            height={350}  
-            width={"100%"}
-          />
-        </div>
-      </div>
-    </div>
-  );
+  const options = {
+    responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    color: isDarkMode ? "white" : "gray" // Change legend text color
+                }
+            },
+            title: {
+                display: true,
+                text: 'Campaign Objective',
+                color:  isDarkMode ? "white" : "gray" // Change title text color
+            },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color:  isDarkMode ? "white" : "gray", // Change x-axis labels color
+                },
+                grid: {
+                    color:  isDarkMode ? "white" : "gray", // Optional: change grid line color
+                }
+            },
+            y: {
+                ticks: {
+                    color:  isDarkMode ? "white" : "gray", // Change y-axis labels color
+                },
+                grid: {
+                    color:  isDarkMode ? "white" : "gray", // Optional: change grid line color
+                }
+            }
+        }
 };
 
+return (
+      <Bar data={data} options={options} height={400}/>
+);
+    
+
+}
+
+ 
 export default ChartOne;
