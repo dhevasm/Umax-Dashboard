@@ -1,28 +1,106 @@
-import { useTranslations } from "next-intl";
 import React from "react";
 import axios from "axios";
 import { useState,useEffect, useContext } from "react";
 import midtransClient from 'midtrans-client';
+import Image from "next/image";
+import Script from "next/script";
 
 const PricingSection = () => {
-  const t = useTranslations("landing");
+
+  const [showModal, setShowModal] = useState(false);
+  const [Subscribe, setSubscribe] = useState(1);
+  const [snapToken, setSnapToken] = useState(null);
+  const [formValues, setFormValues] = useState({
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone_number: '',
+  });
+
+  const handleChange = (event) => {
+      const { name, value } = event.target;
+      setFormValues({
+          ...formValues,
+          [name]: value,
+      });
+  };
+
+  const handleSubmit = async (event) => {
+      let price = [
+        950000,
+        320000,
+        400000
+      ]
+
+      event.preventDefault();
+      const url = process.env.NEXT_PUBLIC_API_URL;
+
+      // Convert form values to URL-encoded format
+      const formData = new URLSearchParams({
+          first_name: formValues.first_name,
+          last_name: formValues.last_name,
+          email: formValues.email,
+          phone_number: formValues.phone_number,
+          price: price[Subscribe - 1]
+      }).toString();
+
+      try {
+          const response = await fetch(`${url}/payment`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: formData,
+          });
+
+          if (!response.ok) {
+              const errorData = await response.json();
+              console.error('Server Error:', errorData);
+              alert('Failed to submit form. Check console for details.');
+              return;
+          }
+
+          const data = await response.json();
+          console.log(data);
+      } catch (error) {
+          console.error('Network Error:', error);
+          alert('Network error occurred. Please try again.');
+      }
+  };
+
+  const openModal = (Subscribe) => {
+    setSubscribe(Subscribe);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    console.log(snapToken)
+  }, [snapToken])
+
+  const handlePayment = (token) => {
+    snap.pay(token)
+  }
 
   return (
     // ====== Pricing Section Start ======
     <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-20" id="payment">
-      <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}></script>
+      <Script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} />
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">  
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
               <span className="block mb-2 text-lg font-semibold text-blue-600">
-                {t('pricing-table')}
+                Pricing Table
               </span>
               <h2 className="mb-3 text-3xl leading-[1.208] font-bold text-dark dark:text-white sm:text-4xl md:text-[40px]">
-                {t('our-pricing-plan')}
+                Our Pricing Plan
               </h2>
               <p className="text-base text-gray-500 dark:text-gray-300">
-                {t('pricing-desc')}
+                There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.
               </p>
             </div>
           </div>
@@ -62,7 +140,7 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                href=""
+                onClick={() => openModal(1)}
                 className="block w-full p-3 text-base dark:text-white font-medium text-center transition bg-transparent border rounded-md border-stroke dark:border-gray-600 text-primary hover:border-primary hover:bg-blue-600 hover:text-white"
               >
                 Choose Personal
@@ -365,9 +443,7 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                onClick={() => {
-                  snap.pay("026838e7-b01d-44ee-a60f-5314a4b82ae6")
-                }}
+                onClick={() => openModal(2)}
                 className="block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Business
@@ -454,7 +530,7 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                href=""
+                onClick={() => openModal(3)}
                 className="block w-full p-3 text-base dark:text-white font-medium text-center transition bg-transparent border rounded-md border-stroke dark:border-gray-600 text-primary hover:border-primary hover:bg-blue-600 hover:text-white"
               >
                 Choose Professional
@@ -512,6 +588,97 @@ const PricingSection = () => {
           </div>
         </div>
       </div>
+
+      
+
+            {/* Modal */}
+            {showModal && (
+              <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="absolute inset-0 bg-black opacity-50"></div>
+                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg p-8 max-h-[80vh]">
+                  <h2 className="text-2xl font-bold mb-4">Complete Your Payment</h2>
+                  <div className="w-full h-0.5 bg-gray-400 my-5"></div>
+                  <div className="text-gray-500 dark:text-gray-300">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                      <div className="flex gap-5">
+                        <input
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="text"
+                          placeholder="First Name"
+                          name="first_name"
+                          onChange={handleChange}
+                          value={formValues.first_name}
+                          required
+                        />
+                        <input
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="text"
+                          placeholder="Last Name"
+                          name="last_name"
+                          required
+                          onChange={handleChange}
+                          value={formValues.last_name}
+                        />
+                      </div>
+                      <input
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="email"
+                          placeholder="Input your email"
+                          name="email"
+                          required
+                          onChange={handleChange}
+                          value={formValues.email}
+                        />
+                      <input
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="number"
+                          placeholder="Input phone number"
+                          name="phone_number"
+                          required
+                          onChange={handleChange}
+                          value={formValues.phone_number}
+                        />
+                        <select className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe}>
+                          <option value="1">Personal Package ($59/year)</option>
+                          <option value="2">Business Package ($199/year)</option>
+                          <option value="3">Professional Package ($256/year)</option>
+                        </select>
+
+                        <div className="flex justify-end gap-5">
+                            <div className="flex gap-2">
+                                <input type="radio" name="method" value="midtrans" defaultChecked/>
+                                <label htmlFor="midtrans" >
+                                  <img src="assets/Midtrans.png" alt="Midtrans" width={100} height={100}/>
+                                </label>
+                              </div>
+                              <div className="flex gap-2">
+                                <input type="radio" name="method" value="paypal" disabled />
+                                <label htmlFor="paypal" ><img src="assets/Paypal.png" alt="Paypal" width={90} height={90} /></label>
+                              </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                        <button
+                          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="submit"
+                        >
+                          Subscribe
+                        </button>
+                        <button
+                          onClick={closeModal}
+                          className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
+                                >
+                          Close
+                        </button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            )}
+        
+     
+      
     </section>
     // ====== Pricing Section End ======
   );

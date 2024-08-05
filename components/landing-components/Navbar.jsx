@@ -10,9 +10,46 @@ const Navbar = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState('id');
+  const [locationChecked, setLocationChecked] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('landing');
+
+  useEffect(() => {
+    if (!localStorage.getItem('locationChecked')) {
+      const fetchLocation = async () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+              const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+              const data = await response.json();
+              console.log(data)
+
+              if (data.address.country_code !== 'id') {
+                setLang('en');
+                router.push(`/en`);
+              } else {
+                setLang('id');
+                router.push(`/id`);
+              }
+              localStorage.setItem('locationChecked', 'true');
+            } catch (error) {
+              console.error('Error fetching location:', error);
+            }
+          }, (error) => {
+            console.error('Error getting geolocation:', error);
+            localStorage.setItem('locationChecked', 'true');
+          });
+        } else {
+          console.error('Geolocation not supported');
+          localStorage.setItem('locationChecked', 'true');
+        }
+      };
+
+      fetchLocation();
+    }
+  }, [locationChecked, router]);
 
   const handleNavbarToggle = () => {
     setNavbarOpen(prevState => !prevState);
@@ -47,9 +84,9 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const currentLang = pathname.split('/')[1];
+    const currentLang = pathname.split('/')[1] || 'id';
     setLang(currentLang);
-  }, [pathname]);
+  }, [pathname]); 
 
   return (
     <div>
@@ -58,7 +95,7 @@ const Navbar = () => {
           <div className="relative flex items-center justify-between -mx-4">
             <div className="max-w-full px-4 w-60">
               <a href="" className="block w-full py-5">
-              <Image
+                <Image
                   src="/assets/logo.png"
                   alt="Logo"
                   className="w-[140px] h-10 decoration-white mr-1 mt-2"
@@ -100,12 +137,8 @@ const Navbar = () => {
               <div className="justify-end hidden pr-16 sm:flex lg:pr-0">
                 <a href={`${lang}/login`} className="py-3 text-base font-medium px-7 text-dark dark:text-white hover:text-blue-600 mr-5">{t("login")}</a>
                 <select name="" id="" className="rounded-full px-2 border" onChange={handleLangChange} value={lang}>
-                  <option value="id">
-                    Indonesia
-                  </option>
-                  <option value="en">
-                    Inggris
-                  </option>
+                  <option value="id">Indonesia</option>
+                  <option value="en">Inggris</option>
                 </select>
               </div>
             </div>
@@ -126,7 +159,7 @@ const Navbar = () => {
           />
           <span className="block text-body-color dark:hidden">
             <svg className="fill-current" width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13.3125 1.50001C12.675 1.31251 12.0375 1.16251 11.3625 1.05001C10.875 0.975006 10.35 1.23751 10.1625 1.68751C9.93751 2.13751 10.05 2.70001 10.425 3.00001C13.0875 5.47501 14.0625 9.11251 12.975 12.525C11.775 16.3125 8.25001 18.975 4.16251 19.0875C3.63751 19.0875 3.22501 19.425 3.07501 19.9125C2.92501 20.4 3.15001 20.925 3.56251 21.1875C4.50001 21.75 5.43751 22.2 6.37501 22.5C7.46251 22.8375 8.58751 22.9875 9.71251 22.9875C11.625 22.9875 13.5 22.5 15.1875 21.5625C17.85 20.1 19.725 17.7375 20.55 14.8875C22.1625 9.26251 18.975 3.37501 13.3125 1.50001ZM18.9375 14.4C18.2625 16.8375 16.6125 18.825 14.4 20.0625C12.075 21.3375 9.41251 21.6 6.90001 20.85C6.63751 20.775 6.33751 20.6625 6.07501 20.55C10.05 19.7625 13.35 16.9125 14.5875 13.0125C15.675 9.56251 15 5.92501 12.7875 3.07501C17.5875 4.68751 20.2875 9.67501 18.9375 14.4Z" />
+            <path d="M13.3125 1.50001C12.675 1.31251 12.0375 1.16251 11.3625 1.05001C10.875 0.975006 10.35 1.23751 10.1625 1.68751C9.93751 2.13751 10.05 2.70001 10.425 3.00001C13.0875 5.47501 14.0625 9.11251 12.975 12.525C11.775 16.3125 8.25001 18.975 4.16251 19.0875C3.63751 19.0875 3.22501 19.425 3.07501 19.9125C2.92501 20.4 3.15001 20.925 3.56251 21.1875C4.50001 21.75 5.43751 22.2 6.37501 22.5C7.46251 22.8375 8.58751 22.9875 9.71251 22.9875C11.625 22.9875 13.5 22.5 15.1875 21.5625C17.85 20.1 19.725 17.7375 20.55 14.8875C22.1625 9.26251 18.975 3.37501 13.3125 1.50001ZM18.9375 14.4C18.2625 16.8375 16.6125 18.825 14.4 20.0625C12.075 21.3375 9.41251 21.6 6.90001 20.85C6.63751 20.775 6.33751 20.6625 6.07501 20.55C10.05 19.7625 13.35 16.9125 14.5875 13.0125C15.675 9.56251 15 5.92501 12.7875 3.07501C17.5875 4.68751 20.2875 9.67501 18.9375 14.4Z" />
             </svg>
           </span>
           <span className="hidden text-white dark:block">
@@ -158,3 +191,4 @@ const Navbar = () => {
 }
 
 export default Navbar;
+

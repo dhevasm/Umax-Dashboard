@@ -27,6 +27,7 @@ export default function Performance({ id }) {
     const [soclp, setsOclp] = useState({})
     const [sctr, setsCtr] = useState({})
 
+    const [dateTime, setDateTime] = useState('');
     const t = useTranslations();
     const [isWideScreen, setIsWideScreen] = useState(window.innerWidth >= 1060);
     const [selected, setSelected] = useState('week');
@@ -98,13 +99,54 @@ export default function Performance({ id }) {
         fetchSuggestions()
     }, [fetchSuggestions])
 
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem('jwtToken');
+            const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/user-by-id`;
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    accept: 'application/json',
+                },
+            });
+
+            let timeZone = ''
+            const data = response.data.Data[0];
+            if(data.roles === 'client'){
+                timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;     
+            }
+            timeZone = data.timezone_name;
+            console.log(timeZone);
+        
+            // Membuat objek tanggal dengan zona waktu
+            const dateFormatter = new Intl.DateTimeFormat('default', {
+            timeZone,
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true, // Jika Anda ingin menampilkan waktu dalam format 12 jam
+            });
+        
+            // Mengatur state dengan tanggal dan waktu yang diformat
+            setDateTime(dateFormatter.format(new Date()));
+            console.log(data.timezone_name);
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     return (
         <>
             <div className="w-full">
                 {/* Header */}
                 <div className="w-full flex items-center justify-end">
                     <div className="w-[150px] h-fit flex mb-3 me-1 text-black dark:text-white">
-                    {new Date().toLocaleString('default', { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
+                    {dateTime}
                     </div>
                     <div className="w-[150px] h-fit flex mb-3 me-3">
                     <select

@@ -22,6 +22,7 @@ const AccountTable = () => {
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [isLoading, setIsLoading] = useState(true);
     const tableRef = useRef(null);
     const t = useTranslations('accounts');
     const tfile = useTranslations('swal-file');
@@ -38,6 +39,7 @@ const AccountTable = () => {
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
 
     const fetchData = async () => {
+        setIsLoading(true);
         try {
             const token = localStorage.getItem('jwtToken');
             const response = await axios.get(`${umaxUrl}/account-by-tenant`, {
@@ -48,12 +50,15 @@ const AccountTable = () => {
             setTableData(response.data.Data);
         } catch (error) {
             console.error("Error fetching data:", error.message);
+        } finally {
+            setIsLoading(false);  // Pastikan loading state diubah ke false baik berhasil maupun gagal
         }
     };
-
+    
     useEffect(() => {
         fetchData();
-    });
+    }, []); // Dependency array kosong memastikan fetchData hanya dipanggil sekali saat komponen pertama kali dimount
+    
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
@@ -457,75 +462,50 @@ const AccountTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentAccounts.length > 0 ? (
-                                currentAccounts.map((data, index) => (
-                                    <tr key={index} className='border text-center dark:border-gray-700'>
-                                        {/* <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>{index + 1}.</td> */}
-                                        <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
-                                            <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.username}`} onClick={() => handleOpenModal(data)}>
-                                                {data.username}
-                                            </button>
-                                        </td>
-                                        <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.client_name}</td>
-                                        <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
-                                        <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
-                                            <a href={`mailto:${data.email}`} className="text-blue-500 underline dark:text-blue-400">{data.email}</a>
-                                        </td>
-                                        <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'><StatusBadge status={data.status} /></td>
-                                        <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap hidden gap-1 justify-center'>
-                                            <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
-                                                <BiEdit size={25}/>
-                                            </button>
-                                            <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
-                                                <MdDeleteForever size={25}/>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                tableData.length > 0 ? (
-                                    <tr>
-                                        <td colSpan="6" className="text-center py-4 border border-gray-300 dark:border-gray-600 dark:text-gray-200">
-                                            {t('not-found')}
-                                        </td>
-                                    </tr>
-                                ) : (
+                            {
+                                isLoading ? (
+                                    // Jika data sedang loading
                                     <tr>
                                         <td colSpan="6" className="text-center">
                                             <LoadingCircle />
                                         </td>
                                     </tr>
+                                ) : (
+                                    currentAccounts.length > 0 ? (
+                                        // Jika data ditemukan
+                                        currentAccounts.map((data, index) => (
+                                            <tr key={index} className='border text-center dark:border-gray-700'>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
+                                                    <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.username}`} onClick={() => handleOpenModal(data)}>
+                                                        {data.username}
+                                                    </button>
+                                                </td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.client_name}</td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
+                                                    <a href={`mailto:${data.email}`} className="text-blue-500 underline dark:text-blue-400">{data.email}</a>
+                                                </td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'><StatusBadge status={data.status} /></td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap hidden gap-1 justify-center'>
+                                                    <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
+                                                        <BiEdit size={25}/>
+                                                    </button>
+                                                    <button className='bg-red-600 text-white px-2 py-2 rounded-md' onClick={() => handleDelete(data._id)}>
+                                                        <MdDeleteForever size={25}/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        // Jika tidak ada data yang ditemukan setelah loading selesai
+                                        <tr>
+                                            <td colSpan="6" className="text-center py-4 border border-gray-300 dark:border-gray-600 dark:text-gray-200">
+                                                {t('not-found')}
+                                            </td>
+                                        </tr>
+                                    )
                                 )
-                            )}
-                        </tbody>
-                    </table>
-
-                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end mt-4">
-                        {renderPagination()}
-                    </div>
-
-                    <table className='w-full border-collapse hidden' ref={tableRef}>
-                        <thead className='bg-white dark:bg-gray-800'>
-                            <tr className='text-left'>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>No.</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>{t('name')}</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>{t('client')}</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Platform</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Email</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600'>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredData.map((data, index) => (
-                                <tr key={index} className='border text-center dark:border-gray-700'>
-                                    <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 text-nowrap text-left'>{index + 1}.</td>
-                                    <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 text-nowrap'>{data.username}</td>
-                                    <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 text-nowrap'>{data.client_name}</td>
-                                    <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
-                                    <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 text-nowrap'>{data.email}</td>
-                                    <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 text-nowrap'>{data.status === 1 ? 'Active' : 'Deactive'}</td>
-                                </tr>
-                            ))}
+                            }
                         </tbody>
                     </table>
                 </div>

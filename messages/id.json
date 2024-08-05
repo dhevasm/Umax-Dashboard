@@ -9,7 +9,7 @@
     "hero_desc" : " Dengan UMAX Dashboard, Anda dapat memantau dan menganalisa performa iklan dari Google Ads, Meta Ads, dan TikTok Ads secara real-time. Ambil keputusan yang lebih baik dan tingkatkan kinerja kampanye Anda.",
     "hero_button" : "Coba Sekarang",
     "download_button" : "Unduh Aplikasi",
-    "service-title-1" : "Multi-Platform Integration",
+    "service-title-1" : "Terintegrasi dengan banyak platform",
     "service-title-2" : "Analisis Mendalam dan Laporan Terperinci",
     "service-title-3" : "Optimasi Kampanye Berbasis Data",
     "service-body-1" : "UMAX Dashboard mengintegrasikan data iklan dari berbagai platform seperti Google Ads, Meta Ads, dan TikTok Ads. Ini memungkinkan Anda untuk melihat performa iklan Anda secara menyeluruh dalam satu dashboard yang mudah digunakan.",
@@ -233,7 +233,7 @@
       "dashboard": "Dasbor",
       "tenants": "Penyewa",
       "analytics": "Analisis",
-      "tenant-profile": "Profil Penyewa",
+      "tenant-profile": "Profil Perusahaan",
       "accounts": "Akun",
       "clients": "Klien",
       "campaigns": "Kampanye",
@@ -243,10 +243,10 @@
     },
 
     "tenant-profile": {
-      "title": "Profil Penyewa",
-      "tenant": "Penyewa",
+      "title": "Profil Perusahaan",
+      "tenant": "Perusahaan",
       "dashboard": "Dasbor",
-      "general": "Umum",
+      "general": "UMUM",
       "address": "Alamat",
       "contact": "Kontak",
       "language": "Bahasa",
@@ -276,7 +276,8 @@
       "currency-error": "Mata Uang tidak boleh kosong",
       "currency-position-error": "Posisi Mata Uang tidak boleh kosong",
       "timezone-error": "Zona Waktu tidak boleh kosong",
-      "culture-error": "Kultur tidak boleh kosong"
+      "culture-error": "Kultur tidak boleh kosong",
+      "edit-profile": "Edit profil"
     },
 
     "admin-users": {

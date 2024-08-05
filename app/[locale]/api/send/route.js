@@ -1,5 +1,11 @@
 import nodemailer from 'nodemailer';
 
+/**
+ * Sends an email using the provided parameters and returns a response indicating the success or failure of the operation.
+ *
+ * @param {Request} req - The request object containing the URL and search parameters.
+ * @return {Promise<Response>} A Promise that resolves to a Response object with a JSON body indicating the success or failure of the email sending operation.
+ */
 export async function GET(req) {
     const url = new URL(req.url);
     const from = url.searchParams.get('from');

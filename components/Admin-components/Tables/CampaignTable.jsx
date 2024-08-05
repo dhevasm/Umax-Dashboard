@@ -29,6 +29,8 @@ export default function CampaignTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectLoading, setSelectLoading] = useState(true)
     const t = useTranslations("admin-campaigns");
     const tfile = useTranslations("swal-file");
     const tdel = useTranslations("swal-delete");
@@ -232,6 +234,7 @@ export default function CampaignTable() {
     }
 
     async function getCampaign(){
+        setIsLoading(true)
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign-by-tenant`, {
             headers: {
             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -239,6 +242,7 @@ export default function CampaignTable() {
         })
         setCampaigns(response.data.Data)
         setCampaignMemo(response.data.Data)
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -368,6 +372,7 @@ export default function CampaignTable() {
     const [tenant, setTenant] = useState([])
 
     async function getSelectFrontend(){
+        setSelectLoading(true)
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
             setTimezone(response.data)
         })
@@ -398,6 +403,7 @@ export default function CampaignTable() {
             })
         }
 
+        setSelectLoading(false)
     }
 
     const tenantInput = useRef(null)
@@ -410,7 +416,7 @@ export default function CampaignTable() {
         if(userData.roles == "admin"){
             tenantInput.current.classList.add("hidden")
         }
-    })
+    }, [])
     
 
     const handlePlatformChange = (event) => {
@@ -670,37 +676,36 @@ export default function CampaignTable() {
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
                                     {
-                                        currentcampaigns.length > 0 ? currentcampaigns.map((campaign, index) => {
-                                            return (
-                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.name}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.client_name}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.account_name}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.status == 1 ? t('active') : campaign.status == 3 ? t('complete') : t('draft')}</td>
-                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium  whitespace-nowrap">{campaign.company_name}</td>
-                                                </tr>
-                                            )
-                                    }) : (
-                                        // Check user yang sudah difilter
-                                        campaigns.length > 0 ? (
-                                            // Jika data tida ditemukan
-                                            <tr className="text-center border dark:border-gray-500">
-                                                <td colSpan={8} className=" py-4">
-                                                    {t('not-found')}
-                                                </td>
-                                            </tr>
-                                        ) :
-                                        (
-                                            // Jika data ditemukan tapi masih loading
+                                        isLoading ? (
+                                            // Jika data sedang loading
                                             <tr className="text-center py-3 border dark:border-gray-500">
                                                 <td colSpan={8}>
                                                     <LoadingCircle />
                                                 </td>
                                             </tr>
+                                        ) : (
+                                            currentcampaigns.length > 0 ? (
+                                                // Jika data ditemukan
+                                                currentcampaigns.map((campaign, index) => (
+                                                    <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
+                                                        <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.name}</td>
+                                                        <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.client_name}</td>
+                                                        <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.account_name}</td>
+                                                        <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                        <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
+                                                        <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.status == 1 ? t('active') : campaign.status == 3 ? t('complete') : t('draft')}</td>
+                                                        <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.company_name}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                // Jika data tidak ditemukan
+                                                <tr className="text-center border dark:border-gray-500">
+                                                    <td colSpan={8} className="py-4">
+                                                        {t('not-found')}
+                                                    </td>
+                                                </tr>
+                                            )
                                         )
-                                    )
                                     }
                                 </tbody>
                             </table>
@@ -747,9 +752,20 @@ export default function CampaignTable() {
                                     <select id="account" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) =>setValues({...values, account: e.target.value})}>
                                         <option value="" disabled hidden>{t('select-account')}</option>
                                         {
-                                            account.length > 0 ? account.map((account, index) => {
-                                                return <option key={index} value={account._id}>{account.username}</option>
-                                            }) : <option key={0} value={0}>Loading...</option>
+                                            selectLoading ? (
+                                                // Jika data sedang loading
+                                                <option disabled key={0} value={0}>
+                                                    <p className="animate-pulse">Loading account list...</p>
+                                                </option>
+                                            ) : account.length > 0 ? (
+                                                // Jika data ditemukan
+                                                account.map((account, index) => (
+                                                    <option key={index} value={account._id}>{account.username}</option>
+                                                ))
+                                            ) : (
+                                                // Jika tidak ada data
+                                                <option disabled key={0} value={0}>No accounts found</option>
+                                            )
                                         }
                                     </select>
                                     {

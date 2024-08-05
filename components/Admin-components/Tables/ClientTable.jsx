@@ -32,6 +32,7 @@ export default function ClientTable() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [isLoading, setIsLoading] = useState(true);
     const t = useTranslations("admin-clients")
     const tfile = useTranslations("swal-file")
     const tdel = useTranslations("swal-delete")
@@ -262,6 +263,7 @@ export default function ClientTable() {
     }
 
     async function getclient(){
+        setIsLoading(true)
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -269,6 +271,7 @@ export default function ClientTable() {
         })
         setclient(response.data.Data)
         setclientMemo(response.data.Data)
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -657,39 +660,38 @@ export default function ClientTable() {
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
                                     {
-                                        currentclients.length > 0 ? currentclients.map((client, index) => {
-                                            return (    
-                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap underline" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.address}</td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
-                                                        <a href={`https://wa.me/${client.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">
-                                                            {client.contact}
-                                                        </a>
-                                                    </td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap"><a href={`mailto:${client.email}`} className="text-blue-500">{client.email }</a></td>
-                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.status == 1 ? t('active') : t('deactive')}</td>
-                                                </tr>
-                                            )
-                                    }) : (
-                                        // Check user yang sudah difilter
-                                        client.length > 0 ? (
-                                            // Jika data tida ditemukan
-                                            <tr className="text-center border dark:border-gray-500">
-                                                <td colSpan={8} className=" py-4">
-                                                    {t('not-found')}
-                                                </td>
-                                            </tr>
-                                        ) :
-                                        (
-                                            // Jika data ditemukan tapi masih loading
+                                        isLoading ? (
+                                            // Jika data sedang loading
                                             <tr className="text-center py-3 border dark:border-gray-500">
                                                 <td colSpan={8}>
                                                     <LoadingCircle />
                                                 </td>
                                             </tr>
+                                        ) : (
+                                            currentclients.length > 0 ? (
+                                                // Jika data ditemukan
+                                                currentclients.map((client, index) => (
+                                                    <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap underline" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.address}</td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
+                                                            <a href={`https://wa.me/${client.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">
+                                                                {client.contact}
+                                                            </a>
+                                                        </td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap"><a href={`mailto:${client.email}`} className="text-blue-500">{client.email}</a></td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.status == 1 ? t('active') : t('deactive')}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                // Jika tidak ada data setelah loading
+                                                <tr className="text-center border dark:border-gray-500">
+                                                    <td colSpan={8} className="py-4">
+                                                        {t('not-found')}
+                                                    </td>
+                                                </tr>
+                                            )
                                         )
-                                    )
                                     }
                                 </tbody>
                             </table>

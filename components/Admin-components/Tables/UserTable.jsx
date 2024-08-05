@@ -558,9 +558,9 @@ export default function UserTable() {
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3d50e0] dark:bg-slate-800">
                             <h3 className="text-lg font-semibold text-white ">
-                                {`${modeModal} user`}
+                                {`${modeModal} ${t('users')}`}
                             </h3>
                             <button type="button" className="text-white text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes/>
@@ -596,7 +596,7 @@ export default function UserTable() {
                                         }
                                     
                                         {
-                                            modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateUser}>{t('save')}</button> : 
+                                            modeModal === 'Edit' ? <button className="bg-[#3d50e0] hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateUser}>{t('save')}</button> : 
                                             <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" 
                                             // onClick={creatUser}
                                             >{t('submit')}</button>
