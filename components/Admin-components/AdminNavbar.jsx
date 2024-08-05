@@ -173,6 +173,23 @@ function AdminNavbar({userData}){
                 // console.log(response.data.Data)
                 const data = response.data.Data
                 const tenant_id = data.filter((tenant) => tenant.company === datatenant.company)[0]._id
+                if(datatenant.subscription == true){
+                    const formData = new FormData();
+                    formData.append('subscription', true);
+                    const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${tenant_id}`, 
+                    formData
+                        , {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                        }
+                    })
+
+                    if(response.data.IsError == false){
+                        console.log("subscription success")
+                    }else{
+                        console.log("subscription failed")
+                    }
+                }
                 // console.log(tenant_id)
                 createUser(datatenant, tenant_id, request_id)
                 }
@@ -191,7 +208,7 @@ function AdminNavbar({userData}){
         formData.append('currency', data.currency);
         formData.append('input_timezone', data.timezone_name);
         formData.append('currency_position', data.currency_position);
-
+        
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/tenant-create`, formData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -204,7 +221,6 @@ function AdminNavbar({userData}){
             console.log("tenant register failed")
             return;
         }
-
         getTenantID(data, request_id)
     }
 

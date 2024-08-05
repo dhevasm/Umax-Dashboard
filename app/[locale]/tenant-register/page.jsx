@@ -135,31 +135,25 @@ export default function TenantRegisterPage() {
                 'accept' : 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
-        }).then((response) => {
+        }).then( async(response) => {
             const data = response.data
         if(data.IsError == false){
-            Swal.fire({
+          
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/delete-transaction?order_id=${searchParams.get("order_id")}`)
+            
+            if(response.data.IsError == false){
+              Swal.fire({
                 icon: 'success',
                 title: 'Success',
                 text: 'Your request has been sent. Please wait for the confirmation email.',
             }).then(() => Router.push('/'));
-        }else{
-            Swal.fire({
+            }else{
+              Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: data.Message,
-            })
-        }
-        }).catch((error) => {
-          console.log(error)
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: error.response.data.detail,
-            })
-        })
-
-        
+                text: 'Failed to register. Please try again.',
+            }).then(() => Router.push('/'));
+            }
       }else{
         Swal.fire({
             icon: 'error',
@@ -167,8 +161,9 @@ export default function TenantRegisterPage() {
             text: 'Please check your form again',
         })
       }
-  };
-
+    })
+  }}
+  
   async function getSelectFrontend(){
     await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
         setTimezone(response.data)

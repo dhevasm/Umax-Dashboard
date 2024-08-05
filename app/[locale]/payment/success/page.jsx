@@ -90,8 +90,8 @@ const SuccessPage = () => {
         }).then( async(result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cancel_transaction?order_id=${order_id}`, {
-                        method: 'POST',
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-transaction?order_id=${order_id}`, {
+                        method: 'DELETE',
                     });
         
                     if (!response.ok) {

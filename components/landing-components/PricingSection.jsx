@@ -180,7 +180,10 @@ const PricingSection = () => {
                 </p>
               </div>
               <a
-                onClick={() => Router.push('/en/tenant-register?order_id=free')}
+                onClick={(e) => {
+                    e.currentTarget.innerHTML = "Loading..."
+                   Router.push('/en/tenant-register?order_id=free')
+                }}
                 className=" hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
                 Choose Personal
