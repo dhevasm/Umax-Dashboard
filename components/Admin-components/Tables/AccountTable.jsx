@@ -800,7 +800,7 @@ export default function AccountTable() {
                                 </div>
 
                             </div>
-                                <div className="flex justify-between items-end">
+                                <div className="flex justify-between items-end pb-10 md:pb-2">
                                 <div>
                                 <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                 <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
