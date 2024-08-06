@@ -418,7 +418,7 @@ export default function Dashboard({ tenant_id }) {
                                             </th>
                                             <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">
                                                 <span className={``}>
-                                                    Company's Email
+                                                    Compan&apos;y Email
                                                 </span>
                                             </th>
                                             <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">

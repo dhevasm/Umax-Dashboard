@@ -279,7 +279,7 @@ const PricingSection = () => {
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
                 <p className="text-base text-body-color dark:text-gray-300">
-                3-Month Lifetime Access
+                1-Year Lifetime Access
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                 Unlimited Admins
