@@ -543,7 +543,7 @@ export default function TenantProfile({tenant_id}){
                                     }
                                 </select>
                             </div>
-                            <div className="col-span-2 md:col-span-1 pb-10 md:pb-2">
+                            <div className="col-span-2 md:col-span-1 pb-20 md:pb-2">
                                 <label htmlFor="currency" className="block mb-2 text-sm font-medium ">{t('currency')}</label>
                                 <select id="currency" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Currency</option>
