@@ -534,7 +534,7 @@ const CampaignTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredData.map((data, index) => (
+                            {filteredData.length > 0 ? filteredData.map((data, index) => (
                                 <tr key={index} className="text-center">
                                     <td className="px-4 py-2 border text-nowrap text-left dark:border-gray-700">{index + 1}.</td>
                                     <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.name}</td>
@@ -548,10 +548,19 @@ const CampaignTable = () => {
                                     </td>
                                     <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.start_date}</td>
                                     <td className="px-4 py-2 border text-nowrap dark:border-gray-700">
-                                        {data.status === 1 ? "Active" : data.status === 2 ? "Draft" : "Completed"}
+                                        {StatusBadge({ status: data.status })}
                                     </td>
                                 </tr>
-                            ))}
+                            ))
+                            : (
+                                // Jika tidak ada data yang ditemukan setelah loading selesai
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4 border dark:border-gray-700 dark:text-gray-200">
+                                        {t('not-found')}
+                                    </td>
+                                </tr>
+                            )
+                            }
                         </tbody>
                     </table>
                 </div>

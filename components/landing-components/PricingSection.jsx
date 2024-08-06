@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import React from "react";
 import axios from "axios";
 import { useState,useEffect, useContext } from "react";
@@ -6,84 +7,7 @@ import Snap from "midtrans-client/lib/snap";
 import { useRouter } from "next/navigation";
 
 const PricingSection = () => {
-
-  const [showModal, setShowModal] = useState(false);
-  const [Subscribe, setSubscribe] = useState(1);
-  const [snapToken, setSnapToken] = useState(null);
-  const [formValues, setFormValues] = useState({
-      first_name: '',
-      last_name: '',
-      email: '',
-      phone_number: '',
-  });
-
-  const handleChange = (event) => {
-      const { name, value } = event.target;
-      setFormValues({
-          ...formValues,
-          [name]: value,
-      });
-  };
-
-  const handleSubmit = async (event) => {
-      let price = [
-        950000,
-        320000,
-        400000
-      ]
-
-      event.preventDefault();
-      const url = process.env.NEXT_PUBLIC_API_URL;
-
-      // Convert form values to URL-encoded format
-      const formData = new URLSearchParams({
-          first_name: formValues.first_name,
-          last_name: formValues.last_name,
-          email: formValues.email,
-          phone_number: formValues.phone_number,
-          price: price[Subscribe - 1]
-      }).toString();
-
-      try {
-          const response = await fetch(`${url}/payment`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: formData,
-          });
-
-          if (!response.ok) {
-              const errorData = await response.json();
-              console.error('Server Error:', errorData);
-              alert('Failed to submit form. Check console for details.');
-              return;
-          }
-
-          const data = await response.json();
-          console.log(data);
-      } catch (error) {
-          console.error('Network Error:', error);
-          alert('Network error occurred. Please try again.');
-      }
-  };
-
-  const openModal = (Subscribe) => {
-    setSubscribe(Subscribe);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  useEffect(() => {
-    console.log(snapToken)
-  }, [snapToken])
-
-  const handlePayment = (token) => {
-    snap.pay(token)
-  }
+  const t = useTranslations("landing");
 
   const Router = useRouter();
 
@@ -207,10 +131,10 @@ const PricingSection = () => {
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
               <span className="block mb-2 text-lg font-semibold text-blue-600">
-                Pricing Table
+                {t('pricing-table')}
               </span>
               <h2 className="mb-3 text-3xl leading-[1.208] font-bold text-dark dark:text-white sm:text-4xl md:text-[40px]">
-                Our Pricing Plan
+                {t('our-pricing-plan')}
               </h2>
               <p className="text-base text-gray-500 dark:text-gray-300">
                 {t('pricing-desc')}
@@ -261,6 +185,7 @@ const PricingSection = () => {
                    Router.push('/en/tenant-register?order_id=free')
                 }}
                 className=" hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
+              >
                 Choose Personal
               </a>
 
@@ -650,6 +575,7 @@ const PricingSection = () => {
               <a
                 onClick={() => openModal(3)}
                 className="hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
+              >
                 Choose Professional
               </a>
 
@@ -748,6 +674,7 @@ const PricingSection = () => {
                         />
                       <input
                           className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="number"
                           placeholder="Input phone number"
                           name="phone_number"
                           required
@@ -759,10 +686,12 @@ const PricingSection = () => {
                           <option value="2">Business Plan ($199/year)</option>
                           <option value="3">Professional Plan ($256/year)</option>
                         </select>
+
                         <div className="flex justify-end gap-5">
                             <div className="flex gap-2">
                                 <input type="radio" name="method" value="midtrans" defaultChecked/>
                                 <label htmlFor="midtrans">
+                                  <img src="assets/Midtrans.png" alt="Midtrans" width={100} height={100}/>
                                 </label>
                               </div>
                               <div className="flex gap-2">
@@ -777,6 +706,7 @@ const PricingSection = () => {
                           type="submit"
                         >
                          {Subscribe === 1 ? 'Get (Free)' : Subscribe === 2 ? "Subscribe ($199/year)" : Subscribe === 3 ? 'Subscribe ($256/year)' : "(Select Package)"}
+                        </button>
                         <button
                           onClick={closeModal}
                           className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"

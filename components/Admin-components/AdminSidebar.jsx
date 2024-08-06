@@ -15,7 +15,7 @@ export default function AdminSidebar() {
     const sideBar = useRef(null);
     const t = useTranslations('admin-sidebar');
     const tout = useTranslations('swal-logout');
-    const router = useRouter();
+    const Router = useRouter();
 
     const [minimizedSidebar, setMinimizedSidebar] = useState(false);
     const { sidebarHide, setSidebarHide, setChangeTable, userData } = useContext(AdminDashboardContext);

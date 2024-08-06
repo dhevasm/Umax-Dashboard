@@ -140,6 +140,21 @@ export default function Performance({ id }) {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (!id) {
+                Swal.fire({
+                    icon: 'info',
+                    title: t('performence.data-not-appear'),
+                    text: t('performence.please-select-campaign'),
+                });
+            }
+        }, 10000); // 10 seconds delay
+    
+        // Cleanup function to clear the timer if the component unmounts
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         <>
             <div className="w-full">
@@ -199,7 +214,7 @@ export default function Performance({ id }) {
                     </div>
                     {/* Suggestion */}
                     <div className="w-full h-0.5 bg-gray-200 dark:bg-slate-600 my-5"></div>
-                    <h1 className="text-xl font-semibold text-black dark:text-white">Suggestions</h1>
+                    <h1 className="text-xl font-semibold text-black dark:text-white">{t('performence.suggestions')}</h1>
                     {id === '' 
                     ? Array(3).fill(0).map((_, i) => (
                         <SuggestionLoding key={i} />

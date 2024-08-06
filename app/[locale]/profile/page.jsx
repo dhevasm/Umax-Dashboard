@@ -15,6 +15,8 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import Currency from '@/helpers/Currency';
+import CountryMap from '@/helpers/CountryMap';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState({});
@@ -87,6 +89,26 @@ const Profile = () => {
         localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
     }
 
+    function getCurrencyNameFromCode(code) {
+        return Currency[code];
+    }
+
+    function getCountryNameFromCode(code) {
+        if (typeof code !== 'string') {
+            return 'Invalid input';
+        }
+    
+        // Extract the country code from the format like 'quz_BO'
+        const parts = code.split('_');
+        if (parts.length < 2) {
+            return 'Invalid format';
+        }
+    
+        const countryCode = parts[1]; // 'BO'
+        return CountryMap[countryCode] || 'Unknown Country';
+    }
+    
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center">
             <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-b-lg overflow-hidden">
@@ -128,11 +150,11 @@ const Profile = () => {
                     </ProfileSection>
                     {role != 'client' && (
                         <ProfileSection title="International">
-                            <ProfileItem icon={LiaMoneyBillWaveAltSolid} label={t('currencies')} value={currency} />
+                            <ProfileItem icon={LiaMoneyBillWaveAltSolid} label={t('currencies')} value={getCurrencyNameFromCode(currency)} />
                             <ProfileItem icon={VscSymbolEnum} label={t('currency_position')} value={currencyPosition ? 'Left ($n)' : 'Right (n$)'} />
                             <ProfileItem icon={CiGlobe} label={t('language')} value={getLanguageName(language)} flag={getFlagSrc(language)} />
                             <ProfileItem icon={MdOutlineAccessTime} label={t('timezone')} value={timezoneName} />
-                            <ProfileItem icon={GiGlobe} label={t('culture')} value={culture} />
+                            <ProfileItem icon={GiGlobe} label={t('culture')} value={getCountryNameFromCode(culture)} />
                         </ProfileSection>
                     )}
                 </div>

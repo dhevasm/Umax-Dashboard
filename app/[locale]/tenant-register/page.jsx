@@ -21,6 +21,7 @@ export default function TenantRegisterPage() {
     const [alldial, setDial] = useState([])
     const [DialCountry, setDialCountry] = useState([])
     const [order_id, setOrder_id] = useState("")
+    const [currentSegment, setCurrentSegment] = useState(1);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -211,16 +212,17 @@ export default function TenantRegisterPage() {
     }, [])
 
   return (
-    <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left max-h-screen max-w-[100vw]">
-      <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg overflow-y-auto">
+    <div className="relative min-h-screen flex items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left max-h-screen max-w-[100vw]">
+      <div className="w-full h-[50%] max-w-md p-8 bg-white rounded-lg shadow-lg overflow-hidden">
         <h1 className="mb-6 text-2xl font-bold text-center text-indigo-600">Register</h1>
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Personal Data Group */}
-          <div>
+
+          {/* Segment 1: User Data */}
+          <div className={`transition-opacity duration-300 ${currentSegment === 1 ? 'block' : 'hidden'}`}>
             <h2 className="mb-4 text-xl font-semibold text-blue-800">User Data</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3">
               {['username'].map((key) => (
-                <div key={key} className="col-span-1">
+                <div key={key}>
                   <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor={key}>
                     {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
                   </label>
@@ -233,15 +235,13 @@ export default function TenantRegisterPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     required
                   />
-                  {
-                    errors.username && (
-                      <p className="mt-2 text-sm text-red-600">{errors.username}</p>
-                    )
-                  }
+                  {errors.username && (
+                    <p className="mt-2 text-sm text-red-600">{errors.username}</p>
+                  )}
                 </div>
               ))}
               {['email'].map((key) => (
-                <div key={key} className="col-span-1">
+                <div key={key}>
                   <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor={key}>
                     {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
                   </label>
@@ -257,7 +257,7 @@ export default function TenantRegisterPage() {
                 </div>
               ))}
               {['password', 'confirmPassword'].map((key) => (
-                <div key={key} className="col-span-1 relative">
+                <div key={key} className="relative">
                   <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor={key}>
                     {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
                   </label>
@@ -282,27 +282,24 @@ export default function TenantRegisterPage() {
                     }}
                   >
                     {(key === 'password' && showPassword) || (key === 'confirmPassword' && showConfirmPassword) ? <FaEyeSlash/> : <FaEye/>}
-                  </button> 
-                  {key === 'confirmPassword' && errors.confirmPassword && 
-                  (
+                  </button>
+                  {key === 'confirmPassword' && errors.confirmPassword && (
                     <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>
                   )}
-                  {
-                    key === 'password' && errors.password && (
-                      <p className="mt-2 text-sm text-red-600">{errors.password}</p>
-                    )
-                  }
+                  {key === 'password' && errors.password && (
+                    <p className="mt-2 text-sm text-red-600">{errors.password}</p>
+                  )}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Company Data Group */}
-          <div>
+          {/* Segment 2: Company Profile */}
+          <div className={`transition-opacity duration-300 ${currentSegment === 2 ? 'block' : 'hidden'}`}>
             <h2 className="mb-4 text-xl font-semibold text-blue-800">Company Profile</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-2">
               {['companyName', 'companyAddress', 'companyEmail', 'companyContact'].map((key) => (
-                <div key={key} className="col-span-1">
+                <div key={key}>
                   <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor={key}>
                     {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
                   </label>
@@ -317,61 +314,63 @@ export default function TenantRegisterPage() {
                   />
                 </div>
               ))}
-              <div className="col-span-1">
-                <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="companyCountry">
-                  Country
-                </label>
-                <select
-                  id="companyCountry"
-                  name="companyCountry"
-                  value={formData.companyCountry}
-                  onChange={(e) => {
-                    handleChange(e);
-                    handleCityList(e.target.value);
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  required
-                  defaultValue={""}
-                >
-                  <option value="" hidden disabled>Select Country</option>
-                  {  Country.map((country, index) => (
-                    <option key={index} value={country.country}>
-                      {country.country}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-span-1">
-                <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="companyCity">
-                  City
-                </label>
-                <select
-                  id="companyCity"
-                  name="companyCity"
-                  value={formData.companyCity}
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  required
-                  defaultValue={""}
-                >
-                  <option value="" hidden disabled>Select Country First</option>
-                  {  City.map((city, index) => (
-                    <option key={index} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <div className='flex gap-2'>
+                <div className='w-full'>
+                  <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="companyCountry">
+                    Country
+                  </label>
+                  <select
+                    id="companyCountry"
+                    name="companyCountry"
+                    value={formData.companyCountry}
+                    onChange={(e) => {
+                      handleChange(e);
+                      handleCityList(e.target.value);
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    required
+                    defaultValue={""}
+                  >
+                    <option value="" hidden disabled>Select Country</option>
+                    {Country.map((country, index) => (
+                      <option key={index} value={country.country}>
+                        {country.country}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className='w-full'>
+                  <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="companyCity">
+                    City
+                  </label>
+                  <select
+                    id="companyCity"
+                    name="companyCity"
+                    value={formData.companyCity}
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    required
+                    defaultValue={""}
+                  >
+                    <option value="" hidden disabled>Select Country First</option>
+                    {City.map((city, index) => (
+                      <option key={index} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                </div>
             </div>
           </div>
 
-          {/* Format Data Group */}
-          <div>
+          {/* Segment 3: Format */}
+          <div className={`transition-opacity duration-300 ${currentSegment === 3 ? 'block' : 'hidden'}`}>
             <h2 className="mb-4 text-xl font-semibold text-blue-800">Format</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div className="col-span-1">
+            <div className="grid grid-cols-1 gap-6">
+              <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="language">
                   Language
                 </label>
@@ -389,7 +388,7 @@ export default function TenantRegisterPage() {
                   <option value="en">English</option>
                 </select>
               </div>
-              <div className="col-span-1">
+              <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="culture">
                   Culture
                 </label>
@@ -403,16 +402,14 @@ export default function TenantRegisterPage() {
                   defaultValue={""}
                 >
                   <option value="" hidden disabled>Select Culture</option>
-                  {
-                    culture.map((item, index) => (
-                      <option key={index} value={item.cultureInfoCode}>
-                        {item.country} ({item.cultureInfoCode})
-                      </option>
-                    ))
-                  }
+                  {culture.map((item, index) => (
+                    <option key={index} value={item.cultureInfoCode}>
+                      {item.country} ({item.cultureInfoCode})
+                    </option>
+                  ))}
                 </select>
               </div>
-              <div className="col-span-1">
+              <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="timezone">
                   Timezone
                 </label>
@@ -426,16 +423,14 @@ export default function TenantRegisterPage() {
                   defaultValue={""}
                 >
                   <option value="" hidden disabled>Select Timezone</option>
-                  {
-                    timezone.map((item, index) => (
-                      <option key={index} value={item.timezone}>
-                        {item.timezone}
-                      </option>
-                    ))
-                  }
+                  {timezone.map((item, index) => (
+                    <option key={index} value={item.timezone}>
+                      {item.timezone}
+                    </option>
+                  ))}
                 </select>
               </div>
-              <div className="col-span-1">
+              <div>
                 <label className="block mb-1 text-sm font-medium text-gray-700" htmlFor="currency">
                   Currency
                 </label>
@@ -449,18 +444,16 @@ export default function TenantRegisterPage() {
                   defaultValue={""}
                 >
                   <option value="" hidden disabled>Select Currency</option>
-                  {
-                    currency.map((item, index) => (
-                      <option key={index} value={item.currency.split(' - ')[0]}>
-                        {item.currency}
-                      </option>
-                    ))
-                  }
+                  {currency.map((item, index) => (
+                    <option key={index} value={item.currency.split(' - ')[0]}>
+                      {item.currency}
+                    </option>
+                  ))}
                 </select>
               </div>
-              <div className='flex flex-col gap-3'>
-              <h2 className="mb-4 text-xl font-semibold text-blue-800">Currency Position</h2>
-              <div className="flex items-center space-x-4">
+              <div>
+                <h2 className="mb-4 text-xl font-semibold text-blue-800">Currency Position</h2>
+                <div className="flex items-center space-x-4">
                   <div className="flex items-center">
                     <input
                       type="radio"
@@ -491,16 +484,14 @@ export default function TenantRegisterPage() {
                   </div>
                 </div>
               </div>
-              </div>
             </div>
+          </div>
 
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              className="w-full px-6 py-2 font-bold text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:shadow-outline"
-            >
-              Register
-            </button>
+          {/* Navigation Buttons */}
+          <div className="flex mt-3 items-center justify-end gap-2">
+            <button type='button' hidden={currentSegment == 1} onClick={() => setCurrentSegment(currentSegment - 1)} className='px-4 py-2 w-32 bg-red-600 text-white rounded-lg'>Kembali</button>
+            <button type='button' hidden={currentSegment == 3} onClick={() => setCurrentSegment(currentSegment + 1)} className='px-4 py-2 w-32 bg-indigo-600 text-white rounded-lg'>Selanjutnya</button>
+            <button type='submit' hidden={currentSegment != 3} className='px-4 py-2 w-32 bg-indigo-600 text-white rounded-lg'>Register</button>
           </div>
         </form>
       </div>

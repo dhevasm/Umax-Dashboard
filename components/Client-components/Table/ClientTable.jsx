@@ -514,7 +514,7 @@ const ClientTable = () => {
                                     <td className='px-4 py-2 border dark:border-gray-600 text-blue-500 underline text-nowrap'>
                                         <a href={`mailto:${data.email}`}>{data.email}</a>
                                     </td>
-                                    <td className='px-4 py-2 border dark:border-gray-600'>{data.status === 1 ? 'Active' : 'Deactive'}</td>
+                                    <td className='px-4 py-2 border dark:border-gray-600'>{StatusBadge({ status: data.status })}</td>
                                 </tr>
                             ))}
                         </tbody>

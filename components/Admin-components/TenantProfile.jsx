@@ -11,6 +11,8 @@ import Swal from "sweetalert2"
 import { CiLock } from "react-icons/ci"
 import { FiWatch } from "react-icons/fi"
 import { useTranslations } from "next-intl"
+import countryMap from "@/helpers/CountryMap"
+import Currency from "@/helpers/Currency"
 
 export default function TenantProfile({tenant_id}){
 
@@ -27,6 +29,7 @@ export default function TenantProfile({tenant_id}){
     const [City, setCity] = useState([])
     const [alldial, setDial] = useState([])
     const [DialCountry, setDialCountry] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     async function getTenant(){
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-by-id?tenant_id=${tenant_id}`, {
@@ -119,8 +122,11 @@ export default function TenantProfile({tenant_id}){
     }, [values, validateForm])
 
     async function updateTenant(){
+        setIsLoading(true)
         if(tenant !== null) {
+            setIsLoading(true)
             if(isvalid){
+            setIsLoading(true)
             const company = document.getElementById('name').value
             const address = document.getElementById('address').value
             const contact = `+${document.getElementById('contact').value}`
@@ -160,15 +166,19 @@ export default function TenantProfile({tenant_id}){
                 document.getElementById('address').value = null
                 document.getElementById('contact').value = null
                 document.getElementById('email').value = null
+                setIsLoading(false)
                 Swal.fire("Success", "Tenant Updated", "success")
             }else{
                 Swal.fire("Error", response.detail.ErrMsg, "error")
+                setIsLoading(false)
             }
             }else{
                 Swal.fire("Failed!","Please fill all required fields!", "error")
+                setIsLoading(false)
             }
             
         }
+        setIsLoading(false)
     }
 
     // useEffect(() => {
@@ -224,6 +234,39 @@ export default function TenantProfile({tenant_id}){
         getSelectFrontend()
     }, [])
 
+    function getCountryNameFromCode(code) {
+        // Extract the country code from the format like 'quz_BO'
+        const countryCode = code.split('_')[1]; // 'BO'
+        return countryMap[countryCode] || 'Unknown Country';
+    }
+
+    function getCurrencyNameFromCode(code) {
+        return Currency[code] || 'Unknown Currency';
+    }
+
+    const getFlagSrc = (language) => {
+        switch (language) {
+            case 'id':
+                return '/assets/indonesia.png';
+            case 'en':
+                return '/assets/us.png';
+            case 'ja':
+                return '/assets/japan.jpg';
+            default:
+                return '';
+        }
+    };
+
+    function LoadingCircle(){
+        return(
+            <div className="flex justify-center items-center h-6 px-3">
+                <div className="relative">
+                    <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
+                </div>
+            </div>
+        )
+    }
+    
     return (
         <>
             <div className="w-full h-full rounded-sm">
@@ -244,7 +287,7 @@ export default function TenantProfile({tenant_id}){
 
                         {
                             tenant.company ? (
-                                <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-800 dark:bg-slate-700 bg-[#3d50e0] hover:bg-blue-600 p-2 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
+                                <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-700 dark:bg-slate-700 bg-[#3d50e0] hover:bg-blue-600 p-2 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
                                     <FaPen />
                                     {t('edit-profile')}
                                 </div>
@@ -265,21 +308,21 @@ export default function TenantProfile({tenant_id}){
                                         <h1 className="font-bold text-xl text-gray-700 dark:text-white">{t('general')}</h1>
                                         <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
                                     </div>
-                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                         <FaBuilding className="text-xl text-[#3d50e0]" />
                                         <p className="dark:text-white">
                                             <span className="font-semibold">{t('address')}</span><br />
                                             {tenant.address}
                                         </p>
                                     </div>
-                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                         <FaPhone className="text-[#3d50e0]" />
                                         <div className="ml-2 dark:text-white">
                                             <span className="font-semibold">{t('contact')}</span> <a href={`https://wa.me/${tenant.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500 font-semibold"><br />
                                             {tenant.contact}</a>
                                         </div>
                                     </div>
-                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                                    <div className="flex flex-row gap-4 items-center mt-3 p-5 bg-gray-50 dark:bg-slate-700 rounded-lg">
                                         <FaEnvelope className="text-[#3d50e0]" />
                                         <div className="ml-2 dark:text-white">
                                             <span className="font-semibold">Email</span> <a href={`mailto:${tenant.email}`} className="text-blue-500 font-semibold"><br />{tenant.email}</a>
@@ -290,25 +333,29 @@ export default function TenantProfile({tenant_id}){
                                         <div className="w-full h-0.5 mt-3 bg-gradient-to-r from-blue-400 to-[#3d50e0]"></div>
                                     </div>
                                     <div className="grid grid-cols-1 md-grid-cols-2 lg:grid-cols-2 xl:grid-cols-2    justify-between gap-5 mt-5 pb-5 bg-white dark:bg-gray-800 rounded-lg">
-                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 dark:bg-slate-700 rounded-lg w-full">
                                             <FaHome className="text-xl text-[#3d50e0]" />
                                             <p className="ml-2 dark:text-white">
-                                                <span className="font-semibold">{t('culture')}</span><br /> {tenant.culture}
+                                                <span className="font-semibold">{t('culture')}</span><br /> {getCountryNameFromCode(tenant.culture)}
                                             </p>
                                         </div>
-                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 dark:bg-slate-700 rounded-lg w-full">
                                             <FaFlag className="text-xl text-[#3d50e0]" />
                                             <p className="ml-2 dark:text-white">
-                                                <span className="font-semibold">{t('language')}</span><br /> {tenant.language}
+                                                <span className="font-semibold">{t('language')}</span><br /> 
+                                                <div className="flex gap-2 items-center">
+                                                    <img src={getFlagSrc(tenant.language)} className="h-5 w-5" alt="flag" /> 
+                                                    {tenant.language == 'id' ? t('indonesian') : tenant.language == 'en' ? t('english') : ''}
+                                                </div>
                                             </p>
                                         </div>
-                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 dark:bg-slate-700 rounded-lg w-full">
                                             <FaDollarSign className="text-xl text-[#3d50e0]" />
                                             <p className="ml-2 dark:text-white">
-                                                <span className="font-semibold">{t('currency')}</span><br /> {tenant.currency}
+                                                <span className="font-semibold">{t('currency')}</span><br /> {getCurrencyNameFromCode(tenant.currency)}
                                             </p>
                                         </div>
-                                        <div className="flex gap-4 items-center p-5 bg-gray-50 rounded-lg w-full">
+                                        <div className="flex gap-4 items-center p-5 bg-gray-50 dark:bg-slate-700 rounded-lg w-full">
                                             <FiWatch className="text-xl text-[#3d50e0]" />
                                             <p className="ml-2 dark:text-white">
                                                 <span className="font-semibold">{t('timezone')}</span><br /> {tenant.timezone_name}
@@ -373,7 +420,7 @@ export default function TenantProfile({tenant_id}){
 
                         <div className="flex gap-2 items-center">
                         {
-                            modeModal === 'Edit' ? <button className="bg-[#3d50e0] hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>{t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
+                            modeModal === 'Edit' ? <button className="bg-[#3d50e0] hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>{isLoading ? <LoadingCircle/> : t('save') }</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
                         }
                         </div>
                         </div>

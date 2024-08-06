@@ -127,58 +127,72 @@ export default function Navbar() {
                 cancelButtonText: `${tout('no')}`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    localStorage.removeItem('jwtToken');
-                    localStorage.removeItem('tenantId');
-                    localStorage.removeItem('roles');
-                    localStorage.removeItem('name');
-                    localStorage.removeItem('lang');
-                    localStorage.removeItem('locationChecked');
+                    localStorage.clear();
                     router.push('/');
                 }
             });
         }
     
+        function handleTheme() {
+            setIsDark(!isDark);
+        }
+    
         return (
-            <div className="text-black me-5 hover:cursor-pointer relative">
+            <div className="text-black dark:text-slate-200 me-5 hover:cursor-pointer relative">
                 <div className="flex items-center">
-                    <Image src={`data:image/png;base64, ${image}`} alt="Profile" className="w-11 h-11 rounded-full mr-2" width={10} height={10} />
+                    <Image 
+                        src={`data:image/png;base64, ${image}`} 
+                        alt="Profile" 
+                        className="w-11 h-11 rounded-full mr-2 border-2 border-gray-300 dark:border-slate-700" 
+                        width={44} 
+                        height={44} 
+                    />
                     <h1 onClick={handleToggle} className="flex flex-col cursor-pointer">
                         <div className="text-sm flex gap-1 items-end font-medium">
-                        <p className="dark:text-slate-100">{name}</p>
-                        <span className="text-blue-500">
-                            {isHidden ? <IoIosArrowDown size={18} className="font-semibold text-gray-800 dark:text-slate-200" /> : <IoIosArrowUp size={18} className="font-semibold text-black dark:text-slate-200" />}
-                        </span>
+                            <p className="dark:text-slate-100">{name}</p>
+                            <span className="text-blue-500">
+                                {isHidden ? 
+                                    <IoIosArrowDown size={18} className="font-semibold text-gray-800 dark:text-slate-200" /> : 
+                                    <IoIosArrowUp size={18} className="font-semibold text-black dark:text-slate-200" />
+                                }
+                            </span>
                         </div>  
                         <div className="text-xs text-gray-500 dark:text-gray-400">{role}</div>
                     </h1>
                 </div>
-                <div className={`profile-dropdown ${isHidden ? 'hidden' : ''} absolute z-10 mt-3 -right-7 p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg w-52 transition-all duration-300 ease-in-out`}>
+                <div className={`profile-dropdown ${isHidden ? 'hidden' : 'block'} absolute z-10 mt-3 -right-7 p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg w-52 transition-all duration-300 ease-in-out`}>
                     <div className="flex flex-col mb-2">
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center mb-2">
                             <p className="font-bold text-[14px] text-gray-800 dark:text-slate-100">{name}</p>
-                            <label htmlFor="theme" className="inline-flex items-center cursor-pointer">
-                                <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
-                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-                                </div>
+                            <label htmlFor="theme" className="inline-flex items-center cursor-pointer md:hidden xl:hidden">
+                                <input 
+                                    type="checkbox" 
+                                    checked={isDark} 
+                                    id="theme" 
+                                    name="theme" 
+                                    className="sr-only peer" 
+                                    onChange={handleTheme} 
+                                />
+                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                             </label>
                         </div>
                         <p className="text-[12px] text-gray-500 dark:text-blue-500">{email}</p>
                     </div>
-                    <div className="border-t border-gray-300 dark:border-gray-600"></div>
-                    <Link href={`profile`} className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                    <div className="border-t border-gray-300 dark:border-gray-600 mb-2"></div>
+                    <Link href={`profile`} className="flex items-center px-4 py-2 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                         <FaUser className="mr-2" />
                         {t('profile')}
                     </Link>
                     
                     {role === 'admin' && (
-                        <Link href={`admin-dashboard`} className="flex items-center px-4 py-4 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                        <Link href={`admin-dashboard`} className="flex items-center px-4 py-2 text-[14px] text-gray-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                             <FaTachometerAlt className="mr-2" />
                             Admin Dashboard
                         </Link>
                     )}
                     
-                    <div className="border-t border-gray-300 dark:border-gray-600"></div>
-                    <a onClick={handleLogout} className="flex items-center px-2 py-1 text-[14px] mt-2 text-red-600 dark:text-red-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
+                    <div className="border-t border-gray-300 dark:border-gray-600 mt-2"></div>
+                    <a onClick={handleLogout} className="flex items-center px-4 py-2 text-[14px] mt-2 text-red-600 dark:text-red-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 rounded-md transition-colors duration-200">
                         <FaSignOutAlt className="mr-2" />
                         {t('logout')}
                     </a>

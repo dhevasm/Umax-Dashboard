@@ -71,7 +71,10 @@
     "performence": {
       "last-week": "Last week",
       "last-month": "Last month",
-      "last-year": "Last year"
+      "last-year": "Last year",
+      "data-not-appear": "Data doesn't appear?",
+      "please-select-campaign": "Please select campaign!",
+      "suggestions": "Suggestions:"
     },
 
     "metric7": {
@@ -277,7 +280,9 @@
       "culture-error": "Culture is required",
       "timezone-error": "Timezone is required",
       "currency-error": "Currency is required",
-      "edit-profile": "Edit Profile"
+      "edit-profile": "Edit Profile",
+      "english": "English",
+      "indonesian": "Indonesian"
     },
 
     "admin-users": {

@@ -508,6 +508,38 @@ const AccountTable = () => {
                             }
                         </tbody>
                     </table>
+
+                    <table className='hidden'ref={tableRef}>
+                        <thead>
+                            <tr>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>{t('name')}</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>{t('client')}</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Platform</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Email</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredData.length > 0 ? (
+                                filteredData.map((data, index) => (
+                                    <tr key={index} className='border text-center dark:border-gray-700'>
+                                        <td>{data.username}</td>
+                                        <td>{data.client_name}</td>
+                                        <td>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
+                                        <td><a href={`mailto:${data.email}`} className="text-blue-500 underline dark:text-blue-400">{data.email}</a></td>
+                                        <td><StatusBadge status={data.status} /></td>
+                                    </tr>
+                                )
+                            )
+                            ) : (
+                                <tr>
+                                    <td colSpan="6" className="text-center py-4 border border-gray-300 dark:border-gray-600 dark:text-gray-200">
+                                        {t('not-found')}
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

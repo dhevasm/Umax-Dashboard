@@ -28,6 +28,7 @@ export default function UserTable() {
     const [searchTerm, setSearchTerm] = useState("")
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [isLoading, setIsLoading] = useState(true);
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
@@ -182,6 +183,7 @@ export default function UserTable() {
     }
 
     async function getUsers(){
+        setIsLoading(true)
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-tenant`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -189,6 +191,7 @@ export default function UserTable() {
         })
         setUsers(response.data.Data)
         setUserMemo(response.data.Data)
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -507,36 +510,34 @@ export default function UserTable() {
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
                                     {
-                                        // Maping data yang sudah melalui filter
-                                        currentusers.length > 0 ? currentusers.map((user, index) => (
-                                            <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
-                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap underline" title="Click to edit" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
-                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{user.roles}</td>
-                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
-                                                    <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a>
-                                                </td>
-                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
-                                                {String(user.company_name)}
+                                        isLoading ? (
+                                            // If loading is true, show loading indicator
+                                            <tr className="text-center py-3 border dark:border-gray-500">
+                                                <td colSpan={4}>
+                                                    <LoadingCircle />
                                                 </td>
                                             </tr>
-                                        )) : (
-                                            // Check user yang sudah difilter
-                                            users.length > 0 ? (
-                                                // Jika data tida ditemukan
-                                                <tr className="text-center border dark:border-gray-500">
-                                                    <td colSpan={5} className=" py-4">
-                                                        {t('not-found')}
+                                        ) : currentusers.length > 0 ? (
+                                            // Display filtered data if available
+                                            currentusers.map((user, index) => (
+                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
+                                                    <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap underline" title="Click to edit" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
+                                                    <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{user.roles}</td>
+                                                    <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
+                                                        <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a>
+                                                    </td>
+                                                    <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
+                                                        {String(user.company_name)}
                                                     </td>
                                                 </tr>
-                                            ) :
-                                            (
-                                                // Jika data ditemukan tapi masih loading
-                                                <tr className="text-center py-3 border dark:border-gray-500">
-                                                    <td colSpan={5}>
-                                                        <LoadingCircle />
-                                                    </td>
-                                                </tr>
-                                            )
+                                            ))
+                                        ) : (
+                                            // Display message if no data found
+                                            <tr className="text-center border dark:border-gray-500">
+                                                <td colSpan={4} className="py-4">
+                                                    {t('not-found')}
+                                                </td>
+                                            </tr>
                                         )
                                     }
                                 </tbody>

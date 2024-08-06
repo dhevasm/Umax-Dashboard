@@ -71,7 +71,10 @@
     "performence":{
       "last-week": "Minggu lalu",
       "last-month": "Sebulan lalu",
-      "last-year": "Tahun lalu"
+      "last-year": "Tahun lalu",
+      "data-not-appear": "Data tidak muncul?",
+      "please-select-campaign": "Silahkan pilih Kampanye!",
+      "suggestions": "Saran Tindakan"
     },
 
     "metric7": {
@@ -277,7 +280,9 @@
       "currency-position-error": "Posisi Mata Uang tidak boleh kosong",
       "timezone-error": "Zona Waktu tidak boleh kosong",
       "culture-error": "Kultur tidak boleh kosong",
-      "edit-profile": "Edit profil"
+      "edit-profile": "Edit profil",
+      "english": "Inggris",
+      "indonesian": "Indonesia"
     },
 
     "admin-users": {

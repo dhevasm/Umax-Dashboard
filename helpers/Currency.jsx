@@ -1,0 +1,30 @@
+const Currency = {
+    "Af"  : "Afghan Afghani",
+    "ALL" : "Albanian Lek",
+    "AR$" : "Argentine Peso",
+    "AMD" : "Armenian Dram",
+    "AU$" : "Australian Dollar",
+    "man.": "Azerbaijani Manat",
+    "BD"  : "Bahraini Dinar",
+    "Tk"  : "Bangladeshi Taka",
+    "Br"  : "Belarusian Ruble",
+    "BZ$" : "Belize Dollar",
+    "Bs"  : "Bolivian Boliviano",
+    "KM"  : "Bosnia-Herzegovina Convertible Mark",
+    "BWP" : "Botswanan Pula",
+    "R$"  : "Brazilian Real",
+    "BN$" : "Brunei Dollar",
+    "BGN" : "Bulgarian Lev",
+    "FBu" : "Burundian Franc",
+    "CA$" : "Canadian Dollar",
+    "CL$" : "Chilean Peso",
+    "CN¥" : "Chinese Yuan",
+    "CO$" : "Colombian Peso",
+    "CDF" : "Congolese Franc",
+    "€"   : "Euro",
+    "Rp"  : "Indonesian Rupiah",
+    "$"   : "US Dollar",
+    "AED" : "United Arab Emirates Dirham"
+}
+
+export default Currency
