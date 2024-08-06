@@ -312,7 +312,6 @@ function AdminNavbar({userData}){
                         after:absolute after:end-1.5 after:top-[calc(50%-0.40625rem)] after:w-[.8125rem] after:h-[.8125rem] after:bg-no-repeat after:bg-[right_center] after:bg-[length:.8125em_.8125em] after:transform after:transition-all after:ease-in-out after:duration-200 after:opacity-70 checked:after:start-1.5 checked:after:end-auto" type="checkbox" id="theme" onChange={handleTheme}></input>
                         </label>
                     </div>
-                    
                     {
                         userData.roles === "sadmin" && (
                             <button className="text-md flex items-center gap-2" onClick={handleDropdown}>
@@ -323,41 +322,45 @@ function AdminNavbar({userData}){
                     }
                     
                     {showDropdown && (
-                        <div className="absolute text-black dark:text-white top-20 right-20 p-5 w-[270px] h-[270px] overflow-y-auto bg-white dark:bg-slate-700 rounded-lg shadow-lg">
-                            <ul className="space-y-2">
-                                {
-                                    requestlist.length === 0 && (
-                                        <p className="text-center">No Request</p>
-                                    )
-                                }
-                                {
-                                    requestlist.map((request, index) => (
-                                        <>
-                                        <li key={index} className="flex items-center w-full justify-between">
-                                            <div className="text-xl flex gap-3 items-center">
-                                                <FaBuilding className="text-blue-500 mr-2" />
-                                                <div className="flex flex-col">
-                                                <p className="text-sm font-bold">{request.company} {request.subscription ? "(Paid)" : "(Free)"}</p>
-                                                <p className="text-xs ">{request.email}</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="text-xl flex gap-3">
-                                                <button>
-                                                    <FaCheck className="text-green-500" onClick={() => handleAccept(request._id)}/>
-                                                </button>
-                                                <button>
-                                                    <FaTimes className="text-red-500" onClick={() => handleReject(request._id)}/>
-                                                </button>
-                                            </div>
-                                        </li>
-                                        <div className="w-full h-0.5 bg-gray-400"></div>
-                                        </>
-                                    ))
-                                }
-                            </ul>
-                        </div>
+                    <div className="absolute text-black dark:text-white top-20 right-20 p-5 w-[300px] max-h-[400px] overflow-y-auto bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                        <ul className="space-y-3">
+                        {requestlist.length === 0 ? (
+                            <p className="text-center text-gray-500">No Request</p>
+                        ) : (
+                            requestlist.map((request, index) => (
+                            <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-3">
+                                <li className="flex items-center justify-between">
+                                <div className="flex gap-3 items-center">
+                                    <FaBuilding className="text-blue-500 mr-2 text-2xl" />
+                                    <div className="flex flex-col">
+                                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                                        {request.company} {request.subscription ? "(Paid)" : "(Free)"}
+                                    </p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">{request.email}</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                    onClick={() => handleAccept(request._id)}
+                                    className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg shadow-md transition duration-200"
+                                    >
+                                    <FaCheck />
+                                    </button>
+                                    <button
+                                    onClick={() => handleReject(request._id)}
+                                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg shadow-md transition duration-200"
+                                    >
+                                    <FaTimes />
+                                    </button>
+                                </div>
+                                </li>
+                            </div>
+                            ))
+                        )}
+                        </ul>
+                    </div>
                     )}
+
                     </div>
 
                     <div className="flex flex-col items-end mt-2">
