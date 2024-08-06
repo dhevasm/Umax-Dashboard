@@ -102,14 +102,14 @@ const Footer = () => {
                             <h4 className="text-lg font-semibold text-white mb-9">Legal</h4>
                             <ul>
                                 <li>
-                                    <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
+                                    <Link href="https://www.termsfeed.com/live/2d907ed6-3b08-4a39-b196-15250f047b29" target='_blank' className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
                                         Privacy Policy
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
+                                    <Link href="https://www.termsfeed.com/live/2d907ed6-3b08-4a39-b196-15250f047b29" target='_blank' className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
                                         Terms & Conditions
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
@@ -163,12 +163,12 @@ const Footer = () => {
                     </div>
                     <div className="w-full px-4 text-center sm:w-auto">
                         <div className="flex items-center justify-center">
-                            <a href="" className="px-4 text-base text-white/70 hover:text-white">
+                            <Link href="https://www.termsfeed.com/live/2d907ed6-3b08-4a39-b196-15250f047b29" target='_blank' className="px-4 text-base text-white/70 hover:text-white">
                                 Privacy Policy
-                            </a>
-                            <a href="" className="px-4 text-base text-white/70 hover:text-white">
+                            </Link>
+                            <Link href="https://www.termsfeed.com/live/2d907ed6-3b08-4a39-b196-15250f047b29" target='_blank' className="px-4 text-base text-white/70 hover:text-white">
                                 Terms of Use
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

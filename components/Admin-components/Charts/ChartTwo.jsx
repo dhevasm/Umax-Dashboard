@@ -59,13 +59,17 @@ const ChartTwo = ({chartData}) => {
             data: start,
             fill: true,
             borderColor: '#60A5FA',
-            tension: 0.1,
+            tension: 0.3,
+            backgroundColor: '#60A5FA',
+            borderWidth: 3
           },{
             label: 'Campaign End',
             data: end,
             fill: true,
             borderColor: '#1D4ED8',
-            tension: 0.1,
+            tension: 0.3,
+            backgroundColor: '#1D4ED8',
+            borderWidth: 3
           }
         ],
       };

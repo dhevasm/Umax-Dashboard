@@ -330,7 +330,6 @@ function AdminNavbar({userData}){
                         after:absolute after:end-1.5 after:top-[calc(50%-0.40625rem)] after:w-[.8125rem] after:h-[.8125rem] after:bg-no-repeat after:bg-[right_center] after:bg-[length:.8125em_.8125em] after:transform after:transition-all after:ease-in-out after:duration-200 after:opacity-70 checked:after:start-1.5 checked:after:end-auto" type="checkbox" id="theme" onChange={handleTheme}></input>
                         </label>
                     </div>
-                    
                     {
                         userData.roles === "sadmin" && (
                             <button className="text-md flex items-center gap-2" onClick={handleDropdown}>

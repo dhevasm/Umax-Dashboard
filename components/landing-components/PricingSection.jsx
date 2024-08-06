@@ -150,43 +150,43 @@ const PricingSection = () => {
         </div>
         
         <div className="flex flex-wrap justify-center -mx-4">
-          <div className="w-full px-4 md:w-1/2 lg:w-1/3">
+          <div className="w-full px-4 md:w-1/2 lg:w-1/2">
             <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
               <span className="block mb-3 text-lg font-semibold text-blue-600">
-                Personal
+                Free Trial
               </span>
               <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
                 <span>Free</span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-                Perfect for using in a personal website or a client project.
+              Analyze your advertising campaigns with essential metrics for free. Get started today with our limited free plan and elevate your campaign performance.
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
-                <p className="text-base text-body-color dark:text-gray-300">1 User</p>
+                <p className="text-base text-body-color dark:text-gray-300">30-Day Trial Period</p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  All UI components
+                  1 Admin per Tenant
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Lifetime access
+                  2 Staff per Tenant
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Free updates
+                  Maximum 3 Accounts per Tenant
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Use on 1 (one) project
+                  Maximum 2 Campaigns per Account
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  3 Months support
+                  Maximum 6 Metrics per Tenant
                 </p>
               </div>
               <a
                 onClick={(e) => {
                     e.currentTarget.innerHTML = "Loading..."
-                   Router.push('/en/tenant-register?order_id=free')
+                    Router.push('/en/tenant-register?order_id=free')
                 }}
                 className=" hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
-                Choose Personal
+                Start Free Trial
               </a>
 
               <div>
@@ -214,244 +214,56 @@ const PricingSection = () => {
                     </defs>
                   </svg>
                 </span>
-                <span className="absolute right-4 top-4 z-[-1]">
-                <svg
-                    width="41"
-                    height="89"
-                    viewBox="0 0 41 89"
+                <span className="absolute right-0 top-7 z-[-1]">
+                  <svg
+                    width="77"
+                    height="172"
+                    viewBox="0 0 77 172"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <circle
-                      cx="38.9138"
-                      cy="87.4849"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 87.4849)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="38.9138"
-                      cy="74.9871"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 74.9871)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="38.9138"
-                      cy="62.4892"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 62.4892)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="38.9138"
-                      cy="38.3457"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 38.3457)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="38.9138"
-                      cy="13.634"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 13.634)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="38.9138"
-                      cy="50.2754"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 50.2754)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="38.9138"
-                      cy="26.1319"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 26.1319)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="38.9138"
-                      cy="1.42021"
-                      r="1.42021"
-                      transform="rotate(180 38.9138 1.42021)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="87.4849"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 87.4849)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="74.9871"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 74.9871)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="62.4892"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 62.4892)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="38.3457"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 38.3457)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="13.634"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 13.634)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="50.2754"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 50.2754)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="26.1319"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 26.1319)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="26.4157"
-                      cy="1.4202"
-                      r="1.42021"
-                      transform="rotate(180 26.4157 1.4202)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="87.4849"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 87.4849)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="74.9871"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 74.9871)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="62.4892"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 62.4892)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="38.3457"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 38.3457)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="13.634"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 13.634)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="50.2754"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 50.2754)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="26.1319"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 26.1319)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="13.9177"
-                      cy="1.42019"
-                      r="1.42021"
-                      transform="rotate(180 13.9177 1.42019)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="87.4849"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 87.4849)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="74.9871"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 74.9871)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="62.4892"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 62.4892)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="38.3457"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 38.3457)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="13.634"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 13.634)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="50.2754"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 50.2754)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="26.1319"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 26.1319)"
-                      fill="#3056D3"
-                    />
-                    <circle
-                      cx="1.41963"
-                      cy="1.4202"
-                      r="1.42021"
-                      transform="rotate(180 1.41963 1.4202)"
-                      fill="#3056D3"
-                    />
+                    <circle cx="86" cy="86" r="86" fill="url(#paint0_linear)" />
+                    <defs>
+                      <linearGradient
+                        id="paint0_linear"
+                        x1="86"
+                        y1="0"
+                        x2="86"
+                        y2="172"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#3056D3" stopOpacity="0.09" />
+                        <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
                   </svg>
+                </span>
+                <span className="absolute right-4 top-4 z-[-1]">
+                <svg
+                  width="51"
+                  height="50"
+                  viewBox="0 0 51 50"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M45.9473 17.2656H41.2598V8.125C41.2598 5.46875 39.1504 3.35938 36.4941 3.35938H10.7129C8.05664 3.35938 5.94727 5.46875 5.94727 8.125V21.7969C5.47852 22.1875 5.08789 22.7344 4.85352 23.4375L1.96289 37.5C1.80664 38.2813 2.04102 39.1406 2.58789 39.7656C3.05664 40.3906 3.83789 40.7031 4.61914 40.7031H29.7754V43.4375C29.7754 45.2344 31.2598 46.7188 33.0566 46.7188H45.9473C47.7441 46.7188 49.2285 45.2344 49.2285 43.4375V20.5469C49.2285 18.75 47.7441 17.2656 45.9473 17.2656ZM5.63477 37.1875L8.21289 24.7656H8.60352H29.8535V37.1875H5.63477ZM29.7754 20.5469V21.25H9.46289V8.125C9.46289 7.42187 10.0098 6.875 10.7129 6.875H36.4941C37.1973 6.875 37.7441 7.42187 37.7441 8.125V17.2656H33.0566C31.2598 17.2656 29.7754 18.75 29.7754 20.5469ZM45.7129 43.125H33.291V20.7812H45.7129V43.125Z"
+                    fill="#3758F9"
+                  />
+                  <path
+                    d="M37.7441 26.7969H41.6504C42.5879 26.7969 43.4473 26.0156 43.4473 25C43.4473 24.0625 42.666 23.2031 41.6504 23.2031H37.7441C36.8066 23.2031 35.9473 23.9844 35.9473 25C35.9473 25.9375 36.7285 26.7969 37.7441 26.7969Z"
+                    fill="#3758F9"
+                  />
+                  <path
+                    d="M39.541 38.9063C39.4629 38.9063 39.3066 38.9844 39.2285 38.9844C39.1504 39.0625 38.9941 39.0625 38.916 39.1406C38.8379 39.2188 38.7598 39.2969 38.6816 39.375C38.3691 39.6875 38.1348 40.1563 38.1348 40.625C38.1348 41.0938 38.291 41.5625 38.6816 41.875C38.7598 41.9531 38.8379 42.0313 38.916 42.1094C38.9941 42.1875 39.1504 42.2656 39.2285 42.2656C39.3066 42.3438 39.4629 42.3438 39.541 42.3438C39.6191 42.3438 39.7754 42.3438 39.8535 42.3438C40.3223 42.3438 40.791 42.1875 41.1035 41.7969C41.416 41.4844 41.6504 41.0156 41.6504 40.5469C41.6504 40.0781 41.4941 39.6094 41.1035 39.2969C40.7129 38.9844 40.0879 38.8281 39.541 38.9063Z"
+                    fill="#3758F9"
+                  />
+                </svg>
                 </span>
               </div>
             </div>
           </div>
-          <div className="w-full px-4 md:w-1/2 lg:w-1/3">
+          <div className="w-full px-4 md:w-1/2 lg:w-1/2">
             <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
               <span className="block mb-3 text-lg font-semibold text-blue-600">
                 Business
@@ -463,26 +275,26 @@ const PricingSection = () => {
                 </span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-                Perfect for using in a Business website or a client project.
+              Unlock the full potential of your advertising campaigns. Upgrade to our paid plan for unlimited access to all features and a comprehensive analysis of your metrics.
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
                 <p className="text-base text-body-color dark:text-gray-300">
-                  5 Users
+                3-Month Lifetime Access
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  All UI components
+                Unlimited Admins
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Lifetime access
+                Unlimited Staff
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Free updates
+                Unlimited Accounts
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Use on 3 (Three) project
+                Unlimited Campaigns
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  4 Months support
+                Unlimited Metrics
                 </p>
               </div>
               <a
@@ -538,10 +350,10 @@ const PricingSection = () => {
               </div>
             </div>
           </div>
-          <div className="w-full px-4 md:w-1/2 lg:w-1/3">
+          {/* <div className="w-full px-4 md:w-1/2 lg:w-1/3">
             <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
               <span className="block mb-3 text-lg font-semibold text-blue-600">
-                Professional
+                Coming Soon
               </span>
               <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
                 <span>$256</span>
@@ -550,7 +362,7 @@ const PricingSection = () => {
                 </span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-                Perfect for using in a Professional website or a client project.
+                Coming soon
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
                 <p className="text-base text-body-color dark:text-gray-300">
@@ -628,7 +440,7 @@ const PricingSection = () => {
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -719,9 +531,6 @@ const PricingSection = () => {
                 </div>
               </div>
             )}
-        
-     
-      
     </section>
     // ====== Pricing Section End ======
   );
