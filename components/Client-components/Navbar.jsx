@@ -303,7 +303,7 @@ export default function Navbar() {
 
                     {/* Profile */}
                     <div className="flex gap-2 items-center">
-                        <label htmlFor="theme" className="inline-flex items-center cursor-pointer" hidden={roles == 'client'}>
+                        <label htmlFor="theme" className="items-center cursor-pointer hidden md:inline-flex" hidden={roles == 'client'}>
                             {
                                 isDark ? <FaMoon className="text-lg text-white me-2"/> : <FaSun className="text-xl text-blue-500 me-2"/>
                             }
