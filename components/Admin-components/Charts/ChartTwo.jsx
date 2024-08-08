@@ -7,6 +7,7 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import { useTranslations } from "next-intl";
 import { Line } from 'react-chartjs-2';
+import { Filler } from 'chart.js';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,6 +21,7 @@ import {
 } from 'chart.js';
 
 ChartJS.register(
+  Filler,
   CategoryScale,
   LinearScale,
   PointElement,
@@ -57,7 +59,7 @@ const ChartTwo = ({chartData}) => {
           {
             label: 'Campaign Start',
             data: start,
-            fill: true,
+            // fill: true,
             borderColor: '#60A5FA',
             tension: 0.3,
             backgroundColor: '#60A5FA',
@@ -65,7 +67,7 @@ const ChartTwo = ({chartData}) => {
           },{
             label: 'Campaign End',
             data: end,
-            fill: true,
+            // fill: true,
             borderColor: '#1D4ED8',
             tension: 0.3,
             backgroundColor: '#1D4ED8',

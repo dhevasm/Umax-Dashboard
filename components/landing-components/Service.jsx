@@ -40,7 +40,7 @@ const Service = () => {
                   />
                 </svg>
               </div>
-              <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
+              <h4 className="text-dark dark:text-white mb-[14px] text-xl font-bold">
                {t("service-title-1")}
               </h4>
               <p className="text-body-color text-justify dark:text-slate-200">
@@ -70,7 +70,7 @@ const Service = () => {
                   />
                 </svg>
               </div>
-              <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
+              <h4 className="text-dark dark:text-white mb-[14px] text-xl font-bold">
               {t("service-title-2")}
               </h4>
               <p className="text-body-color text-justify dark:text-slate-200">
@@ -104,7 +104,7 @@ const Service = () => {
                   />
                 </svg>
               </div>
-              <h4 className="text-dark dark:text-white mb-[14px] text-2xl font-bold">
+              <h4 className="text-dark dark:text-white mb-[14px] text-xl font-bold">
               {t("service-title-3")}
               </h4>
               <p className="text-body-color text-justify dark:text-slate-200">

@@ -34,7 +34,7 @@ const VideoSection = () => {
       </div>
 
       {/* vidio */}
-      <div className="top-0 right-0 z-10 w-full h-full lg:absolute lg:w-1/2">
+      <div className="top-0 right-0 z-10 w-full h-full hidden lg:block lg:absolute lg:w-1/2">
         <div className="flex items-center justify-center w-full h-full bg-bg-tenant bg-no-repeat bg-cover">
           <a
             onClick={() => setVideoOpen(true)}
@@ -56,7 +56,6 @@ const VideoSection = () => {
           </a>
         </div>
       </div>
-
       {/* <span className="absolute left-0 top-0 z-[-1]">
         <svg
           width="644"

@@ -138,7 +138,7 @@ const Navbar = () => {
                   </ul>
                 </nav>
               </div>
-              <div className="justify-end hidden pr-16 sm:flex lg:pr-0">
+              <div className="justify-end me-5 hidden pr-16 sm:flex lg:pr-0">
                 <a href={`${lang}/login`} className="py-3 text-base font-medium px-7 text-dark dark:text-white hover:text-blue-600 mr-5">{t("login")}</a>
                 <select name="" id="" className="rounded-full px-2 border" onChange={handleLangChange} value={lang}>
                   <option value="id">

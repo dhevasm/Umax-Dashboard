@@ -18,11 +18,7 @@ const Page = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [lang, setLang] = useState(pathname.slice(0, 3));
-  const t = useTranslations('login')
-
-  // useEffect(() => {
-  //   console.log(process.env.NEXT_PUBLIC_API_URL);
-  // }, [])
+  const t = useTranslations('login');
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -37,20 +33,19 @@ const Page = () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-id`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+        },
       });
 
-      if (!localStorage.getItem('locationChecked') && roles == 'client') {
+      if (!localStorage.getItem('locationChecked') && roles === 'client') {
         const fetchLocation = async () => {
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
               const { latitude, longitude } = position.coords;
               try {
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
-                const data = await response.json();
-                console.log(data)
-  
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+                const data = await res.json();
+
                 if (data.address.country_code !== 'id') {
                   localStorage.setItem('lang', 'en');
                   setLang('en');
@@ -71,10 +66,10 @@ const Page = () => {
             localStorage.setItem('locationChecked', 'true');
           }
         };
-  
+
         fetchLocation();
       }
-      
+
       const language = response.data.Data[0]?.language || 'en';
       localStorage.setItem('lang', language);
 
@@ -104,10 +99,9 @@ const Page = () => {
       setLoading(true);
       try {
         if (!navigator.onLine) {
-          // Jika pengguna offline
           throw new Error("Network error: Please check your internet connection.");
         }
-    
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
           method: "POST",
           headers: {
@@ -116,35 +110,30 @@ const Page = () => {
           },
           body: new URLSearchParams(values).toString(),
         });
-    
+
         if (!response.ok) {
-          // Menggunakan response.status untuk deteksi kesalahan tertentu jika perlu
-          throw new Error("Login failed: Invalid email or password.");
+          if (response.status === 400) {
+            Swal.fire("Login failed", "Free Trial has Expired", "error");
+          } else {
+            Swal.fire("Login failed", "Invalid email or password.", "error");
+          }
         }
-    
+
         const data = await response.json();
         const { Token, Data } = data;
         const { tenant_id: tenantID, roles, name } = Data;
-    
+
         localStorage.setItem("jwtToken", Token);
         localStorage.setItem("tenantId", tenantID);
         localStorage.setItem("roles", roles);
         localStorage.setItem("name", name);
-    
+
         getUserData(roles);
       } catch (error) {
-        if (error.message.includes("Network error")) {
-          setError("Network error: Please check your internet connection.");
-          setLoading(false);
-        } else {
-          setError("Please check your email and password.");
-          setLoading(false);
-        }
-      } finally {
-        // setLoading(false);
+        console.log(error);
+        setLoading(false);
       }
-    }
-    
+    },
   });
 
   useEffect(() => {
@@ -154,34 +143,21 @@ const Page = () => {
     }
   }, [error]);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("jwtToken");
-  //   const roles = localStorage.getItem("roles");
-  //   const lang = localStorage.getItem("lang");
-  //   if (token) {
-  //     Swal.fire('Already Logged In', 'Nice Try!', 'warning').then(() => {
-  //       router.push(roles === "sadmin" || roles === "admin"
-  //         ? `/${lang}/admin-dashboard`
-  //         : `/${lang}/dashboard`);
-  //     });
-  //   }
-  // }, [router]);
-
   const togglePasswordVisibility = () => {
-    setShowPassword(prev => !prev);
+    setShowPassword((prev) => !prev);
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">
-      <div className="w-full md:max-w-md mx-auto">
+    <div className="min-h-screen overflow-y-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">
+      <div className="w-full md:max-w-md mx-auto mb-[100px]">
         <Image
           src="/assets/logo.png"
           alt="logo"
-          className="mx-auto pb-2 w-20"
-          width={80} 
-          height={10}
+          className="mx-auto pb-2"
+          width={120}
+          height={40}
         />
-        <div className="flex flex-col items-center justify-center mt-5 sm:mt-0">
+        <div className="flex flex-col items-center justify-center mt-2 sm:mt-0">
           <form
             onSubmit={formik.handleSubmit}
             className="w-10/12 md:w-full p-6 bg-white rounded-lg shadow-lg border-2"
@@ -198,7 +174,7 @@ const Page = () => {
             />
             {formik.errors.email && <div className="text-red-500">{formik.errors.email}</div>}
 
-            <div className="relative items-center">
+            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -211,7 +187,7 @@ const Page = () => {
               {formik.errors.password && <div className="text-red-500">{formik.errors.password}</div>}
 
               <div
-                className="absolute top-5 right-8 cursor-pointer"
+                className="absolute top-4 right-3 cursor-pointer"
                 onClick={togglePasswordVisibility}
               >
                 {showPassword ? <AiOutlineEye size={27} /> : <AiOutlineEyeInvisible size={27} />}
@@ -220,8 +196,7 @@ const Page = () => {
 
             {error && (
               <div
-                className="w-full mt-2 text-[15px] md:text-base bg-red-200 h-12 p-3 rounded-md border-2 border-red-400 animate-pulse transition-all duration-200"
-                style={{ opacity: 1 }}
+                className="w-full mt-2 text-base bg-red-200 h-12 p-3 rounded-md border-2 border-red-400 animate-pulse"
               >
                 <p className="text-red-500">{error}</p>
               </div>
@@ -234,13 +209,12 @@ const Page = () => {
               {loading ? <LoadingCircle /> : t('sign-in')}
             </button>
 
-            <div className="flex justify-between items-center">
-              <div></div>
+            <div className="flex justify-between items-center mt-3">
               <Link
                 href={`${lang}/forgotpassword`}
-                className="mt-3 text-[#5473E3] hover:text-[#2347C5] hover:underline"
+                className="text-[#5473E3] hover:text-[#2347C5] hover:underline"
               >
-                <p className="text-[#5473E3]">{t('forgot-password')}</p>
+                {t('forgot-password')}
               </Link>
             </div>
           </form>

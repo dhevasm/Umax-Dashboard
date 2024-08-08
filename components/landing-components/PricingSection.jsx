@@ -140,10 +140,10 @@ const PricingSection = () => {
                 {t('pricing-desc')}
                 <br />
                 <br />
-                Have order id? <a onClick={() => {
+                {t('have')} <a onClick={() => {
                   const order_id = prompt("Enter your order ID");
                   uncompletedpayment(order_id)
-                }} className="text-blue-500 underline hover:cursor-pointer">click me</a>
+                }} className="text-blue-500 underline hover:cursor-pointer">{t('click-me')}</a>
               </p>
             </div>
           </div>
@@ -153,30 +153,33 @@ const PricingSection = () => {
           <div className="w-full px-4 md:w-1/2 lg:w-1/2">
             <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
               <span className="block mb-3 text-lg font-semibold text-blue-600">
-                Free Trial
+                {t('free-trial')}
               </span>
               <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
-                <span>Free</span>
+                <span>{t('free')}</span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-              Analyze your advertising campaigns with essential metrics for free. Get started today with our limited free plan and elevate your campaign performance.
+                {t('free-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
-                <p className="text-base text-body-color dark:text-gray-300">30-Day Trial Period</p>
+                <p className="text-base text-body-color dark:text-gray-300">{t('free-feature-1')}</p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  1 Admin per Tenant
+                  {t("free-feature-2")}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  2 Staff per Tenant
+                  {t("free-feature-3")}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Maximum 3 Accounts per Tenant
+                {t("free-feature-4")}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Maximum 2 Campaigns per Account
+                 {t("free-feature-5")}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  Maximum 6 Metrics per Tenant
+                  {t("free-feature-6")}
+                </p>
+                <p className="text-base text-body-color dark:text-gray-300">
+                  {t('free-feature-7')}
                 </p>
               </div>
               <a
@@ -186,7 +189,7 @@ const PricingSection = () => {
                 }}
                 className=" hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
-                Start Free Trial
+                {t('start-free-trial')}
               </a>
 
               <div>
@@ -266,44 +269,46 @@ const PricingSection = () => {
           <div className="w-full px-4 md:w-1/2 lg:w-1/2">
             <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
               <span className="block mb-3 text-lg font-semibold text-blue-600">
-                Business
+                {t('business')}
               </span>
               <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
                 <span>$199</span>
                 <span className="text-base font-medium text-body-color dark:text-gray-300">
-                  / year
+                  / {t('year')}
                 </span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-              Unlock the full potential of your advertising campaigns. Upgrade to our paid plan for unlimited access to all features and a comprehensive analysis of your metrics.
+                {t('business-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
                 <p className="text-base text-body-color dark:text-gray-300">
-                1-Year Lifetime Access
+                  {t('business-feature-1')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                Unlimited Admins
+                  {t('business-feature-2')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                Unlimited Staff
+                  {t('business-feature-3')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                Unlimited Accounts
+                  {t('business-feature-4')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                Unlimited Campaigns
+                  {t('business-feature-5')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                Unlimited Metrics
+                  {t('business-feature-6')}
+                </p>
+                <p className="text-base text-body-color dark:text-gray-300">
+                  {t('business-feature-7')}
                 </p>
               </div>
               <a
                 onClick={() => openModal(2)}
                 className="hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
               >
-                Choose Business
+                {t('choose-business')}
               </a>
-
               <div>
                 <span className="absolute right-0 top-7 z-[-1]">
                   <svg
@@ -443,9 +448,6 @@ const PricingSection = () => {
           </div> */}
         </div>
       </div>
-
-      
-
             {/* Modal */}
             {showModal && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
