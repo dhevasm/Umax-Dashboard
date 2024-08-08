@@ -43,7 +43,7 @@ const Footer = () => {
                         <div className="w-full mb-10">
                             <a href="" className="mb-6  max-w-[160px] flex gap-3 items-center">
                                 <img src="assets/iconBlue.png" alt="logo" className="max-w-full bg-white p-3 rounded-full" width={58} height={58}/>
-                                <h1 className='text-white font-bold text-xl'>
+                                <h1 className='text-white font-bold text-xl text-nowrap'>
                                 UMAX Dasboard
                                 </h1>
                             </a>
@@ -130,7 +130,7 @@ const Footer = () => {
                             <ul>
                                 <li>
                                     <Link href={"https://wa.me/6281212122388"} target='_blank' className="inline-block text-base leading-loose text-white/70 mb-2">
-                                        +0812-1212-2388
+                                        0812-1212-2388
                                     </Link>
                                 </li>
                                 <li>

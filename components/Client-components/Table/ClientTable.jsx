@@ -338,7 +338,7 @@ const ClientTable = () => {
     
         // Info page
         pageButtons.push(
-            <span key="info" className="px-3 py-1 dark:text-white rounded-md">
+            <span key="info" className="px-3 py-1 dark:text-white rounded-md text-nowrap">
                 {`${t("page")} ${currentPage} / ${totalPages}`}
             </span>
         );
@@ -389,7 +389,7 @@ const ClientTable = () => {
             <h1>{t('title')}</h1>
             </div>
             <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-5 dark:bg-gray-800 dark:border-gray-700">
-                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
+                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col-reverse"}`}>
                     <div className={`mb-4 flex flex-row items-start gap-4`}>
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
@@ -408,7 +408,7 @@ const ClientTable = () => {
                             <option value="2">{t('deactive')}</option>
                         </select>
                     </div>
-                    <div className="w-full flex gap-3 justify-end pb-5">
+                    <div className={`w-full flex ${isWideScreen ? "gap-4" : "gap-2"} justify-end pb-5`}>
                         <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}

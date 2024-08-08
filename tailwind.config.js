@@ -15,6 +15,9 @@ module.exports = {
         'bg-login': "url('/assets/bg-default.svg')",
         'bg-tenant': "url('/assets/Building.png')",
       },
+      screens: {
+        'normal': '1420',
+      },
     },
   },
   plugins: [],

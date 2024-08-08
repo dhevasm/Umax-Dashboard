@@ -159,9 +159,9 @@ export default function Performance({ id }) {
         <>
             <div className="w-full">
                 {/* Header */}
-                <div className="w-full flex items-center justify-end">
-                    <div className="w-[150px] h-fit flex mb-3 me-1 text-black dark:text-white">
-                    {dateTime}
+                <div className="w-full flex items-center justify-end gap-2">
+                    <div className="w-[150px] h-fit flex mb-3 me-1 text-black dark:text-white text-nowrap">
+                        {dateTime}
                     </div>
                     <div className="w-[150px] h-fit flex mb-3 me-3">
                     <select

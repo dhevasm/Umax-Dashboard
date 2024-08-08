@@ -352,7 +352,7 @@ const AccountTable = () => {
     
         // Info page
         pageButtons.push(
-            <span key="info" className="px-3 py-1 dark:text-white rounded-md">
+            <span key="info" className="px-3 py-1 dark:text-white rounded-md text-nowrap">
                 {`${t("page")} ${currentPage} / ${totalPages}`}
             </span>
         );
@@ -392,7 +392,6 @@ const AccountTable = () => {
         );
     };
     
-    
     const indexOfLastCampaign = currentPage * dataPerPage;
     const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
     const currentAccounts = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign);
@@ -405,8 +404,8 @@ const AccountTable = () => {
                 </h1>
             </div>
             <div className="bg-white border dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-lg w-full h-fit p-5">
-                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
-                    <div className="mb-4 flex flex-row items-start gap-4">
+                <div className={`flex ${isWideScreen ? `${'flex-row'}` : "flex-col-reverse"}`}>
+                    <div className={`mb-4 flex flex-row items-start ${isWideScreen ? `gap-4` : "gap-2"}`}>
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300`}
                             type="text"
@@ -431,7 +430,7 @@ const AccountTable = () => {
                             <option value="2">{t("deactive")}</option>
                         </select>
                     </div>
-                    <div className="w-full flex gap-3 justify-end pb-5">
+                    <div className={`w-full flex ${isWideScreen ? `gap-4` : "gap-2"} justify-end pb-5`}>
                         <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}
@@ -511,6 +510,11 @@ const AccountTable = () => {
                     <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
                         {renderPagination()}
                     </div>
+
+                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
+                        {renderPagination()}
+                    </div>
+
                     <table className='hidden'ref={tableRef}>
                         <thead>
                             <tr>

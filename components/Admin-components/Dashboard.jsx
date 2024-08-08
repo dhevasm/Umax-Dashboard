@@ -19,6 +19,7 @@ import { reach } from "yup"
 import { FaArrowUp, FaBuilding, FaCheck, FaTimes } from "react-icons/fa"
 import { map } from "leaflet"
 import Swal from "sweetalert2"
+import { LiaSpinnerSolid } from "react-icons/lia"
 
 
 export default function Dashboard({ tenant_id }) {
@@ -31,20 +32,24 @@ export default function Dashboard({ tenant_id }) {
     const [requestCount, setRequestCount] = useState(0);
     const roles = localStorage.getItem('roles')
     const [isLoading, setLoading] = useState(false)
+    const [dataLoading, setDataLoading] = useState(false)
 
     const getCampaign = async() => {
-            await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
-                headers: {
-                    'accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-                }
-            }).then((response) => {
-                setCampaigns(response.data.Data);
-            })
+        setDataLoading(true)
+        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+        }).then((response) => {
+            setCampaigns(response.data.Data);
+            setDataLoading(false)
+        })
     }
 
     async function getRequestList(){
+        setDataLoading(true)
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/request-list`, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -52,11 +57,14 @@ export default function Dashboard({ tenant_id }) {
         })
         setRequestList(res.data.Output)
         setRequestCount(res.data.Output.length)
+        setDataLoading(false)
     }
 
     useEffect(() => {
-        setFilterCampaign("reach")
-        getCampaign()
+        if(roles == 'admin'){
+            setFilterCampaign("reach")
+            getCampaign()
+        }
         if(roles == 'sadmin'){
             getRequestList()
         }
@@ -80,10 +88,6 @@ export default function Dashboard({ tenant_id }) {
         setFilterCampaign(value)
     }
 
-    // useEffect(() => {
-    //     console.log(dataDashboard)
-    // }, [dataDashboard])
-
     async function getChartData() { 
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chart-data`, {
           headers: {
@@ -92,7 +96,6 @@ export default function Dashboard({ tenant_id }) {
         })
         const data = res.data.Output
         setChartData(data)
-        // console.log(data)
     }  
 
     useEffect(() => {
@@ -386,7 +389,23 @@ export default function Dashboard({ tenant_id }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {campaigns.length > 0 ? (
+                                        {dataLoading ? (
+                                            <tr>
+                                                <td colSpan="5" className="w-full text-center align-middle">
+                                                    <div className="flex items-center justify-center h-full">
+                                                        <LoadingCircle />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ) : campaigns.length > 0 ? (
+                                            <tr>
+                                                <td colSpan="5" className="w-full text-center align-middle border dark:border-slate-400">
+                                                    <div className="flex items-center justify-center h-full dark:text-slate-200 py-5">
+                                                        Request not found
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ) : (
                                             campaigns.slice(0, 5).map((data, index) => (
                                                 <tr key={index} className="border-b">
                                                     <td className="p-2.5 xl:p-5 flex items-center gap-3">
@@ -414,13 +433,8 @@ export default function Dashboard({ tenant_id }) {
                                                     </td>
                                                 </tr>
                                             ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan="5" className="w-full flex items-center justify-center p-2.5 xl:p-5">
-                                                    <LoadingCircle />
-                                                </td>
-                                            </tr>
-                                        )}
+                                        )
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -433,7 +447,7 @@ export default function Dashboard({ tenant_id }) {
                         <div className="rounded-sm bg-white dark:bg-slate-800 shadow-default sm:px-7.5 xl:pb-1">
                             <div className="flex justify-between items-center mb-5">
                                 <h4 className="text-xl font-semibold text-black dark:text-slate-200">
-                                    {t('top-5-campaigns')}
+                                    Register Request
                                 </h4>
                             </div>
                             <div className="overflow-x-auto">
@@ -447,7 +461,9 @@ export default function Dashboard({ tenant_id }) {
                                             </th>
                                             <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">
                                                 <span className={``}>
-                                                    Compan&apos;y Email
+
+                                                    {"Company's Email"}
+
                                                 </span>
                                             </th>
                                             <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">
@@ -466,7 +482,23 @@ export default function Dashboard({ tenant_id }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {requestlist.length > 0 ? (
+                                        {dataLoading ? (
+                                            <tr>
+                                                <td colSpan="5" className="w-full text-center align-middle">
+                                                    <div className="flex items-center justify-center h-full">
+                                                        <LoadingCircle />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ) : requestlist.length < 0 ? (
+                                                <tr>
+                                                    <td colSpan="5" className="w-full text-center align-middle border dark:border-slate-400">
+                                                        <div className="flex items-center justify-center h-full dark:text-slate-200 py-5">
+                                                            Request not found
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        ) : (
                                             requestlist.map((data, index) => (
                                                 <tr key={index} className="border dark:border-gray-400">
                                                     <td className="p-2.5 xl:p-5 text-black dark:text-slate-200 text-left text-nowrap">
@@ -481,27 +513,26 @@ export default function Dashboard({ tenant_id }) {
                                                     <td className="hidden sm:table-cell p-2.5 xl:p-5 text-meta-5 dark:text-slate-200 text-center">
                                                         {data.subscription ? 
                                                             <div className="px-5 py-1 rounded-full border-2 border-green-800 bg-green-500 text-green-200">Paid</div> : 
-                                                            <div className="px-5 py-1 rounded-full border-2 border-red-800 bg-red-500 text-red-200">Free</div>}
+                                                            <div className="px-5 py-1 rounded-full border-2 border-blue-800 bg-blue-500 text-red-200">Free</div>}
                                                     </td>
                                                     <td className="hidden sm:table-cell p-2.5 xl:p-5 text-center">
-                                                        <button onClick={() => handleAccept(data._id)} className="text-green-500 px-2 py-2 border border-green-500 hover:text-green-200 hover:bg-green-500 transition-colors duration-200">
-                                                            <FaCheck size={20}/>
-                                                        </button>
-                                                        <button onClick={() => handleReject(data._id)} className="text-red-500 px-2 py-2 border border-red-500 hover:text-red-200 hover:bg-red-500 transition-colors duration-200 ms-2">
-                                                            <FaTimes size={20}/>
-                                                        </button>
+                                                        {isLoading ? (
+                                                            <LiaSpinnerSolid className="w-15 h-15 dark:text-white animate-spin" />
+                                                        ) : (
+                                                            <>
+                                                                <button onClick={() => handleAccept(data._id)} className="text-green-500 px-2 py-2 border border-green-500 hover:text-green-200 hover:bg-green-500 transition-colors duration-200">
+                                                                    <FaCheck size={20}/>
+                                                                </button>
+                                                                <button onClick={() => handleReject(data._id)} className="text-red-500 px-2 py-2 border border-red-500 hover:text-red-200 hover:bg-red-500 transition-colors duration-200 ms-2">
+                                                                    <FaTimes size={20}/>
+                                                                </button>
+                                                            </>
+                                                        )}
                                                     </td>
                                                 </tr>
                                             ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan="5" className="w-full text-center align-middle">
-                                                    <div className="flex items-center justify-center h-full">
-                                                        <LoadingCircle />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        )}
+                                        )
+                                        }
                                     </tbody>
                                 </table>
                             </div>

@@ -51,6 +51,7 @@ export default function AdminSidebar() {
                 localStorage.removeItem('name');
                 localStorage.removeItem('lang');
                 Router.push(`/en/login`);
+
             }
         });
     };

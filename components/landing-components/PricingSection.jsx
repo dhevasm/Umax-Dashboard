@@ -123,6 +123,16 @@ const PricingSection = () => {
     }
   }
 
+  useEffect(() => {
+    // Mengaktifkan scroll-blocking ketika modal aktif
+    document.body.style.overflow = showModal ? 'hidden' : 'auto';
+
+    // Bersihkan gaya saat komponen unmount
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showModal]);
+
   return (
     // ====== Pricing Section Start ======
     <section className="relative overflow-hidden dark:bg-slate-900 bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] px-2 md:px-20" id="payment">
@@ -140,7 +150,7 @@ const PricingSection = () => {
                 {t('pricing-desc')}
                 <br />
                 <br />
-                {t('have')} <a onClick={() => {
+                {t('have-an-order-id')} <a onClick={() => {
                   const order_id = prompt("Enter your order ID");
                   uncompletedpayment(order_id)
                 }} className="text-blue-500 underline hover:cursor-pointer">{t('click-me')}</a>
@@ -159,27 +169,26 @@ const PricingSection = () => {
                 <span>{t('free')}</span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-                {t('free-desc')}
+              {t('free-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
                 <p className="text-base text-body-color dark:text-gray-300">{t('free-feature-1')}</p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t("free-feature-2")}
+
+                  1 {t('admin-per-company')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t("free-feature-3")}
+                  2 {t('staff-per-company')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                {t("free-feature-4")}
+                  {t('maximum')} 3 {t('accounts-per-company')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                 {t("free-feature-5")}
+                  {t('maximum')} 2 {t('campaigns-per-account')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t("free-feature-6")}
-                </p>
-                <p className="text-base text-body-color dark:text-gray-300">
-                  {t('free-feature-7')}
+                  {t('maximum')} 6 {t('metrics-per-company')}
+
                 </p>
               </div>
               <a
@@ -278,29 +287,27 @@ const PricingSection = () => {
                 </span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-                {t('business-desc')}
+
+              {t('business-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t('business-feature-1')}
+                {t('1-year-trial')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t('business-feature-2')}
+                {t('unlimited-admins')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t('business-feature-3')}
+                {t('unlimited-staffs')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t('business-feature-4')}
+                {t('unlimited-accounts')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t('business-feature-5')}
+                {t('unlimited-campaigns')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t('business-feature-6')}
-                </p>
-                <p className="text-base text-body-color dark:text-gray-300">
-                  {t('business-feature-7')}
+                {t('unlimited-metrics')}
                 </p>
               </div>
               <a
@@ -451,15 +458,15 @@ const PricingSection = () => {
             {/* Modal */}
             {showModal && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="absolute inset-0 bg-black opacity-50"></div>
-                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg p-8 h-[520px]">
-                  <h2 className="text-2xl font-bold mb-4 text-black dark:text-white">Complete Your Payment</h2>
-                  <div className="w-full h-0.5 bg-gray-400 my-5"></div>
-                  <div className="text-gray-500 dark:text-gray-300">
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                      <div className="flex gap-5">
+                <div className="absolute inset-0 bg-black opacity-60"></div>
+                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8 max-w-lg w-full">
+                  <h2 className="text-3xl font-semibold mb-6 text-gray-900 dark:text-white">Complete Your Payment</h2>
+                  <div className="w-full h-1 bg-gray-300 my-4"></div>
+                  <div className="text-gray-600 dark:text-gray-300">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div className="flex gap-4">
                         <input
-                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="First Name"
                           name="first_name"
@@ -468,7 +475,7 @@ const PricingSection = () => {
                           required
                         />
                         <input
-                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="Last Name"
                           name="last_name"
@@ -478,61 +485,74 @@ const PricingSection = () => {
                         />
                       </div>
                       <input
-                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          type="email"
-                          placeholder="Input your email"
-                          name="email"
-                          required
-                          onChange={handleChange}
-                          value={formValues.email}
-                        />
+                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        type="email"
+                        placeholder="Input your email"
+                        name="email"
+                        required
+                        onChange={handleChange}
+                        value={formValues.email}
+                      />
                       <input
-                          className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          type="number"
-                          placeholder="Input phone number"
-                          name="phone_number"
-                          required
-                          onChange={handleChange}
-                          value={formValues.phone_number}
-                        />
-                        <select className="w-full px-4 py-2 border dark:bg-slate-900 dark:text-white dark:border-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue={Subscribe} disabled>
-                          <option value="1">Personal Plan (Free)</option>
-                          <option value="2">Business Plan ($199/year)</option>
-                          <option value="3">Professional Plan ($256/year)</option>
-                        </select>
-
-                        <div className="flex justify-end gap-5">
-                            <div className="flex gap-2">
-                                <input type="radio" name="method" value="midtrans" defaultChecked/>
-                                <label htmlFor="midtrans">
-                                  <img src="assets/Midtrans.png" alt="Midtrans" width={100} height={100}/>
-                                </label>
-                              </div>
-                              <div className="flex gap-2">
-                                <input type="radio" name="method" value="paypal" disabled />
-                                <label htmlFor="paypal" ><img src="assets/Paypal.png" alt="Paypal" width={90} height={90} /></label>
-                              </div>
+                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        type="tel"
+                        placeholder="Input phone number"
+                        name="phone_number"
+                        required
+                        onChange={handleChange}
+                        value={formValues.phone_number}
+                      />
+                      <select
+                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        defaultValue={Subscribe}
+                        disabled
+                      >
+                        <option value="1">Personal Plan (Free)</option>
+                        <option value="2">Business Plan ($199/year)</option>
+                        <option value="3">Professional Plan ($256/year)</option>
+                      </select>
+                      <div className="flex gap-4">
+                        <div className="flex items-center gap-2">
+                          <input type="radio" id="midtrans" name="method" value="midtrans" defaultChecked />
+                          <label htmlFor="midtrans" className="flex items-center gap-2">
+                            <img src="assets/Midtrans.png" alt="Midtrans" className="w-24 h-24 object-contain" />
+                            Midtrans
+                          </label>
                         </div>
-
-                        <div className="flex flex-col gap-2">
-                        <button
-                          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          type="submit"
-                        >
-                         {Subscribe === 1 ? 'Get (Free)' : Subscribe === 2 ? "Subscribe ($199/year)" : Subscribe === 3 ? 'Subscribe ($256/year)' : "(Select Package)"}
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <input type="radio" id="paypal" name="method" value="paypal" disabled />
+                          <label htmlFor="paypal" className="flex items-center gap-2">
+                            <img src="assets/Paypal.png" alt="Paypal" className="w-24 h-24 object-contain" />
+                            Paypal
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex justify-end gap-2">
                         <button
                           onClick={closeModal}
-                          className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
-                                >
+                          className="w-full px-5 py-2 bg-gray-500 text-white rounded-md shadow-md hover:bg-gray-600"
+                        >
                           Cancel
                         </button>
-                        </div>
+                        <button
+                          className="w-full px-5 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="submit"
+                        >
+                          {Subscribe === 1
+                            ? 'Get (Free)'
+                            : Subscribe === 2
+                            ? 'Subscribe ($199/year)'
+                            : Subscribe === 3
+                            ? 'Subscribe ($256/year)'
+                            : '(Select Package)'}
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </div>
               </div>
             )}
+
     </section>
     // ====== Pricing Section End ======
   );
