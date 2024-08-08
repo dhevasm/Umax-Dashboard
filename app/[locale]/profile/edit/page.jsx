@@ -12,6 +12,7 @@ import * as yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { Router } from 'react-router-dom';
 import Image from 'next/image';
+import { RiCameraLine } from 'react-icons/ri';
 
 const EditProfile = () => {
     const [selectTimezone, setSelectTimezone] = useState([]);
@@ -23,6 +24,8 @@ const EditProfile = () => {
     const t = useTranslations('profile');
     const [role,setRole] = useState('') 
     const roles = localStorage.getItem('roles');
+    const [imagePreview, setImagePreview] = useState('');
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async (url, setState) => {
@@ -220,6 +223,18 @@ const EditProfile = () => {
         }
     }, [router]);
 
+    function handleImageChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+                formik.setFieldValue('image', file);
+            };
+            reader.readAsDataURL(file);
+        }
+    }    
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center">
             <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-b-lg overflow-hidden">
@@ -249,9 +264,31 @@ const EditProfile = () => {
                         </label>
                         <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden">
                             {formik.values.image ? (
-                                <Image src={`data:image/png;base64, ${profileData.image}`} className="object-cover w-full h-full" width={128} height={128} alt="Profile" />
+                                <div className='w-full h-full flex justify-end items-end'>
+                                    <div className='absolute w-8 h-8 rounded-full bg-blue-700'>
+                                        <label htmlFor='image-upload' className='w-full h-full flex justify-center items-center hover:cursor-pointer'>
+                                            <RiCameraLine className='text-white' />
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="image-upload"
+                                            ref={fileInputRef}
+                                            onChange={handleImageChange}
+                                            className="hidden"
+                                            accept="image/*"
+                                        />
+                                    </div>
+                                    <Image src={imagePreview ? imagePreview : `data:image/png;base64, ${profileData.image}`} className="object-cover w-full h-full" width={128} height={128} alt="Profile" />
+                                </div>
                             ) : (
-                                <Image src={'/assets/defaultProfil.jpg'} width={128} height={128} alt='Profile'/>
+                                <div className='w-full h-full flex justify-end items-end'>
+                                    <div className='absolute w-8 h-8 rounded-full bg-blue-700 hover:cursor-pointer'>
+                                        <label className='w-full h-full flex justify-center items-center'>
+                                            <RiCameraLine className='text-white' />
+                                        </label>
+                                    </div>
+                                    <Image src={'/assets/defaultProfil.jpg'} width={128} height={128} alt='Profile'/>
+                                </div>
                             )}
                         </div>
                         <h1 className="mt-4 text-white text-2xl font-semibold">{formik.values.name}</h1>
@@ -260,19 +297,6 @@ const EditProfile = () => {
                 </div>
                 <form onSubmit={formik.handleSubmit} className="p-6 dark:text-gray-200">
                     <ProfileSection title={t('edit-personal-information')} display={true}>
-                        {/* <ProfileItem
-                            icon="image"
-                            label="Profile Picture"
-                            element={
-                                <input
-                                    type="file"
-                                    className="border w-full p-2 rounded-lg dark:bg-gray-700"
-                                    onChange={(event) => formik.setFieldValue("image", event.currentTarget.files[0])}
-                                    name="image"
-                                />
-                            }
-                            error={formik.errors.image}
-                        /> */}
                         <ProfileItem
                             icon="user"
                             label={formik.errors.name ? (

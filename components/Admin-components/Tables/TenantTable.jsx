@@ -9,24 +9,22 @@ import jsPDF from "jspdf"
 import 'jspdf-autotable'
 import { IconContext } from "react-icons"
 import { AiOutlineFilePdf } from "react-icons/ai"
-import { FaArrowLeft, FaArrowRight, FaFileExcel, FaTable } from "react-icons/fa"
-import { FaPlus } from "react-icons/fa"
-import { FaPen } from "react-icons/fa"
+import { FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
-import { FaEye } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
-import { Switch } from "@material-tailwind/react"
 import { RiBuildingLine, RiFileExcel2Line } from "react-icons/ri"
-import CountCard from "../CountCard"
-import { BiPlug, BiPlus } from "react-icons/bi"
+import { BiPlus } from "react-icons/bi"
+import { useTranslations } from "next-intl"
 export default function TenantTable() {
 
     const [tenants, setTenants] = useState([])
     const [tenantMemo, setTenantMemo] = useState([])
     const [EditTenantId, setEditTenantId] = useState(null)
     const [searchTerm, setSearchTerm] = useState("");
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [dataPerPage, setDataPerPage] = useState(10);
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
+    const [isLoading, setIsLoading] = useState(false)
 
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
@@ -39,6 +37,7 @@ export default function TenantTable() {
     const [City, setCity] = useState([])
     const [alldial, setDial] = useState([])
     const [DialCountry, setDialCountry] = useState([])
+    const t = useTranslations('admin-tenants')
 
     const [values, setValues] = useState({name: '', address: '', contact: '', email: '', language:'', culture:'', timezone:'', currency:'', country:'', city:''})
     const [error, setError] = useState({
@@ -111,37 +110,37 @@ export default function TenantTable() {
     const validateForm = useCallback(() => {
         let errors = {}
         if(values.name == ""){
-            errors.name = 'Name is required'
+            errors.name = t('name-error')
         }
         if(values.address == ""){
-            errors.address = 'Address is required'
+            errors.address = t('address-error')
         }
         if(values.contact == ""){
-            errors.contact = 'Contact is required'
+            errors.contact = t('contact-error')
         }
         if(values.email == ""){
-            errors.email = 'Email is required'
+            errors.email = t('email-error')
         }
         if(!values.email.includes("@")){
-            errors.email = "Email must contain @"
+            errors.email = t('email-error2')
         }
         if(values.language == ""){
-            errors.language = "Language is required"
+            errors.language = t('language-error')
         }
         if(values.culture == ""){
-            errors.culture = "Culture is required"
+            errors.culture = t('culture-error')
         }
         if(values.timezone == ""){
-            errors.timezone = "Timezone is required"
+            errors.timezone = t('timezone-error')
         }
         if(values.currency == ""){
-            errors.currency = "Currency is required"
+            errors.currency = t('currency-error')
         }
         if(values.country == ""){
-            errors.country = "Country is required"
+            errors.country = t('country-error')
         }
         if(values.city == ""){
-            errors.city == "City is required"
+            errors.city == +t('city-error')
         }
         setError(errors)
         setIsvalid(Object.keys(errors).length === 0)
@@ -268,6 +267,7 @@ export default function TenantTable() {
     }
 
     async function getTenants(){
+        setIsLoading(true)
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -275,14 +275,12 @@ export default function TenantTable() {
         })
         setTenants(response.data.Data)
         setTenantMemo(response.data.Data)
-        setTotalPages(Math.ceil(tenants.length / itemsPerPage));
-        setFirstPage(0);
-        setLastPage(itemsPerPage);
+        setIsLoading(false)
     }
 
     useEffect(() => {
         getTenants()
-    })
+    }, [])
 
     async function createTenant(){
         if(isvalid){
@@ -420,8 +418,6 @@ export default function TenantTable() {
         await axios.get("https://countriesnow.space/api/v0.1/countries/codes").then((response) => {
             setDial(response.data.data)
         })
-
-
     }
 
     async function handleCityList(countryname){
@@ -451,77 +447,6 @@ export default function TenantTable() {
         getSelectFrontend()
     }, [])
 
-
-    // Pagination
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [totalPages, setTotalPages] = useState(0);
-    const [firstPage, setFirstPage] = useState(0);
-    const [lastPage, setLastPage] = useState(10);
-
-    useEffect(() => {
-        setCurrentPage(1);
-        setTotalPages(Math.ceil(tenants.length / itemsPerPage));
-        setFirstPage(0);
-        setLastPage(itemsPerPage);
-    }, [tenants, itemsPerPage]);
-
-    const firstPageButton = useRef(null);
-    const previousButton = useRef(null);
-    const nextButton = useRef(null);
-    const lastPageButton = useRef(null);
-
-    useEffect(() => {
-        setFirstPage((currentPage - 1) * itemsPerPage);
-        setLastPage(currentPage * itemsPerPage);
-        if(currentPage == 1){
-            firstPageButton.current.classList.add("paginDisable");
-            previousButton.current.classList.add("paginDisable");
-            nextButton.current.classList.remove("paginDisable");
-            lastPageButton.current.classList.remove("paginDisable");
-        }else if(currentPage == totalPages){
-            nextButton.current.classList.add("paginDisable");
-            lastPageButton.current.classList.add("paginDisable");
-            firstPageButton.current.classList.remove("paginDisable");
-            previousButton.current.classList.remove("paginDisable");
-        }else if(currentPage == 1 && currentPage == totalPages){
-            firstPageButton.current.classList.add("paginDisable");
-            previousButton.current.classList.add("paginDisable");
-            nextButton.current.classList.add("paginDisable");
-            lastPageButton.current.classList.add("paginDisable");
-        }else{
-            firstPageButton.current.classList.remove("paginDisable");
-            previousButton.current.classList.remove("paginDisable");
-            nextButton.current.classList.remove("paginDisable");
-            lastPageButton.current.classList.remove("paginDisable");
-        }
-    }, [currentPage, itemsPerPage, totalPages]);
-
-    function handleNextButton(){
-        if(currentPage < totalPages){
-            setCurrentPage(currentPage + 1);
-        }
-    }
-
-    function handlePreviousButton(){
-        if(currentPage > 1){
-            setCurrentPage(currentPage - 1);
-        }
-    }
-
-    function handleFristPageButton(){
-        if(currentPage > 1){
-            setCurrentPage(1);
-        }
-    }
-
-    function handleLastPageButton(){
-        if(currentPage < totalPages){
-            setCurrentPage(totalPages);
-        }
-    }
-
     function LoadingCircle() {
         return (
           <div className="flex justify-center items-center h-20">
@@ -534,6 +459,7 @@ export default function TenantTable() {
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+        setCurrentPage(1);
     };
 
     const filteredData = tenants.filter((data) => {
@@ -543,14 +469,98 @@ export default function TenantTable() {
         );
     });
 
+    // Calculate total number of pages
+    const totalPages = Math.ceil(filteredData.length / dataPerPage);
 
+    // Function to change current page
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
+    const renderPagination = () => {
+        const pageButtons = [];
+        const maxButtons = 3; // Maximum number of buttons to show
+    
+        // First page button
+        pageButtons.push(
+            <button
+                key="first"
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
+                    currentPage === 1 ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(1)}
+                disabled={currentPage === 1}
+            >
+                {'<<'}
+            </button>
+        );
+    
+        // Previous page button
+        pageButtons.push(
+            <button
+                key="prev"
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
+                    currentPage === 1 ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+            >
+                {'<'}
+            </button>
+        );
+    
+        // Info page
+        pageButtons.push(
+            <span key="info" className="px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white rounded-md">
+                {`${t('page')} ${currentPage} / ${totalPages}`}
+            </span>
+        );
+    
+        // Next page button
+        pageButtons.push(
+            <button
+                key="next"
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
+                    currentPage === totalPages ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+            >
+                {'>'}
+            </button>
+        );
+    
+        // Last page button
+        pageButtons.push(
+            <button
+                key="last"
+                className={`px-1 sm:px-3 md:px-3 lg:px-3 xl:px-3 py-1 dark:text-white ${
+                    currentPage === totalPages ? "cursor-not-allowed" : ""
+                } rounded-md`}
+                onClick={() => goToPage(totalPages)}
+                disabled={currentPage === totalPages}
+            >
+                {'>>'}
+            </button>
+        );
+    
+        return (
+            <div className="flex justify-center gap-2 mt-4">
+                {pageButtons}
+            </div>
+        );
+    };
+       
+    const indexOfLasttenant = currentPage * dataPerPage;
+    const indexOfFirsttenant = indexOfLasttenant - dataPerPage;
+    const currenttenants = filteredData.slice(indexOfFirsttenant, indexOfLasttenant);
 
     return (
         <>
             <div className="w-full">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-                    <h1 className="text-3xl font-bold uppercase dark:text-white flex gap-2"><RiBuildingLine size={35}/> Tenants</h1>
-                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>Dashboard</a>  / Tenants</p>
+                    <h1 className="text-3xl font-bold uppercase dark:text-white flex gap-2"><RiBuildingLine size={35}/> {t('title')}</h1>
+                    <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a>  / {t('tenants')}</p>
                 </div>
 
                 {/* {'Statistic Card end'} */}
@@ -566,7 +576,7 @@ export default function TenantTable() {
 
                     {/* Body */}
                     <div className="w-full h-fit bg-white dark:bg-slate-800 dark:text-white rounded-b-md p-4">
-                        <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
+                        <div className=" flex flex-col-reverse sm:flex-row md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
                                 <button className=" py-2 mb-4 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
@@ -591,7 +601,7 @@ export default function TenantTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className="dark:bg-slate-800 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search" 
+                                    <input type="text" id="search" name="search" className="dark:bg-slate-800 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')}
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     />
@@ -607,80 +617,49 @@ export default function TenantTable() {
                             <table className="w-full text-sm text-left" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Name</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Client</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Account</th>
-                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('company')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('address')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('email')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('contact')}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-slate-800">
-                                    {
-                                        filteredData.length > 0 ? filteredData.map((tenant, index) => {
-                                            return (
-                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
-                                                    <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap underline"  onClick={() => showModal("Edit", tenant._id)}>{tenant.company}</td>
-                                                    <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">{tenant.address}</td>
-                                                    <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">
-                                                        <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
-                                                    </td>
-                                                    <td scope="row" className="px-6 py-3 font-medium  whitespace-nowrap">
-                                                        <a className="text-blue-500" href={`https://wa.me/${tenant.contact.slice(1)}`} target="_blank">{String(tenant.contact)}</a>
-                                                    </td>
-                                                </tr>
-                                            )
-                                    }).slice(firstPage, lastPage) : (
-                                        // Check user yang sudah difilter
-                                        tenants.length > 0 ? (
-                                            // Jika data tida ditemukan
-                                            <tr className="text-center border dark:border-gray-500">
-                                                <td colSpan={8} className=" py-4">
-                                                    Data not found
-                                                </td>
-                                            </tr>
-                                        ) :
-                                        (
-                                            // Jika data ditemukan tapi masih loading
-                                            <tr className="text-center py-3 border dark:border-gray-500">
-                                                <td colSpan={8}>
-                                                    <LoadingCircle />
-                                                </td>
-                                            </tr>
-                                        )
-                                    )
-                                    }
+                                    {isLoading ? (
+                                        <tr className="text-center py-3 border dark:border-gray-500">
+                                            <td colSpan={8}>
+                                                <LoadingCircle />
+                                            </td>
+                                        </tr>
+                                    ) : currenttenants.length > 0 ? (
+                                            currenttenants.map((tenant, index) => {
+                                                return (
+                                                    <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap underline"  onClick={() => showModal("Edit", tenant._id)}>{tenant.company}</td>
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">{tenant.address}</td>
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">
+                                                            <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
+                                                        </td>
+                                                        <td scope="row" className="px-6 py-3 font-medium  whitespace-nowrap">
+                                                            <a className="text-blue-500" href={`https://wa.me/${tenant.contact.slice(1)}`} target="_blank">{String(tenant.contact)}</a>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                    ) : (
+                                        // Jika data tida ditemukan
+                                        <tr className="text-center border dark:border-gray-500">
+                                            <td colSpan={8} className=" py-4">
+                                                {t('not-found')}
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
 
-                        {/* Pagin */}
-                        <style jsx>
-                            {
-                                `
-                                    .paginDisable{
-                                        opacity:0.5;
-                                    }
-                                `
-                            }
-
-                        </style>
-                        <div className="w-full flex justify-between items-center mb-4">
-                            <div className="mt-5 flex  gap-3 items-center w-full justify-end">
-                                <button className=" hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleFristPageButton} ref={firstPageButton}>
-                                    {"<<"}
-                                </button>
-                                <button className=" hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handlePreviousButton} ref={previousButton}>
-                                    {"<"}   
-                                </button>
-                                <div>
-                                    <p>Page {currentPage} / {totalPages}</p>
-                                </div>
-                                <button className=" hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleNextButton} ref={nextButton}>
-                                    {">"}
-                                </button>
-                                <button className=" hover:bg-gray-100 border py-1.5 px-3 rounded inline-flex items-center" onClick={handleLastPageButton} ref={lastPageButton}>
-                                {">>"}
-                                </button>
-                            </div>
+                        {/* Pagin start */}
+                        <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
+                            {renderPagination()}
                         </div>
                         {/* Pagin end */}
                     </div>
@@ -697,7 +676,7 @@ export default function TenantTable() {
                         {/* <!-- Modal header --> */}
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white ">
                             <h3 className="text-xl font-semibold">
-                                {`${modeModal} Tenant`}
+                                {`${modeModal} ${'tenants'}`}
                             </h3>
                             
                             <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
@@ -707,11 +686,11 @@ export default function TenantTable() {
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5 bg-white dark:bg-slate-900 dark:text-white" >
                             <div className="flex justify-between items-center">
-                            <div className="text-xl font-semibold text-blue-500">General</div>
+                            <div className="text-xl font-semibold text-blue-500">{t('general')}</div>
 
                             <div className="flex gap-2 items-center">
                             {
-                                modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>Save Change</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded" onClick={createTenant}>Add Tenant</button>
+                                modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>{t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded" onClick={createTenant}>{t('submit')}</button>
                             }
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1.5 px-4 rounded" ref={deleteButton} onClick={() => handleDelete(EditTenantId)}>
                                 <FaTrash className="text-xl"/>
@@ -726,11 +705,11 @@ export default function TenantTable() {
                        
                             <div className="grid gap-4 mb-4 grid-cols-2 pb-20 md:pb-3">
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="name" className="mb-2 text-sm font-medium  flex">Company Name {
+                                    <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('company-name')} {
                                         error.name && <p className="text-red-500 text-sm">*</p>
                                     }
                                     </label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
                                     required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                     
                                 {
@@ -738,10 +717,10 @@ export default function TenantTable() {
                                 }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="address" className="mb-2 text-sm font-medium  flex">Company Address {
+                                    <label htmlFor="address" className="mb-2 text-sm font-medium  flex">{t('company-address')} {
                                         error.address && <p className="text-red-500 text-sm">*</p>
                                     }</label>
-                                    <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type company address here"
+                                    <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-address')}
                                     required onChange={(e) => setValues({...values, address: e.target.value})}/>
                                      {
                                     error.address && <p className="text-red-500 text-xs">{error.address}</p>
@@ -749,11 +728,11 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="country" className="flex mb-2 text-sm font-medium ">Country {
+                                    <label htmlFor="country" className="flex mb-2 text-sm font-medium ">{t('country')} {
                                             error.country && <p className="text-red-500 text-sm">*</p>
                                     }</label>
                                     <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => handleCityList(e.target.value)}  >
-                                        <option value="" disabled hidden>Select Country</option>
+                                        <option value="" disabled hidden>{t('select-country')}</option>
                                         {
                                             Country.length > 0 ? Country.map((item, index) => (
                                                 <option key={index} value={item.country}>{item.country}</option>
@@ -766,13 +745,13 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="city" className="block mb-2 text-sm font-medium ">City {
+                                    <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')} {
                                         error.city && <p className="text-red-500 text-sm">*</p>}</label>
                                     <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, city: e.target.value})}>
                                         {
                                             City.length > 0 ? City.map((item, index) => (
                                                 <option key={index} value={item}>{item}</option>
-                                            )) : <option  value="" hidden disabled>Please Select Country</option>
+                                            )) : <option  value="" hidden disabled>{t('city-error2')}</option>
                                         }
                                     </select>
                                     {
@@ -781,20 +760,20 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">Email{
+                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">{t('email')} {
                                         error.email && <p className="text-red-500 text-sm">*</p>
                                     }</label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="example@gmail.com" required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                     {
                                     error.email && <p className="text-red-500 text-xs">{error.email}</p>
                                 }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">Contact {
+                                    <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">{t('contact')} {
                                         error.contact && <p className="text-red-500 text-sm">*</p>
                                     }</label>
-                                    <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="+62427836778" required onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                    <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-contact')} required onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                     {
                                     error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
                                 }
@@ -803,16 +782,16 @@ export default function TenantTable() {
                                 <div className="
                                 col-span-2">
                                     <div className="flex justify-between items-center">
-                                    <div className="text-xl font-semibold text-blue-500 ">Format</div>
+                                    <div className="text-xl font-semibold text-blue-500 ">{t('format')}</div>
                                     <div className="flex items-center gap-1 me-1">
                                     <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
 
-                                    <span className="text-sm font-medium ">Currency position :</span>
+                                    <span className="text-sm font-medium ">{t('currency-position')} :</span>
                                     <div className="flex flex-row gap-2 ">
                                         <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
-                                        <div className="text-sm font-medium">right(-$)</div>
+                                        <div className="text-sm font-medium">{t('right')}(-$)</div>
                                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                        <div className="text-sm font-medium">left($-)</div>
+                                        <div className="text-sm font-medium">{t('left')}($-)</div>
                                         {
                                     error.currency_position && <p className="text-red-500 text-xs">{error.currency_position}</p>
                                 }

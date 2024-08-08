@@ -361,7 +361,7 @@ const CampaignTable = () => {
 
         // Info page
         pageButtons.push(
-            <span key="info" className="px-3 py-1 dark:text-white rounded-md">
+            <span key="info" className="px-3 py-1 dark:text-white rounded-md text-nowrap">
                 {`${t('page')} ${currentPage} / ${totalPages}`}
             </span>
         );
@@ -403,8 +403,8 @@ const CampaignTable = () => {
                 <h1>{t('title')}</h1>
                 </div>
                 <div className={`bg-white dark:bg-gray-800 ${modalIsOpen ? 'overflow-hidden' : ''} border border-gray-300 dark:border-gray-700 rounded-lg p-5`} style={{ width: "100%" }}>
-                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col"}`}>
-                    <div className={`mb-4 flex flex-row items-start gap-4`}>
+                <div className={`flex ${isWideScreen ? "flex-row" : "flex-col-reverse"}`}>
+                    <div className={`mb-4 flex flex-row items-start ${isWideScreen ? "gap-4" : "gap-2"}`}>
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-700 rounded-lg px-2 text-[15px] text-semibold py-2 dark:bg-gray-700 dark:text-gray-200`}
                             type="text"
@@ -433,7 +433,7 @@ const CampaignTable = () => {
                             <option value="3">Consideration</option>
                         </select>
                     </div>
-                    <div className="w-full flex gap-3 justify-end pb-5">
+                    <div className={`w-full flex ${isWideScreen ? "gap-3" : "gap-2"} justify-end pb-5`}>
                         <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}

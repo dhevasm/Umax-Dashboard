@@ -32,31 +32,6 @@ function Dashboard() {
     const [SidebarHide, setSidebarHide] = useState(false)
     const t = useTranslations('dashboard');
 
-    useEffect(() => {
-      const handleResize = () => {
-        // setWidth(window.innerWidth);
-        if (window.innerWidth > 1420) {
-          if (SidebarHide) {
-            Card.current.classList.add('w-full');
-          } else {
-            Card.current.classList.remove('w-full');
-          }
-        } else {
-          Card.current.classList.add('w-full');
-        }
-      };
-  
-      // Initial call and event listener setup
-      handleResize();
-      window.addEventListener('resize', handleResize);
-  
-      // Cleanup on component unmount
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, [SidebarHide]);
-    // expnase card end
-
     const handleCampaignIDChange = (id, name, platform) => {
         setCampaignID(id);
         setName(name);
@@ -89,12 +64,12 @@ function Dashboard() {
         <>
         {/* Header */}
         <Navbar />
-        <Sidebar onCampaignIDChange={handleCampaignIDChange} sidebarHide={SidebarHide} setSidebarHide={setSidebarHide}/>
 
         {/* Dashboard Container */}
-        <div className="flex w-full min-h-full justify-end items-center bg-gray-100 dark:bg-slate-900">
+        <div className="flex w-full min-h-full justify-end start bg-gray-100 dark:bg-slate-900">
+        <Sidebar onCampaignIDChange={handleCampaignIDChange} sidebarHide={SidebarHide} setSidebarHide={setSidebarHide}/>
         {/* Dashboard Card */}
-            <div className="w-[75%] min-h-screen bg-white dark:bg-slate-800 rounded-xl mt-[100px] md:me-3 md:ms-5 text-black dark:text-white transition-transform" ref={Card}>
+            <div className={`${SidebarHide ? 'w-full' : 'w-full sm:w-full md:w-full lg:w-full xl:w-[calc(100%-378px)] 2xl:w-[calc(100%-378px)]'} min-h-screen bg-white dark:bg-slate-800 rounded-xl mt-[100px] md:me-3 md:ms-5 text-black dark:text-white transition-transform`} ref={Card}>
                 {/* header */}
                 <div className="m-10">
                 {campaignID === '' ? (
@@ -107,7 +82,7 @@ function Dashboard() {
                 )}
 
                 {/* Dashboard Nav Link */}
-                  <div className="md:flex hidden gap-7 mt-5 border-b-2 border-gray-300 dark:border-slate-600">
+                  <div className="lg:flex hidden gap-7 mt-5 border-b-2 border-gray-300 dark:border-slate-600">
                       <style jsx>
                       {`
                           .dashboardActive {
