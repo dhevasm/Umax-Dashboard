@@ -50,7 +50,8 @@ export default function AdminSidebar() {
                 localStorage.removeItem('roles');
                 localStorage.removeItem('name');
                 localStorage.removeItem('lang');
-                Router.push(`/en/login`)
+                Router.push(`/en/login`);
+
             }
         });
     };
@@ -66,7 +67,7 @@ export default function AdminSidebar() {
             key: 'analytics',
             icon: <FaChartLine size={13} />,
             text: t('analytics'),
-            link: `/${localStorage.getItem("lang")}/dashboard`
+            link: `/${localStorage.getItem("lang")}/dashboard`,
         },
         userData.roles === "admin" && {
             key: 'tenant-profile',
@@ -108,7 +109,7 @@ export default function AdminSidebar() {
             key: 'profile',
             icon: <RiProfileFill />,
             text: t('profile'),
-            link: `/${localStorage.getItem("lang")}/profile`
+            link: `/${localStorage.getItem("lang")}/profile`,
         },
         {
             key: 'logout',

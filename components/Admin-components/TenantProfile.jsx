@@ -404,7 +404,7 @@ export default function TenantProfile({tenant_id}){
                 {/* <!-- Modal content --> */}
                 <div className="relative bg-white rounded-lg shadow max-h-[100vh] overflow-auto">
                     {/* <!-- Modal header --> */}
-                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3d50e0] dark:bg-slate-800 text-white ">
+                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3d50e0] dark:bg-slate-800 text-white">
                         <h3 className="text-xl font-semibold">
                             {`${modeModal} ${t('tenant')}`}
                         </h3>
@@ -543,15 +543,15 @@ export default function TenantProfile({tenant_id}){
                                     }
                                 </select>
                             </div>
-                            <div className="col-span-2 md:col-span-1">
+                            <div className="col-span-2 md:col-span-1 pb-20 md:pb-2">
                                 <label htmlFor="currency" className="block mb-2 text-sm font-medium ">{t('currency')}</label>
                                 <select id="currency" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Currency</option>
                                 {
-                                        currency.length > 0 ? currency.map((item, index) => (
-                                            <option key={index} value={item.currency.split(" ")[0]}>{item.currency}</option>
-                                        )) : <option disabled>Loading</option>
-                                    }
+                                    currency.length > 0 ? currency.map((item, index) => (
+                                        <option key={index} value={item.currency.split(" ")[0]}>{item.currency}</option>
+                                    )) : <option disabled>Loading</option>
+                                }
                                 </select>
                                 </div>
                             </div>

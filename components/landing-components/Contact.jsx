@@ -14,33 +14,97 @@ const Contact = () => {
 
     const formik = useFormik({
         initialValues: {
-            name: '',
             email: '',
+            to: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
+            name: '',
             phonenumber: '',
-            message: '',
+            message: ''
         },
         onSubmit: async (values) => {
             setLoading(true);
-            // Validasi form
-            if (!values.name || !values.email || !values.phonenumber || !values.message) {
-                setLoading(false);
-                return Swal.fire('Error', t('please-fill'), 'error');
-            }
+            const formData = new FormData();
+            formData.append('from', values.email);
+            formData.append('to', values.to);
+            formData.append('body', `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .email-container {
+                            max-width: 600px;
+                            margin: 20px auto;
+                            background-color: #ffffff;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            border-radius: 10px;
+                            overflow: hidden;
+                        }
+                        .email-header {
+                            background-color: #0073e6;
+                            padding: 5px;
+                            text-align: center;
+                        }
+                        .email-header img {
+                            max-width: 150px;
+                        }
+                        .email-body {
+                            padding: 20px;
+                        }
+                        .email-body h2 {
+                            color: #333333;
+                            margin-top: 0;
+                        }
+                        .email-body p {
+                            color: #555555;
+                            line-height: 1.6;
+                        }
+                        .email-footer {
+                            background-color: #f1f1f1;
+                            padding: 10px;
+                            text-align: center;
+                            color: #777777;
+                            font-size: 12px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-container">
+                        <div class="email-header">
+                            <h1 style="font-weight: bold; color: white;">UMAX Dashboard</h1>
+                        </div>
+                        <div class="email-body">
+                            <h2>Pesan Baru dari Formulir Kontak</h2>
+                            <p><strong>Email Pengirim:</strong> ${values.email}</p>
+                            <p><strong>Nama Pengirim:</strong> ${values.name}</p>
+                            <p><strong>Nomor HP Pengirim:</strong> ${values.phonenumber}</p>
+                            <p><strong>Pesan:</strong> ${values.message}</p>
+                        </div>
+                        <div class="email-footer">
+                            &copy; 2024 Umax Team. All rights reserved.
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
     
             try {
-                // Mengirim permintaan menggunakan axios
-                await axios.get(`/en/api/send?from=${values.email}&name=${values.name}&phonenumber=${values.phonenumber}&message=${values.message}`, {
-                    params: {
-                        from: values.email,
-                        name: values.name,
-                        phonenumber: values.phonenumber,
-                        message: values.message,
-                    },
+                await axios.post('/en/api/send', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 });
+    
                 // Mengatur ulang formulir jika pengiriman berhasil
                 formik.resetForm();
                 setLoading(false);
-                Swal.fire('Success', t('success'), 'success')
+                Swal.fire('Success', t('success'), 'success');
             } catch (error) {
                 console.error(error);
                 setLoading(false);

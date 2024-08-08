@@ -281,6 +281,41 @@ export default function Navbar() {
                                 </span>
                                 {t("client")}
                             </li>
+                            {roles !== "client" && (
+                                <li
+                                    className={`font-semibold flex gap-1 items-center ${
+                                        activeLink.slice(3) === "/clients" ? "active-link" : ""
+                                    }`}
+                                    onClick={() => handleClick("/clients")}
+                                >
+                                    <span>
+                                        <BiGroup size={20} />
+                                    </span>
+                                    {t("client")}
+                                </li>
+                            )}
+                        </ul>
+                    </div>
+
+                    {/* Profile */}
+                    <div className="flex gap-2 items-center">
+                        <label htmlFor="theme" className="items-center cursor-pointer hidden md:inline-flex" hidden={roles == 'client'}>
+                            {
+                                isDark ? <FaMoon className="text-lg text-white me-2"/> : <FaSun className="text-xl text-blue-500 me-2"/>
+                            }
+                            <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
+                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            </div>
+                        </label>
+                        {roles === 'client' && (
+                            activeLink.includes("id") ? 
+                                <button onClick={() => changeLanguage('en')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                    {'ID'}
+                                </button>
+                            : 
+                                <button onClick={() => changeLanguage('id')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                    {'EN'}
+                                </button>
                         )}
                     </ul>
                 </div>

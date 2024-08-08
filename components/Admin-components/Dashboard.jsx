@@ -23,9 +23,8 @@ import { LiaSpinnerSolid } from "react-icons/lia"
 
 
 export default function Dashboard({ tenant_id }) {
-
     const t = useTranslations("admin-dashboard")
-    const { sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard, tenantsCount } = useContext(AdminDashboardContext)
+    const { sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData} = useContext(AdminDashboardContext)
     const [campaigns, setCampaigns] = useState([])
     const [filter, setFilter] = useState("reach")
     const [chartData, setChartData] = useState([])
@@ -101,6 +100,7 @@ export default function Dashboard({ tenant_id }) {
 
     useEffect(() => {
     getChartData()
+    getCount()
     }, [])
 
     const handleReject = (request_id) => {
@@ -285,16 +285,45 @@ export default function Dashboard({ tenant_id }) {
           });
     }
 
+    const [userCount, setUserCount] = useState(0)
+    const [clientCount, setClientCount] = useState(0)
+    const [campaignCount, setCampaignCount] = useState(0)
+    const [tenantCount, setTenantCount] = useState(0)
+    const [loadingCount, setLoadingCount] = useState(false)
+    
+    async function getCount() {
+        try{
+            setLoadingCount(true)
+            axios.get(`${process.env.NEXT_PUBLIC_API_URL}/count-card`, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                },
+            }).then((response) => {
+                if(!response.IsError){
+                    setLoadingCount(false)
+                    const data = response.data.Output
+                    // console.log(data)
+                    setUserCount(data["total_user"])
+                    setClientCount(data["total_client"])
+                    setCampaignCount(data["total_campaign"])
+                    setTenantCount(data["total_tenant"])
+                }
+            })
+        } catch(error){
+            console.error(error)
+        }
+    }
+    
     return (
         <>
             <div className="w-full h-full flex flex-wrap gap-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
                     {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
-                        userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={tenantsCount ? tenantsCount : <div className="text-md animate-pulse">Loading...</div>} handleClick={"tenants"} /> :
+                        userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={loadingCount ? "Loading..." : tenantCount} handleClick={"tenants"} /> :
                             <CountCard title={t('tenants')} value={<div className="text-md animate-pulse">Loading...</div>} />}
-                            <CountCard title={t('users')} value={dataDashboard.users} handleClick={"users"} />
-                            <CountCard title={t('campaigns')} value={dataDashboard.campaigns } handleClick={"campaigns"} />
-                            <CountCard title={t('clients')} value={dataDashboard.clients } handleClick={"clients"} />
+                            <CountCard title={t('users')} value={loadingCount ? "Loading..." : userCount} handleClick={"users"} />
+                            <CountCard title={t('campaigns')} value={loadingCount ? "Loading..." : campaignCount} handleClick={"campaigns"} />
+                            <CountCard title={t('clients')} value={loadingCount ? "Loading..." : clientCount} handleClick={"clients"} />
                 </div>  
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
                     <div className="w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
@@ -432,7 +461,9 @@ export default function Dashboard({ tenant_id }) {
                                             </th>
                                             <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">
                                                 <span className={``}>
+
                                                     {"Company's Email"}
+
                                                 </span>
                                             </th>
                                             <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">

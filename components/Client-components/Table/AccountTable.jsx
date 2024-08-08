@@ -507,6 +507,9 @@ const AccountTable = () => {
                             }
                         </tbody>
                     </table>
+                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
+                        {renderPagination()}
+                    </div>
 
                     <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
                         {renderPagination()}

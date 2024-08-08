@@ -28,7 +28,7 @@ const Hero = () => {
                   </a>
                 </li>
                 <li>
-                  <a
+                  {/* <a
                     href=""
                     className="inline-flex items-center justify-center py-3 px-5 text-center text-base font-medium text-[#464646] dark:text-white hover:text-primary"
                   >
@@ -62,10 +62,10 @@ const Hero = () => {
                       </svg>
                     </span>
                    {t("download_button")}
-                  </a>
+                  </a> */}
                 </li>
               </ul>
-              <div className="pt-16 clients">
+              {/* <div className="pt-16 clients">
                 <h6 className="flex items-center mb-2 text-xs font-normal dark:text-white">
                   Used by Thriving Brands
                   <span className="ml-2 inline-block h-[1px] w-8 bg-body-color"></span>
@@ -96,7 +96,7 @@ const Hero = () => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="hidden px-4 lg:block lg:w-1/12"></div>

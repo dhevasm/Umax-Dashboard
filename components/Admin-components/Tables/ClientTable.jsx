@@ -818,7 +818,7 @@ export default function ClientTable() {
                                     <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                 </div>
 
-                                <div className="flex justify-between items-end">
+                                <div className="flex justify-between items-end pb-20 md:pb-2">
                                 <div>
                                     <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                     <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>

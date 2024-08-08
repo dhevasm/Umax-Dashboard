@@ -22,9 +22,6 @@ function AdminDashboard() {
     const router = useRouter()
     const [userData, setUserData] = useState([])
     const [tenantsCount, setTenantsCount] = useState("")
-    const [usersCount, setUsersCount] = useState("")
-    const [campaignsCount, setCampaignsCount] = useState("")
-    const [clientCount, setClientCount] = useState("")
     const [isDarkMode, setIsDarkMode] = useState(true)
     const [navbarBrandHide, setNavbarBrandHide] = useState(false)
     const [sidebarHide, setSidebarHide] = useState(false)
@@ -34,7 +31,7 @@ function AdminDashboard() {
         users: "",
         campaigns: "",
         clients: ""
-    })
+    }) 
     const [changeTable, setChangeTable] = useState("dashboard")
 
     useEffect(() => {
@@ -78,42 +75,6 @@ function AdminDashboard() {
         setUserData(response.data.Data[0])
     }, [])
 
-    const getUserCampaignCount = useCallback(async () => {
-        setUsersCount("Loading...")
-        setCampaignsCount("Loading...")
-        setClientCount("Loading...")
-        const getUsers = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-tenant`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-        if(getUsers.data.Data.length > 0){
-            setUsersCount(getUsers.data.Data.length)
-        }else{
-            setUsersCount(0)
-        }
-        const getCampaigns = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign-by-tenant`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-        if(getCampaigns.data.Data.length > 0){
-            setCampaignsCount(getCampaigns.data.Data.length)
-        }else{
-            setCampaignsCount(0)
-        }
-        const getClient = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-by-tenant`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-        if(getClient.data.Data.length > 0){
-            setClientCount(getClient.data.Data.length)
-        }else{
-            setClientCount(0)
-        }
-    }, [])
-
     useEffect(() => {
         if (userData.roles === 'sadmin') {
             const fetchTenantsCount = async () => {
@@ -130,31 +91,15 @@ function AdminDashboard() {
 
     useEffect(() => {
         getUserData()
-        getUserCampaignCount()
-    }, [getUserData, getUserCampaignCount])
-
-    useEffect(() => {
-
-        setDataDashboard({
-            tenants: tenantsCount,
-            users: usersCount,
-            campaigns: campaignsCount,
-            clients: clientCount
-        })
-    }, [clientCount, tenantsCount, campaignsCount, usersCount])
-
-    // useEffect(() => {
-    //     console.log(tenantsCount)
-    // }, [tenantsCount])
+    }, [getUserData])
 
     const MainCard = useRef(null)
 
     useEffect(() => {
         if (typeof window !== "undefined" && updateCard) {
-            getUserCampaignCount()
             setUpdateCard(false)
         }
-    }, [updateCard, getUserCampaignCount])
+    }, [updateCard])
 
     useEffect(() => {
         if (typeof window !== "undefined") {

@@ -95,8 +95,8 @@ const Navbar = () => {
   return (
     <div>
       <header className="top-0 left-0 z-50 w-full fixed bg-white dark:bg-slate-900 bg-opacity-80 shadow-sm backdrop-blur-sm">
-        <div className="container px-20">
-          <div className="relative flex items-center justify-between -mx-4">
+        <div className="w-full">
+          <div className="relative flex items-center justify-between">
             <div className="max-w-full px-4 w-60">
               <a href="" className="block w-full py-5 ms-5">
               <Image
@@ -138,7 +138,7 @@ const Navbar = () => {
                   </ul>
                 </nav>
               </div>
-              <div className="justify-end hidden pr-16 sm:flex lg:pr-0">
+              <div className="justify-end me-5 hidden pr-16 sm:flex lg:pr-0">
                 <a href={`${lang}/login`} className="py-3 text-base font-medium px-7 text-dark dark:text-white hover:text-blue-600 mr-5">{t("login")}</a>
                 <select name="" id="" className="rounded-full px-2 border" onChange={handleLangChange} value={lang}>
                   <option value="id">

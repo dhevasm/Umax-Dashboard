@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl'; // Import the translation hook
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 
 const Page = () => {
     const router = useRouter();
@@ -15,6 +16,7 @@ const Page = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showKonfirmasiPassword, setShowKonfirmasiPassword] = useState(false);
+    const searchParams = useSearchParams();
 
     const validationSchema = Yup.object({
         token: Yup.string()
@@ -29,7 +31,7 @@ const Page = () => {
 
     const formik = useFormik({
         initialValues: {
-            token: '',
+            token: searchParams.get('token'),
             new_password: '',
             konfirmasi_password: '',
         },
@@ -38,7 +40,7 @@ const Page = () => {
             setLoading(true);
             try {
                 const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/reset-password`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/reset-password?token=${values.token}&new_password=${values.new_password}&konfirmasi_password=${values.konfirmasi_password}`,
                     {
                         method: 'POST',
                         headers: {
@@ -50,21 +52,29 @@ const Page = () => {
                 );
 
                 const data = await response.json();
-                const { Token } = data;
-
-                localStorage.setItem('jwtToken', Token);
-
-                Swal.fire({
-                    icon: 'success',
-                    title: t('success-title'),
-                    text: t('success-message'),
-                    confirmButtonColor: '#3D5FD9',
-                    confirmButtonText: t('ok'),
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        router.push('/');
-                    }
-                });
+                console.log(data)
+                
+                if(data.message == "Password reset successful"){
+                    Swal.fire({
+                        icon: 'success',
+                        title: t('success-title'),
+                        text: t('success-message'),
+                        confirmButtonColor: '#3D5FD9',
+                        confirmButtonText: t('ok'),
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            router.push('/');
+                        }
+                    });
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: t('error-title'),
+                        text: t('error-message'),
+                        confirmButtonColor: '#FF5252',
+                        confirmButtonText: t('ok'),
+                    });
+                }
             } catch (error) {
                 console.error(error);
                 Swal.fire({
@@ -96,14 +106,6 @@ const Page = () => {
                     onSubmit={formik.handleSubmit}
                     className="w-full p-6 bg-white rounded-lg shadow-lg border-2 relative"
                 >
-                    <InputField
-                        id="token"
-                        name="token"
-                        type="text"
-                        placeholder={t('token-placeholder')}
-                        formik={formik}
-                    />
-
                     <PasswordField
                         id="new_password"
                         name="new_password"

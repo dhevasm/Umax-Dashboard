@@ -172,8 +172,9 @@ const PricingSection = () => {
               {t('free-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
-                <p className="text-base text-body-color dark:text-gray-300">30-Day Trial Period</p>
+                <p className="text-base text-body-color dark:text-gray-300">{t('free-feature-1')}</p>
                 <p className="text-base text-body-color dark:text-gray-300">
+
                   1 {t('admin-per-company')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
@@ -187,6 +188,7 @@ const PricingSection = () => {
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                   {t('maximum')} 6 {t('metrics-per-company')}
+
                 </p>
               </div>
               <a
@@ -285,6 +287,7 @@ const PricingSection = () => {
                 </span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
+
               {t('business-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
@@ -313,7 +316,6 @@ const PricingSection = () => {
               >
                 {t('choose-business')}
               </a>
-
               <div>
                 <span className="absolute right-0 top-7 z-[-1]">
                   <svg
@@ -453,9 +455,6 @@ const PricingSection = () => {
           </div> */}
         </div>
       </div>
-
-      
-
             {/* Modal */}
             {showModal && (
               <div className="fixed inset-0 flex items-center justify-center z-50">

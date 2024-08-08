@@ -3,15 +3,14 @@ import nodemailer from 'nodemailer';
 /**
  * Sends an email using the provided parameters and returns a response indicating the success or failure of the operation.
  *
- * @param {Request} req - The request object containing the URL and search parameters.
+ * @param {Request} req - The request object containing the FormData parameters.
  * @return {Promise<Response>} A Promise that resolves to a Response object with a JSON body indicating the success or failure of the email sending operation.
  */
-export async function GET(req) {
-    const url = new URL(req.url);
-    const from = url.searchParams.get('from');
-    const name = url.searchParams.get('name');
-    const phone = url.searchParams.get('phone');
-    const message = url.searchParams.get('message');
+export async function POST(req) {
+    const formData = await req.formData();
+    const from = formData.get('from');
+    const to = formData.get('to');
+    const body = formData.get('body');
 
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -24,13 +23,9 @@ export async function GET(req) {
     try {
         await transporter.sendMail({
             from: from,
-            to: process.env.NEXT_PUBLIC_MAILER_EMAIL,
-            subject: `Message from ${name}`,
-            text: `
-                Name: ${name}
-                Phone: ${phone}
-                Message: ${message}
-            `,
+            to: to,
+            subject: `Message from ${from}`,
+            html: body
         });
 
         return new Response(JSON.stringify({ success: true, message: 'Email sent successfully' }), { status: 200 });

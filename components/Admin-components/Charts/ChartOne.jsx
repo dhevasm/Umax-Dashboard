@@ -7,8 +7,9 @@ import axios from 'axios';
 import { useTranslations } from 'next-intl';
 import { useContext } from 'react';
 import { AdminDashboardContext } from '@/app/[locale]/admin-dashboard/page';
+import { Filler } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(Filler ,CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ChartOne = ({chartData}) => {
   const t = useTranslations("admin-dashboard");
