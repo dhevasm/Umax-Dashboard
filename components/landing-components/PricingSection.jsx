@@ -20,6 +20,7 @@ const PricingSection = () => {
       email: '',
       phone_number: '',
   });
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (event) => {
       const { name, value } = event.target;
@@ -30,6 +31,7 @@ const PricingSection = () => {
   };
 
   const handleSubmit = async (event) => {
+    setLoading(true)
       let price = [
         0,
         3200000,
@@ -59,6 +61,7 @@ const PricingSection = () => {
           });
 
           if (!response.ok) {
+              setLoading(false)
               const errorData = await response.json();
               console.error('Server Error:', errorData);
               alert('Your email has aready purchased a plan!');
@@ -68,6 +71,7 @@ const PricingSection = () => {
           const data = await response.json();
           setSnapToken(data.token);
       } catch (error) {
+          setLoading(false)
           console.error('Network Error:', error);
           alert('Network error occurred. Please try again.');
       }
@@ -543,7 +547,9 @@ const PricingSection = () => {
                           className="w-full px-5 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="submit"
                         >
-                          {Subscribe === 1
+                          {
+                          loading ? 'Loading...' :
+                          Subscribe === 1
                             ? 'Get (Free)'
                             : Subscribe === 2
                             ? 'Subscribe ($199/year)'
