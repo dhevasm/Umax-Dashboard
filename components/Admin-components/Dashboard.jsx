@@ -14,13 +14,12 @@ import { useTranslations } from "next-intl"
 import axios from "axios"
 import Image from "next/image"
 import { IconContext } from "react-icons"
-import { RiAdvertisementFill, RiGoogleFill, RiGoogleLine, RiMetaLine, RiTiktokFill, RiTiktokLine } from "react-icons/ri"
+import { RiAdvertisementFill, RiGoogleFill, RiGoogleLine, RiMetaLine, RiRefreshFill, RiTiktokFill, RiTiktokLine } from "react-icons/ri"
 import { reach } from "yup"
 import { FaArrowUp, FaBuilding, FaCheck, FaTimes } from "react-icons/fa"
 import { map } from "leaflet"
 import Swal from "sweetalert2"
 import { LiaSpinnerSolid } from "react-icons/lia"
-
 
 export default function Dashboard({ tenant_id }) {
     const t = useTranslations("admin-dashboard")
@@ -104,87 +103,276 @@ export default function Dashboard({ tenant_id }) {
     getCount()
     }, [])
 
-    const handleReject = (request_id) => {
+    const handleReject = async (request_id, name, email) => {
         Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, Reject it!"
-          }).then(async(result) => {
-            if (result.isConfirmed) {
-                setLoading(true)
-                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,{
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Yes, Reject it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            setLoading(true);
+            await axios
+              .delete(
+                `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
+                {
+                  headers: {
+                    authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                  },
+                }
+              )
+              .then(async (response) => {
+                if (!response.IsError) {
+                  const formData = new FormData();
+                  formData.append("from", "UMAX Dashboard Team");
+                  formData.append("to", `${email}`);
+                  formData.append(
+                    "body",
+                    `
+                                <!DOCTYPE html>
+                                <html lang="en">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                                    <style>
+                                        body {
+                                            font-family: Arial, sans-serif;
+                                            background-color: #f4f4f4;
+                                            margin: 0;
+                                            padding: 0;
+                                        }
+                                        .email-container {
+                                            max-width: 600px;
+                                            margin: 20px auto;
+                                            background-color: #ffffff;
+                                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                                            border-radius: 10px;
+                                            overflow: hidden;
+                                        }
+                                        .email-header {
+                                            background-color: #dc3545;
+                                            padding: 10px;
+                                            text-align: center;
+                                            color: white;
+                                        }
+                                        .email-body {
+                                            padding: 20px;
+                                        }
+                                        .email-body h2 {
+                                            color: #333333;
+                                            margin-top: 0;
+                                        }
+                                        .email-body p {
+                                            color: #555555;
+                                            line-height: 1.6;
+                                        }
+                                        .email-footer {
+                                            background-color: #f1f1f1;
+                                            padding: 10px;
+                                            text-align: center;
+                                            color: #777777;
+                                            font-size: 12px;
+                                        }
+                                    </style>
+                                </head>
+                                <body>
+                                    <div class="email-container">
+                                        <div class="email-header">
+                                            <h1>UMAX Dashboard</h1>
+                                        </div>
+                                        <div class="email-body">
+                                            <h2>Your Request Status has rejected</h2>
+                                            <p>Hello, <strong>${name}</strong>,</p>
+                                            <p>We are pleased to inform you that your request has been <strong>Rejected</strong>.</p>
+                                            <p>Thank you for using our services.</p>
+                                            <p>Best regards,</p>
+                                            <p>The UMAX Team</p>
+                                        </div>
+                                        <div class="email-footer">
+                                            &copy; 2024 UMAX Team. All rights reserved.
+                                        </div>
+                                    </div>
+                                </body>
+                                </html>
+                            `
+                  );
+    
+                  try {
+                    await axios.post("/en/api/send", formData, {
+                      headers: {
+                        "Content-Type": "multipart/form-data",
+                      },
+                    });
+                    // Mengatur ulang formulir jika pengiriman berhasil
+                    setLoading(false);
+                    Swal.fire("Success", "Request has rejected", "success").then(
+                      () => {
+                        getRequestList();
+                        setLoading(false);
+                      }
+                    );
+                  } catch (error) {
+                    console.error(error);
+                    setLoading(false);
+                    Swal.fire("Error", "Failed to reject request", "error");
+                  }
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: response.ErrorMessage,
+                  }).then(() => {
+                    setLoading(false);
+                  });
+                }
+              });
+          }
+        });
+      };
+
+      const createUser = async (datatenant, tenant_id, request_id) => {
+        const formData = new FormData();
+        formData.append("name", datatenant.username);
+        formData.append("email", datatenant.email);
+        formData.append("password", datatenant.password);
+        formData.append("confirm_password", datatenant.password);
+        formData.append("role", "admin");
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${tenant_id}`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+              },
+            }
+          )
+          .then(async (res) => {
+            if (res.data.Output === "Registration Successfully") {
+              console.log("user register success");
+              await axios
+                .delete(
+                  `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
+                  {
                     headers: {
-                        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                      authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                     },
-                }).then((response) => {
-                    if(!response.IsError){
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Request Rejected',
-                        }).then(() => {
-                            getRequestList()
-                            setLoading(false)
-                        })
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: response.ErrorMessage,
-                        }).then(() => {
-                            setLoading(false)
-                        })
+                  }
+                )
+                .then(async (response) => {
+                  if (!response.IsError) {
+                    const formData = new FormData();
+                    formData.append("from", "UMAX Dashboard Team");
+                    formData.append("to", `${datatenant.email}`);
+                    formData.append(
+                      "body",
+                      `
+                                <!DOCTYPE html>
+                                <html lang="en">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                                    <style>
+                                        body {
+                                            font-family: Arial, sans-serif;
+                                            background-color: #f4f4f4;
+                                            margin: 0;
+                                            padding: 0;
+                                        }
+                                        .email-container {
+                                            max-width: 600px;
+                                            margin: 20px auto;
+                                            background-color: #ffffff;
+                                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                                            border-radius: 10px;
+                                            overflow: hidden;
+                                        }
+                                        .email-header {
+                                            background-color: #0073E6;
+                                            padding: 10px;
+                                            text-align: center;
+                                            color: white;
+                                        }
+                                        .email-body {
+                                            padding: 20px;
+                                        }
+                                        .email-body h2 {
+                                            color: #333333;
+                                            margin-top: 0;
+                                        }
+                                        .email-body p {
+                                            color: #555555;
+                                            line-height: 1.6;
+                                        }
+                                        .email-footer {
+                                            background-color: #f1f1f1;
+                                            padding: 10px;
+                                            text-align: center;
+                                            color: #777777;
+                                            font-size: 12px;
+                                        }
+                                    </style>
+                                </head>
+                                <body>
+                                    <div class="email-container">
+                                        <div class="email-header">
+                                            <h1>UMAX Dashboard</h1>
+                                        </div>
+                                        <div class="email-body">
+                                            <h2>Your Request Status has Accepted</h2>
+                                            <p>Hello, <strong>${datatenant.username}</strong>,</p>
+                                            <p>We are pleased to inform you that your request has been <strong>Accepted</strong>, your tenant ${datatenant.company} was registered.</p>
+                                            <p>Thank you for using our services.</p>
+                                            <a href='https://umax-dashboard.vercel.app/en/login'>Login Now</a>
+                                            <p>Best regards,</p>
+                                            <p>The UMAX Team</p>
+                                        </div>
+                                        <div class="email-footer">
+                                            &copy; 2024 UMAX Team. All rights reserved.
+                                        </div>
+                                    </div>
+                                </body>
+                                </html>
+                            `
+                    );
+    
+                    try {
+                      await axios.post("/en/api/send", formData, {
+                        headers: {
+                          "Content-Type": "multipart/form-data",
+                        },
+                      });
+                      // Mengatur ulang formulir jika pengiriman berhasil
+                      setLoading(false);
+                      Swal.fire({
+                        icon: "success",
+                        title: "Request Successfully",
+                        text: "Register new user & new tenant successfully",
+                      }).then(() => {
+                        setLoading(false);
+                        getRequestList();
+                      });
+                    } catch (error) {
+                      console.error(error);
+                      setLoading(false);
+                      Swal.fire("Error", "Failed to Accept request", "error");
                     }
-                })
+                  } else {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: response.ErrorMessage,
+                    });
+                  }
+                });
             }
           });
-
-        
-        
-    }
-
-    const createUser = async(datatenant, tenant_id, request_id) => {
-        const formData = new FormData();
-                formData.append('name', datatenant.username);
-                formData.append('email', datatenant.email);
-                formData.append('password', datatenant.password);
-                formData.append('confirm_password', datatenant.password);
-                formData.append('role', "admin");
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${tenant_id}`, formData, {
-                    headers: {
-                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-                    }
-                }).then( async(res) => {
-                    if (res.data.Output === "Registration Successfully") {
-                        console.log("user register success")
-                        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,{
-                            headers: {
-                                authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                            },
-                        }).then((response) => {
-                            if(!response.IsError){
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Request Successfully',
-                                    text: 'Register new user & new tenant successfully',
-                                }).then(() => {
-                                    setLoading(false)
-                                    getRequestList()
-                                })
-                            }else{
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Oops...',
-                                    text: response.ErrorMessage,
-                                })
-                            }
-                        })
-                    }
-                })
-    }
+      };
 
     const getTenantID = async(datatenant, request_id) => {
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`,{
@@ -524,7 +712,11 @@ export default function Dashboard({ tenant_id }) {
                                                                 <button onClick={() => handleAccept(data._id)} className="text-green-500 px-2 py-2 border border-green-500 hover:text-green-200 hover:bg-green-500 transition-colors duration-200">
                                                                     <FaCheck size={20}/>
                                                                 </button>
-                                                                <button onClick={() => handleReject(data._id)} className="text-red-500 px-2 py-2 border border-red-500 hover:text-red-200 hover:bg-red-500 transition-colors duration-200 ms-2">
+                                                                <button onClick={() => handleReject(
+                                                                        data._id,
+                                                                        data.username,
+                                                                        data.email
+                                                                    )} className="text-red-500 px-2 py-2 border border-red-500 hover:text-red-200 hover:bg-red-500 transition-colors duration-200 ms-2">
                                                                     <FaTimes size={20}/>
                                                                 </button>
                                                             </>

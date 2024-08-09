@@ -112,8 +112,8 @@ function AdminNavbar({ userData }) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "yes",
-        cancelButtonText: "no",
+        confirmButtonText: "Logout",
+        cancelButtonText: "Cancel",
     }).then((result) => {
         if (result.isConfirmed) {
             localStorage.removeItem('jwtToken');
