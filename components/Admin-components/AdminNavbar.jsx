@@ -718,7 +718,13 @@ function AdminNavbar({ userData }) {
           {userData.image ? (
                 <>
                     <div onClick={toggleDropdown} className="flex items-center cursor-pointer">
-                    <FaAngleDown className="me-2"/>
+                      {
+                        isDropdownOpen ? (
+                          <FaAngleDown className="text-xl me-2 transform rotate-180"/>
+                        ) : (
+                          <FaAngleDown className="text-xl me-2"/>
+                        )
+                      }
                         <div className="block">
                             <Image
                                 src={`data:image/png;base64, ${userData.image}`}

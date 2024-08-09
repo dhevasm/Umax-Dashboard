@@ -99,8 +99,8 @@ export default function Dashboard({ tenant_id }) {
     }  
 
     useEffect(() => {
-    getChartData()
-    getCount()
+        getChartData()
+        getCount()
     }, [])
 
     const handleReject = async (request_id, name, email) => {
