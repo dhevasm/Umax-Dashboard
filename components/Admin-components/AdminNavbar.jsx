@@ -6,6 +6,7 @@ import {
 import { useEffect, useState, useContext, useRef } from "react";
 import { IconContext } from "react-icons";
 import {
+  FaAngleDown,
   FaBars,
   FaBell,
   FaBuilding,
@@ -25,6 +26,9 @@ import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
 import AdminNavbarLoading from "../Client-components/Loading/AdminProfileLoading";
+import { AiOutlineProfile } from "react-icons/ai";
+import { MdAnalytics } from "react-icons/md";
+import { RiLogoutBoxLine } from "react-icons/ri";
 
 function AdminNavbar({ userData }) {
   const {
@@ -45,6 +49,11 @@ function AdminNavbar({ userData }) {
   const [requestCount, setRequestCount] = useState(0);
   const roles = localStorage.getItem("roles");
   const [isLoading, setLoading] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
   const navbarBrand = useRef();
 
@@ -95,10 +104,28 @@ function AdminNavbar({ userData }) {
 
   const Router = useRouter();
 
-  function handleLogout() {
-    localStorage.clear();
-    Router.push("/");
-  }
+  const handleLogout = () => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "yes",
+        cancelButtonText: "no",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('tenantId');
+            localStorage.removeItem('roles');
+            localStorage.removeItem('name');
+            localStorage.removeItem('lang');
+            Router.push(`/`);
+
+        }
+    });
+};
 
   function handleTheme() {
     setIsDarkMode(!isDarkMode);
@@ -687,27 +714,72 @@ function AdminNavbar({ userData }) {
             )}
           </div>
 
+          <div className="relative">
           {userData.image ? (
-            <>
-              <div className="flex flex-col items-end mt-2">
-                <h1 className="text-nowrap font-medium">{userData.name}</h1>
-                <p className="text-gray-500">{userData.roles}</p>
-              </div>
-              <div className="block">
-                <Image
-                  src={`data:image/png;base64, ${userData.image}`}
-                  alt="profile"
-                  className="rounded-full hidden md:block w-[40px] h-[40px] bg-slate-200"
-                  width={40}
-                  height={40}   
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <AdminNavbarLoading />
-            </>
-          )}
+                <>
+                    <div onClick={toggleDropdown} className="flex items-center cursor-pointer">
+                    <FaAngleDown className="me-2"/>
+                        <div className="block">
+                            <Image
+                                src={`data:image/png;base64, ${userData.image}`}
+                                alt="profile"
+                                className="rounded-full w-[40px] h-[40px] bg-slate-200"
+                                width={40}
+                                height={40}   
+                            />
+                        </div>
+                        <div className="flex flex-col items-end mt-2 ml-2">
+                            {/* <h1 className="font-medium">{userData.name}</h1>
+                            <p className="text-gray-500">{userData.roles}</p> */}
+                        </div>
+                    </div>
+                    
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 z-50">
+                            <div className="flex items-center mb-4">
+                                <Image
+                                    src={`data:image/png;base64, ${userData.image}`}
+                                    alt="profile"
+                                    className="rounded-full w-[50px] h-[50px] bg-slate-200"
+                                    width={50}
+                                    height={50}   
+                                />
+                                <div className="ml-3">
+                                    <h3 className="font-medium text-black dark:text-white">{userData.name}</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-300">{userData.roles}</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-5">
+                                <li>
+                                    <button onClick={() => {Router.push(`/${localStorage.getItem("lang")}/profile`)}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                                        <AiOutlineProfile className="mr-2" /> Profile
+                                    </button>
+                                </li>
+                                <li>
+                                  {
+                                    userData.roles == "admin" && (
+                                      <button onClick={() => {Router.push(`/${localStorage.getItem("lang")}/dashboard`)}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                                        <MdAnalytics className="mr-2" /> Analytics
+                                      </button>
+                                    )
+                                  }
+                                    
+                                </li>
+                                <li>
+                                    <button onClick={handleLogout} className="flex items-center text-sm text-red-500 hover:text-red-700">
+                                        <FaSignOutAlt className="mr-2" /> Logout
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    <AdminNavbarLoading />
+                </>
+            )}
+            </div>
         </div>
       </nav>
     </>

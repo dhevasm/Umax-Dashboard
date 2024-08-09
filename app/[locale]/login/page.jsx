@@ -99,6 +99,7 @@ const Page = () => {
       setLoading(true);
       try {
         if (!navigator.onLine) {
+          Swal.fire("Network error", "Please check your internet connection.", "error");
           throw new Error("Network error: Please check your internet connection.");
         }
 

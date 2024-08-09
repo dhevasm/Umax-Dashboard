@@ -174,12 +174,12 @@ export default function Navbar() {
                             Profile
                         </Link>
                     </li>
-                    {roles === 'admin' || roles === 'sadmin' && (
+                    {roles === 'admin' && (
                         <li>
                             <Link href={`admin-dashboard`} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                                 <RiAdminLine className="w-5 h-5 mr-2" />
                                 Admin Dashboard
-                            </Link>
+                            </Link> 
                         </li>
                     )}
                     {/* Other links here */}
@@ -300,14 +300,14 @@ export default function Navbar() {
                     </div>
                         {/* Profile */}
                         <div className="flex gap-2 items-center">
-                            <label htmlFor="theme" className="items-center cursor-pointer hidden md:inline-flex" hidden={roles == 'client'}>
+                            {/* <label htmlFor="theme" className="items-center cursor-pointer hidden md:inline-flex" hidden={roles == 'client'}>
                                 {
                                     isDark ? <FaMoon className="text-lg text-white me-2"/> : <FaSun className="text-xl text-blue-500 me-2"/>
                                 }
                                 <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
                                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                             </div>
-                            </label>
+                            </label> */}
                             {roles === 'client' && (
                                 activeLink.includes("id") ? 
                                     <button onClick={() => changeLanguage('en')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
@@ -318,16 +318,12 @@ export default function Navbar() {
                                         {'EN'}
                                     </button>
                             )}
-                        </div>
-                    </div>
-
-                    {/* Right side */}
                     <div className="flex items-center space-x-4">
                         <button
                             onClick={handleTheme}
                             className="hidden sm:flex xl:flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
                         >
-                            {isDark ? <FaSun size={20} className="text-white"/> : <FaMoon size={16} />}
+                            {isDark ? <FaMoon className="text-lg text-white"/> : <FaSun className="text-xl text-blue-500" />}
                         </button>
                         <button
                             onClick={isHidden == 2 ? setIsHidden : () => setIsHidden(2)}
@@ -341,6 +337,9 @@ export default function Navbar() {
                         ) : (
                             <UserInfoLoading />
                         )}
+                    </div>
+                        </div>
+                         {/* Right side */}
                     </div>
 
                 <div className={`${isHidden === 2 ? 'block lg:hidden' : 'hidden'} absolute right-2 mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg w-60 transition-all duration-300 ease-in-out`}>
