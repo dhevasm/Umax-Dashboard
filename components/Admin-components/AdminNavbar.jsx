@@ -413,44 +413,44 @@ function AdminNavbar({ userData }) {
       });
   };
 
-  const getTenantID = async (datatenant, request_id) => {
-    await axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      .then(async (response) => {
-        if (!response.IsError) {
-          // console.log(response.data.Data)
-          const data = response.data.Data;
-          const tenant_id = data.filter(
-            (tenant) => tenant.company === datatenant.company
-          )[0]._id;
-          if (datatenant.subscription == true) {
-            const formData = new FormData();
-            formData.append("subscription", true);
-            const response = await axios.put(
-              `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${tenant_id}`,
-              formData,
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                },
-              }
-            );
+  // const getTenantID = async (datatenant, request_id) => {
+  //   await axios
+  //     .get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
+  //       headers: {
+  //         authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //       },
+  //     })
+  //     .then(async (response) => {
+  //       if (!response.IsError) {
+  //         // console.log(response.data.Data)
+  //         const data = response.data.Data;
+  //         const tenant_id = data.filter(
+  //           (tenant) => tenant.company === datatenant.company
+  //         )[0]._id;
+  //         if (datatenant.subscription == true) {
+  //           const formData = new FormData();
+  //           formData.append("subscription", true);
+  //           const response = await axios.put(
+  //             `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${tenant_id}`,
+  //             formData,
+  //             {
+  //               headers: {
+  //                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //               },
+  //             }
+  //           );
 
-            if (response.data.IsError == false) {
-              console.log("subscription success");
-            } else {
-              console.log("subscription failed");
-            }
-          }
-          // console.log(tenant_id)
-          createUser(datatenant, tenant_id, request_id);
-        }
-      });
-  };
+  //           if (response.data.IsError == false) {
+  //             console.log("subscription success");
+  //           } else {
+  //             console.log("subscription failed");
+  //           }
+  //         }
+  //         // console.log(tenant_id)
+  //         createUser(datatenant, tenant_id, request_id);
+  //       }
+  //     });
+  // };
 
   const createTenant = async (data, request_id) => {
     const formData = new FormData();
@@ -481,7 +481,7 @@ function AdminNavbar({ userData }) {
       console.log("tenant register failed");
       return;
     }
-    getTenantID(data, request_id);
+    createUser(data, response.data.tenant_id, request_id);
   };
 
   const handleAccept = (request_id) => {
