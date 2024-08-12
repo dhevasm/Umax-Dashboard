@@ -24,7 +24,6 @@ const page = () => {
           }
         `
         }
-        
       </style>
       <Navbar />
       <Hero/>
@@ -38,6 +37,7 @@ const page = () => {
       <Contact />
       <Footer />
     </div>
+    
   )
 }
 

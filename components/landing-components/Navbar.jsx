@@ -155,7 +155,7 @@ const Navbar = () => {
       </header>
 
       {/* Theme Switcher */}
-      <div className="fixed flex items-center justify-center bg-blue-500 rounded dark:bg-gray-600 z-[99999] shadow-1 dark:shadow-box-dark bottom-10 right-5 h-11 w-11">
+      <div className="fixed bottom-10 flex items-center justify-center bg-blue-500 rounded dark:bg-gray-600 z-[99999] shadow-1 dark:shadow-box-dark right-5 h-11 w-11">
         <label htmlFor="themeSwitcher" className="inline-flex items-center cursor-pointer" aria-label="themeSwitcher" name="themeSwitcher">
           <input 
             type="checkbox" 
