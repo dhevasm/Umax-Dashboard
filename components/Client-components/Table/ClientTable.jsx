@@ -24,6 +24,7 @@ const ClientTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true);
+    const [mode, setMode] = useState('');
     const t = useTranslations("clients");
     const tfile = useTranslations('swal-file')
     const [selectedClient, setSelectedClient] = useState(null);
@@ -286,8 +287,9 @@ const ClientTable = () => {
         }
     }
 
-    const handleOpenModal = (client) => {
+    const handleOpenModal = (client, mode) => {
         setSelectedClient(client);
+        setMode(mode);
         setModalIsOpen(true);
     };
 
@@ -385,15 +387,18 @@ const ClientTable = () => {
 
     return (
         <>
-            <div className='font-semibold text-3xl text-slate-800 mb-10 dark:text-slate-200'>
+            <div className='font-semibold flex justify-between text-3xl text-slate-800 mb-10 dark:text-slate-200'>
             <h1>{t('title')}</h1>
+            <button onClick={() => handleOpenModal(null, "create")} className='text-sm dark:text-gray-300 dark:bg-gray-700 font-normal border border-gray-300 dark:border-gray-600 rounded-md flex justify-center items-center py-2 px-4'>
+                Tambah
+            </button>
             </div>
             <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-5 dark:bg-gray-800 dark:border-gray-700">
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col-reverse"}`}>
                     <div className={`mb-4 flex flex-row items-start gap-4`}>
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/2'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`}
-                            type="text"
+                            type="search"
                             placeholder={t('search')}
                             value={searchTerm}
                             onChange={handleSearchChange}
@@ -452,7 +457,7 @@ const ClientTable = () => {
                                     currentClients.map((data, index) => (
                                         <tr key={index} className='text-center'>
                                             <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
-                                                <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data)}>
+                                                <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data, "edit")}>
                                                     {data.name}
                                                 </button>
                                             </td>
@@ -523,8 +528,13 @@ const ClientTable = () => {
             </div>
 
 
-            {selectedClient && (
-                <ClientDetail isOpen={modalIsOpen} onClose={handleCloseModal} data={selectedClient} />
+            {(selectedClient || mode === "create") && (
+                <ClientDetail 
+                    isOpen={modalIsOpen} 
+                    onClose={handleCloseModal} 
+                    data={selectedClient} 
+                    mode={mode} 
+                />
             )}
         </>
     )

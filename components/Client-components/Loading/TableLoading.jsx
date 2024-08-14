@@ -5,11 +5,11 @@ const TableLoading = () => {
   const pathname = usePathname();
 
   return (
-    <div className="w-full h-full bg-white dark:bg-slate-700 rounded-lg shadow-lg p-3 overflow-x-auto">
+    <div className="w-full h-full bg-transparent rounded-lg p-3 overflow-x-auto">
       {!pathname.includes('/dashboard') && (
         <div className="w-32 h-11 rounded-full bg-gray-300 dark:bg-gray-500 animate-pulse mb-10"></div>
       )}
-      <div className="bg-white dark:bg-slate-700 rounded-lg p-3 overflow-x-auto">
+      <div className="bg-transparent rounded-lg p-3 overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
           <thead className="bg-gray-50 dark:bg-slate-600">
             <tr>

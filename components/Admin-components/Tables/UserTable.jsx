@@ -182,21 +182,25 @@ export default function UserTable() {
         }
     }
 
-    async function getUsers(){
-        setIsLoading(true)
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-tenant`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-            }
-        })
-        setUsers(response.data.Data)
-        setUserMemo(response.data.Data)
-        setIsLoading(false)
-    }
-
+    const getUsers = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-tenant`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            });
+            setUsers(response.data.Data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
     useEffect(() => {
-        getUsers()
-    }, [])
+        getUsers();
+    }, []);
 
     // async function creatUser(){
     //     const name = document.getElementById('name').value
@@ -448,17 +452,17 @@ export default function UserTable() {
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => {Router.push('register')}} >
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => {Router.push('register')}} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -468,7 +472,7 @@ export default function UserTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
                                         <option value="" key={0} disabled hidden>Role 
@@ -485,7 +489,7 @@ export default function UserTable() {
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
-                                    <input type="text" className="w-full dark:bg-slate-800 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
+                                    <input type="text" className="w-full dark:bg-slate-800 px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     id="search"/>
@@ -511,12 +515,13 @@ export default function UserTable() {
                                 <tbody className="bg-white dark:bg-slate-800">
                                     {
                                         isLoading ? (
-                                            // If loading is true, show loading indicator
-                                            <tr className="text-center py-3 border dark:border-gray-500">
-                                                <td colSpan={4}>
-                                                    <LoadingCircle />
-                                                </td>
-                                            </tr>
+                                            <>
+                                                <tr className="text-center py-3 border dark:border-gray-500">
+                                                    <td colSpan={4}>
+                                                        <LoadingCircle />
+                                                    </td>
+                                                </tr>
+                                            </>
                                         ) : currentusers.length > 0 ? (
                                             // Display filtered data if available
                                             currentusers.map((user, index) => (

@@ -130,7 +130,6 @@ export default function Performance({ id }) {
         
             // Mengatur state dengan tanggal dan waktu yang diformat
             setDateTime(dateFormatter.format(new Date()));
-            console.log(data.timezone_name);
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
@@ -160,9 +159,9 @@ export default function Performance({ id }) {
             <div className="w-full">
                 {/* Header */}
                 <div className="w-full flex items-center justify-end gap-2">
-                    <div className="w-[150px] h-fit flex mb-3 me-1 text-black dark:text-white text-nowrap">
+                    <p className="flex items-center">
                         {dateTime}
-                    </div>
+                    </p>
                     <div className="w-[150px] h-fit flex mb-3 me-3">
                     <select
                         className="w-full h-fit px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg"
@@ -186,10 +185,33 @@ export default function Performance({ id }) {
                             <InfoCardLoading key={i} />
                         ))
                         : <>
-                            <Infocard Color='' Title={t('metric7.amount-spent')} Value='Rp 2000.000' Desc={t('metric7.amount-desc')} />
-                            <Infocard Color={rar.color} Title={t('metric7.reach-amount-spent-ratio')} Value={rar.value} Desc={t('metric7.rar-desc')} />
-                            <Infocard Color={cpr.color} Title={t('metric7.cpr')} Value={cpr.value} Desc={t('metric7.cpr-desc')} />
-                            <Infocard Color={oclp.color} Title={t('metric7.oclp')} Value={oclp.value} Desc={t('metric7.oclp-desc')} />
+                            <Infocard 
+                            Color='' 
+                            Title={t('metric7.amount-spent')} 
+                            Value='Rp 2000.000' 
+                            Desc={t('metric7.amount-desc')} 
+                            />
+
+                            <Infocard 
+                            Color={rar?.color || ''} 
+                            Title={t('metric7.reach-amount-spent-ratio')} 
+                            Value={rar?.value || ''} 
+                            Desc={t('metric7.rar-desc')} 
+                            />
+
+                            <Infocard 
+                            Color={cpr?.color || ''} 
+                            Title={t('metric7.cpr')} 
+                            Value={cpr?.value || ''} 
+                            Desc={t('metric7.cpr-desc')} 
+                            />
+
+                            <Infocard 
+                            Color={oclp?.color || ''} 
+                            Title={t('metric7.oclp')} 
+                            Value={oclp?.value || ''} 
+                            Desc={t('metric7.oclp-desc')} 
+                            />
                         </>
                         }
                     </div>
@@ -203,10 +225,33 @@ export default function Performance({ id }) {
                             <InfoCardLoading key={i} />
                             ))
                             : <>
-                            <Infocard Color={ctr.color} Title={t('metric7.ctr')} Value={ctr.value} Desc={t('metric7.ctr-desc')} />
-                            <Infocard Color='' Title={t('metric7.atc')} Value={'180%'} Desc={t('metric7.atc-desc')} />
-                            <Infocard Color={roas.color} Title={t('metric7.roas')} Value={roas.value} Desc={t('metric7.roas-desc')} />
-                            <Infocard Color={r_roas.color} Title={t('metric7.real-roas')} Value={r_roas.value} Desc={t('metric7.real-desc')} />
+                                <Infocard 
+                                Color={ctr?.color || ''} 
+                                Title={t('metric7.ctr')} 
+                                Value={ctr?.value || ''} 
+                                Desc={t('metric7.ctr-desc')} 
+                                />
+
+                                <Infocard 
+                                Color='' 
+                                Title={t('metric7.atc')} 
+                                Value='180%' 
+                                Desc={t('metric7.atc-desc')} 
+                                />
+
+                                <Infocard 
+                                Color={roas?.color || ''} 
+                                Title={t('metric7.roas')} 
+                                Value={roas?.value || ''} 
+                                Desc={t('metric7.roas-desc')} 
+                                />
+
+                                <Infocard 
+                                Color={r_roas?.color || ''} 
+                                Title={t('metric7.real-roas')} 
+                                Value={r_roas?.value || ''} 
+                                Desc={t('metric7.real-desc')} 
+                                />
                             </>
                         }
                         </div>
@@ -220,12 +265,59 @@ export default function Performance({ id }) {
                         <SuggestionLoding key={i} />
                     ))
                     : <>
-                        <SuggestionCard Title={srar.title || ''} Desc={srar.msg} Color={srar.color || ''} Value={srar.value || ''} Target={srar.target || ''} Message={srar.massage || ''} />
-                        <SuggestionCard Title={sroas.title || ''} Desc={sroas.msg} Color={sroas.color || ''} Value={sroas.value || ''} Target={sroas.target || ''} Message={sroas.message || ''} />
-                        <SuggestionCard Title={scpr.title || ''} Desc={scpr.msg} Color={scpr.color || ''} Value={scpr.value || ''} Target={scpr.target || ''} Message={scpr.message || ''} />
-                        <SuggestionCard Title={scpc.title || ''} Desc={scpc.msg} Color={scpc.color || ''} Value={scpc.value || ''} Target={scpc.target || ''} Message={scpc.message || ''} />
-                        <SuggestionCard Title={soclp.title || ''} Desc={soclp.msg} Color={soclp.color || ''} Value={soclp.value || ''} Target={soclp.target || ''} Message={soclp.massage} />
-                        <SuggestionCard Title={sctr.title || ''} Desc={sctr.msg} Color={sctr.color || ''} Value={sctr.value || ''} Target={sctr.target || ''} Message={sctr.message || ''} />
+                        <SuggestionCard 
+                            Title={srar?.title || ''} 
+                            Desc={srar?.msg || ''} 
+                            Color={srar?.color || ''} 
+                            Value={srar?.value || ''} 
+                            Target={srar?.target || ''} 
+                            Message={srar?.massage || ''} 
+                        />
+
+                        <SuggestionCard 
+                            Title={sroas?.title || ''} 
+                            Desc={sroas?.msg || ''} 
+                            Color={sroas?.color || ''} 
+                            Value={sroas?.value || ''} 
+                            Target={sroas?.target || ''} 
+                            Message={sroas?.message || ''} 
+                        />
+
+                        <SuggestionCard 
+                            Title={scpr?.title || ''} 
+                            Desc={scpr?.msg || ''} 
+                            Color={scpr?.color || ''} 
+                            Value={scpr?.value || ''} 
+                            Target={scpr?.target || ''} 
+                            Message={scpr?.message || ''} 
+                        />
+
+                        <SuggestionCard 
+                            Title={scpc?.title || ''} 
+                            Desc={scpc?.msg || ''} 
+                            Color={scpc?.color || ''} 
+                            Value={scpc?.value || ''} 
+                            Target={scpc?.target || ''} 
+                            Message={scpc?.message || ''} 
+                        />
+
+                        <SuggestionCard 
+                            Title={soclp?.title || ''} 
+                            Desc={soclp?.msg || ''} 
+                            Color={soclp?.color || ''} 
+                            Value={soclp?.value || ''} 
+                            Target={soclp?.target || ''} 
+                            Message={soclp?.massage || ''} 
+                        />
+
+                        <SuggestionCard 
+                            Title={sctr?.title || ''} 
+                            Desc={sctr?.msg || ''} 
+                            Color={sctr?.color || ''} 
+                            Value={sctr?.value || ''} 
+                            Target={sctr?.target || ''} 
+                            Message={sctr?.message || ''} 
+                        />
                     </>
                     }
                 </div>

@@ -96,7 +96,7 @@ const Setting = ({ id }) => {
       {id === '' ? (
           <SettingLoading />
       ) : (
-          <div className='h-screen w-full flex flex-col bg-white dark:bg-gray-800'>
+          <div className='h-fit w-full flex flex-col bg-white dark:bg-gray-800'>
               <div className='w-full float-right h-2 flex justify-end mb-3 items-center'>
                   <button
                       className='transition duration-300'
@@ -122,7 +122,7 @@ const Setting = ({ id }) => {
                                 value={item.rar}
                                 onChange={(e) => handleChange(index, 'rar', e.target.value)}
                               />
-                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                              <div className='w-14 py-3 bg-blue-700 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
                                 %
                               </div>
                             </div>
@@ -139,7 +139,7 @@ const Setting = ({ id }) => {
                                 value={item.ctr}
                                 onChange={(e) => handleChange(index, 'ctr', e.target.value)}
                               />
-                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                              <div className='w-14 py-3 bg-blue-700 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
                                 %
                               </div>
                             </div>
@@ -156,7 +156,7 @@ const Setting = ({ id }) => {
                                 value={item.oclp}
                                 onChange={(e) => handleChange(index, 'oclp', e.target.value)}
                               />
-                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                              <div className='w-14 py-3 bg-blue-700 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
                                 %
                               </div>
                             </div>
@@ -173,7 +173,7 @@ const Setting = ({ id }) => {
                                 value={item.roas}
                                 onChange={(e) => handleChange(index, 'roas', e.target.value)}
                               />
-                              <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
+                              <div className='w-14 py-3 bg-blue-700 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-e-md text-white'>
                                 %
                               </div>
                             </div>
@@ -184,7 +184,7 @@ const Setting = ({ id }) => {
                           </label>
                           <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 5000</p>
                           <div className='mt-1 flex items-center'>
-                            <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-s-md text-white'>
+                            <div className='w-14 py-3 bg-blue-700 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-s-md text-white'>
                               Rp.
                             </div>
                             <input
@@ -201,7 +201,7 @@ const Setting = ({ id }) => {
                           </label>
                           <p className='text-xs text-gray-500 dark:text-gray-400'>{t('recommended')} &lt; Rp. 1000</p>
                           <div className='mt-1 flex items-center'>
-                            <div className='w-14 py-3 bg-blue-500 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-s-md text-white'>
+                            <div className='w-14 py-3 bg-blue-700 flex justify-center items-center font-semibold text-[17px] border dark:border-none rounded-s-md text-white'>
                               Rp.
                             </div>
                             <input
@@ -214,7 +214,7 @@ const Setting = ({ id }) => {
                         </div>
                       </div>
                       <button 
-                          className='w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'
+                          className='w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300'
                           onClick={handleSubmit}
                       >
                           Save

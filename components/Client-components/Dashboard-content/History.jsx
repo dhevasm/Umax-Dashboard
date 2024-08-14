@@ -77,7 +77,7 @@ export default function History({ id }) {
 
         try {
             const token = localStorage.getItem('jwtToken');
-            const response = await axios.get(`${umaxUrl}/history?campaign_id=${id}&tenantId=${localStorage.getItem('tenant_id')}&page=${currentPage}&limit=${dataPerPage}`, {
+            const response = await axios.get(`${umaxUrl}/history?campaign_id=${id}&tenantId=${localStorage.getItem('tenantId')}&page=${currentPage}&limit=${dataPerPage}`, {
                 headers: {
                     'accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',

@@ -227,16 +227,28 @@
       "title": "Clients",
       "search": "Search",
       "name": "Name",
+      "holder-name":"Type client name here",
       "email": "Email",
+      "holder-email": "example@gmail.com",                                                                                                                                                                                                    
+      "password": "Password",
+      "holder-password": "Type password here",
+      "confirm": "Confirm Password",
+      "holder-confirm": "Type confirm password here",
       "contact": "Contact",
+      "holder-contact": "+1234567890",
       "address": "Address",
+      "holder-address": "Client Address",
       "note": "Note",
+      "holder-note": "Note",
       "status": "Status",
+      "select-status": "Select status",
       "active": "Active",
       "deactive": "Deactive",
       "page": "Page",
       "not-found": "Client not found",
-      "details-of":"Details of"
+      "details-of":"Details of",
+      "create-client": "Create Client",
+      "save": "Save"
     },
 
     "admin-dashboard": {
@@ -409,7 +421,8 @@
       "end-date-error": "End date is required",
       "all-platform": "All platform",
       "all-status": "All status",
-      "all-objective": "All objective"
+      "all-objective": "All objective",
+      "delete": "Delete"
     },
 
     "admin-accounts": {
@@ -427,10 +440,10 @@
       "save": "Save Changes",
       "page": "Page",
       "not-found": "Account not found",
-      "holder-name": "Type Username here",
-      "holder-email": "example@gmail.com",
-      "holder-password": "Type password here",
-      "holder-confirm": "Type confirm password here",
+      "holder-name": "Enter Account's name",
+      "holder-email": "Enter email address",
+      "holder-password": "Enter Password",
+      "holder-confirm": "Enter Password Confirmation",
       "select-client": "Select client",
       "select-platform": "Select platform",
       "name-error": "Username is required",
@@ -442,7 +455,8 @@
       "client-error": "Client is required",
       "platform-error": "Platform is required",
       "all-status": "All status",
-      "all-platform": "All platform"
+      "all-platform": "All platform",
+      "delete": "Delete"
     },
 
     "admin-clients": {
@@ -478,7 +492,8 @@
       "password-error": "Password is required",
       "password-error2": "Password does not match",
       "confirm-error": "Confirm password is required",
-      "all-status": "All status"
+      "all-status": "All status",
+      "delete": "Delete"
     },
 
     "swal-file": {
@@ -527,14 +542,17 @@
       "holder-name": "Name",
       "holder-email": "example@gmail.com",
       "holder-confirm": "Confirm Password",
+      "select-tenant": "Select Tenant",
       "select-role": "Select Role",
       "name-error": "Name is required",
       "email-error": "Email is required",
-      "email-error-2": "Invalid Email Address",
+      "email-error2": "Invalid Email Address",
       "password-error":"Password is required",
       "password-error2":"Password does not match",
       "confirm-error":"Password confirmation is required",
-      "role-error": "Please select Role"
+      "tenant-error": "Tenant is required",
+      "role-error": "Please select Role",
+      "tenant-not-found": "Tenant not found"
     },
 
     "login":{

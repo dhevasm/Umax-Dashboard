@@ -514,25 +514,25 @@ export default function Dashboard({ tenant_id }) {
                             <CountCard title={t('campaigns')} value={loadingCount ? "Loading..." : campaignCount} handleClick={"campaigns"} />
                             <CountCard title={t('clients')} value={loadingCount ? "Loading..." : clientCount} handleClick={"clients"} />
                 </div>  
-                <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
-                    <div className="w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
+                    <div className="w-full max-w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartOne chartData={chartData} />
                     </div>
-                    <div className="w-full flex justify-center lg:w-2/3 h-[250px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full max-w-full flex justify-center lg:w-2/3 h-[200px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartTwo chartData={chartData} />
                     </div>
                 </div>
-                <div className="w-full flex flex-col lg:flex-row gap-7 mb-3">
-                    <div className="w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
+                    <div className="w-full max-w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <Map/>
                     </div>
-                    <div className="w-full flex justify-center lg:w-2/5 h-[320px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full max-w-full flex justify-center lg:w-2/5 h-[370px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartThree chartData={chartData} />
                     </div>
                 </div>
             </div>
             {userData.roles === 'admin' ? (
-                <div className="w-full h-fit flex flex-col gap-7 mb-3">
+                <div className="w-full h-fit flex flex-col gap-7 mb-3 mt-5">
                     <div className="w-full h-fit bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-x-auto">
                         <div className="rounded-sm bg-white dark:bg-slate-800 shadow-default sm:px-7.5 xl:pb-1">
                             <div className="flex justify-between items-center mb-5">
@@ -631,7 +631,7 @@ export default function Dashboard({ tenant_id }) {
                     </div>
                 </div>
             ) : (
-                <div className="w-full h-fit flex flex-col gap-7 mb-3">
+                <div className="w-full h-fit flex flex-col gap-7 mb-3 mt-5">
                     <div className="w-full h-fit bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-x-auto">
                         <div className="rounded-sm bg-white dark:bg-slate-800 shadow-default sm:px-7.5 xl:pb-1">
                             <div className="flex justify-between items-center mb-5">

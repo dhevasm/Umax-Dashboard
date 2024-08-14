@@ -54,6 +54,7 @@ function AdminNavbar({ userData }) {
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
+  const router = useRouter();
 
   const navbarBrand = useRef();
 
@@ -507,13 +508,14 @@ function AdminNavbar({ userData }) {
           )
           .then((response) => {
             if (!response.IsError) {
-              Swal.fire({
-                icon: "info",
-                title: "Please wait...",
-                text: "Request is being processed",
-              }).then(() => {
-                createTenant(response.data.Data, request_id);
-              });
+                createTenant(response.data.Data, request_id)
+                // .then(() => {
+                //   Swal.fire({
+                //     icon: "info",
+                //     title: "Please wait...",
+                //     text: "Request is being processed",
+                //   })
+                // })
             } else {
               Swal.fire({
                 icon: "error",

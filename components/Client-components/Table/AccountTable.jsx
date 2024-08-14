@@ -408,7 +408,7 @@ const AccountTable = () => {
                     <div className={`mb-4 flex flex-row items-start ${isWideScreen ? `gap-4` : "gap-2"}`}>
                         <input
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-600 rounded-lg px-2 text-[15px] py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300`}
-                            type="text"
+                            type="search"
                             placeholder={t("search")}
                             value={searchTerm}
                             onChange={handleSearchChange}

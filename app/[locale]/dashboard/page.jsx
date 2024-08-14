@@ -107,10 +107,10 @@ function Dashboard() {
                 {/* Nav Select */}
                 <div className="flex md:hidden justify-end m-10">
                   <select className="border w-full border-gray-300 py-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-1 px-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" onChange={(e) => SetActiveLink(e.target.value)}>
-                      <option value="performance">{t('performence')}</option>
-                      <option value="metrics">{t('metrics')}</option>
-                      <option value="history">{t('history')}</option>
-                      <option value="setting">{t('setting')}</option>
+                      <option value="performance" selected={activeContent === "performance"}>{t('performence')}</option>
+                      <option value="metrics" selected={activeContent === "metrics"}>{t('metrics')}</option>
+                      <option value="history" selected={activeContent === "history"}>{t('history')}</option>
+                      <option value="setting" selected={activeContent === "setting"}>{t('setting')}</option>
                   </select>
                 </div>
 

@@ -231,6 +231,6 @@ const LoadingCircle = () => (
       <div className="w-7 h-7 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
     </div>
   </div>
-);
+); 
 
 export default Page;
