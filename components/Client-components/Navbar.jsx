@@ -174,7 +174,7 @@ export default function Navbar() {
                             Profile
                         </Link>
                     </li>
-                    {roles === 'admin'&& (
+                    {roles === 'admin' && (
                         <li>
                             <Link href={`admin-dashboard`} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                                 <RiAdminLine className="w-5 h-5 mr-2" />
@@ -208,68 +208,35 @@ export default function Navbar() {
                         height={48}
                         onClick={() => router.push(`/${lang}/dashboard`)}
                     />
-                {/* Menu */}
-                <div>
-                    <ul className="hidden sm:hidden md:hidden lg:flex xl:flex justify-center p-2 text-black dark:text-slate-100 gap-5">
-                        <style jsx>
-                            {`
-                                .active-link {
-                                    background-color: rgba(38, 100, 235);
-                                    padding: 9px 16px;
-                                    border-radius: 25px;
-                                    color: white;
-                                    transition: background-color 0.3s, color 0.3s;
-                                }
-                                ul li {
-                                    padding: 9px 16px;
-                                    border-radius: 25px;
-                                    transition: background-color 0.3s, color 0.3s;
-                                }
-                                ul li:hover:not(.active-link) {
-                                    cursor: pointer;
-                                    background-color: rgba(0, 0, 255, 0.1);
-                                    color: blue;
-                                }
-                                .dark ul li:hover:not(.active-link) {
-                                    background-color: rgba(255, 255, 255, 0.1);
-                                    color: white;
-                                }
-                            `}
-                        </style>
-                        <li
-                            className={`font-semibold flex gap-1 items-center ${
-                                activeLink.slice(3) === "/dashboard" ? "active-link" : ""
-                            }`}
-                            onClick={() => handleClick("/dashboard")}
-                        >
-                            <span>
-                                <MdDashboard size={20} />
-                            </span>
-                            {t("dashboard")}
-                        </li>
-                        <li
-                            className={`font-semibold flex gap-1 items-center ${
-                                activeLink.slice(3) === "/campaigns" ? "active-link" : ""
-                            }`}
-                            onClick={() => handleClick("/campaigns")}
-                        >
-                            <span>
-                                <BiSolidMegaphone size={20} />
-                            </span>
-                            {t("campaign")}
-                        </li>
-                        <li
-                            className={`font-semibold flex gap-1 items-center ${
-                                activeLink.slice(3) === "/accounts" ? "active-link" : ""
-                            }`}
-                            onClick={() => handleClick("/accounts")}
-                        >
-                            <span>
-                                <AiOutlineUser size={20} />
-                            </span>
-                            {t("account")}
-                        </li>
-                        {roles !== "client" && (
+
+                    {/* Menu */}
+                    <div>
+                        <ul className="hidden sm:hidden md:hidden lg:flex xl:flex p-2 text-black dark:text-slate-100 gap-5">
+                            <style jsx>
+                                {`
+                                    .active-link {
+                                        background-color: rgba(38, 100, 235);
+                                        padding: 9px 16px;
+                                        border-radius: 25px;
+                                        color: white;
+                                        transition: background-color 0.3s, color 0.3s;
+                                    }
+                                    ul li {
+                                        padding: 9px 16px;
+                                        border-radius: 25px;
+                                        transition: background-color 0.3s, color 0.3s;
+                                    }
+                                    ul li:hover:not(.active-link) {
+                                        cursor: pointer;
+                                        background-color: rgba(0, 0, 255, 0.1);
+                                        color: blue;
+                                    }
+                                    .dark ul li:hover:not(.active-link) {
+                                        background-color: rgba(255, 255, 255, 0.1);
+                                        color: white;
+                                    }
+                                `}
+                            </style>
                             <li
                                 className={`font-semibold flex gap-1 items-center ${
                                     activeLink.slice(3) === "/dashboard" ? "active-link" : ""
@@ -303,6 +270,59 @@ export default function Navbar() {
                                 </span>
                                 {t("account")}
                             </li>
+                                {roles !== "client" && (
+                                    <li
+                                        className={`font-semibold flex gap-1 items-center ${
+                                            activeLink.slice(3) === "/clients" ? "active-link" : ""
+                                        }`}
+                                        onClick={() => handleClick("/clients")}
+                                    >
+                                        <span>
+                                            <BiGroup size={20} />
+                                        </span>
+                                        {t("client")}
+                                    </li>
+                                )}
+                            </ul>
+                    </div>
+                        {/* Profile */}
+                        <div className="flex gap-2 items-center">
+                            {/* <label htmlFor="theme" className="items-center cursor-pointer hidden md:inline-flex" hidden={roles == 'client'}>
+                                {
+                                    isDark ? <FaMoon className="text-lg text-white me-2"/> : <FaSun className="text-xl text-blue-500 me-2"/>
+                                }
+                                <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
+                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            </div>
+                            </label> */}
+                            {roles === 'client' && (
+                                activeLink.includes("id") ? 
+                                    <button onClick={() => changeLanguage('en')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                        {'ID'}
+                                    </button>
+                                : 
+                                    <button onClick={() => changeLanguage('id')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                        {'EN'}
+                                    </button>
+                            )}
+                    <div className="flex items-center space-x-4">
+                        <button
+                            onClick={handleTheme}
+                            className="hidden sm:flex xl:flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                        >
+                            {isDark ? <FaMoon className="text-lg text-white"/> : <FaSun className="text-xl text-blue-500" />}
+                        </button>
+                        <button
+                            onClick={isHidden == 2 ? setIsHidden : () => setIsHidden(2)}
+                            className="flex lg:hidden items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                        >
+                            <FaBars size={20} className="dark:text-slate-100"/>
+                        </button>
+
+                        {name && email ? (
+                            <ProfileDropdown name={name} email={email} role={role} image={image} />
+                        ) : (
+                            <UserInfoLoading />
                         )}
                     </div>
                         </div>
@@ -330,35 +350,7 @@ export default function Navbar() {
                     </ul>
                 </div>
 
-                {/* Profile */}
-                <div className="flex gap-2 items-center">
-                    {roles === 'client' && (
-                        activeLink.includes("id") ? 
-                            <button onClick={() => changeLanguage('en')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
-                                {'ID'}
-                            </button>
-                        : 
-                            <button onClick={() => changeLanguage('id')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
-                                {'EN'}
-                            </button>
-                    )}
-                </div>
 
-                {/* Right side */}
-                <div className="flex items-center space-x-4">
-                    <button
-                        onClick={handleTheme}
-                        className="hidden sm:flex xl:flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
-                    >
-                        {isDark ? <FaSun size={20} className="text-white"/> : <FaMoon size={16} />}
-                    </button>
-                    <button
-                        onClick={isHidden == 2 ? setIsHidden : () => setIsHidden(2)}
-                        className="flex lg:hidden items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
-                    >
-                        <FaBars size={20} className="dark:text-slate-100"/>
-                    </button>
-                    
                 <div className="fixed flex sm:hidden items-center justify-center bg-blue-500 rounded dark:bg-gray-600 z-[99999] shadow-1 dark:shadow-box-dark bottom-10 right-5 h-11 w-11">
                     <label htmlFor="themeSwitcher" className="inline-flex items-center cursor-pointer" aria-label="themeSwitcher" name="themeSwitcher">
                     <input 
@@ -377,47 +369,7 @@ export default function Navbar() {
                     </span>
                     </label>
                 </div>
-            </div>
-
-            <div className={`${isHidden === 2 ? 'block lg:hidden' : 'hidden'} absolute right-2 mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg w-60 transition-all duration-300 ease-in-out`}>
-                <ul className="space-y-1">
-                    <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <MdOutlineDashboard className="w-6 h-6 mr-2 dark:text-white"/>
-                        <Link href={`/${lang}/dashboard`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("dashboard")}</Link>
-                    </li>
-                    <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <BiSolidMegaphone className="w-6 h-6 mr-2 dark:text-white"/>
-                        <Link href={`/${lang}/campaigns`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("campaign")}</Link>
-                    </li>
-                    <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <AiOutlineUser className="w-6 h-6 mr-2 dark:text-white"/>
-                        <Link href={`/${lang}/accounts`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("account")}</Link>
-                    </li>
-                    <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <BiGroup className="w-6 h-6 mr-2 dark:text-white"/>
-                        <Link href={`/${lang}/clients`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("client")}</Link>
-                    </li>
-                </ul>
-            </div>
-
-            <div className="fixed flex sm:hidden items-center justify-center bg-blue-500 rounded dark:bg-gray-600 z-[99999] shadow-1 dark:shadow-box-dark bottom-10 right-5 h-11 w-11">
-                <label htmlFor="themeSwitcher" className="inline-flex items-center cursor-pointer" aria-label="themeSwitcher" name="themeSwitcher">
-                    <input 
-                        type="checkbox" 
-                        name="themeSwitcher" 
-                        checked={isDark} 
-                        onChange={handleTheme} 
-                        id="themeSwitcher" 
-                        className="sr-only" 
-                    />
-                    <span className="block text-body-color dark:hidden">
-                        <FaSun className='text-2xl text-white'/>
-                    </span>
-                    <span className="hidden text-white dark:block">
-                        <FaMoon className='text-xl'/>
-                    </span>
-                </label>
-            </div>
-        </nav>
+            </nav>
+        </>
     );
 }
