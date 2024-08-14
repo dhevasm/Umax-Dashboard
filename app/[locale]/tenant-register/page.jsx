@@ -215,9 +215,9 @@ export default function TenantRegisterPage() {
 
   function LoadingCircle(){
       return(
-          <div className="flex justify-center items-center h-8">
+          <div className="flex justify-center items-center h-4">
               <div className="relative">
-                  <div className="w-8 h-8 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
+                  <div className="w-4 h-4 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
               </div>
           </div>
       )

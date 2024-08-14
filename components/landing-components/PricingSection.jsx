@@ -172,7 +172,7 @@ const PricingSection = () => {
               {t('free-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
-                <p className="text-base text-body-color dark:text-gray-300">{t('free-feature-1')}</p>
+                <p className="text-base text-body-color dark:text-gray-300 font-bold">{t('30-day-trial-period')}</p>
                 <p className="text-base text-body-color dark:text-gray-300">
 
                   1 {t('admin-per-company')}
@@ -182,6 +182,9 @@ const PricingSection = () => {
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                   {t('maximum')} 3 {t('accounts-per-company')}
+                </p>
+                <p className="text-base text-body-color dark:text-gray-300">
+                  {t('maximum')} 2 {t('clients-per-company')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                   {t('maximum')} 2 {t('campaigns-per-account')}
@@ -291,7 +294,7 @@ const PricingSection = () => {
               {t('business-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
-                <p className="text-base text-body-color dark:text-gray-300">
+                <p className="text-base text-body-color dark:text-gray-300 font-bold">
                 {t('1-year-trial')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
@@ -302,6 +305,9 @@ const PricingSection = () => {
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                 {t('unlimited-accounts')}
+                </p>
+                <p className="text-base text-body-color dark:text-gray-300">
+                {t('unlimited-clients')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                 {t('unlimited-campaigns')}

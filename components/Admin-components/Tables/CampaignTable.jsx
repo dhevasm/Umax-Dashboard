@@ -40,47 +40,79 @@ export default function CampaignTable() {
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
 
-    // validasi form
-    const [values, setValues] = useState({name: '', start_date: '', end_date: ''})
+    const [values, setValues] = useState({
+        name: '',
+        start_date: '',
+        end_date: '',
+        account: '',
+        objective: '',
+        status: '',
+    });
+    
     const [error, setError] = useState({
         name: '',
         start_date: '',
         end_date: '',
-        account : '',
+        account: '',
         objective: '',
-        status : ''
-    })
-    const [isvalid, setIsvalid] = useState(false)
+        status: '',
+    });
+    
+    const [touched, setTouched] = useState({
+        name: false,
+        start_date: false,
+        end_date: false,
+        account: false,
+        objective: false,
+        status: false,
+    });
+
+    const [isvalid, setIsvalid] = useState(false);
 
     const validateForm = useCallback(() => {
-        let errors = {}
-        if(values.name == ''){
-            errors.name = t('name-error')
+        let errors = {};
+        if (values.name === '') {
+            errors.name = t('name-error');
         }
-        if(values.start_date == ''){
-            errors.start_date = t('start-date-error')
+        if (values.start_date === '') {
+            errors.start_date = t('start-date-error');
         }
-        if(values.end_date == ''){
-            errors.end_date = t('end-date-error')
+        if (values.end_date === '') {
+            errors.end_date = t('end-date-error');
         }
-        if(values.account == ''){
-            errors.account = t('account-error')
+        if (values.account === '') {
+            errors.account = t('account-error');
         }
-        if(values.objective == ''){
-            errors.objective = t('objective-error')
+        if (values.objective === '') {
+            errors.objective = t('objective-error');
         }
-        if(values.status == ''){
-            errors.status = t('status-error')
+        if (values.status === '') {
+            errors.status = t('status-error');
         }
-        setError(errors)
-        setIsvalid(Object.keys(errors).length === 0)
-    }, [values, t])
+        setError(errors);
+        setIsvalid(Object.keys(errors).length === 0);
+    }, [values, t]);
 
     useEffect(() => {
-        validateForm()
-    }, [values, validateForm])
+        validateForm();
+    }, [values, validateForm]);
+
+    const handleBlur = (e) => {
+        setTouched((prevTouched) => ({
+            ...prevTouched,
+            [e.target.name]: true,
+        }));
+    };
+
+    const handleChange = (e) => {
+        setValues((prevValues) => ({
+            ...prevValues,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     function showModal(mode, campaign_id = null ){
+        document.body.style.overflow = 'hidden'
         setModeModal(mode)
         if(mode == "Edit"){
             const filteredCampaign = campaigns.filter(campaign => campaign._id === campaign_id);
@@ -121,6 +153,31 @@ export default function CampaignTable() {
         addModal.current.classList.remove("hidden")
     }
     function closeModal(){
+        document.body.style.overflow = 'auto'
+        setValues({
+            name: '',
+            start_date: '',
+            end_date: '',
+            account: '',
+            objective: '',
+            status: '',
+        });
+        setError({
+            name: '',
+            start_date: '',
+            end_date: '',
+            account: '',
+            objective: '',
+            status: '',
+        });
+        setTouched({
+            name: false,
+            start_date: false,
+            end_date: false,
+            account: false,
+            objective: false,
+            status: false,
+        });
         addModal.current.classList.add("hidden")
     }
     
@@ -582,17 +639,17 @@ export default function CampaignTable() {
                             <div className="w-full flex justify-start flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
                                 <div className="flex mb-4 lg:mb-0 xl:mb-0">
                                     {/* Button */}
-                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <AiOutlineFilePdf />
                                         </IconContext.Provider>
                                     </button>
-                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <RiFileExcel2Line />
                                         </IconContext.Provider>
                                     </button>
-                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border hover:bg-gray-100 rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <BiPlus className="text-thin"/>
                                         </IconContext.Provider>
@@ -604,7 +661,7 @@ export default function CampaignTable() {
                                     {/* Filter by select */}
                                     <div className="mb-4">
                                         <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s dark:border-gray-500 sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                         value={selectedStatus} onChange={handleStatusChange}
                                         >
                                             <option value="" disabled hidden>Status</option>
@@ -616,7 +673,7 @@ export default function CampaignTable() {
                                     </div>
                                     <div className="mb-4">
                                         <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border dark:border-gray-500 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                             value={selectedPlatform}
                                             onChange={handlePlatformChange}
                                         >
@@ -629,7 +686,7 @@ export default function CampaignTable() {
                                     </div>
                                     <div className="mb-4">
                                         <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                        <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e  text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                             value={selectedObjective}
                                             onChange={handleObjectiveChange}
                                         >
@@ -648,7 +705,7 @@ export default function CampaignTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4 ">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className= "w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-800" placeholder={t('search')}
+                                    <input type="text" id="search" name="search" className= "w-full px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-800" placeholder={t('search')}
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     onFocus={() => setCurrentPage(1)}
@@ -726,13 +783,13 @@ export default function CampaignTable() {
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:text-white dark:bg-slate-900 rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
+                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto pb-3">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
-                            <h3 className="text-lg font-semibold ">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                            <h3 className="text-2xl font-semibold ">
                                 {`${modeModal} ${t('campaigns')}`}
                             </h3>
-                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
@@ -740,16 +797,16 @@ export default function CampaignTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className={` ${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
-                                    <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('campaign_name')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
-                                    required onChange={(e) => setValues({...values, name: e.target.value})}/>
+                                    <label htmlFor="name" className="mb-2 text-sm font-normal text-black dark:text-slate-200  flex">{t('campaign_name')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <input type="text" name="name" id="name" className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 text-black dark:text-slate-200" placeholder={t('holder-name')}
+                                    required onChange={handleChange} onBlur={handleBlur}/>
                                     {
-                                        error.name ? <div className="text-red-500 dark:text-red-600 text-sm">{error.name}</div> : ""
+                                        touched.name && error.name ? <div className="text-red-500 dark:text-red-600 text-sm">{error.name}</div> : ""
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="account" className="flex mb-2 text-sm font-medium ">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="account" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={(e) =>setValues({...values, account: e.target.value})}>
+                                    <label htmlFor="account" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <select id="account" name="account" className={`bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] ${values.account ? "text-white" : "text-[#858c96]"} border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>{t('select-account')}</option>
                                         {
                                             selectLoading ? (
@@ -769,12 +826,12 @@ export default function CampaignTable() {
                                         }
                                     </select>
                                     {
-                                        error.account ? <div className="text-red-500 dark:text-red-600 text-sm">{error.account}</div> : ""
+                                        touched.account && error.account ? <div className="text-red-500 dark:text-red-600 text-sm">{error.account}</div> : ""
                                     }
                                 </div>
                                 <div className="col-span-1" ref={tenantInput}>
-                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium ">Tenant</label>
-                                    <select id="tenant" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <label htmlFor="tenant" className="block mb-2 text-sm font-normal text-black dark:text-slate-200 ">Tenant</label>
+                                    <select id="tenant" name="tenant" className="bg-white border text-[#858c96] dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
                                         {
                                             tenant.length > 0 ? tenant.map((tenant, index) => {
                                                 return <option key={index} value={tenant._id}>{tenant.company}</option>
@@ -782,73 +839,77 @@ export default function CampaignTable() {
                                         }
                                     </select>
                                 </div>
-
                                 
                                 <div className="col-span-1">
-                                <label htmlFor="objective" className="flex mb-2 text-sm font-medium ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="objective" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  "  defaultValue={""} onChange={(e) =>setValues({...values, objective: e.target.value})}>
+                                <label htmlFor="objective" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <select id="objective" name="objective" className={`bg-white ${values.objective ? "text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}  defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>{t('select-objective')}</option>
                                         <option value="1">Awareness</option>
                                         <option value="2">Conversion</option>
                                         <option value="3">Consideration</option>
                                     </select>
                                     {
-                                        error.objective ? <div className="text-red-500 dark:text-red-600 text-sm">{error.objective}</div> : ""
+                                        touched.objective && error.objective ? <div className="text-red-500 dark:text-red-600 text-sm">{error.objective}</div> : ""
                                     }
                                 </div>
                                 
                                 <div className="col-span-1">
-                                <label htmlFor="status" className="flex mb-2 text-sm font-medium ">status <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="status" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  " defaultValue={""} onChange={(e) => setValues({...values, status: e.target.value})}>
+                                <label htmlFor="status" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">Status <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <select id="status" name="status" className={`bg-white ${values.status ? "text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>{t('select-status')}</option>
                                         <option value="1">{t('active')}</option>
                                         <option value="2">{t('draft')}</option>
                                         <option value="3">{t('complete')}</option>
                                     </select>
                                     {
-                                        error.status ? <div className="text-red-500 dark:text-red-600 text-sm">{error.status}</div> : ""
+                                        touched.status && error.status ? <div className="text-red-500 dark:text-red-600 text-sm">{error.status}</div> : ""
                                     }
                                 </div>
 
                                 <div className="col-span-1">
-                                <label htmlFor="start_date" className="flex mb-2 text-sm font-medium ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="start_date" id="start_date" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
-                                    required onChange={(e) => setValues({...values, start_date: e.target.value})}/>
+                                <label htmlFor="start_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                    required onChange={handleChange} onBlur={handleBlur}/>
                                     {
-                                        error.start_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.start_date}</div> : ""
+                                        touched.start_date && error.start_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.start_date}</div> : ""
                                     }
                                 </div>
                                 
 
                                 <div className="col-span-1">
-                                <label htmlFor="end_date" className="flex mb-2 text-sm font-medium ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="end_date" id="end_date" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type Campaign name here"
-                                    required onChange={(e) => setValues({...values, end_date: e.target.value})}/>
+                                <label htmlFor="end_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                    required onChange={handleChange} onBlur={handleBlur}/>
                                     {
-                                        error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
+                                        touched.end_date && error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
                                     }
                                 </div>
 
                                 <div className="col-span-2">
-                                    <label htmlFor="notes" className="mb-2 text-sm font-medium">Notes</label>
-                                    <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
+                                    <label htmlFor="notes" className="mb-2 text-sm font-normal text-black dark:text-slate-200">Notes</label>
+                                    <textarea id="notes" name="notes" className="bg-white border text-black dark:text-slate-200 dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                 </div>
                                 
                                 
                                 
                             </div>
-                                <div className="flex justify-between items-end">
-                                    <div></div>
-                                        {
-                                            modeModal === 'Edit' ? <div className="flex gap-2">
-                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateCampaign}>{t('save')}</button> 
-                                                <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}><FaTrash/>
-                                                </button> 
-                                            </div> 
-                                                : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createCampaign}>{t('submit')}</button>
-                                        }
-                                        
-                                </div>  
+                                {
+                                    modeModal === 'Edit' ? (
+                                        <div className="flex gap-3">
+                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateCampaign}>
+                                                {t('save')}
+                                            </button>
+                                            <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}>
+                                                {t('delete')}
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createCampaign}>
+                                            {t('submit')}
+                                        </button>
+                                    )
+                                    
+                                }   
                         </div>
                     </div>
                 </div>

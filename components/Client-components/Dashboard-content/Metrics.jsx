@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 export default function Metrics({ id }) {
     const [activeCard, setActiveCard] = useState(null);
     const [data, setData] = useState([]);
+    const [history, setHistory] = useState([]);
     const t = useTranslations('metrics');
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -34,10 +35,64 @@ export default function Metrics({ id }) {
 
     useEffect(() => {
         getMetricByCampaign();
-    }, [getMetricByCampaign]); // Trigger useEffect whenever getMetricByCampaign changes
+    }, [getMetricByCampaign]);
+
+    const getHistoryByCampaign = useCallback(async () => {
+        if (!id) {
+            console.warn("No campaign ID provided");
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('jwtToken');
+            const response = await axios.get(`${umaxUrl}/metrics-7?campaign_id=${id}&tenantId=${localStorage.getItem('tenantId')}`, {
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            setHistory(response.data.Data);
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        getHistoryByCampaign();
+    }, [getHistoryByCampaign]);
 
     const handleToggle = (id) => {
         setActiveCard(activeCard === id ? null : id);
+    };
+
+    const cleanValue = (value) => {
+        return parseFloat(value.replace(/%|x|[^0-9.-]+/g, "")) || 0;
+    };
+
+    const calculateMetrics = (metricName) => {
+        const values = history.slice(-7).map(item => cleanValue(item[metricName]));
+        const total = values.reduce((acc, value) => acc + value, 0);
+        const average = total / values.length;
+        return {
+            total: total.toFixed(1),
+            average: average.toFixed(1)
+        };
+    };
+
+    const metricCalculations = {
+        amountspent: calculateMetrics('amountspent'),
+        reach: calculateMetrics('reach'),
+        impressions: calculateMetrics('impressions'),
+        frequency: calculateMetrics('frequency'),
+        rar: calculateMetrics('rar'),
+        cpc: calculateMetrics('cpc'),
+        ctr: calculateMetrics('ctr'),
+        oclp: calculateMetrics('oclp'),
+        cpr: calculateMetrics('cpr'),
+        atc: calculateMetrics('atc'),
+        roas: calculateMetrics('roas'),
+        realroas: calculateMetrics('realroas')
     };
 
     return (    
@@ -59,6 +114,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('amount-desc')}
                                 isActive={activeCard === 1}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.amountspent)
+                                }))}
+                                totalSpent={metricCalculations.amountspent.total}
+                                averageSpent={metricCalculations.amountspent.average}
                             />,
                             <MetricCard
                                 key={`${index}-2`}
@@ -68,6 +129,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('reach-desc')}
                                 isActive={activeCard === 2}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.reach)
+                                }))}
+                                totalSpent={metricCalculations.reach.total}
+                                averageSpent={metricCalculations.reach.average}
                             />,
                             <MetricCard
                                 key={`${index}-3`}
@@ -77,6 +144,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('impressions-desc')}
                                 isActive={activeCard === 3}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.impressions)
+                                }))}
+                                totalSpent={metricCalculations.impressions.total}
+                                averageSpent={metricCalculations.impressions.average}
                             />,
                             <MetricCard
                                 key={`${index}-4`}
@@ -86,6 +159,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('frequency-desc')}
                                 isActive={activeCard === 4}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.frequency)
+                                }))}
+                                totalSpent={metricCalculations.frequency.total}
+                                averageSpent={metricCalculations.frequency.average}
                             />,
                             <MetricCard
                                 key={`${index}-5`}
@@ -95,6 +174,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('rar-desc')}
                                 isActive={activeCard === 5}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.rar)
+                                }))}
+                                totalSpent={metricCalculations.rar.total}
+                                averageSpent={metricCalculations.rar.average}
                             />,
                             <MetricCard
                                 key={`${index}-6`}
@@ -104,6 +189,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('cpc-desc')}
                                 isActive={activeCard === 6}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.cpc)
+                                }))}
+                                totalSpent={metricCalculations.cpc.total}
+                                averageSpent={metricCalculations.cpc.average}
                             />,
                             <MetricCard
                                 key={`${index}-7`}
@@ -113,6 +204,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('ctr-desc')}
                                 isActive={activeCard === 7}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.ctr)
+                                }))}
+                                totalSpent={metricCalculations.ctr.total}
+                                averageSpent={metricCalculations.ctr.average}
                             />,
                             <MetricCard
                                 key={`${index}-8`}
@@ -122,6 +219,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('oclp-desc')}
                                 isActive={activeCard === 8}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.oclp)
+                                }))}
+                                totalSpent={metricCalculations.oclp.total}
+                                averageSpent={metricCalculations.oclp.average}
                             />,
                             <MetricCard
                                 key={`${index}-9`}
@@ -131,6 +234,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('cpr-desc')}
                                 isActive={activeCard === 9}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.cpr)
+                                }))}
+                                totalSpent={metricCalculations.cpr.total}
+                                averageSpent={metricCalculations.cpr.average}
                             />,
                             <MetricCard
                                 key={`${index}-10`}
@@ -140,6 +249,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('atc-desc')}
                                 isActive={activeCard === 10}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.atc)
+                                }))}
+                                totalSpent={metricCalculations.atc.total}
+                                averageSpent={metricCalculations.atc.average}
                             />,
                             <MetricCard
                                 key={`${index}-11`}
@@ -149,6 +264,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('roas-desc')}
                                 isActive={activeCard === 11}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.roas)
+                                }))}
+                                totalSpent={metricCalculations.roas.total}
+                                averageSpent={metricCalculations.roas.average}
                             />,
                             <MetricCard
                                 key={`${index}-12`}
@@ -158,6 +279,12 @@ export default function Metrics({ id }) {
                                 onToggle={handleToggle}
                                 Description={t('real-desc')}
                                 isActive={activeCard === 12}
+                                data={history.slice(-7).map((item, index) => ({
+                                    name: `Metric ${index + 1}`,
+                                    value: cleanValue(item.realroas)
+                                }))}
+                                totalSpent={metricCalculations.realroas.total}
+                                averageSpent={metricCalculations.realroas.average}
                             />,
                         ])
                     }

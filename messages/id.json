@@ -227,15 +227,28 @@
       "title": "Klien",
       "search": "Cari",
       "name": "Nama",
+      "holder-name": "Ketik nama klien disini",
       "email": "Email",
+      "holder-email": "contoh@gmail.com",
+      "password": "Kata Sandi",
+      "holder-password": "Ketik Kata Sandi",
+      "confirm": "Konfirmasi Kata Sandi",
+      "holder-confirm": "Ketik Konfirmasi Kata Sandi",
+      "contact": "Kontak",
+      "holder-contact": "+1234567890",
       "address": "Alamat",
-      "contact": "kontak",
+      "holder-address": "Ketik Alamat Disini",
       "note": "Catatan",
+      "holder-note": "Ketik Catatan Disini",
       "active": "Aktif",
+      "status": "Status",
+      "select-status": "Pilih Status",
       "deactive": "Tidak Aktif",
       "page": "Halaman",
       "not-found": "Klien tidak ditemukan",
-      "details-of": "Detail dari"
+      "details-of": "Detail dari",
+      "create-client": "Tambah Klien",
+      "save": "Simpan"
     },
 
     "admin-dashboard": {
@@ -409,7 +422,8 @@
       "end-date-error": "Tanggal selesai tidak boleh kosong",
       "all-platform": "Semua Platform",
       "all-status": "Semua status",
-      "all-objective": "Semua Objektif"
+      "all-objective": "Semua Objektif",
+      "delete": "Hapus"
     },
 
     "admin-accounts": {
@@ -442,7 +456,8 @@
       "password-error2": "Password tidak sama",
       "confirm-error": "Konfirmasi Password tidak boleh kosong",
       "all-status": "Semua status",
-      "all-platform": "Semua platform"
+      "all-platform": "Semua platform",
+      "delete": "Hapus"
     },
 
     "admin-clients": {
@@ -478,7 +493,8 @@
       "password-error": "Password tidak boleh kosong",
       "password-error2": "Password tidak sama",
       "confirm-error": "Konfirmasi Password tidak boleh kosong",
-      "all-status": "Semua status"
+      "all-status": "Semua status",
+      "delete": "Hapus"
     },
 
     "swal-file": {
@@ -527,14 +543,17 @@
       "holder-name": "Nama",
       "holder-email": "contoh@gmail.com",
       "holder-confirm": "Konfirmasi Password",
+      "select-tenant": "Pilih Tenant",
       "select-role": "Pilih Role",
       "name-error": "Nama tidak boleh kosong",
       "email-error": "Email tidak boleh kosong",
-      "email-error-2": "Email tidak valid",
+      "email-error2": "Email tidak valid",
       "password-error":"Password tidak boleh kosong",
       "password-error2":"Password tidak sama",
       "confirm-error":"Konfirmasi Password tidak boleh kosong",
-      "role-error": "Pilih Role Pengguna"
+      "tenant-error": "Pilih Tenant",
+      "role-error": "Pilih Role Pengguna",
+      "tenant-not-found": "Tenant tidak ditemukan"
     },
 
     "login": {

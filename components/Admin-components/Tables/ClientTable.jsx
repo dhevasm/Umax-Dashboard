@@ -47,7 +47,15 @@ export default function ClientTable() {
     const tenantInput = useRef(null)
 
     // validasi form
-    const [values, setValues] = useState({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
+    const [values, setValues] = useState({
+        name: '',
+        address: '',
+        contact: '',
+        email: '',
+        password: '',
+        passwordverify: ''
+    });
+    
     const [error, setError] = useState({
         name: '',
         address: '',
@@ -55,46 +63,76 @@ export default function ClientTable() {
         email: '',
         password: '',
         passwordverify: ''
-    })
-    const [isvalid, setIsvalid] = useState(false)
+    });
+    
+    const [touched, setTouched] = useState({
+        name: false,
+        address: false,
+        contact: false,
+        email: false,
+        password: false,
+        passwordverify: false
+    });
+    
+    const [isValid, setIsValid] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setValues(prevValues => ({
+            ...prevValues,
+            [name]: value
+        }));
+    };
+
+    const handleBlur = (e) => {
+        const { name } = e.target;
+        setTouched(prevTouched => ({
+            ...prevTouched,
+            [name]: true
+        }));
+    };
+    
 
     const validateForm = useCallback(() => {
-        let errors = {}
-        if(values.name == ''){
-            errors.name = t('name-error')
+        let errors = {};
+    
+        if (values.name === '' && touched.name) {
+            errors.name = t('name-error');
         }
-        if(values.address == ''){
-            errors.address = t('address-error')
+        if (values.address === '' && touched.address) {
+            errors.address = t('address-error');
         }
-        if(values.contact == ''){
-            errors.contact = t('contact-error')
+        if (values.contact === '' && touched.contact) {
+            errors.contact = t('contact-error');
         }
-        if(!values.email.includes("@")){
-            errors.email = t('email-error2')
+        if (!values.email.includes('@') && touched.email) {
+            errors.email = t('email-error2');
         }
-        if(values.email == ''){
-            errors.email = t('email-error')
+        if (values.email === '' && touched.email) {
+            errors.email = t('email-error');
         }
-        if(values.password != values.passwordverify){
-            errors.password = t('password-error2')
-            errors.passwordverify = t('password-error2')
+        if (values.password !== values.passwordverify && (touched.password || touched.passwordverify)) {
+            errors.password = t('password-error2');
+            errors.passwordverify = t('password-error2');
         }
-        if(values.password == ''){
-            errors.password = t('password-error')
+        if (values.password === '' && touched.password) {
+            errors.password = t('password-error');
         }
-        if(values.passwordverify == ''){
-            errors.passwordverify = t('confirm-error')
+        if (values.passwordverify === '' && touched.passwordverify) {
+            errors.passwordverify = t('confirm-error');
         }
-        setError(errors)
-        setIsvalid(Object.keys(errors).length === 0)
-    }, [values, t])
+    
+        setError(errors);
+        setIsValid(Object.keys(errors).length === 0);
+    }, [values, touched, t]);
+    
 
     useEffect(() => {
-        validateForm()
-    }, [values, validateForm])
-
+        validateForm();
+    }, [values, touched, validateForm]);    
 
     function showModal(mode, client_id = null ){
+        document.body.style.overflow = 'hidden'
         setModeModal(mode)
         if(mode == "Edit"){
             const filteredclient = client.filter(client => client._id === client_id);
@@ -147,6 +185,31 @@ export default function ClientTable() {
         addModal.current.classList.remove("hidden")
     }
     function closeModal(){
+        document.body.style.overflow = 'auto'
+        setValues({
+            name: '',
+            address: '',
+            contact: '',
+            email: '',
+            password: '',
+            passwordverify: ''
+        })
+        setError({
+            name: '',
+            address: '',
+            contact: '',
+            email: '',
+            password: '',
+            passwordverify: ''
+        })
+        setTouched({
+            name: false,
+            address: false,
+            contact: false,
+            email: false,
+            password: false,
+            passwordverify: false
+        })
         addModal.current.classList.add("hidden")
     }
     
@@ -278,7 +341,7 @@ export default function ClientTable() {
     }, [client])
     
     async function createClient(){
-        if(isvalid){
+        if(isValid){
             const name = document.getElementById('name').value
             const country = document.getElementById('country').value
             const city = document.getElementById('city').value
@@ -348,7 +411,7 @@ export default function ClientTable() {
 
     async function updateClient(){
         if(EditclientId !== null) {
-            if(isvalid){
+            if(isValid){
 
                 const name = document.getElementById('name').value
                 const country = document.getElementById('country').value
@@ -594,17 +657,17 @@ export default function ClientTable() {
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -614,7 +677,7 @@ export default function ClientTable() {
                                 {/* Filter by select */}
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 rounded-e-md text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="" disabled hidden>Status</option>
@@ -630,7 +693,7 @@ export default function ClientTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className=" dark:bg-slate-800 w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t("search")}
+                                    <input type="text" id="search" name="search" className=" dark:bg-slate-800 w-full px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t("search")}
                                     defaultValue="" 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
@@ -705,13 +768,13 @@ export default function ClientTable() {
 
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
+                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto pb-3">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
                             <h3 className="text-lg font-semibold">
                                 {`${modeModal} ${t('clients')}`}
                             </h3>
-                            <button type="button" className=" text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes/>
                             </button>
                         </div>
@@ -719,17 +782,17 @@ export default function ClientTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium ">{t('client_name')}<span className="text-red-500">*</span> </label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('client_name')}<span className="text-red-500">*</span> </label>
+                                    <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
                                     required
-                                    onChange={(e) => setValues({...values, name: e.target.value})}/>
+                                    onChange={handleChange} onBlur={handleBlur}/>
                                     {
-                                        error.name && <p className="text-red-500 text-xs">{error.name}</p>
+                                        touched.name && error.name && <p className="text-red-500 text-xs">{error.name}</p>
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                <label htmlFor="country" className="block mb-2 text-sm font-medium ">{t('country')}<span className="text-red-500">*</span></label>
-                                <select id="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
+                                <label htmlFor="country" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('country')}<span className="text-red-500">*</span></label>
+                                <select id="country" name="country" className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-white' : 'text-[#858c96]'} text-black dark:text-slate-200-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
                                     <option value="0" key={0} disabled hidden>{t('select-country')}</option>
                                     {
                                         Country.length > 0 ? Country.map((item, index) => (
@@ -738,12 +801,12 @@ export default function ClientTable() {
                                     }
                                 </select>
                                 {
-                                    error.address && <p className="text-red-500 text-xs">{error.address}</p>
+                                    touched.address && error.address && <p className="text-red-500 text-xs">{error.address}</p>
                                 }
                             </div>
                             <div className="col-span-1">
-                                <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}<span className="text-red-500">*</span></label>
-                                <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}  onChange={(e) => setValues({...values, address: e.target.value})}>
+                                <label htmlFor="city" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('city')}<span className="text-red-500">*</span></label>
+                                <select id="city" name="address" className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-white' : 'text-[#858c96]'} text-black dark:text-slate-200-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={0} onChange={handleChange} onBlur={handleBlur}>
                                     {
                                         City.length > 0 ? <option disabled value={0} key={0} hidden>{t('select-city')}</option> : ""
                                     }
@@ -754,54 +817,54 @@ export default function ClientTable() {
                                     }
                                 </select>
                                 {
-                                    error.address && <p className="text-red-500 text-xs">{error.address}</p>
+                                    touched.address && error.address && <p className="text-red-500 text-xs">{error.address}</p>
                                 }
                             </div>
                                 
                                 <div className="col-span-1">
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium ">Email<span className="text-red-500">*</span> </label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required
-                                    onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Email<span className="text-red-500">*</span> </label>
+                                    <input type="email" name="email" id="email" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-email')} required
+                                    onChange={handleChange} onBlur={handleBlur}/>
                                     {
-                                        error.email && <p className="text-red-500 text-xs">{error.email}</p>
+                                        touched.email && error.email && <p className="text-red-500 text-xs">{error.email}</p>
                                     }
                                 </div>
                                 <div className="col-span-1">
-                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium ">{t('contact')}<span className="text-red-500">*</span> </label>
-                                    <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-contact')} required
-                                    onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('contact')}<span className="text-red-500">*</span> </label>
+                                    <input type="number" name="contact" id="contact" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-contact')} required
+                                    onChange={handleChange} onBlur={handleBlur}/>
                                     {
-                                        error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
+                                        touched.contact && error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1" ref={passwordInput}>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium ">Password<span className="text-red-500">*</span> </label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Password<span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-password')} required 
-                                        onChange={(e)=> setValues({...values, password: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} required 
+                                        onChange={handleChange} onBlur={handleBlur}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
                                     {
-                                        error.password && <p className="text-red-500 text-xs">{error.password}</p>
+                                        touched.password && error.password && <p className="text-red-500 text-xs">{error.password}</p>
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium ">{t('confirm_password')}<span className="text-red-500">*</span> </label>
+                                    <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('confirm_password')}<span className="text-red-500">*</span> </label>
                                     <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-confirm')} required onChange={(e) => setValues({...values, passwordverify: e.target.value})}/>
+                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} required onChange={handleChange} onBlur={handleBlur}/>
                                         <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                             {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                         </button>
                                     </div>
                                     {
-                                        error.passwordverify && <p className="text-red-500 text-xs">{error.passwordverify}</p>
+                                        touched.passwordverify && error.passwordverify && <p className="text-red-500 text-xs">{error.passwordverify}</p>
                                     }
                                 </div>
                                 <div className="col-span-2" ref={tenantInput}>
-                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium ">Tenant <span className="text-red-500">*</span> </label>
-                                    <select id="tenant" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  ">
+                                    <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Tenant <span className="text-red-500">*</span> </label>
+                                    <select id="tenant" className={`bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}>
                                         {
                                             tenants.length > 0 ? tenants.map((tenant, index) => {
                                                 return (
@@ -814,28 +877,35 @@ export default function ClientTable() {
                             </div>
                             
                             <div className="col-span-2">
-                                    <label htmlFor="notes" className="mb-2 text-sm font-medium">Notes</label>
-                                    <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 dark:border-none border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
+                                    <label htmlFor="notes" className="mb-2 text-sm font-medium text-black dark:text-slate-200">Notes</label>
+                                    <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 text-black dark:text-slate-200 dark:border-none border-gray-300 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                 </div>
 
-                                <div className="flex justify-between items-end pb-20 md:pb-2">
-                                <div>
+                                <div className="mt-3">
                                     <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                     <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                    <span className="text-sm font-medium ">Status</span>
-                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <span className="text-sm font-medium text-black dark:text-slate-200 ">Status</span>
+                                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
                                     </label>
                                 </div>
-                                <div>
-                                 {
-                                            modeModal === 'Edit' ? <div className="flex gap-3">
-                                                <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateClient}>{t('save')}</button>
-                                                <button className="bg-red-500 hover:bg-red-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditclientId)}><FaTrash/></button>
-                                            </div> 
-                                             : <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" onClick={createClient}>{t('submit')}</button>
-                                        }
-                                </div>
-                                </div>  
+
+                                {
+                                    modeModal === 'Edit' ? (
+                                        <div className="flex gap-3 mt-5">
+                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateClient}>
+                                                {t('save')}
+                                            </button>
+                                            <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditclientId)}>
+                                                {t('delete')}
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createClient}>
+                                            {t('submit')}
+                                        </button>
+                                    )
+                                    
+                                }
                         </div>
                     </div>
                 </div>
