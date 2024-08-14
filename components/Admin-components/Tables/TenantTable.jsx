@@ -579,7 +579,7 @@ export default function TenantTable() {
                         <div className=" flex flex-col-reverse sm:flex-row md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className=" py-2 mb-4 borde dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className=" py-2 mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>

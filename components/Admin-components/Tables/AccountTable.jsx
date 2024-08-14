@@ -792,7 +792,7 @@ export default function AccountTable() {
                                 </div>
                                 <div className="col-span-1">
                                     <label htmlFor="client" className="flex mb-2 text-sm font-normal ">{t('client')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
-                                    <select id="client" name="client" className={`bg-white ${values.client ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                    <select id="client" name="client" className={`bg-white ${values.client ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>{t('select-client')}</option>
                                         {
                                             selectLoading ? (
@@ -826,7 +826,7 @@ export default function AccountTable() {
                                 </div>
                                 <div className="col-span-1">
                                     <label htmlFor="platform" className="flex mb-2 text-sm font-normal ">Platform <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
-                                    <select id="platform" name="platform" className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${values.platform ? "text-white" : "text-[#858c96]"}`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                    <select id="platform" name="platform" className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${values.platform ? "text-black dark:text-white" : "text-[#858c96]"}`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden className="">{t('select-platform')}</option>
                                         <option value="1">Meta Ads</option>z
                                         <option value="2">Google Ads</option>

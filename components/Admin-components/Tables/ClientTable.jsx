@@ -792,7 +792,7 @@ export default function ClientTable() {
                                 </div>
                                 <div className="col-span-1">
                                 <label htmlFor="country" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('country')}<span className="text-red-500">*</span></label>
-                                <select id="country" name="country" className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-white' : 'text-[#858c96]'} text-black dark:text-slate-200-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
+                                <select id="country" name="country" className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={(e) => handleCityList(e.target.value)} defaultValue={0}>
                                     <option value="0" key={0} disabled hidden>{t('select-country')}</option>
                                     {
                                         Country.length > 0 ? Country.map((item, index) => (
@@ -806,7 +806,7 @@ export default function ClientTable() {
                             </div>
                             <div className="col-span-1">
                                 <label htmlFor="city" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('city')}<span className="text-red-500">*</span></label>
-                                <select id="city" name="address" className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-white' : 'text-[#858c96]'} text-black dark:text-slate-200-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={0} onChange={handleChange} onBlur={handleBlur}>
+                                <select id="city" name="address" className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={0} onChange={handleChange} onBlur={handleBlur}>
                                     {
                                         City.length > 0 ? <option disabled value={0} key={0} hidden>{t('select-city')}</option> : ""
                                     }

@@ -117,6 +117,7 @@ export default function CampaignTable() {
         if(mode == "Edit"){
             const filteredCampaign = campaigns.filter(campaign => campaign._id === campaign_id);
             if(filteredCampaign.length > 0){
+                console.log(filteredCampaign[0])
                 setValues({name: filteredCampaign[0].name, start_date: filteredCampaign[0].start_date, end_date: filteredCampaign[0].end_date, account: filteredCampaign[0].account_id, objective: filteredCampaign[0].objective, status: filteredCampaign[0].status})
                 setError({name: '', start_date: '', end_date: '', account: '', objective: '', status: ''})
                 // console.log(filteredCampaign[0])
@@ -126,8 +127,7 @@ export default function CampaignTable() {
                 document.getElementById('tenant').value = filteredCampaign[0].tenant_id
                 document.getElementById('account').value = filteredCampaign[0].account_id
                 document.getElementById('objective').value = filteredCampaign[0].objective
-                document.getElementById('start_date').value = dateconvert(filteredCampaign[0].start_date)
-                filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : 
+                filteredCampaign[0].start_date ?document.getElementById('start_date').value = dateconvert(filteredCampaign[0].start_date) : ""
                 filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : ""
                 document.getElementById('status').value = filteredCampaign[0].status 
                 if(filteredCampaign[0].notes == "empty"){
@@ -603,7 +603,7 @@ export default function CampaignTable() {
 
     function dateconvert(date){
         let [day, month, year, hour] = date.split(" ");
-        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
         let monthIndex = months.indexOf(month) + 1;
         if(monthIndex < 10){
             monthIndex = "0" + monthIndex;
@@ -806,7 +806,7 @@ export default function CampaignTable() {
                                 </div>
                                 <div className="col-span-1">
                                     <label htmlFor="account" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="account" name="account" className={`bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] ${values.account ? "text-white" : "text-[#858c96]"} border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                    <select id="account" name="account" className={`bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] ${values.account ? "text-black dark:text-white" : "text-[#858c96]"} border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>{t('select-account')}</option>
                                         {
                                             selectLoading ? (
@@ -842,7 +842,7 @@ export default function CampaignTable() {
                                 
                                 <div className="col-span-1">
                                 <label htmlFor="objective" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="objective" name="objective" className={`bg-white ${values.objective ? "text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}  defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                    <select id="objective" name="objective" className={`bg-white ${values.objective ? "text-black dark:text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}  defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>{t('select-objective')}</option>
                                         <option value="1">Awareness</option>
                                         <option value="2">Conversion</option>
@@ -855,7 +855,7 @@ export default function CampaignTable() {
                                 
                                 <div className="col-span-1">
                                 <label htmlFor="status" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">Status <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="status" name="status" className={`bg-white ${values.status ? "text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                    <select id="status" name="status" className={`bg-white ${values.status ? "text-black dark:text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>{t('select-status')}</option>
                                         <option value="1">{t('active')}</option>
                                         <option value="2">{t('draft')}</option>
@@ -868,7 +868,7 @@ export default function CampaignTable() {
 
                                 <div className="col-span-1">
                                 <label htmlFor="start_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     {
                                         touched.start_date && error.start_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.start_date}</div> : ""
@@ -878,7 +878,7 @@ export default function CampaignTable() {
 
                                 <div className="col-span-1">
                                 <label htmlFor="end_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     {
                                         touched.end_date && error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
