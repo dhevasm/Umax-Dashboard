@@ -219,7 +219,7 @@ const PricingSection = () => {
                 console.log(response)
                   const element = document.getElementById("paypal-button-container");
                   element.innerHTML = "";
-                  element.innerHTML = `<h3>Thank you for your payment! <br> Save your order id : ${response.data.order_id} <br><a href='/en/tenant-register?order_id=${response.data.order_id}'>Click me to register new tenant</a></h3>`;
+                  element.innerHTML = `<h3>Thank you for your payment! <br> Save your order id : ${response.data.order_id} <br><a class='text-blue-500 underline' href='/en/tenant-register?order_id=${response.data.order_id}'>Click me to register new tenant</a></h3>`;
               }
             })
   
@@ -649,7 +649,7 @@ const PricingSection = () => {
                         >
                           Cancel
                         </div>
-                        <div id="paypal-button-container" className="hidden absolute bottom-24 right-6 max-h-[170px] overflow-y-auto w-[90%] bg-[#F0F0F0] p-5 rounded-sm shadow-xl">
+                        <div id="paypal-button-container" className="hidden absolute bottom-24 right-6 max-h-[170px] overflow-y-auto w-[90%] bg-[#F0F0F0] dark:bg-slate-800 p-5 rounded-sm shadow-xl">
                         </div>
                         <button
                           className="w-full px-5 bg-blue-500 text-white py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
