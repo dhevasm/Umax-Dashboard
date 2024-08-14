@@ -578,12 +578,12 @@ const PricingSection = () => {
                 <div className="absolute inset-0 bg-black opacity-60"></div>
                 <div className="relative z-10 bg-white dark:bg-slate-800 rounded-sm shadow-lg p-8 max-w-lg h-[700px] md:h-[650px] w-full">
                   <h2 className="text-3xl font-semibold mb-6 text-gray-900 dark:text-white">Complete Your Payment</h2>
-                  <div className="w-full h-1 bg-gray-300 my-4"></div>
-                  <div className="text-gray-600 dark:text-gray-300">
+                  {/* <div className="w-full h-0.5 bg-gray-300 my-4"></div> */}
+                  <div className="text-gray-600 dark:text-gray-300 pt-5">
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="flex gap-4">
                         <input
-                          className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="First Name"
                           name="first_name"
@@ -592,7 +592,7 @@ const PricingSection = () => {
                           required
                         />
                         <input
-                          className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="text"
                           placeholder="Last Name"
                           name="last_name"
@@ -602,7 +602,7 @@ const PricingSection = () => {
                         />
                       </div>
                       <input
-                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         type="email"
                         placeholder="Input your email"
                         name="email"
@@ -611,7 +611,7 @@ const PricingSection = () => {
                         required
                       />
                       <input
-                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         type="tel"
                         placeholder="Input phone number"
                         name="phone_number"
@@ -620,7 +620,7 @@ const PricingSection = () => {
                         required
                       />
                       <select
-                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         defaultValue={Subscribe}
                         disabled
                       >
@@ -628,16 +628,16 @@ const PricingSection = () => {
                         <option value="2">Business Plan ($199/year)</option>
                         <option value="3">Professional Plan ($256/year)</option>
                       </select>
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 pt-5">
                         <div className="flex items-center gap-2">
                           <input className="hidden" type="radio" id="midtrans" name="method" value="midtrans" onChange={handleChange} defaultChecked />
-                          <label htmlFor="midtrans" className={`flex hover:cursor-pointer border px-3 md:px-10 rounded-xl border-slate-700 items-center gap-2 ${formValues.method == "midtrans" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
+                          <label htmlFor="midtrans" className={`flex hover:cursor-pointer border px-3 md:px-10 rounded-sm border-slate-700 items-center gap-2 ${formValues.method == "midtrans" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
                             <img src="assets/Midtrans.png" alt="Midtrans" className="w-40 h-16 object-contain" />
                           </label>
                         </div> 
                         <div className="flex items-center gap-2">
                           <input className="hidden" type="radio" id="paypal" name="method" value="paypal" onChange={handleChange}/>
-                          <label htmlFor="paypal" className={`flex hover:cursor-pointer items-center gap-2 px-3 md:px-10 border rounded-xl border-slate-700 ${formValues.method == "paypal" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
+                          <label htmlFor="paypal" className={`flex hover:cursor-pointer items-center gap-2 px-3 md:px-10 border rounded-sm border-slate-700 ${formValues.method == "paypal" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
                             <img src="assets/Paypal.png" alt="Paypal" className="w-40 h-16 object-contain" />
                           </label>
                         </div>
@@ -645,7 +645,7 @@ const PricingSection = () => {
                       <div className="flex flex-col-reverse justify-end gap-2">
                         <div
                           onClick={closeModal}
-                          className="w-full px-5  bg-gray-500 text-white text-center py-3 rounded-md shadow-md hover:bg-gray-600"
+                          className="hover:cursor-pointer w-full px-5  bg-gray-500 text-white text-center py-3 rounded-md shadow-md hover:bg-gray-600"
                         >
                           Cancel
                         </div>
