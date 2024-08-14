@@ -179,7 +179,7 @@ export default function Navbar() {
                             <Link href={`admin-dashboard`} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                                 <RiAdminLine className="w-5 h-5 mr-2" />
                                 Admin Dashboard
-                            </Link>
+                            </Link> 
                         </li>
                     )}
                     {/* Other links here */}
@@ -196,18 +196,18 @@ export default function Navbar() {
     );
 
     return (
-        <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg px-5">
-            <div className="flex justify-between items-center h-16">
-                {/* Logo */}
-                <Image
-                    src="/assets/logo.png"
-                    alt="Logo"
-                    className="w-32 hover:cursor-pointer"
-                    width={120}
-                    height={48}
-                    onClick={() => router.push(`/${lang}/dashboard`)}
-                />
-
+        <>
+            <nav className="fixed top-0 z-50 w-full p-3 bg-white dark:bg-slate-800 shadow-lg px-5">
+                <div className="flex justify-between items-center h-16">
+                    {/* Logo */}
+                    <Image
+                        src="/assets/logo.png"
+                        alt="Logo"
+                        className="w-32 hover:cursor-pointer"
+                        width={120}
+                        height={48}
+                        onClick={() => router.push(`/${lang}/dashboard`)}
+                    />
                 {/* Menu */}
                 <div>
                     <ul className="hidden sm:hidden md:hidden lg:flex xl:flex justify-center p-2 text-black dark:text-slate-100 gap-5">
@@ -272,16 +272,61 @@ export default function Navbar() {
                         {roles !== "client" && (
                             <li
                                 className={`font-semibold flex gap-1 items-center ${
-                                    activeLink.slice(3) === "/clients" ? "active-link" : ""
+                                    activeLink.slice(3) === "/dashboard" ? "active-link" : ""
                                 }`}
-                                onClick={() => handleClick("/clients")}
+                                onClick={() => handleClick("/dashboard")}
                             >
                                 <span>
-                                    <BiGroup size={20} />
+                                    <MdDashboard size={20} />
                                 </span>
-                                {t("client")}
+                                {t("dashboard")}
+                            </li>
+                            <li
+                                className={`font-semibold flex gap-1 items-center ${
+                                    activeLink.slice(3) === "/campaigns" ? "active-link" : ""
+                                }`}
+                                onClick={() => handleClick("/campaigns")}
+                            >
+                                <span>
+                                    <BiSolidMegaphone size={20} />
+                                </span>
+                                {t("campaign")}
+                            </li>
+                            <li
+                                className={`font-semibold flex gap-1 items-center ${
+                                    activeLink.slice(3) === "/accounts" ? "active-link" : ""
+                                }`}
+                                onClick={() => handleClick("/accounts")}
+                            >
+                                <span>
+                                    <AiOutlineUser size={20} />
+                                </span>
+                                {t("account")}
                             </li>
                         )}
+                    </div>
+                        </div>
+                         {/* Right side */}
+                    </div>
+
+                <div className={`${isHidden === 2 ? 'block lg:hidden' : 'hidden'} absolute right-2 mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg w-60 transition-all duration-300 ease-in-out`}>
+                    <ul className="space-y-1">
+                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <MdOutlineDashboard className="w-6 h-6 mr-2 dark:text-white"/>
+                        <Link href={`/${lang}/dashboard`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("dashboard")}</Link>
+                        </li>
+                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <BiSolidMegaphone className="w-6 h-6 mr-2 dark:text-white"/>
+                        <Link href={`/${lang}/campaigns`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("campaign")}</Link>
+                        </li>
+                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <AiOutlineUser className="w-6 h-6 mr-2 dark:text-white"/>
+                        <Link href={`/${lang}/accounts`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("account")}</Link>
+                        </li>
+                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <BiGroup className="w-6 h-6 mr-2 dark:text-white"/>
+                        <Link href={`/${lang}/clients`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("client")}</Link>
+                        </li>
                     </ul>
                 </div>
 
@@ -313,12 +358,24 @@ export default function Navbar() {
                     >
                         <FaBars size={20} className="dark:text-slate-100"/>
                     </button>
-
-                    {name && email ? (
-                        <ProfileDropdown name={name} email={email} role={role} image={image} />
-                    ) : (
-                        <UserInfoLoading />
-                    )}
+                    
+                <div className="fixed flex sm:hidden items-center justify-center bg-blue-500 rounded dark:bg-gray-600 z-[99999] shadow-1 dark:shadow-box-dark bottom-10 right-5 h-11 w-11">
+                    <label htmlFor="themeSwitcher" className="inline-flex items-center cursor-pointer" aria-label="themeSwitcher" name="themeSwitcher">
+                    <input 
+                        type="checkbox" 
+                        name="themeSwitcher" 
+                        checked={isDark} 
+                        onChange={handleTheme} 
+                        id="themeSwitcher" 
+                        className="sr-only" 
+                    />
+                    <span className="block text-body-color dark:hidden">
+                        <FaSun className='text-2xl text-white'/>
+                    </span>
+                    <span className="hidden text-white dark:block">
+                        <FaMoon className='text-xl'/>
+                    </span>
+                    </label>
                 </div>
             </div>
 

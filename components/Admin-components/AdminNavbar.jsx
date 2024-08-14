@@ -6,6 +6,7 @@ import {
 import { useEffect, useState, useContext, useRef } from "react";
 import { IconContext } from "react-icons";
 import {
+  FaAngleDown,
   FaBars,
   FaBell,
   FaBuilding,
@@ -25,6 +26,9 @@ import Image from "next/image";
 import axios from "axios";
 import Swal from "sweetalert2";
 import AdminNavbarLoading from "../Client-components/Loading/AdminProfileLoading";
+import { AiOutlineProfile } from "react-icons/ai";
+import { MdAnalytics } from "react-icons/md";
+import { RiLogoutBoxLine } from "react-icons/ri";
 
 function AdminNavbar({ userData }) {
   const {
@@ -45,6 +49,11 @@ function AdminNavbar({ userData }) {
   const [requestCount, setRequestCount] = useState(0);
   const roles = localStorage.getItem("roles");
   const [isLoading, setLoading] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
   const router = useRouter();
 
   const navbarBrand = useRef();
@@ -96,10 +105,28 @@ function AdminNavbar({ userData }) {
 
   const Router = useRouter();
 
-  function handleLogout() {
-    localStorage.clear();
-    Router.push("/");
-  }
+  const handleLogout = () => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Logout",
+        cancelButtonText: "Cancel",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('tenantId');
+            localStorage.removeItem('roles');
+            localStorage.removeItem('name');
+            localStorage.removeItem('lang');
+            Router.push(`/`);
+
+        }
+    });
+};
 
   function handleTheme() {
     setIsDarkMode(!isDarkMode);
@@ -387,44 +414,44 @@ function AdminNavbar({ userData }) {
       });
   };
 
-  const getTenantID = async (datatenant, request_id) => {
-    await axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      })
-      .then(async (response) => {
-        if (!response.IsError) {
-          // console.log(response.data.Data)
-          const data = response.data.Data;
-          const tenant_id = data.filter(
-            (tenant) => tenant.company === datatenant.company
-          )[0]._id;
-          if (datatenant.subscription == true) {
-            const formData = new FormData();
-            formData.append("subscription", true);
-            const response = await axios.put(
-              `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${tenant_id}`,
-              formData,
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                },
-              }
-            );
+  // const getTenantID = async (datatenant, request_id) => {
+  //   await axios
+  //     .get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
+  //       headers: {
+  //         authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //       },
+  //     })
+  //     .then(async (response) => {
+  //       if (!response.IsError) {
+  //         // console.log(response.data.Data)
+  //         const data = response.data.Data;
+  //         const tenant_id = data.filter(
+  //           (tenant) => tenant.company === datatenant.company
+  //         )[0]._id;
+  //         if (datatenant.subscription == true) {
+  //           const formData = new FormData();
+  //           formData.append("subscription", true);
+  //           const response = await axios.put(
+  //             `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${tenant_id}`,
+  //             formData,
+  //             {
+  //               headers: {
+  //                 Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+  //               },
+  //             }
+  //           );
 
-            if (response.data.IsError == false) {
-              console.log("subscription success");
-            } else {
-              console.log("subscription failed");
-            }
-          }
-          // console.log(tenant_id)
-          createUser(datatenant, tenant_id, request_id);
-        }
-      });
-  };
+  //           if (response.data.IsError == false) {
+  //             console.log("subscription success");
+  //           } else {
+  //             console.log("subscription failed");
+  //           }
+  //         }
+  //         // console.log(tenant_id)
+  //         createUser(datatenant, tenant_id, request_id);
+  //       }
+  //     });
+  // };
 
   const createTenant = async (data, request_id) => {
     const formData = new FormData();
@@ -455,7 +482,7 @@ function AdminNavbar({ userData }) {
       console.log("tenant register failed");
       return;
     }
-    getTenantID(data, request_id);
+    createUser(data, response.data.tenant_id, request_id);
   };
 
   const handleAccept = (request_id) => {
@@ -527,7 +554,7 @@ function AdminNavbar({ userData }) {
               height={40}
             />
           </div>
-          <button onClick={hideHandle} className="mx-5">
+          <button onClick={hideHandle} className="mx-5 me-20">
             <FaBars className="text-2xl" />
           </button>
         </div>
@@ -573,7 +600,7 @@ function AdminNavbar({ userData }) {
             </button>
           </div>
 
-          <div className=" flex items-center gap-2 ms-20">
+          <div className=" flex items-center ms-15">
             <div
               className={`w-16 h-9 flex justify-center items-center rounded-full me-2`}
             >
@@ -613,7 +640,9 @@ function AdminNavbar({ userData }) {
             )}
 
             {showDropdown && (
-              <div className="absolute text-black dark:text-white top-20 right-36 p-5 w-[270px] max-h-[300px] overflow-y-auto bg-white dark:bg-slate-800 shadow-lg transition-transform transform duration-300 ease-in-out">
+              <>
+              <div className="absolute top-0 left-0 w-[100vw] h-[100vh] z-10" onClick={() => setShowDropdown(false)}></div>
+              <div className="absolute z-20 text-black dark:text-white top-20 right-10 p-5 w-[270px] max-h-[300px] overflow-y-auto bg-white dark:bg-slate-800 shadow-lg transition-transform transform duration-300 ease-in-out">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4 border-b border-gray-500 pb-2">
                   <h2 className="text-lg font-semibold">Register Requests</h2>
@@ -647,7 +676,7 @@ function AdminNavbar({ userData }) {
                             </p>
                           </div>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex" id="right-item">
                           {isLoading ? (
                             <>
                               <FaSpinner
@@ -686,30 +715,78 @@ function AdminNavbar({ userData }) {
                   ))}
                 </ul>
               </div>
+              </>
             )}
           </div>
 
+          <div className="relative">
           {userData.image ? (
-            <>
-              <div className="flex flex-col items-end mt-2">
-                <h1 className="text-nowrap font-medium">{userData.name}</h1>
-                <p className="text-gray-500">{userData.roles}</p>
-              </div>
-              <div className="block">
-                <Image
-                  src={`data:image/png;base64, ${userData.image}`}
-                  alt="profile"
-                  className="rounded-full hidden md:block w-[40px] h-[40px] bg-slate-200"
-                  width={40}
-                  height={40}   
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <AdminNavbarLoading />
-            </>
-          )}
+                <>
+                    <div onClick={toggleDropdown} className="flex items-center cursor-pointer">
+                      {
+                        isDropdownOpen ? (
+                          <FaAngleDown className="text-xl me-2 transform rotate-180"/>
+                        ) : (
+                          <FaAngleDown className="text-xl me-2"/>
+                        )
+                      }
+                        <div className="block">
+                            <Image
+                                src={`data:image/png;base64, ${userData.image}`}
+                                alt="profile"
+                                className="rounded-full w-[40px] h-[40px] bg-slate-200"
+                                width={40}
+                                height={40}   
+                            />
+                        </div>
+                    </div>
+                    
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 z-50">
+                            <div className="flex items-center mb-4">
+                                <Image
+                                    src={`data:image/png;base64, ${userData.image}`}
+                                    alt="profile"
+                                    className="rounded-full w-[50px] h-[50px] bg-slate-200"
+                                    width={50}
+                                    height={50}   
+                                />
+                                <div className="ml-3">
+                                    <h3 className="font-medium text-black dark:text-white">{userData.name}</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-300">{userData.roles}</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-5">
+                                <li>
+                                    <button onClick={() => {Router.push(`/${localStorage.getItem("lang")}/profile`)}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                                        <AiOutlineProfile className="mr-2" /> Profile
+                                    </button>
+                                </li>
+                                <li>
+                                  {
+                                    userData.roles == "admin" && (
+                                      <button onClick={() => {Router.push(`/${localStorage.getItem("lang")}/dashboard`)}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                                        <MdAnalytics className="mr-2" /> Analytics
+                                      </button>
+                                    )
+                                  }
+                                    
+                                </li>
+                                <li>
+                                    <button onClick={handleLogout} className="flex items-center text-sm text-red-500 hover:text-red-700">
+                                        <FaSignOutAlt className="mr-2" /> Logout
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    <AdminNavbarLoading />
+                </>
+            )}
+            </div>
         </div>
       </nav>
     </>

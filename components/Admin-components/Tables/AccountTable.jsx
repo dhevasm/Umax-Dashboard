@@ -408,8 +408,8 @@ export default function AccountTable() {
                 }
 
                 const formData = new FormData();
-                formData.append('name', name);
-                formData.append('client', client);
+                formData.append('username', name);
+                formData.append('client_id', client);
                 formData.append('email', email);
                 formData.append('platform', platform);
                 formData.append('password', password);
@@ -865,7 +865,6 @@ export default function AccountTable() {
                                     <label htmlFor="notes" className="mb-2 text-sm font-normal">Notes</label>
                                     <textarea id="notes" name="notes" className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] placeholder-[#858c96] border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={handleChange} onBlur={handleBlur}></textarea>
                                 </div>
-
                                 <div className="flex items-center">
                                     <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                         <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>

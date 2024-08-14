@@ -38,7 +38,8 @@ export default function TenantRegisterPage() {
         order_id: searchParams.get('order_id'),
       }).toString();
   
-
+      
+      // cek apakah order id tersedia di databse
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token-from-order`, {
           method: 'POST',
@@ -52,8 +53,29 @@ export default function TenantRegisterPage() {
           const errorData = await response.json();
           console.error('Server Error:', errorData);
           console.log('Order id not found!'); 
-          Router.push('/');
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Order ID not found.',
+          }).then(() => Router.push('/'));
           return;
+        }
+
+        // check status order mitrans
+        if(searchParams.get('order_id') != "free" || searchParams.get('order_id').slice(0,2) != "PP"){
+          const orderidcek = new FormData();
+          orderidcek.append("order_id", searchParams.get('order_id'));  
+          axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment-verify`, orderidcek).then((response) => {
+            if(response.data.Status !== "settlement"){
+              console.log('Order id status wasnt success!'); 
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Order ID status wasnt success.',
+              }).then(() => Router.push('/'));
+              return;
+            }
+          })
         }
 
         console.log("order id found");

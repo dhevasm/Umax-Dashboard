@@ -5,6 +5,7 @@ import { IconContext } from 'react-icons'
 import { FaCheckCircle, FaCross, FaExclamationCircle } from 'react-icons/fa'
 import { useSearchParams } from 'next/navigation'
 import Swal from 'sweetalert2'
+import axios from 'axios'
 
 const FailedPage = () => {  
     const Router = useRouter()
@@ -16,8 +17,18 @@ const FailedPage = () => {
         setOrder_id(searchParams.get('order_id'))
     }, [searchParams])
 
+    async function deleteorderid(){
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/delete-transaction?order_id=${order_id}`).then((response) =>{
+            if(!response.IsError){
+                console.log('Transaction deleted')
+            }else{
+                console.log('Failed to delete transaction')
+            }
+        })
+    }
+
     useEffect(() => {
-        console.log(order_id)
+       deleteorderid()
     }, [order_id])
 
     return (

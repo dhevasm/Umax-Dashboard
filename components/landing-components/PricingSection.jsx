@@ -5,6 +5,8 @@ import { useState,useEffect, useContext } from "react";
 import Image from "next/image";
 import Snap from "midtrans-client/lib/snap";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import Transaction from "midtrans-client/lib/transaction";
 
 const PricingSection = () => {
   const t = useTranslations("landing");
@@ -19,7 +21,9 @@ const PricingSection = () => {
       last_name: '',
       email: '',
       phone_number: '',
+      method : 'midtrans',
   });
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (event) => {
       const { name, value } = event.target;
@@ -30,56 +34,45 @@ const PricingSection = () => {
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true)
       let price = [
         0,
         3200000,
         4000000
       ]
 
-      event.preventDefault();
-      const url = process.env.NEXT_PUBLIC_API_URL;
-
-      // Convert form values to URL-encoded format
-      const formData = new URLSearchParams({
-          first_name: formValues.first_name,
-          last_name: formValues.last_name,
-          email: formValues.email,
-          phone_number: formValues.phone_number,
-          price: price[Subscribe - 1],
-          product_name : Subscribe === 1 ? 'Personal plan' : Subscribe === 2 ? 'Business plan' : 'Professional plan',
-      }).toString();
-
-      try {
-          const response = await fetch(`${url}/payment`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: formData,
-          });
-
-          if (!response.ok) {
-              const errorData = await response.json();
-              console.error('Server Error:', errorData);
-              alert('Your email has aready purchased a plan!');
-              return;
-          }
-
-          const data = await response.json();
-          setSnapToken(data.token);
-      } catch (error) {
-          console.error('Network Error:', error);
-          alert('Network error occurred. Please try again.');
+      if(formValues.method == "midtrans"){
+        midtransPay(price[Subscribe - 1])
+      }else if(formValues.method == "paypal"){
+        paypalPay(price[Subscribe - 1])
+      }else{
+        Swal.fire({
+          title: "Error!",
+          text: "Please select payment method",
+          icon: "error",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          setLoading(false)
+        });
       }
   };
 
   const openModal = (Subscribe) => {
+    setLoading(false)
+    setFormValues({
+      method : "midtrans"
+    })
     setSubscribe(Subscribe);
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
+    const modal = document.getElementById("paypal-button-container")
+    if(modal){
+      modal.classList.add("hidden")
+    }
   };
 
   useEffect(() => {
@@ -116,7 +109,14 @@ const PricingSection = () => {
       }
 
       const data = await response.json();
-      setSnapToken(data.token);
+      if(order_id.slice(0,5) === "ORDER")
+      {
+        setSnapToken(data.token);
+      }else if(order_id.slice(0,2) === "PP"){
+        Router.push(`/en/tenant-register?order_id=${order_id}`)
+      }else{
+        console.log("unknown order id")
+      }
     } catch (error) {
       console.error('Network Error:', error);
       alert('Network error occurred. Please try again.');
@@ -132,6 +132,112 @@ const PricingSection = () => {
       document.body.style.overflow = 'auto';
     };
   }, [showModal]);
+
+  async function midtransPay(price){
+    const url = process.env.NEXT_PUBLIC_API_URL;
+
+      // Convert form values to URL-encoded format
+      const formData = new URLSearchParams({
+          first_name: formValues.first_name,
+          last_name: formValues.last_name,
+          email: formValues.email,
+          phone_number: formValues.phone_number,
+          price: price,
+          product_name : Subscribe === 1 ? 'Personal plan' : Subscribe === 2 ? 'Business plan' : 'Professional plan',
+      }).toString();
+
+      try {
+          const response = await fetch(`${url}/payment`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: formData,
+          });
+
+          if (!response.ok) {
+              setLoading(false)
+              const errorData = await response.json();
+              console.error('Server Error:', errorData);
+              alert('Your email has aready purchased a plan!');
+              return;
+          }
+
+          const data = await response.json();
+          setSnapToken(data.token);
+      } catch (error) {
+          setLoading(false)
+          console.error('Network Error:', error);
+          alert('Network error occurred. Please try again.');
+      }
+  }
+
+  function paypalPay(price) {
+    document.getElementById("paypal-button-container").innerHTML = ""
+
+    paypal
+      .Buttons({
+        style: {
+          shape: "rect",
+          color: "gold",
+          layout: "vertical",
+          label: "paypal",
+        },
+  
+        createOrder: function (data, actions) {
+          const paypalAmount = parseFloat(price) / 16000;
+          return actions.order.create({
+            purchase_units: [
+              { amount: { currency_code: "USD", value: paypalAmount } },
+            ],
+          });
+        },
+  
+        onApprove: function (data, actions) {
+          return actions.order.capture().then(function (orderData) {
+            // Full available details
+            // console.log(
+            //   "Capture result",
+            //   orderData["id"],
+            //   JSON.stringify(orderData, null, 2)
+            // );
+
+            const formData = new FormData()
+            formData.append("id", orderData["id"])
+            formData.append("price", price)
+            formData.append("product", Subscribe === 1 ? 'Personal plan' : Subscribe === 2 ? 'Business plan' : 'Professional plan' )
+            formData.append("transaction", orderData["payer"].email_address)
+            formData.append("email", formValues.email )
+            axios.post(`${process.env.NEXT_PUBLIC_API_URL}/paypal-payment`, formData).then((response) => {
+              if(!response.IsError){
+                Swal.fire({
+                  title: "Success!",
+                  text: "Payment success",
+                  icon: "success",
+                  confirmButtonText: "Ok",
+                })
+                console.log(response)
+                  const element = document.getElementById("paypal-button-container");
+                  element.innerHTML = "";
+                  element.innerHTML = `<h3>Thank you for your payment! <br> Save your order id : ${response.data.order_id} <br><a href='/en/tenant-register?order_id=${response.data.order_id}'>Click me to register new tenant</a></h3>`;
+              }
+            })
+  
+            // Show a success message within this page, for example:
+            
+  
+            // Or go to another URL:  actions.redirect('thank_you.html');
+          });
+        },
+  
+        onError: function (err) {
+          console.log(err);
+        },
+      })
+      .render("#paypal-button-container");
+      document.getElementById("paypal-button-container").classList.remove("hidden")
+      setLoading(false)
+  }
 
   return (
     // ====== Pricing Section Start ======
@@ -191,7 +297,9 @@ const PricingSection = () => {
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                   {t('maximum')} 6 {t('metrics-per-company')}
-
+                </p>
+                <p className="text-base text-body-color dark:text-gray-300">
+                  {t('unlimited-clients')}
                 </p>
               </div>
               <a
@@ -314,6 +422,9 @@ const PricingSection = () => {
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
                 {t('unlimited-metrics')}
+                </p>
+                <p className="text-base text-body-color dark:text-gray-300">
+                  {t('unlimited-clients')}
                 </p>
               </div>
               <a
@@ -465,7 +576,7 @@ const PricingSection = () => {
             {showModal && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="absolute inset-0 bg-black opacity-60"></div>
-                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8 max-w-lg w-full">
+                <div className="relative z-10 bg-white dark:bg-slate-800 rounded-sm shadow-lg p-8 max-w-lg h-[700px] md:h-[650px] w-full">
                   <h2 className="text-3xl font-semibold mb-6 text-gray-900 dark:text-white">Complete Your Payment</h2>
                   <div className="w-full h-1 bg-gray-300 my-4"></div>
                   <div className="text-gray-600 dark:text-gray-300">
@@ -485,9 +596,9 @@ const PricingSection = () => {
                           type="text"
                           placeholder="Last Name"
                           name="last_name"
-                          required
                           onChange={handleChange}
                           value={formValues.last_name}
+                          required
                         />
                       </div>
                       <input
@@ -495,18 +606,18 @@ const PricingSection = () => {
                         type="email"
                         placeholder="Input your email"
                         name="email"
-                        required
                         onChange={handleChange}
                         value={formValues.email}
+                        required
                       />
                       <input
                         className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         type="tel"
                         placeholder="Input phone number"
                         name="phone_number"
-                        required
                         onChange={handleChange}
                         value={formValues.phone_number}
+                        required
                       />
                       <select
                         className="w-full px-4 py-3 border dark:bg-slate-900 dark:text-white dark:border-gray-600 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -519,32 +630,34 @@ const PricingSection = () => {
                       </select>
                       <div className="flex gap-4">
                         <div className="flex items-center gap-2">
-                          <input type="radio" id="midtrans" name="method" value="midtrans" defaultChecked />
-                          <label htmlFor="midtrans" className="flex items-center gap-2">
-                            <img src="assets/Midtrans.png" alt="Midtrans" className="w-24 h-24 object-contain" />
-                            Midtrans
+                          <input className="hidden" type="radio" id="midtrans" name="method" value="midtrans" onChange={handleChange} defaultChecked />
+                          <label htmlFor="midtrans" className={`flex hover:cursor-pointer border px-3 md:px-10 rounded-xl border-slate-700 items-center gap-2 ${formValues.method == "midtrans" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
+                            <img src="assets/Midtrans.png" alt="Midtrans" className="w-40 h-16 object-contain" />
                           </label>
-                        </div>
+                        </div> 
                         <div className="flex items-center gap-2">
-                          <input type="radio" id="paypal" name="method" value="paypal" disabled />
-                          <label htmlFor="paypal" className="flex items-center gap-2">
-                            <img src="assets/Paypal.png" alt="Paypal" className="w-24 h-24 object-contain" />
-                            Paypal
+                          <input className="hidden" type="radio" id="paypal" name="method" value="paypal" onChange={handleChange}/>
+                          <label htmlFor="paypal" className={`flex hover:cursor-pointer items-center gap-2 px-3 md:px-10 border rounded-xl border-slate-700 ${formValues.method == "paypal" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
+                            <img src="assets/Paypal.png" alt="Paypal" className="w-40 h-16 object-contain" />
                           </label>
                         </div>
                       </div>
-                      <div className="flex justify-end gap-2">
-                        <button
+                      <div className="flex flex-col-reverse justify-end gap-2">
+                        <div
                           onClick={closeModal}
-                          className="w-full px-5 py-2 bg-gray-500 text-white rounded-md shadow-md hover:bg-gray-600"
+                          className="w-full px-5  bg-gray-500 text-white text-center py-3 rounded-md shadow-md hover:bg-gray-600"
                         >
                           Cancel
-                        </button>
+                        </div>
+                        <div id="paypal-button-container" className="hidden absolute bottom-24 right-6 max-h-[170px] overflow-y-auto w-[90%] bg-[#F0F0F0] p-5 rounded-sm shadow-xl">
+                        </div>
                         <button
-                          className="w-full px-5 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-5 bg-blue-500 text-white py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                           type="submit"
                         >
-                          {Subscribe === 1
+                          {
+                          loading ? 'Loading...' :
+                          Subscribe === 1
                             ? 'Get (Free)'
                             : Subscribe === 2
                             ? 'Subscribe ($199/year)'

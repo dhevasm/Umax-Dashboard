@@ -639,7 +639,7 @@ export default function TenantTable() {
                                                         <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">
                                                             <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
                                                         </td>
-                                                        <td scope="row" className="px-6 py-3 font-medium  whitespace-nowrap">
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">
                                                             <a className="text-blue-500" href={`https://wa.me/${tenant.contact.slice(1)}`} target="_blank">{String(tenant.contact)}</a>
                                                         </td>
                                                     </tr>

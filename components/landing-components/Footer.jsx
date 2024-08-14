@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <div>
         <footer className="relative z-10 bg-blue-600 max-w-full flex flex-col justify-center">
-            <div className="container mx-auto px-20">
+            <div className="container mx-auto px-10 md:px-20">
                 <div className="border-b border-gray-7/20 pt-[70px] pb-10">
                     <div className="flex flex-wrap items-center justify-center -mx-4">
                         <div className="w-full px-4 lg:w-1/2">
@@ -37,7 +37,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className="container pt-14 lg:pt-20 px-20 w-full flex justify-center">
+            <div className="container pt-14 lg:pt-20 px-10 md:px-20 w-full flex justify-center">
                 <div className="flex flex-wrap justify-center -mx-4">
                     <div className="w-full px-4 sm:w-2/3 lg:w-4/12 2xl:w-3/12">
                         <div className="w-full mb-10">
@@ -154,7 +154,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="pt-10 pb-10 px-20 w-full bg-white/[.06]">
-                <div className="flex justify-between -mx-4">
+                <div className="flex flex-col gap-5 md:flex-row justify-between -mx-4">
                     <div className="w-full px-4 text-center sm:w-auto">
                         <p className="text-base text-white/70">
                             {/* &copy;  */}
@@ -162,7 +162,7 @@ const Footer = () => {
                         </p>
                     </div>
                     <div className="w-full px-4 text-center sm:w-auto">
-                        <div className="flex items-center justify-center">
+                        <div className="flex flex-col gap-5 md:flex-row items-center justify-center">
                             <Link href="https://www.termsfeed.com/live/2d907ed6-3b08-4a39-b196-15250f047b29" target='_blank' className="px-4 text-base text-white/70 hover:text-white">
                                 Privacy Policy
                             </Link>

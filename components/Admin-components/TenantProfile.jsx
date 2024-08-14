@@ -287,7 +287,7 @@ export default function TenantProfile({tenant_id}){
 
                         {
                             tenant.company ? (
-                                <div className="self-end text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-700 dark:bg-slate-700 bg-[#3d50e0] hover:bg-blue-600 p-2 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
+                                <div className="self-end text-xs md:text-md text-nowrap flex gap-2 items-center text-white hover:cursor-pointer dark:hover:bg-slate-700 dark:bg-slate-700 bg-[#3d50e0] hover:bg-blue-600 p-2 rounded-md" onClick={() => showModal("Edit", tenant._id)}>
                                     <FaPen />
                                     {t('edit-profile')}
                                 </div>
@@ -414,7 +414,7 @@ export default function TenantProfile({tenant_id}){
                         </button>
                     </div>
                     {/* <!-- Modal body --> */}
-                    <div className="p-4 md:p-5 dark:bg-slate-900 dark:text-white">
+                    <div className="p-4 pb-64 md:pb-1 md:p-5 dark:bg-slate-900 dark:text-white">
                         <div className="flex justify-between items-center">
                         <div className="text-xl font-semibold text-[#3d50e0]">{t('general')}</div>
 

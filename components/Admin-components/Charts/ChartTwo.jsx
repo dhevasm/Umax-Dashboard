@@ -120,7 +120,7 @@ const ChartTwo = ({chartData}) => {
       }
     
       return (
-          <Line data={data} options={options}  />
+          <Line data={data} options={options} width={500} height={300} />
       );
 };
 

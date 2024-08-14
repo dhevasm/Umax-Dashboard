@@ -39,8 +39,8 @@ export default function CountCard({title, value, handleClick}){
                 title == t('clients') ? <RiEyeLine className="text-[#3d50e0] font-thin" size={22}/> : ''
                 }
             </div>
-            <div className="p-3 text-xl font-semibold">{value}
-                <div className="flex justify-between items-end">
+            <div className="p-3 text-md font-semibold">{value}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end">
                 <p className="text-sm text-gray-500 dark:text-gray-300">{title}</p>
                 <p className="text-xs text-blue-500 hover:cursor-pointer" onClick={() => handleCardClick(handleClick)}>{t('show-detail')}</p>
                 </div>
