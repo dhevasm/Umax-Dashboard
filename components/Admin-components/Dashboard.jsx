@@ -506,7 +506,7 @@ export default function Dashboard({ tenant_id }) {
     return (
         <>
             <div className="w-full h-full flex flex-wrap gap-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
+                <div className="grid grid-cols-2 md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
                     {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
                         userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={loadingCount ? "Loading..." : tenantCount} handleClick={"tenants"} /> :
                             <CountCard title={t('tenants')} value={<div className="text-md animate-pulse">Loading...</div>} />}
@@ -518,7 +518,7 @@ export default function Dashboard({ tenant_id }) {
                     <div className="w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartOne chartData={chartData} />
                     </div>
-                    <div className="w-full flex justify-center lg:w-2/3 h-[200px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full flex justify-center lg:w-2/3 h-[250px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartTwo chartData={chartData} />
                     </div>
                 </div>
@@ -526,7 +526,7 @@ export default function Dashboard({ tenant_id }) {
                     <div className="w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <Map/>
                     </div>
-                    <div className="w-full flex justify-center lg:w-2/5 h-[370px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full flex justify-center lg:w-2/5 h-[320px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartThree chartData={chartData} />
                     </div>
                 </div>
@@ -567,12 +567,12 @@ export default function Dashboard({ tenant_id }) {
                                                     {t('reach')}
                                                 </span>
                                             </th>
-                                            <th className="hidden p-2.5 text-center sm:table-cell xl:p-5 text-sm font-medium uppercase">
+                                            <th className="p-2.5 text-center sm:table-cell xl:p-5 text-sm font-medium uppercase">
                                                 <span className={`hover:cursor-pointer ${filter == "impressions" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("impressions")}>
                                                     {t('impressions')}
                                                 </span>
                                             </th>
-                                            <th className="hidden p-2.5 text-center sm:table-cell xl:p-5 text-sm font-medium uppercase">
+                                            <th className="p-2.5 text-center sm:table-cell xl:p-5 text-sm font-medium uppercase">
                                                 {t('start-date')}
                                             </th>
                                         </tr>
@@ -604,20 +604,20 @@ export default function Dashboard({ tenant_id }) {
                                                             height={45}
                                                             alt="Logo"
                                                         />
-                                                        <p className="hidden sm:block text-black dark:text-slate-200">
+                                                        <p className="sm:block text-sm text-black dark:text-slate-200">
                                                             {data.campaign_name}
                                                         </p>
                                                     </td>
-                                                    <td className="p-2.5 xl:p-5 text-black dark:text-slate-200 text-center">
+                                                    <td className="p-2.5 xl:p-5 text-nowrap text-black dark:text-slate-200 text-center">
                                                         {data.amountspent}
                                                     </td>
-                                                    <td className="p-2.5 xl:p-5 text-meta-3 dark:text-slate-200 text-center">
+                                                    <td className="p-2.5 xl:p-5 text-nowrap text-meta-3 dark:text-slate-200 text-center">
                                                         {data.reach}
                                                     </td>
-                                                    <td className="hidden sm:table-cell p-2.5 xl:p-5 text-meta-5 dark:text-slate-200 text-center">
+                                                    <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-meta-5 dark:text-slate-200 text-center">
                                                         {data.impressions}
                                                     </td>
-                                                    <td className="hidden sm:table-cell p-2.5 xl:p-5 text-black dark:text-slate-200 text-center">
+                                                    <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-black dark:text-slate-200 text-center">
                                                         {data.start_date}
                                                     </td>
                                                 </tr>

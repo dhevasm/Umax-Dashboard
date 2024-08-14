@@ -85,7 +85,7 @@ const ChartOne = ({chartData}) => {
 };
 
 return (
-      <Bar data={data} options={options} height={400}/>
+    <Bar data={data} options={options} height={400} width={250}/>
 );
     
 

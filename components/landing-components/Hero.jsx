@@ -7,7 +7,7 @@ const Hero = () => {
 
 
   return (
-    <div className="relative bg-white dark:bg-slate-900 pt-[70px] md:pt-[120px] pb-[110px] lg:pt-[150px] px-12 md:px-20" id='home'>
+    <div className="relative bg-white dark:bg-slate-900 pt-[40px] md:pt-[120px] pb-[110px] lg:pt-[150px] px-12 md:px-20" id='home'>
       <div className="container mx-auto">
         <div className="flex flex-col-reverse md:flex-row gap-5 flex-nowrap">
           <div className="w-full md:px-4 lg:w-5/12">
@@ -15,7 +15,7 @@ const Hero = () => {
               <h1 className="mb-3 md:text-4xl font-bold leading-snug text-dark text-xl lg:text-[40px] xl:text-[42px] dark:text-white">
              {t("hero_title")}
               </h1>
-              <p className="mb-8 max-w-[480px] text-base dark:text-slate-300 text-body-color">
+              <p className="mb-3 max-w-[480px] text-base dark:text-slate-300 text-body-color">
               {t("hero_desc")}
               </p>
               <ul className="flex flex-wrap items-center justify-center md:justify-start">

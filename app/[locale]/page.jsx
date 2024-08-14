@@ -35,7 +35,9 @@ const page = () => {
       {/* <Call /> */}
       {/* <Testimoni /> */}
       <Contact />
-      <Footer />
+      <Footer />  
+      <script src="https://cdn.botpress.cloud/webchat/v2/inject.js" async></script>
+      <script src="https://mediafiles.botpress.cloud/40be869e-3bbd-4b55-a0a6-5dacdfaa8951/webchat/v2/config.js" async></script>
     </div>
     
   )

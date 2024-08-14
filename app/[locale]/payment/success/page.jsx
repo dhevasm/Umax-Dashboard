@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { IconContext } from 'react-icons'
-import { FaCheckCircle } from 'react-icons/fa'
+import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 import { useSearchParams } from 'next/navigation'
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -175,7 +175,7 @@ const SuccessPage = () => {
                     <>
                         <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-center">
                     <div className='flex w-full justify-center my-3'>
-                        <FaCheckCircle size={50} className='text-2xl font-bold text-yellow-500' />
+                        <FaExclamationCircle size={50} className='text-2xl font-bold text-yellow-500' />
                     </div>
                     <h2 className="text-4xl font-semibold text-gray-800 mb-2">Payment Pending</h2>
                     <p className="text-gray-600 mb-4">

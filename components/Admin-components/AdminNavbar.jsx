@@ -552,7 +552,7 @@ function AdminNavbar({ userData }) {
               height={40}
             />
           </div>
-          <button onClick={hideHandle} className="mx-5">
+          <button onClick={hideHandle} className="mx-5 me-20">
             <FaBars className="text-2xl" />
           </button>
         </div>
@@ -598,7 +598,7 @@ function AdminNavbar({ userData }) {
             </button>
           </div>
 
-          <div className=" flex items-center gap-2 ms-20">
+          <div className=" flex items-center ms-15">
             <div
               className={`w-16 h-9 flex justify-center items-center rounded-full me-2`}
             >
@@ -638,7 +638,9 @@ function AdminNavbar({ userData }) {
             )}
 
             {showDropdown && (
-              <div className="absolute text-black dark:text-white top-20 right-36 p-5 w-[270px] max-h-[300px] overflow-y-auto bg-white dark:bg-slate-800 shadow-lg transition-transform transform duration-300 ease-in-out">
+              <>
+              <div className="absolute top-0 left-0 w-[100vw] h-[100vh] z-10" onClick={() => setShowDropdown(false)}></div>
+              <div className="absolute z-20 text-black dark:text-white top-20 right-10 p-5 w-[270px] max-h-[300px] overflow-y-auto bg-white dark:bg-slate-800 shadow-lg transition-transform transform duration-300 ease-in-out">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4 border-b border-gray-500 pb-2">
                   <h2 className="text-lg font-semibold">Register Requests</h2>
@@ -672,7 +674,7 @@ function AdminNavbar({ userData }) {
                             </p>
                           </div>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex" id="right-item">
                           {isLoading ? (
                             <>
                               <FaSpinner
@@ -711,6 +713,7 @@ function AdminNavbar({ userData }) {
                   ))}
                 </ul>
               </div>
+              </>
             )}
           </div>
 
@@ -733,10 +736,6 @@ function AdminNavbar({ userData }) {
                                 width={40}
                                 height={40}   
                             />
-                        </div>
-                        <div className="flex flex-col items-end mt-2 ml-2">
-                            {/* <h1 className="font-medium">{userData.name}</h1>
-                            <p className="text-gray-500">{userData.roles}</p> */}
                         </div>
                     </div>
                     

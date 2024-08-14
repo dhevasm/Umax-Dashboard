@@ -98,13 +98,13 @@ const Navbar = () => {
         <div className="w-full">
           <div className="relative flex items-center justify-between">
             <div className="max-w-full px-4 w-60">
-              <a href="" className="block w-full py-5 ms-5">
+              <a href="" className="block w-full py-2 ms-5">
               <Image
                   src="/assets/logo.png"
                   alt="Logo"
-                  className="w-[140px] h-10 decoration-white mr-1 mt-2"
+                  className="decoration-white mr-1 mt-2"
                   width={140}
-                  height={40}
+                  height={70}
                 />
               </a>
             </div>
@@ -133,14 +133,35 @@ const Navbar = () => {
                       <a href="#contact" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("contact")}</a>
                     </li>
                     <li className='block md:hidden'>
+                      <button onClick={handleTheme} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">Theme</button>
+                    </li>
+                    <li className='block md:hidden'>
                       <a href={`${lang}/login`} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("login")}</a>
                     </li>
                   </ul>
                 </nav>
               </div>
-              <div className="justify-end me-5 hidden pr-16 sm:flex lg:pr-0">
-                <a href={`${lang}/login`} className="py-3 text-base font-medium px-7 text-dark dark:text-white hover:text-blue-600 mr-5">{t("login")}</a>
-                <select name="" id="" className="rounded-full px-2 border" onChange={handleLangChange} value={lang}>
+              
+              <div className="justify-end me-5 hidden pr-16 gap-5 sm:flex lg:pr-0">
+                <a href={`${lang}/login`} className="py-3 text-base font-medium text-dark dark:text-white hover:text-blue-600 mr-5">{t("login")}</a>
+                <label htmlFor="themeSwitcher" className="inline-flex items-center cursor-pointer" aria-label="themeSwitcher" name="themeSwitcher">
+                <input 
+                  type="checkbox" 
+                  name="themeSwitcher" 
+                  checked={isDark} 
+                  onChange={handleTheme} 
+                  id="themeSwitcher" 
+                  className="sr-only" 
+                />
+                <span className="block text-body-color dark:hidden">
+                  <FiSun className='text-2xl text-blue-500'/>
+                </span>
+                <span className="hidden text-white dark:block">
+                  <FaMoon className='text-xl'/>
+                </span>
+              </label>
+             
+                <select name="" id="" className="rounded-full px-2 border outline-none" onChange={handleLangChange} value={lang}>
                   <option value="id">
                     Indonesia
                   </option>
@@ -148,6 +169,7 @@ const Navbar = () => {
                     English
                   </option>
                 </select>
+                
               </div>
             </div>
           </div>
@@ -155,7 +177,7 @@ const Navbar = () => {
       </header>
 
       {/* Theme Switcher */}
-      <div className="fixed bottom-10 flex items-center justify-center bg-blue-500 rounded dark:bg-gray-600 z-[99999] shadow-1 dark:shadow-box-dark right-5 h-11 w-11">
+      {/* <div className="fixed bottom-7 flex items-center justify-center bg-blue-500 rounded dark:bg-gray-600 z-[99999] shadow-1 dark:shadow-box-dark right-24 h-11 w-11">
         <label htmlFor="themeSwitcher" className="inline-flex items-center cursor-pointer" aria-label="themeSwitcher" name="themeSwitcher">
           <input 
             type="checkbox" 
@@ -172,7 +194,7 @@ const Navbar = () => {
             <FaMoon className='text-xl'/>
           </span>
         </label>
-      </div>
+      </div> */}
     </div>
   );
 }

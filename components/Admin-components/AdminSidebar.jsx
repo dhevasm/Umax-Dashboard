@@ -18,7 +18,12 @@ export default function AdminSidebar() {
     const Router = useRouter();
 
     const [minimizedSidebar, setMinimizedSidebar] = useState(false);
-    const { sidebarHide, setSidebarHide, setChangeTable, userData } = useContext(AdminDashboardContext);
+    const { sidebarHide, setSidebarHide, changeTable ,setChangeTable, userData } = useContext(AdminDashboardContext);
+
+    useEffect(() => {
+        document.querySelector(".sidebaractivelink")?.classList.remove('sidebaractivelink');
+        document.getElementById(changeTable)?.classList.add('sidebaractivelink');
+    }, [changeTable])
 
     useEffect(() => {
         if (sidebarHide) {
@@ -59,6 +64,7 @@ export default function AdminSidebar() {
     const sidebarItems = [
         {
             key: 'dashboard',
+            id: 'dashboard',
             icon: <FaTachometerAlt size={13} />,
             text: t('dashboard'),
             onClick: () => setChangeTable("dashboard")
@@ -71,36 +77,42 @@ export default function AdminSidebar() {
         },
         userData.roles === "admin" && {
             key: 'tenant-profile',
+            id: 'company',
             icon: <FaBuilding size={13} />,
             text: t('tenant-profile'),
             onClick: () => setChangeTable("company")
         },
         userData.roles === "sadmin" && {
             key: 'tenants',
+            id: 'tenants',
             icon: <RiBuilding2Fill />,
             text: t('tenants'),
             onClick: () => setChangeTable("tenants")
         },
         {
             key: 'users',
+            id: 'users',
             icon: <RiProfileFill />,
             text: t('users'),
             onClick: () => setChangeTable("users")
         },
         {
             key: 'campaigns',
+            id: 'campaigns',
             icon: <RiMegaphoneFill />,
             text: t('campaigns'),
             onClick: () => setChangeTable("campaigns")
         },
         {
             key: 'accounts',
+            id: 'accounts',
             icon: <RiAccountBoxFill />,
             text: t('accounts'),
             onClick: () => setChangeTable("accounts")
         },
         {
             key: 'clients',
+            id: 'clients',
             icon: <RiEye2Fill />,
             text: t('clients'),
             onClick: () => setChangeTable("clients")
@@ -121,12 +133,21 @@ export default function AdminSidebar() {
 
     return (
         <div className="fixed z-10 bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
+            <style>
+                {
+                    `
+                        .sidebaractivelink{
+                            background-color: #333A48;
+                        }
+                    `
+                }
+            </style>
             <ul className="pt-28 pl-3 uppercase ms-5">
                 <li className="mb-4 ms-2 text-slate-400 font-semibold">
                     Menu
                 </li>
                 {sidebarItems.map(item => item && (
-                    <li key={item.key} className="mb-4 text-sm">
+                    <li key={item.key} id={item.id} className="mb-4 text-sm">
                         <button
                             className="flex items-center justify-between w-full px-4 py-2 text-sm rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]"
                             onClick={item.onClick}

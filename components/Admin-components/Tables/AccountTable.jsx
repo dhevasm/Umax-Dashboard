@@ -341,8 +341,8 @@ export default function AccountTable() {
                 }
 
                 const formData = new FormData();
-                formData.append('name', name);
-                formData.append('client', client);
+                formData.append('username', name);
+                formData.append('client_id', client);
                 formData.append('email', email);
                 formData.append('platform', platform);
                 formData.append('password', password);
@@ -800,7 +800,7 @@ export default function AccountTable() {
                                 </div>
 
                             </div>
-                                <div className="flex justify-between items-end pb-20 md:pb-2">
+                                <div className={`flex justify-between items-end ${modeModal === "Edit" ? "" : "pb-20"} md:pb-2`}>
                                 <div>
                                 <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                 <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>

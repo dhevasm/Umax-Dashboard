@@ -42,16 +42,17 @@ function Map() {
     }, [])
     
   return (
-    <div className="App overflow-auto">
+    <div className="App overflow-auto flex justify-end items-end">
       <p className={`${isDarkMode ? "text-white" : "text-gray-500"}`}>Client Country</p>
       <WorldMap
         color={isDarkMode ?  "#D1D5DB" : "#1E40AF" }
         backgroundColor={isDarkMode ? "#1E293B" : "#FFFFFF"}
         value-suffix="Client"
-        strokeOpacity={0.5}
+        strokeOpacity={1}
         borderColor={isDarkMode ?  "#D1D5DB" : "#1E40AF" }
-        size="responsive"
+        size="xl"
         data={data}
+
       />
     </div>
   );

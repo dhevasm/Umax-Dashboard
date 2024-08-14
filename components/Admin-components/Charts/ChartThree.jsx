@@ -96,9 +96,7 @@ const ChartThree = ({chartData}) => {
 };
 
 return (
-  <div className="w-full flex justify-center overflow-auto" style={{ height: 400 }}>
-  <Doughnut data={data} options={options} />
-</div>
+  <Doughnut data={data} options={options} width={300} height={300} />
 );
    
 }
