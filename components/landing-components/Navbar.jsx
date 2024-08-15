@@ -87,6 +87,16 @@ const Navbar = () => {
     router.push(newPath);
   };
 
+  const handleLang = () => {
+    if (lang === 'id') {
+      setLang('en');
+      router.push(`/en`);
+    } else {
+      setLang('id');
+      router.push(`/id`);
+    }
+  }
+
   useEffect(() => {
     const currentLang = pathname.split('/')[1] || 'id';
     setLang(currentLang);
@@ -133,7 +143,10 @@ const Navbar = () => {
                       <a href="#contact" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("contact")}</a>
                     </li>
                     <li className='block md:hidden'>
-                      <button onClick={handleTheme} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">Theme</button>
+                      <button onClick={handleTheme} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{isDark ? "Light mode" : "Dark mode"}</button>
+                    </li>
+                    <li className='block md:hidden'>
+                      <button onClick={handleLang} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{lang == "id" ? "Ganti bahasa" : "Change lang"}</button>
                     </li>
                     <li className='block md:hidden'>
                       <a href={`${lang}/login`} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("login")}</a>
@@ -160,15 +173,32 @@ const Navbar = () => {
                   <FaMoon className='text-xl'/>
                 </span>
               </label>
+                <label htmlFor="langSwitcher" className="inline-flex items-center cursor-pointer" aria-label="langSwitcher" name="langSwitcher">
+                <input 
+                  type="checkbox" 
+                  name="langSwitcher" 
+                  onChange={handleLang} 
+                  id="langSwitcher" 
+                  className="sr-only" 
+                />
+                <span className={`${lang == "id" ? "block" : "hidden"}`}>
+                  <Image src={"/assets/indonesia.png"} width={25} height={25} className='drop-shadow-sm' ></Image>
+                </span>
+                <span className={`${lang == "en" ? "block" : "hidden"}`}>
+                <Image src={"/assets/us.png"} width={25} height={25} className='drop-shadow-sm' ></Image>
+                </span>
+              </label>
              
-                <select name="" id="" className="rounded-full px-2 border outline-none" onChange={handleLangChange} value={lang}>
+                {/* <select name="" id="" className="rounded-full px-2 border outline-none" onChange={handleLangChange} value={lang}>
                   <option value="id">
                     Indonesia
                   </option>
                   <option value="en">
                     English
                   </option>
-                </select>
+                </select> */}
+
+
                 
               </div>
             </div>
