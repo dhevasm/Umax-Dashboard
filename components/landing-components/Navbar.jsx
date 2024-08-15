@@ -143,10 +143,10 @@ const Navbar = () => {
                       <a href="#contact" className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("contact")}</a>
                     </li>
                     <li className='block md:hidden'>
-                      <button onClick={handleTheme} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{isDark ? "Light mode" : "Dark mode"}</button>
+                      <button onClick={handleTheme} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{isDark ? t("light-mode") : t("dark-mode")}</button>
                     </li>
                     <li className='block md:hidden'>
-                      <button onClick={handleLang} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{lang == "id" ? "Ganti bahasa" : "Change lang"}</button>
+                      <button onClick={handleLang} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{lang == "id" ? "Ganti bahasa" : "Change language"}</button>
                     </li>
                     <li className='block md:hidden'>
                       <a href={`${lang}/login`} className="flex py-2 text-base dark:text-slate-200 font-medium hover:text-primary lg:ml-12 lg:inline-flex">{t("login")}</a>

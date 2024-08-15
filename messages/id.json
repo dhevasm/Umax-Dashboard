@@ -63,7 +63,9 @@
       "unlimited-campaigns": "Unlimited Kampanye",
       "unlimited-metrics": "Unlimited Metrik",
       "unlimited-clients": "Unlimited Klien",
-      "choose-business": "Mulai Berlangganan"
+      "choose-business": "Mulai Berlangganan",
+      "dark-mode": "Mode gelap",
+      "light-mode": "Mode terang"
     },
 
     "navbar": {

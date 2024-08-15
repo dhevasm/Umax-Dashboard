@@ -41,6 +41,7 @@ export default function UserTable() {
     const Router = useRouter()
 
     function showModal(mode, user_id = null ){
+        document.body.style.overflow = 'hidden'
         // console.log(user_id)
         setModeModal(mode)
         if(mode == "Edit"){
@@ -62,6 +63,7 @@ export default function UserTable() {
         addModal.current.classList.remove("hidden")
     }
     function closeModal(){
+        document.body.style.overflow = 'auto'
         addModal.current.classList.add("hidden")
     }
     
@@ -134,7 +136,7 @@ export default function UserTable() {
         currentTableRef: tableRef.current,
         filename: "DataUsers",
         sheet: "DataUsers",
-      });
+    });
 
     const generatePDF = () => {
         Swal.fire({
@@ -557,13 +559,13 @@ export default function UserTable() {
 
                 <div className="relative p-4 w-full max-w-md max-h-full ">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-slate-900 dark:text-white rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3d50e0] dark:bg-slate-800">
-                            <h3 className="text-lg font-semibold text-white ">
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                            <h3 className="text-2xl font-semibold text-black dark:text-slate-200">
                                 {`${modeModal} ${t('users')}`}
                             </h3>
-                            <button type="button" className="text-white text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes/>
                             </button>
                         </div>
@@ -571,40 +573,36 @@ export default function UserTable() {
                         <div className="p-4 md:p-5">
                             <div className="grid gap-4 mb-4 grid-cols-2">
                                 <div className="col-span-2">
-                                    <label htmlFor="name" className="block mb-2 text-sm font-medium  ">{t('name')}</label>
-                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 border dark:border-none border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type name here"
-                                    disabled/>
+                                    <label htmlFor="name" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">{t('name')}</label>
+                                    <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder="Type name here"
+                                    readolny/>
                                 </div>
                                 <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
-                                    <label htmlFor="role" className="block mb-2 text-sm font-medium ">Role</label>
-                                    <select id="role" className="bg-gray-50 border dark:border-none border-gray-300 dark:bg-slate-800  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 " >
+                                    <label htmlFor="role" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">Role</label>
+                                    <select id="role" className="bg-white border dark:border-[#314051] border-gray-200 text-black dark:text-slate-200 dark:bg-[#1d2a3a] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " >
                                         <option value="admin">Admin</option>
                                         <option value="staff">Staff</option>
                                     </select>
                                 </div>
                             </div>
-                                <div className="flex justify-between items-end">
-                                    <div></div>
-                                    <div className="flex flex-row-reverse items-center gap-3">
-                                        {
-                                            EditUserId != "64fa84403ce06f0129321ced" ? (
-                                                <button className="bg-red-500 hover:bg-red-700 mt-5 text-white text-xl font-bold py-2.5 px-4 rounded" 
-                                                onClick={() => handleDelete(EditUserId)}
-                                                >
-                                                    <FaTrash/>
-                                                </button>
-                                            ) : ""
-                                        }
-                                    
-                                        {
-                                            modeModal === 'Edit' ? <button className="bg-[#3d50e0] hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded text-nowrap" onClick={updateUser}>{t('save')}</button> : 
-                                            <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" 
-                                            // onClick={creatUser}
-                                            >{t('submit')}</button>
-                                        }
-                                    </div>
-                                        
-                                </div>  
+                                <div className="flex flex-row-reverse items-center gap-3 mt-5">
+                                    {
+                                        EditUserId != "64fa84403ce06f0129321ced" ? (
+                                            <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" 
+                                            onClick={() => handleDelete(EditUserId)}
+                                            >
+                                                {t('delete')}
+                                            </button>
+                                        ) : ""
+                                    }
+                                
+                                    {
+                                        modeModal === 'Edit' ? <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateUser}>{t('save')}</button> : 
+                                        <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" 
+                                        // onClick={creatUser}
+                                        >{t('submit')}</button>
+                                    }
+                                </div>
                         </div>
 
                     </div>

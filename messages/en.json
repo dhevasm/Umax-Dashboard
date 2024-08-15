@@ -63,7 +63,9 @@
       "unlimited-campaigns": "Unlimited Campaigns",
       "unlimited-metrics": "Unlimited Metrics",
       "unlimited-clients": "Unlimited Clients",
-      "choose-business": "Choose Business"
+      "choose-business": "Choose Business",
+      "dark-mode": "Dark mode",
+      "light-mode": "Light mode"
     },
  
     "navbar": {
