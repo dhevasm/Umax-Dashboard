@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 
-export default function SidebarCard({ platform, name, status, amountspend, reach, startdate, id, onCardClick }) {
+export default function SidebarCard({ platform, name, status, amountspend, reach, startdate, id, onCardClick, atc }) {
   const [Status, setStatus] = useState("");
   const t = useTranslations("sidebar");
 
@@ -19,7 +19,7 @@ export default function SidebarCard({ platform, name, status, amountspend, reach
   return (
     <div 
       className="text-sm text-black dark:text-slate-300 border-b-2 border-gray-300 dark:border-slate-600 hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-600 active:bg-gray-300 dark:active:bg-slate-700 p-5 rounded-lg transition-all duration-300 ease-in-out shadow-sm hover:shadow-md active:shadow-lg transform"
-      onClick={() => onCardClick(id, name, platform, amountspend)}
+      onClick={() => onCardClick(id, name, platform, amountspend, atc)}
     >
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-3">

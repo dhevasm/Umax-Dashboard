@@ -524,18 +524,19 @@ export default function CampaignTable() {
             return `${year}-${month}-${day}`;
         }
 
-        const impressions = getRandomValue(200000, 300000);
-        const reach = getRandomValue(800000, 1200000);
-        const click = getRandomValue(300000, 2000000);
-        const amountspent = getRandomValue(400000, 500000);
+        const reach = getRandomValue(80000000, 120000000);
+        const impressions = reach * getRandomValue(2,3);
+        const click = impressions + getRandomValue(1000, 2000);
+        const amountspent = getRandomValue(400000, 5000000);
         const result = getRandomValue(600, 900);
         const purchase = getRandomValue(7000000, 8000000);
-        const lpview = getRandomValue(90000, 100000);
-        const atc = getRandomValue(20000, 30000);
+        const lpview = click - getRandomValue(5000, 10000);
+        const atc = lpview - getRandomValue(2000, 3000);
         const ctview = getRandomValue(8000, 12000);
         const delivery = getRandomValue(80, 90);
         const leads = getRandomValue(200, 240);
         const cpc = getRandomValue(2500, 3500);
+
 
         const formDataMetrics = new FormData();
         formDataMetrics.append('clicks', click);
@@ -581,18 +582,19 @@ export default function CampaignTable() {
             ).then((response) => {
                 if(!response.IsError){
                     for(let i = 0; i < 7; i++){
-                        const impressions2 = getRandomValue(120000000, 300000000);
                         const reach2 = getRandomValue(80000000, 120000000);
-                        const click2 = getRandomValue(100000, 200000);
+                        const impressions2 = reach2 + getRandomValue(1000,5000);
+                        const click2 = impressions2 + getRandomValue(100000, 200000);
                         const amountspent2 = getRandomValue(400000, 5000000);
                         const result2 = getRandomValue(600, 900);
                         const purchase2 = getRandomValue(7000000, 8000000);
-                        const lpview2 = getRandomValue(90000, 100000);
-                        const atc2 = getRandomValue(20000, 30000);
+                        const lpview2 = click2 - getRandomValue(5000, 10000);
+                        const atc2 = lpview2 - getRandomValue(2000, 3000);
                         const ctview2 = getRandomValue(8000, 12000);
                         const delivery2 = getRandomValue(80, 90);
                         const leads2 = getRandomValue(200, 240);
                         const cpc2 = getRandomValue(2500, 3500);
+
 
                         const formDua = new FormData()
                         formDua.append('tanggal', `2024-08-${10 + i}` );

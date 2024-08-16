@@ -10,7 +10,7 @@ import Chart from "./Chart";
 import Swal from "sweetalert2";
 import { useTranslations } from 'next-intl';
 
-export default function Performance({ id, spent }) {
+export default function Performance({ id, spent, atc }) {
     // Variabel for Metrics
     const [rar, setRar] = useState({});
     const [oclp, setOclp] = useState({})
@@ -289,7 +289,7 @@ export default function Performance({ id, spent }) {
                                 <Infocard 
                                 Color='' 
                                 Title={t('metric7.atc')} 
-                                Value='180%' 
+                                Value={atc ? atc : ''} 
                                 Desc={t('metric7.atc-desc')} 
                                 />
 

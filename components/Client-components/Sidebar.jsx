@@ -34,6 +34,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
 
     // fetch Campaign
     const fetchMetrics = useCallback(async () => {
+        const clientId = localStorage.getItem('clientId'); // Ambil clientId dari localStorage
         try {
             const response = await axios.get(`${umaxUrl}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
                 headers: {
@@ -42,11 +43,21 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                     'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
                 }
             });
-            setCampaigns(response.data.Data);
+    
+            // Filter data yang diambil berdasarkan clientId
+            if(localStorage.getItem('roles') == "client"){
+                const filteredCampaigns = response.data.Data.filter(campaign => campaign.client_id === clientId);
+                setCampaigns(filteredCampaigns);
+            }else{
+                setCampaigns(response.data.Data);
+            }
+
+    
         } catch (error) {
             console.error(error);
         }
     }, [status, umaxUrl]);
+    
 
     useEffect(() => {
         const controller = new AbortController();
@@ -66,7 +77,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
         } else {
             return (
                 campaign.campaign_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                campaign.campaign_status === status
+                campaign.campaign_status === status && campaign.client_id === localStorage.getItem('clientId')
             );
         }
     });
@@ -79,7 +90,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
     return (
         <>
             {/* Sidebar */}
-            <div className="fixed mt-[100px] min-w-[300px] max-w-[340px] mb-3 me-3 md:ms-3 left-0 w-[300px] sm:w-[300px] md:w-[340px] lg:w-[340px] h-screen bg-white dark:bg-slate-800 rounded-xl flex flex-col items-center px-3 z-10 transition-transform shadow-md md:pb-28" ref={sidebar}>
+            <div className="fixed mt-[100px] min-w-[300px] max-w-[340px] mb-3 me-3 md:ms-3 left-0 w-[300px] sm:w-[300px] md:w-[340px] lg:w-[340px] h-screen bg-white dark:bg-slate-800 rounded-xl flex flex-col items-center px-3 z-10 transition-transform shadow-md pb-28" ref={sidebar}>
                 {/* Campaign Status Filter */}
                 <div className="m-3 mt-5 px-4 md:px-5 w-full bg-gray-200 dark:bg-slate-500 p-2 rounded-full flex justify-between items-center text-md hover:cursor-pointer font-bold">
                     <style jsx>
@@ -129,7 +140,8 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                                 platform={campaign.campaign_platform} 
                                 name={campaign.campaign_name} 
                                 status={campaign.campaign_status} 
-                                amountspend={campaign.amountspent} 
+                                amountspend={campaign.amountspent}
+                                atc={campaign.atc}
                                 reach={campaign.reach} 
                                 startdate={campaign.start_date} 
                                 id={campaign.campaign_id}

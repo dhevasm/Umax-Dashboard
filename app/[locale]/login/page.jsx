@@ -119,10 +119,14 @@ const Page = () => {
             Swal.fire("Login failed", "Invalid email or password.", "error");
           }
         }
-
+        
         const data = await response.json();
         const { Token, Data } = data;
-        const { tenant_id: tenantID, roles, name } = Data;
+        const { tenant_id: tenantID, roles, name, email } = Data;
+
+        if (roles === "client") {
+            await fetchClient(email, Token);
+        }
 
         localStorage.setItem("jwtToken", Token);
         localStorage.setItem("tenantId", tenantID);
@@ -136,6 +140,31 @@ const Page = () => {
       }
     },
   });
+
+  const fetchClient = async (email, token) => {
+      try {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-by-tenant`, {
+              headers: {
+                  'accept': 'application/json',
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Authorization': `Bearer ${token}`,
+              },
+          });
+
+          // Cari client dengan email yang sesuai
+          const client = response.data.Data.find((item) => item.email === email);
+
+          // Jika client ditemukan, set clientId ke localStorage
+          if (client) {
+              localStorage.setItem("clientId", client._id);
+          } else {
+              console.warn(`Client with email ${email} not found.`);
+          }
+      } catch (error) {
+          console.error("Error fetching data:", error.message);
+      }
+  };
+
 
   useEffect(() => {
     if (error) {
