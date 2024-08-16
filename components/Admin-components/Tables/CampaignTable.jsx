@@ -370,7 +370,6 @@ export default function CampaignTable() {
             formData.append('start_date', start_date)
             formData.append('end_date', end_date)
             formData.append('notes', notes)
-            
     
             let url = ""
     
@@ -514,7 +513,7 @@ export default function CampaignTable() {
         const getRandomValue = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
         const impressions = getRandomValue(200000, 300000);
-        const reach = getRandomValue(8000, 12000);
+        const reach = getRandomValue(80000, 120000);
         const click = getRandomValue(100000, 200000);
         const amountspent = getRandomValue(4000000, 5000000);
         const result = getRandomValue(600, 900);
@@ -735,7 +734,7 @@ export default function CampaignTable() {
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
                             <FaTable  className="text-blue-200" size={18}/><p className="text-white text-md font-semibold"></p>
-                            {isCreate ? 'uhuy' : 'nop'}
+                            {/* {isCreate ? 'uhuy' : 'nop'} */}
                         </h1>
                     </div>
                     {/* Header end */}
@@ -975,7 +974,7 @@ export default function CampaignTable() {
 
                                 <div className="col-span-1">
                                 <label htmlFor="start_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "dark:text-white text-black" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     {
                                         touched.start_date && error.start_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.start_date}</div> : ""
@@ -985,7 +984,7 @@ export default function CampaignTable() {
 
                                 <div className="col-span-1">
                                 <label htmlFor="end_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "dark:text-white text-black" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     {
                                         touched.end_date && error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
