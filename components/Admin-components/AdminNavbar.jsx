@@ -602,23 +602,25 @@ function AdminNavbar({ userData }) {
 
           <div className=" flex items-center ms-15">
             <div
-              className={`w-16 h-9 flex justify-center items-center rounded-full me-2`}
+              className={`w-16 h-9 flex justify-center items-center rounded-full`}
             >
               <label
                 htmlFor="theme"
-                className="inline-flex items-center cursor-pointer me-2 "
+                className="inline-flex items-center cursor-pointer "
               >
+                <div className="p-2 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-full">
                 {isDarkMode ? (
-                  <FaMoon className="text-lg text-white me-2" />
+                  <FaMoon className="text-lg text-white" />
                 ) : (
-                  <FaSun className="text-xl text-blue-500 me-2" />
+                  <FaSun className="text-xl text-blue-500" />
                 )}
+                </div>
                 {/* <input type="checkbox" value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme}/>
                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                         </div> */}
                 <input
                   data-hs-theme-switch
-                  className="relative w-[3.25rem] h-7 bg-blue-200 checked:bg-none checked:bg-gray-700 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 ring-1 ring-transparent focus:border-slate-700 focus:ring-slate-700 focus:outline-none appearance-none
+                  className="hidden relative w-[3.25rem] h-7 bg-blue-200 checked:bg-none checked:bg-gray-700 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 ring-1 ring-transparent focus:border-slate-700 focus:ring-slate-700 focus:outline-none appearance-none
                         before:inline-block before:size-6 before:bg-white checked:before:bg-gray-500 before:translate-x-0 checked:before:translate-x-full before:shadow before:rounded-full before:transform before:ring-0 before:transition before:ease-in-out before:duration-200
                         after:absolute after:end-1.5 after:top-[calc(50%-0.40625rem)] after:w-[.8125rem] after:h-[.8125rem] after:bg-no-repeat after:bg-[right_center] after:bg-[length:.8125em_.8125em] after:transform after:transition-all after:ease-in-out after:duration-200 after:opacity-70 checked:after:start-1.5 checked:after:end-auto"
                   type="checkbox"
@@ -632,7 +634,7 @@ function AdminNavbar({ userData }) {
                 className="text-md flex items-center gap-2"
                 onClick={handleDropdown}
               >
-                <FaBell className="text-2xl text-blue-500 ms-3" />
+                <FaBell className="text-2xl text-blue-500" />
                 <span className="relative top-0 right-5 bg-red-500 text-white rounded-full px-1 text-xs">
                   {requestCount}
                 </span>

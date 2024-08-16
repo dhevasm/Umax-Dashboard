@@ -182,10 +182,10 @@ const Navbar = () => {
                   className="sr-only" 
                 />
                 <span className={`${lang == "id" ? "block" : "hidden"}`}>
-                  <Image src={"/assets/indonesia.png"} width={25} height={25} className='drop-shadow-sm' ></Image>
+                  <Image src={"/assets/indonesia.png"} alt='Indonesian' width={25} height={25} className='drop-shadow-sm' ></Image>
                 </span>
                 <span className={`${lang == "en" ? "block" : "hidden"}`}>
-                <Image src={"/assets/us.png"} width={25} height={25} className='drop-shadow-sm' ></Image>
+                <Image src={"/assets/us.png"} alt='English' width={25} height={25} className='drop-shadow-sm' ></Image>
                 </span>
               </label>
              

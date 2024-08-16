@@ -42,7 +42,7 @@ const Footer = () => {
                     <div className="w-full px-4 sm:w-2/3 lg:w-4/12 2xl:w-3/12">
                         <div className="w-full mb-10">
                             <a href="" className="mb-6  max-w-[160px] flex gap-3 items-center">
-                                <img src="assets/iconBlue.png" alt="logo" className="max-w-full bg-white p-3 rounded-full" width={58} height={58}/>
+                                <Image src={"/assets/iconBlue.png"} alt="logo" className="max-w-full bg-white p-3 rounded-full" width={58} height={58}/>
                                 <h1 className='text-white font-bold text-xl text-nowrap'>
                                 UMAX Dasboard
                                 </h1>

@@ -22,7 +22,7 @@ const SuccessPage = () => {
         }).toString();
   
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment-verify`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_PAYMENT_API}/payment-verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

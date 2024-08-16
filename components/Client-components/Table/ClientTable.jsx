@@ -142,7 +142,7 @@ const ClientTable = () => {
               }
             } catch (error) {
               Swal.fire({
-                // title: 'Error',
+                title: 'Error',
                 text: 'Maaf Anda Tidak Dapat Menghapus Data.',
                 icon: 'error',
                 customClass: {
@@ -534,6 +534,7 @@ const ClientTable = () => {
                     onClose={handleCloseModal} 
                     data={selectedClient} 
                     mode={mode} 
+                    deleteClient={handleDelete}
                 />
             )}
         </>

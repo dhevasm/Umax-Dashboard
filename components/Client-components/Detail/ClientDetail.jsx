@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import { useFormik } from 'formik';
 import axios from 'axios';
 
-const ClientDetail = ({ isOpen, onClose, data, mode }) => {
+const ClientDetail = ({ isOpen, onClose, data, mode, deleteClient }) => {
     const t = useTranslations("clients");
 
     useEffect(() => {
@@ -107,7 +107,7 @@ const ClientDetail = ({ isOpen, onClose, data, mode }) => {
                     </button>
                 </div>
                 <form onSubmit={formik.handleSubmit}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <DetailItem label={t('name')} value={formik.values.name} id="name" type="text" handleChange={formik.handleChange} icon={FaUser} t={t} holder={t('holder-name')} />
                         <DetailItem label={t('address')} value={formik.values.address} id="address" type="text" handleChange={formik.handleChange} icon={FaRegAddressBook} t={t} holder={t('holder-address')} />
                         <DetailItem label={t('contact')} value={formik.values.contact} id="contact" type="text" handleChange={formik.handleChange} icon={MdAccountCircle} t={t} holder={t('holder-contact')} />
@@ -121,10 +121,15 @@ const ClientDetail = ({ isOpen, onClose, data, mode }) => {
                         <DetailItem label={t('status')} value={formik.values.status} id="status" type="select" handleChange={formik.handleChange} icon={FaRegClock} t={t} holder={t('select-status')} />
                         <DetailItem label={t('note')} value={formik.values.notes} id="notes" type="text" handleChange={formik.handleChange} icon={FaNotesMedical} t={t} holder={t('holder-note')} />
                     </div>
-                    <div className='w-full flex justify-end mt-4'>
-                        <button type='submit' className='bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md focus:outline-none'>
+                    <div className='w-full flex justify-end mt-4 gap-4'>
+                        <button type='submit' className='w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md focus:outline-none'>
                             {t('save')}
                         </button>
+                        {mode === 'edit' && (
+                            <button type='button' onClick={() => deleteClient(data?._id)} className='w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white font-semibold py-2 px-6 rounded-lg shadow-md focus:outline-none'>
+                                {t('delete')}
+                            </button>
+                        )}
                     </div>
                 </form>
             </div>
@@ -138,7 +143,7 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, t, holde
         <div className='flex flex-col gap-1 w-full'>
             <label htmlFor={id} className="text-gray-700 dark:text-gray-300 font-medium">{label}</label>
             {type === 'select' ? (
-                <select id={id} value={value} onChange={handleChange} className='bg-white border border-gray-300 rounded-sm p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300'>
+                <select id={id} value={value} onChange={handleChange} className='bg-white border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300'>
                     <option value="">{holder}</option>
                     <option value="1">{t('active')}</option>
                     <option value="2">{t('deactive')}</option>

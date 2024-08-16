@@ -13,6 +13,7 @@ import { FiWatch } from "react-icons/fi"
 import { useTranslations } from "next-intl"
 import countryMap from "@/helpers/CountryMap"
 import Currency from "@/helpers/Currency"
+import Image from "next/image"
 
 export default function TenantProfile({tenant_id}){
 
@@ -344,7 +345,7 @@ export default function TenantProfile({tenant_id}){
                                             <p className="ml-2 dark:text-white">
                                                 <span className="font-semibold">{t('language')}</span><br /> 
                                                 <div className="flex gap-2 items-center">
-                                                    <img src={getFlagSrc(tenant.language)} className="h-5 w-5" alt="flag" /> 
+                                                    <Image src={getFlagSrc(tenant.language)} width={50} height={50} className="h-5 w-5" alt="flag" /> 
                                                     {tenant.language == 'id' ? t('indonesian') : tenant.language == 'en' ? t('english') : ''}
                                                 </div>
                                             </p>

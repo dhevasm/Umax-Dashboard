@@ -31,6 +31,7 @@ export default function CampaignTable() {
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [selectLoading, setSelectLoading] = useState(true)
+    const [isCreate, setIsCreate] = useState(false)
     const t = useTranslations("admin-campaigns");
     const tfile = useTranslations("swal-file");
     const tdel = useTranslations("swal-delete");
@@ -117,7 +118,6 @@ export default function CampaignTable() {
         if(mode == "Edit"){
             const filteredCampaign = campaigns.filter(campaign => campaign._id === campaign_id);
             if(filteredCampaign.length > 0){
-                console.log(filteredCampaign[0])
                 setValues({name: filteredCampaign[0].name, start_date: filteredCampaign[0].start_date, end_date: filteredCampaign[0].end_date, account: filteredCampaign[0].account_id, objective: filteredCampaign[0].objective, status: filteredCampaign[0].status})
                 setError({name: '', start_date: '', end_date: '', account: '', objective: '', status: ''})
                 // console.log(filteredCampaign[0])
@@ -127,7 +127,8 @@ export default function CampaignTable() {
                 document.getElementById('tenant').value = filteredCampaign[0].tenant_id
                 document.getElementById('account').value = filteredCampaign[0].account_id
                 document.getElementById('objective').value = filteredCampaign[0].objective
-                filteredCampaign[0].start_date ?document.getElementById('start_date').value = dateconvert(filteredCampaign[0].start_date) : ""
+                document.getElementById('start_date').value = dateconvert(filteredCampaign[0].start_date)
+                filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : 
                 filteredCampaign[0].end_date ? document.getElementById('end_date').value = dateconvert(filteredCampaign[0].end_date) : ""
                 document.getElementById('status').value = filteredCampaign[0].status 
                 if(filteredCampaign[0].notes == "empty"){
@@ -297,14 +298,48 @@ export default function CampaignTable() {
             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
             }
         })
-        setCampaigns(response.data.Data)
-        setCampaignMemo(response.data.Data)
-        setIsLoading(false)
+        setCampaigns(response.data.Data);
+        setCampaignMemo(response.data.Data);
+        const lastData = response.data.Data[response.data.Data.length - 1];
+        setIsLoading(false);
+
+        if (isCreate) {
+            setTimeout(() => {
+                console.log(lastData._id);
+                createMetrics(lastData._id);
+            }, 5000); // Menunda selama 5 detik
+
+            setIsCreate(false);
+        }
     }
 
     useEffect(() => {
         getCampaign()
     }, [])
+
+    function getCampaignNoAsync() {
+    
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/campaign-by-tenant`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+            }
+        })
+        .then((response) => {
+            const lastData = response.data.Data[response.data.Data.length - 1];
+    
+                setTimeout(() => {
+                    console.log(lastData._id);
+                    createMetrics(lastData._id);
+                }, 5000); // Menunda selama 5 detik
+    
+                setIsCreate(false);
+        })
+        .catch((error) => {
+            console.error('Error fetching campaigns:', error);
+            // Anda juga bisa menambahkan penanganan kesalahan lainnya di sini
+        });
+    }
+    
 
     useEffect(() => {
     }, [campaigns])
@@ -352,6 +387,7 @@ export default function CampaignTable() {
             })
     
             if(response.data.Output == "Create Campaign Successfully"){
+                getCampaignNoAsync()
                 getCampaign()
                 closeModal()
                 setUpdateCard(true)
@@ -369,7 +405,6 @@ export default function CampaignTable() {
               });
         }
     }
-
     async function updateCampaign(){
         if(EditCampaignId !== null) {
             if(isvalid){
@@ -475,6 +510,77 @@ export default function CampaignTable() {
         }
     }, [])
     
+    function createMetrics(campaignID) {
+        const getRandomValue = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        const impressions = getRandomValue(200000, 300000);
+        const reach = getRandomValue(8000, 12000);
+        const click = getRandomValue(100000, 200000);
+        const amountspent = getRandomValue(4000000, 5000000);
+        const result = getRandomValue(600, 900);
+        const purchase = getRandomValue(7000000, 8000000);
+        const lpview = getRandomValue(90000, 100000);
+        const atc = getRandomValue(20000, 30000);
+        const ctview = getRandomValue(8000, 12000);
+        const delivery = getRandomValue(80, 90);
+        const leads = getRandomValue(200, 240);
+        const cpc = getRandomValue(2500, 3500);
+
+        const formDataMetrics = new FormData();
+        formDataMetrics.append('clicks', click);
+        formDataMetrics.append('lpview', lpview);
+        formDataMetrics.append('atc', atc);
+        formDataMetrics.append('ctview', ctview);
+        formDataMetrics.append('results', result);
+        formDataMetrics.append('amountspent', amountspent);
+        formDataMetrics.append('reach', reach);
+        formDataMetrics.append('impressions', impressions);
+        formDataMetrics.append('delivery', delivery);
+        formDataMetrics.append('leads', leads);
+        formDataMetrics.append('purchase', purchase);
+        formDataMetrics.append('cpc', cpc);
+        formDataMetrics.append('frequency', impressions / reach);
+        formDataMetrics.append('ctr', click / impressions);
+        formDataMetrics.append('cpr', amountspent / result);
+        formDataMetrics.append('cpm', amountspent / (impressions / 1000));
+        formDataMetrics.append('roas', purchase / amountspent);
+
+        const Hitung = new FormData();
+        Hitung.append('tanggal', '2024-12-12');
+        Hitung.append('clicks', click);
+        Hitung.append('lpview', lpview);
+        Hitung.append('atc', atc);
+        Hitung.append('ctview', ctview);
+        Hitung.append('results', result);
+        Hitung.append('amountspent', amountspent);
+        Hitung.append('reach', reach);
+        Hitung.append('impressions', impressions);
+        Hitung.append('delivery', delivery);
+        Hitung.append('leads', leads);
+        Hitung.append('purchase', purchase);
+        Hitung.append('cpc', cpc);
+
+        try{
+            const satu = axios.post(`${process.env.NEXT_PUBLIC_API_URL}/metrics-create?campaign_id=${campaignID}&tenantId=${localStorage.getItem('tenantId')}`, formDataMetrics, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            }
+            )
+            const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, Hitung, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            }
+            )
+            console.log(satu)
+            console.log(dua)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
@@ -603,7 +709,7 @@ export default function CampaignTable() {
 
     function dateconvert(date){
         let [day, month, year, hour] = date.split(" ");
-        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
         let monthIndex = months.indexOf(month) + 1;
         if(monthIndex < 10){
             monthIndex = "0" + monthIndex;
@@ -629,6 +735,7 @@ export default function CampaignTable() {
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
                         <h1 className="flex gap-2 p-4 items-center text">
                             <FaTable  className="text-blue-200" size={18}/><p className="text-white text-md font-semibold"></p>
+                            {isCreate ? 'uhuy' : 'nop'}
                         </h1>
                     </div>
                     {/* Header end */}
@@ -868,7 +975,7 @@ export default function CampaignTable() {
 
                                 <div className="col-span-1">
                                 <label htmlFor="start_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     {
                                         touched.start_date && error.start_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.start_date}</div> : ""
@@ -878,7 +985,7 @@ export default function CampaignTable() {
 
                                 <div className="col-span-1">
                                 <label htmlFor="end_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     {
                                         touched.end_date && error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
