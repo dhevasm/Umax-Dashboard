@@ -581,7 +581,7 @@ export default function CampaignTable() {
             ).then((response) => {
                 if(!response.IsError){
                     for(let i = 0; i < 7; i++){
-                        const impressions2 = getRandomValue(200000, 300000);
+                        const impressions2 = getRandomValue(120000000, 300000000);
                         const reach2 = getRandomValue(80000000, 120000000);
                         const click2 = getRandomValue(100000, 200000);
                         const amountspent2 = getRandomValue(400000, 5000000);
