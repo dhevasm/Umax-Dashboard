@@ -526,7 +526,7 @@ export default function CampaignTable() {
 
         const impressions = getRandomValue(200000, 300000);
         const reach = getRandomValue(800000, 1200000);
-        const click = getRandomValue(100000, 200000);
+        const click = getRandomValue(300000, 2000000);
         const amountspent = getRandomValue(400000, 500000);
         const result = getRandomValue(600, 900);
         const purchase = getRandomValue(7000000, 8000000);
