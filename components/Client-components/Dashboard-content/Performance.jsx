@@ -10,7 +10,7 @@ import Chart from "./Chart";
 import Swal from "sweetalert2";
 import { useTranslations } from 'next-intl';
 
-export default function Performance({ id }) {
+export default function Performance({ id, spent }) {
     // Variabel for Metrics
     const [rar, setRar] = useState({});
     const [oclp, setOclp] = useState({})
@@ -139,6 +139,60 @@ export default function Performance({ id }) {
         fetchData();
     }, []);
 
+    // function getRandomDateInFuture() {
+    //     const currentDate = new Date();
+    //     const randomDaysToAdd = Math.floor(Math.random() * 30) + 1; // Menambahkan antara 1 hingga 30 hari
+    //     currentDate.setDate(currentDate.getDate() + randomDaysToAdd);
+
+    //     const year = currentDate.getFullYear();
+    //     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+    //     const day = String(currentDate.getDate()).padStart(2, '0');
+
+    //     return `${year}-${month}-${day}`;
+    // }
+
+    // async function updateMetrics() {
+    //     const Hitung = new FormData();
+    //     Hitung.append('tanggal', getRandomDateInFuture());
+    //     Hitung.append('clicks', Math.floor(Math.random() * 1000000) + 500000);
+    //     Hitung.append('lpview', Math.floor(Math.random() * 100000) + 10000);
+    //     Hitung.append('atc', Math.floor(Math.random() * 50000) + 5000);
+    //     Hitung.append('ctview', Math.floor(Math.random() * 10000) + 1000);
+    //     Hitung.append('results', Math.floor(Math.random() * 5000000) + 1000000);
+    //     Hitung.append('amountspent', Math.floor(Math.random() * 50000) + 1000000);
+    //     Hitung.append('reach', Math.floor(Math.random() * 1000000) + 100000);
+    //     Hitung.append('impressions', Math.floor(Math.random() * 50000000) + 1000000);
+    //     Hitung.append('delivery', Math.floor(Math.random() * 100));
+    //     Hitung.append('leads', Math.floor(Math.random() * 1000) + 100);
+    //     Hitung.append('purchase', Math.floor(Math.random() * 10000) + 1000);
+    //     Hitung.append('cpc', Math.floor(Math.random() * 5000) + 500);
+
+    //     try {
+    //         await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${id}`, Hitung, 
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+    //                     "Content-Type": "application/x-www-form-urlencoded",
+    //                 }
+    //             }
+    //         );
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     // Jalankan fetchData dan fetchSuggestions saat komponen mount
+    //     fetchData();
+    //     fetchSuggestions();
+
+    //     // Jalankan updateMetrics setiap 5 menit
+    //     const intervalId = setInterval(updateMetrics, 1 * 60 * 1000);
+
+    //     // Bersihkan interval saat komponen unmount
+    //     return () => clearInterval(intervalId);
+    // }, [])
+
     useEffect(() => {
         const timer = setTimeout(() => {
             if (!id) {
@@ -188,7 +242,7 @@ export default function Performance({ id }) {
                             <Infocard 
                             Color='' 
                             Title={t('metric7.amount-spent')} 
-                            Value='Rp 2000.000' 
+                            Value={spent ? spent : ''} 
                             Desc={t('metric7.amount-desc')} 
                             />
 

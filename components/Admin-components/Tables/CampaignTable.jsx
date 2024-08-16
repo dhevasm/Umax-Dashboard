@@ -511,9 +511,21 @@ export default function CampaignTable() {
     
     function createMetrics(campaignID) {
         const getRandomValue = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        function getRandomDateInFuture() {
+            const currentDate = new Date();
+            const randomDaysToAdd = Math.floor(Math.random() * 30) + 1; // Menambahkan antara 1 hingga 30 hari
+            currentDate.setDate(currentDate.getDate() + randomDaysToAdd);
+    
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+            const day = String(currentDate.getDate()).padStart(2, '0');
+    
+            return `${year}-${month}-${day}`;
+        }
 
         const impressions = getRandomValue(200000, 300000);
-        const reach = getRandomValue(80000, 120000);
+        const reach = getRandomValue(800000, 1200000);
         const click = getRandomValue(100000, 200000);
         const amountspent = getRandomValue(400000, 500000);
         const result = getRandomValue(600, 900);
@@ -545,7 +557,7 @@ export default function CampaignTable() {
         formDataMetrics.append('roas', purchase / amountspent);
 
         const Hitung = new FormData();
-        Hitung.append('tanggal', '2024-12-12');
+        Hitung.append('tanggal', '2024-02-02');
         Hitung.append('clicks', click);
         Hitung.append('lpview', lpview);
         Hitung.append('atc', atc);
@@ -566,18 +578,53 @@ export default function CampaignTable() {
                     "Content-Type": "application/x-www-form-urlencoded",
                 }
             }
-            )
-            for(let i = 0; i < 6; i++){
-                const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, Hitung, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    }
+            ).then((response) => {
+                if(!response.IsError){
+                    for(let i = 0; i < 7; i++){
+                        const impressions2 = getRandomValue(200000, 300000);
+                        const reach2 = getRandomValue(80000000, 120000000);
+                        const click2 = getRandomValue(100000, 200000);
+                        const amountspent2 = getRandomValue(400000, 5000000);
+                        const result2 = getRandomValue(600, 900);
+                        const purchase2 = getRandomValue(7000000, 8000000);
+                        const lpview2 = getRandomValue(90000, 100000);
+                        const atc2 = getRandomValue(20000, 30000);
+                        const ctview2 = getRandomValue(8000, 12000);
+                        const delivery2 = getRandomValue(80, 90);
+                        const leads2 = getRandomValue(200, 240);
+                        const cpc2 = getRandomValue(2500, 3500);
+
+                        const formDua = new FormData()
+                        formDua.append('tanggal', `2024-08-${10 + i}` );
+                        formDua.append('clicks', click2);
+                        formDua.append('lpview', lpview2);
+                        formDua.append('atc', atc2);
+                        formDua.append('ctview', ctview2);
+                        formDua.append('results', result2);
+                        formDua.append('amountspent', amountspent2);
+                        formDua.append('reach', reach2);
+                        formDua.append('impressions', impressions2);
+                        formDua.append('delivery', delivery2);
+                        formDua.append('leads', leads2);
+                        formDua.append('purchase', purchase2);
+                        formDua.append('cpc', cpc2);
+                        try {
+                            const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, formDua , {
+                                headers: {
+                                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                                    "Content-Type": "application/x-www-form-urlencoded",
+                                }
+                            }
+                            )
+                            console.log(dua)
+                        }catch (error) {
+                            console.log(error)
+                        }
+                        }
                 }
-                )
-            }
+            })
+            
             console.log(satu)
-            console.log(dua)
         } catch (error) {
             console.log(error)
         }

@@ -29,13 +29,15 @@ function Dashboard() {
     const [campaignID, setCampaignID] = useState('');
     const [name, setName] = useState('');
     const [platform, setPlatform] = useState('');
+    const [amountspent, setAmountSpent] = useState(0);
     const [SidebarHide, setSidebarHide] = useState(false)
     const t = useTranslations('dashboard');
 
-    const handleCampaignIDChange = (id, name, platform) => {
+    const handleCampaignIDChange = (id, name, platform, spent) => {
         setCampaignID(id);
         setName(name);
         setPlatform(platform);
+        setAmountSpent(spent)
     };
 
     // Dashborad Change Content Start
@@ -116,7 +118,7 @@ function Dashboard() {
 
                 {/* Content */}
                 <div className="m-10">
-                  {activeContent === "performance" && <Performance key={campaignID} id={campaignID} />}
+                  {activeContent === "performance" && <Performance key={campaignID} spent={amountspent} id={campaignID} />}
                   {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID} />}
                   {activeContent === "history" && <History key={campaignID} id={campaignID} />}
                   {activeContent === "setting" && <Setting key={campaignID} id={campaignID} />}
