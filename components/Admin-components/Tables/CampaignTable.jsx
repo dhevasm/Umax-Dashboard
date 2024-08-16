@@ -757,7 +757,7 @@ export default function CampaignTable() {
 
     function dateconvert(date){
         let [day, month, year, hour] = date.split(" ");
-        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
         let monthIndex = months.indexOf(month) + 1;
         if(monthIndex < 10){
             monthIndex = "0" + monthIndex;
