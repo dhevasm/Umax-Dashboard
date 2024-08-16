@@ -515,7 +515,7 @@ export default function CampaignTable() {
         const impressions = getRandomValue(200000, 300000);
         const reach = getRandomValue(80000, 120000);
         const click = getRandomValue(100000, 200000);
-        const amountspent = getRandomValue(4000000, 5000000);
+        const amountspent = getRandomValue(400000, 500000);
         const result = getRandomValue(600, 900);
         const purchase = getRandomValue(7000000, 8000000);
         const lpview = getRandomValue(90000, 100000);
@@ -567,13 +567,15 @@ export default function CampaignTable() {
                 }
             }
             )
-            const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, Hitung, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-                    "Content-Type": "application/x-www-form-urlencoded",
+            for(let i = 0; i < 6; i++){
+                const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, Hitung, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    }
                 }
+                )
             }
-            )
             console.log(satu)
             console.log(dua)
         } catch (error) {
