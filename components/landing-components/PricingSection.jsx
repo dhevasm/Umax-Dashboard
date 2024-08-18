@@ -134,7 +134,8 @@ const PricingSection = () => {
   }, [showModal]);
 
   async function midtransPay(price){
-    const url = process.env.NEXT_PUBLIC_PAYMENT_API;
+    // const url = process.env.NEXT_PUBLIC_API_URL;
+    const url = process.env.NEXT_PUBLIC_API_URL_2;
 
       // Convert form values to URL-encoded format
       const formData = new URLSearchParams({

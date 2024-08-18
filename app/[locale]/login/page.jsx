@@ -31,7 +31,8 @@ const Page = () => {
 
   const getUserData = async (roles) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-id`, {
+      // const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-id`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_2}/user-by-id`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
         },

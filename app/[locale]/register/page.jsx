@@ -18,7 +18,8 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useRouter();
   const t = useTranslations('register');
-  const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
+  // const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
+  const umaxUrl = process.env.NEXT_PUBLIC_API_URL_2;
   const roles = localStorage.getItem('roles');
 
   // Tenant all
