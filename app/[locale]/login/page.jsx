@@ -31,8 +31,7 @@ const Page = () => {
 
   const getUserData = async (roles) => {
     try {
-      // const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-id`, {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_2}/user-by-id`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user-by-id`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
         },
@@ -104,7 +103,8 @@ const Page = () => {
           throw new Error("Network error: Please check your internet connection.");
         }
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL2}/login`, {
           method: "POST",
           headers: {
             accept: "application/json",

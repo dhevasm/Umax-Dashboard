@@ -40,7 +40,8 @@ const Page = () => {
             setLoading(true);
             try {
                 const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/reset-password?token=${values.token}&new_password=${values.new_password}&konfirmasi_password=${values.konfirmasi_password}`,
+                    // `${process.env.NEXT_PUBLIC_API_URL}/reset-password?token=${values.token}&new_password=${values.new_password}&konfirmasi_password=${values.konfirmasi_password}`,
+                    `${process.env.NEXT_PUBLIC_API_URL_2}/reset-password?token=${values.token}&new_password=${values.new_password}&konfirmasi_password=${values.konfirmasi_password}`,
                     {
                         method: 'POST',
                         headers: {
