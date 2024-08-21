@@ -507,20 +507,9 @@ export default function Dashboard({ tenant_id }) {
 
     const printPage = useRef(null)
 
-    const handlePrint = () => {
-        if (printPage.current) {
-            html2pdf()
-            .from(printPage.current)
-            .save('document.pdf')
-            .catch(error => console.error('Error generating PDF:', error));
-        }
-    };
-
-
     return (
         <>
             <div className="w-full h-full flex flex-wrap gap-5" ref={printPage}>
-                <button onClick={handlePrint}>Coba</button>
                 <div className="grid grid-cols-2 md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
                     {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
                         userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={loadingCount ? "Loading..." : tenantCount} handleClick={"tenants"} /> :
