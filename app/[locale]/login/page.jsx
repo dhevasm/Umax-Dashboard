@@ -103,8 +103,7 @@ const Page = () => {
           throw new Error("Network error: Please check your internet connection.");
         }
 
-        // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL2}/login`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
           method: "POST",
           headers: {
             accept: "application/json",
@@ -202,6 +201,7 @@ const Page = () => {
               className="w-full h-12 rounded-lg pl-5 border border-blue mt-2 focus:outline-none focus:ring-1"
               onChange={formik.handleChange}
               value={formik.values.email}
+              required
             />
             {formik.errors.email && <div className="text-red-500">{formik.errors.email}</div>}
 
@@ -214,6 +214,7 @@ const Page = () => {
                 className="w-full h-12 rounded-lg pl-5 border border-blue mt-2 focus:outline-none focus:ring-1"
                 onChange={formik.handleChange}
                 value={formik.values.password}
+                required
               />
               {formik.errors.password && <div className="text-red-500">{formik.errors.password}</div>}
 

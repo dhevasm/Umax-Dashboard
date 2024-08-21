@@ -250,7 +250,8 @@
       "not-found": "Client not found",
       "details-of":"Details of",
       "create-client": "Create Client",
-      "save": "Save"
+      "save": "Save",
+      "Delete" : "Delete"
     },
 
     "admin-dashboard": {
@@ -388,7 +389,8 @@
       "page": "Page",
       "save": "Save Changes",
       "submit": "Submit",
-      "not-found": "User not found"
+      "not-found": "User not found",
+      "delete" : "Delete"
     },
 
     "admin-campaigns": {
@@ -571,7 +573,7 @@
       "email-placeholder": "Email",
       "email-error":"Invalid Email Address",
       "email-required":"Email is required",
-      "reset-email-sent": "Please check your email. A token has been sent to your email address.",
+      "reset-email-sent": "Please check your email to reset your password",
       "reset-email-error": "Failed to send reset email. Please try again.",
       "ok": "OK",
       "submit": "Submit",

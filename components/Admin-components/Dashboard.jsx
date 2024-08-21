@@ -6,7 +6,7 @@ import ChartTwo from "./Charts/ChartTwo"
 import ChartThree from "./Charts/ChartThree"
 import Map from "./Maps/Map"
 import { BiSolidLeftArrow, BiSolidRightArrow } from "react-icons/bi"
-import { useCallback, useContext } from "react"
+import { useCallback, useContext, useRef } from "react"
 import { AdminDashboardContext } from "@/app/[locale]/admin-dashboard/page"
 import { useState, useEffect } from "react"
 import LoadingCircle from "../Client-components/Loading/LoadingCircle"
@@ -20,6 +20,7 @@ import { FaArrowUp, FaBuilding, FaCheck, FaTimes } from "react-icons/fa"
 import { map } from "leaflet"
 import Swal from "sweetalert2"
 import { LiaSpinnerSolid } from "react-icons/lia"
+import { html2pdf } from "html2pdf.js"
 
 export default function Dashboard({ tenant_id }) {
     const t = useTranslations("admin-dashboard")
@@ -503,9 +504,23 @@ export default function Dashboard({ tenant_id }) {
         }
     }
     
+
+    const printPage = useRef(null)
+
+    const handlePrint = () => {
+        if (printPage.current) {
+            html2pdf()
+            .from(printPage.current)
+            .save('document.pdf')
+            .catch(error => console.error('Error generating PDF:', error));
+        }
+    };
+
+
     return (
         <>
-            <div className="w-full h-full flex flex-wrap gap-5">
+            <div className="w-full h-full flex flex-wrap gap-5" ref={printPage}>
+                <button onClick={handlePrint}>Coba</button>
                 <div className="grid grid-cols-2 md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
                     {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
                         userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={loadingCount ? "Loading..." : tenantCount} handleClick={"tenants"} /> :
@@ -518,15 +533,15 @@ export default function Dashboard({ tenant_id }) {
                     <div className="w-full max-w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartOne chartData={chartData} />
                     </div>
-                    <div className="w-full max-w-full flex justify-center lg:w-2/3 h-[200px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full max-w-full flex justify-center lg:w-2/3 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartTwo chartData={chartData} />
                     </div>
                 </div>
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
-                    <div className="w-full max-w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
-                        <Map/>
+                    <div className="w-full max-w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] relative bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-hidden">
+                        <Map />
                     </div>
-                    <div className="w-full max-w-full flex justify-center lg:w-2/5 h-[370px] md:h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full max-w-full flex justify-center lg:w-2/5 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartThree chartData={chartData} />
                     </div>
                 </div>
@@ -578,53 +593,56 @@ export default function Dashboard({ tenant_id }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {dataLoading ? (
-                                            <tr>
-                                                <td colSpan="5" className="w-full text-center align-middle">
-                                                    <div className="flex items-center justify-center h-full">
-                                                        <LoadingCircle />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ) : campaigns.length == 0 ? (
-                                            <tr>
-                                                <td colSpan="5" className="w-full text-center align-middle border dark:border-slate-400">
-                                                    <div className="flex items-center justify-center h-full dark:text-slate-200 py-5">
-                                                        Campaign no found
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            campaigns.slice(0, 5).map((data, index) => (
-                                                <tr key={index} className="border-b">
-                                                    <td className="p-2.5 xl:p-5 flex items-center gap-3">
-                                                        <Image
-                                                            src={`/assets/${data.campaign_platform === 1 ? 'meta.svg' : data.campaign_platform === 2 ? 'google.svg' : data.campaign_platform === 3 ? 'tiktok.svg' : ''}`}
-                                                            width={45}
-                                                            height={45}
-                                                            alt="Logo"
-                                                        />
-                                                        <p className="sm:block text-sm text-black dark:text-slate-200">
-                                                            {data.campaign_name}
-                                                        </p>
-                                                    </td>
-                                                    <td className="p-2.5 xl:p-5 text-nowrap text-black dark:text-slate-200 text-center">
-                                                        {data.amountspent}
-                                                    </td>
-                                                    <td className="p-2.5 xl:p-5 text-nowrap text-meta-3 dark:text-slate-200 text-center">
-                                                        {data.reach}
-                                                    </td>
-                                                    <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-meta-5 dark:text-slate-200 text-center">
-                                                        {data.impressions}
-                                                    </td>
-                                                    <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-black dark:text-slate-200 text-center">
-                                                        {data.start_date}
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )
-                                        }
+                                    {dataLoading ? (
+                                        <tr>
+                                        <td colSpan="5" className="w-full text-center align-middle">
+                                            <div className="flex items-center justify-center h-full">
+                                            <LoadingCircle />
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    ) : campaigns.length === 0 ? (
+                                        <tr>
+                                        <td colSpan="5" className="w-full text-center align-middle border dark:border-slate-400">
+                                            <div className="flex items-center justify-center h-full dark:text-slate-200 py-5">
+                                            Campaign not found
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    ) : (
+                                        campaigns.slice(0, 5).map((data, index) => (
+                                        <tr
+                                            key={index}
+                                            className="border-b cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700"
+                                        >
+                                            <td className="p-2.5 xl:p-5 flex flex-col md:flex-row items-center text-center gap-3">
+                                            <Image
+                                                src={`/assets/${data.campaign_platform === 1 ? 'meta.svg' : data.campaign_platform === 2 ? 'google.svg' : data.campaign_platform === 3 ? 'tiktok.svg' : ''}`}
+                                                width={45}
+                                                height={45}
+                                                alt="Logo"
+                                            />
+                                            <p className="text-xs md:text-sm text-black dark:text-slate-200">
+                                                {data.campaign_name}
+                                            </p>
+                                            </td>
+                                            <td className="p-2.5 xl:p-5 text-nowrap text-black dark:text-slate-200 text-center">
+                                            {data.amountspent}
+                                            </td>
+                                            <td className="p-2.5 xl:p-5 text-nowrap text-meta-3 dark:text-slate-200 text-center">
+                                            {data.reach}
+                                            </td>
+                                            <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-meta-5 dark:text-slate-200 text-center">
+                                            {data.impressions}
+                                            </td>
+                                            <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-black dark:text-slate-200 text-center">
+                                            {data.start_date}
+                                            </td>
+                                        </tr>
+                                        ))
+                                    )}
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>

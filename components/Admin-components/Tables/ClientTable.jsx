@@ -18,6 +18,8 @@ import { MdPeopleOutline } from "react-icons/md"
 import { RiFileExcel2Line } from "react-icons/ri"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 export default function ClientTable() {
 
     const [client, setclient] = useState([])
@@ -25,6 +27,7 @@ export default function ClientTable() {
     const [EditclientId, setEditclientId] = useState(null)
     const [showPassword, setShowPassword] = useState(false)
     const [selectedStatus, setSelectedStatus] = useState("");
+    const [selectedTenant, setSelectedTenant] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
@@ -226,11 +229,12 @@ export default function ClientTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteclient(client_id)
-            Swal.fire({
-                title: tdel('success'),
-                text: tdel('suc-msg'),
-                icon: "success"
-            })
+            // Swal.fire({
+            //     title: tdel('success'),
+            //     text: tdel('suc-msg'),
+            //     icon: "success"
+            // })
+            toastr.success(tdel('suc-msg'), tdel('success'))
             }
           });
     }
@@ -266,11 +270,12 @@ export default function ClientTable() {
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('suc-msg')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(tfile('suc-msg'), tfile('success'))
             }
           });
     }
@@ -300,11 +305,12 @@ export default function ClientTable() {
                     body: client.map((client) => [client.name, client.address, client.contact, client.email, client.status == 1 ? "Active" : "Inactive"]),
                 });
                 doc.save('Dataclient.pdf');
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('suc-msg')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(tfile('suc-msg'), tfile('success'))
             }
           });
     };
@@ -393,16 +399,19 @@ export default function ClientTable() {
                 document.getElementById('password').value = null
                 document.getElementById('passwordverify').value = null
                 document.getElementById('notes').value = ""
-                Swal.fire("Success", "Client created successfully", "success")
+                // Swal.fire("Success", "Client created successfully", "success")
+                toastr.success('Client created successfully', 'Success')
             }else{
-                Swal.fire("Error", response.detail, "error")
+                // Swal.fire("Error", response.detail, "error")
+                toastr.error(response.detail, 'Error')
             }
         }else{
-            Swal.fire({
-                title: "Failed!",
-                text: "Please Fill The Blank!",
-                icon: "error"
-              });
+            // Swal.fire({
+            //     title: "Failed!",
+            //     text: "Please Fill The Blank!",
+            //     icon: "error"
+            //   });
+            toastr.warning('Please Fill The Blank!', 'Failed')
             //   validateForm()
             
         }
@@ -447,16 +456,19 @@ export default function ClientTable() {
                     document.getElementById('contact').value = null
                     document.getElementById('email').value = null
                     document.getElementById('password').value = null
-                    Swal.fire("Success", "Client Updated", "success")
+                    // Swal.fire("Success", "Client Updated", "success")
+                    toastr.success('Client Updated', 'Success')
                 }else{
-                    Swal.fire("Error", response.detail.ErrMsg, "error")
+                    // Swal.fire("Error", response.detail.ErrMsg, "error")
+                    toastr.error(response.detail.ErrMsg, 'Error')
                 }
             }else{
-                Swal.fire({
-                    title: "Failed!",
-                    text: "Please Fill The Blank!",
-                    icon: "error"
-                  });
+                // Swal.fire({
+                //     title: "Failed!",
+                //     text: "Please Fill The Blank!",
+                //     icon: "error"
+                //   });
+                toastr.warning('Please Fill The Blank!', 'Failed')
             
             }
         }
@@ -516,9 +528,15 @@ export default function ClientTable() {
         setCurrentPage(1);
     };
 
+    const handleTenantChange = (event) => {
+        setSelectedTenant(event.target.value);
+        setCurrentPage(1);
+    };
+
     const filteredData = client.filter((data) => {
         return (
             (!selectedStatus || data.status === Number(selectedStatus)) &&
+            (!selectedTenant || data.tenant_id === selectedTenant) &&
             (!searchTerm ||
                 data.name.toLowerCase().includes(searchTerm.toLowerCase()))
         );
@@ -675,6 +693,24 @@ export default function ClientTable() {
                                 {/* Button end */}
 
                                 {/* Filter by select */}
+                                {
+                                    userData.roles == "sadmin" && (
+                                        <div className="mb-4">
+                                            <label htmlFor="tenantfilter" className="text-sm font-medium hidden">Tenant</label>
+                                            <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
+                                            value={selectedTenant} onChange={handleTenantChange}
+                                            >
+                                                <option value="" disabled hidden>Tenant</option>
+                                                <option value="">All Tenant</option>
+                                                {
+                                                    tenants ? tenants.map((tenant, index) => (
+                                                        <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                    )) : <option>Loading</option>
+                                                }
+                                            </select>  
+                                        </div>
+                                    )
+                                }
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium hidden">Role</label>
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 rounded-e-md text-sm block w-full px-3 py-2 focus:border-none select-no-arrow" defaultValue={0}
@@ -686,6 +722,8 @@ export default function ClientTable() {
                                         <option value="2">{t("deactive")}</option>
                                     </select>  
                                 </div>
+                                
+                                
                                 {/* Filter by select end */}
                             </div>
 
@@ -707,7 +745,7 @@ export default function ClientTable() {
                         </div>
 
                         <div className="bg-white dark:bg-slate-800 h-fit overflow-auto">
-                            <table className="w-full text-sm text-left" ref={tableRef}>
+                            <table className="w-full text-sm text-left">
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t("name")}</th>
@@ -750,6 +788,43 @@ export default function ClientTable() {
                                                     </td>
                                                 </tr>
                                             )
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                            <table className="w-full text-sm text-left hidden" ref={tableRef}>
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
+                                    <tr>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t("name")}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t("address")}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t("contact")}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Email</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white dark:bg-slate-800">
+                                    {filteredData.length > 0 ? (
+                                            // Jika data ditemukan
+                                            filteredData.map((client, index) => (
+                                                <tr key={index} className="hover:bg-gray-100 hover:cursor-pointer dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap underline" onClick={() => showModal("Edit", client._id)}>{client.name}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.address}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
+                                                        <a href={`https://wa.me/${client.contact.replace(/\D+/g, '')}`} target="_blank" className="text-blue-500">
+                                                            {client.contact}
+                                                        </a>
+                                                    </td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap"><a href={`mailto:${client.email}`} className="text-blue-500">{client.email}</a></td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{client.status == 1 ? t('active') : t('deactive')}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            // Jika tidak ada data setelah loading
+                                            <tr className="text-center border dark:border-gray-500">
+                                                <td colSpan={8} className="py-4">
+                                                    {t('not-found')}
+                                                </td>
+                                            </tr>
                                         )
                                     }
                                 </tbody>

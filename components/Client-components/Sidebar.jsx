@@ -57,7 +57,6 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
             console.error(error);
         }
     }, [status, umaxUrl]);
-    
 
     useEffect(() => {
         const controller = new AbortController();
@@ -77,7 +76,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
         } else {
             return (
                 campaign.campaign_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                campaign.campaign_status === status && campaign.client_id === localStorage.getItem('clientId')
+                campaign.campaign_status === status 
             );
         }
     });
@@ -102,7 +101,6 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                             color: white;
                             transition: background-color 0.3s, color 0.3s;
                         }
-
                         .SidebarFilterActive:hover {
                             cursor: pointer;
                             background-color: rgba(0, 0, 255, 0.1);

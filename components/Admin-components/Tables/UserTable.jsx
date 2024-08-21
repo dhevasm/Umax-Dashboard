@@ -17,6 +17,8 @@ import { RiFileExcel2Line, RiUser3Line } from "react-icons/ri"
 import CountCard from "../CountCard"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 export default function UserTable() {
 
@@ -80,11 +82,12 @@ export default function UserTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteuser(user_id)
-            Swal.fire({
-                title: tdel('success'),
-                text: tdel('suc-msg'),
-                icon: "success"
-            })
+            // Swal.fire({
+            //     title: tdel('success'),
+            //     text: tdel('suc-msg'),
+            //     icon: "success"
+            // })
+            toastr.success('User Deleted', 'Success')
             setTimeout(() => {
                 closeModal()
             }, 100);
@@ -123,11 +126,12 @@ export default function UserTable() {
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('success')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(`${tfile('success')}`, `${tfile('success')}`)
             }
           });
     }
@@ -157,11 +161,12 @@ export default function UserTable() {
                     body: users.map((user) => [user.name, user.roles, user.email, user.company_name]),
                 });
                 doc.save('DataUsers.pdf');
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('suc-msg')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(`${tfile('success')}`, `${tfile('suc-msg')}`)
             }
           });
        
@@ -251,9 +256,11 @@ export default function UserTable() {
             if(response.data.Output.includes("Successfully changed") || response.data.Output.includes("Berhasil")){
                 getUsers()
                 closeModal()
-                Swal.fire("Success", "user Updated", "success")
+                // Swal.fire("Success", "user Updated", "success")
+                toastr.success('User Updated', 'Success')
             }else{
-                Swal.fire("Error", response.detail.ErrMsg, "error")
+                // Swal.fire("Error", response.detail.ErrMsg, "error")
+                toastr.error(response.detail.ErrMsg, 'Error')
             }
         }
     }
@@ -277,15 +284,15 @@ export default function UserTable() {
             setCulture(response.data)
         })
 
-        // if(localStorage.getItem('roles') == 'sadmin'){
-        //     await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
-        //         headers : {
-        //             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-        //         }
-        //     }).then((response) => {
-        //         setTenants(response.data.Data)
-        //     })
-        // }
+        if(localStorage.getItem('roles') == 'sadmin'){
+            await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
+                headers : {
+                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+                }
+            }).then((response) => {
+                setTenants(response.data.Data)
+            })
+        }
     }
 
     useEffect(() => {
@@ -324,7 +331,7 @@ export default function UserTable() {
         // if(role != 'client') {
         return (
             (!selectedRole || data.roles === selectedRole) &&
-            (!selectedTenant || data.company_name.toLowerCase().includes(selectedTenant.toLowerCase())) &&
+            (!selectedTenant || data.tenant_id.toLowerCase() == selectedTenant.toLowerCase()) &&
             (!searchTerm ||
                 data.name.toLowerCase().includes(searchTerm.toLowerCase()))
         );
@@ -468,7 +475,28 @@ export default function UserTable() {
                                 {/* Button end */}
 
                                 {/* Filter by select */}
-                                <div className="mb-4">
+                                <div className="mb-4 flex">
+                                {
+                                    userData.roles == 'sadmin' && (
+                                        <>
+                                            <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
+                                            <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e text-sm block w-full px-3 py-2" defaultValue={0}
+                                            value={selectedTenant} onChange={handleTenantChange}
+                                            >
+                                                <option value="" key={0} disabled hidden>Tenant 
+                                                </option>
+                                                <option value="" key={0}> All Tenant </option>
+                                                {
+                                                    tenants.map((tenant, index) => {    
+                                                        return (
+                                                            <option value={tenant._id} key={index + 1}>{tenant.company}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>  
+                                        </>
+                                    )
+                                }
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
                                     <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
@@ -480,6 +508,7 @@ export default function UserTable() {
                                         <option value="admin" key={2}>Admin</option>
                                         <option value="staff" key={3}>Staff</option>
                                     </select>  
+                                    
                                 </div>
                                 {/* Filter by select end */}
                             </div>
@@ -501,7 +530,7 @@ export default function UserTable() {
 
                         
                         <div className="bg-white h-fit overflow-auto">
-                            <table className="w-full text-sm text-left" ref={tableRef}>
+                            <table className="w-full text-sm text-left">
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
                                         <th scope="col" className="px-6 border dark:border-gray-500 py-3">{t('name')}</th>
@@ -542,6 +571,40 @@ export default function UserTable() {
                                             </tr>
                                         )
                                     }
+                                </tbody>
+                            </table>
+                            <table className="w-full text-sm text-left hidden" ref={tableRef}>
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
+                                    <tr>
+                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">{t('name')}</th>
+                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">Role</th>
+                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">Email</th>
+                                        <th scope="col" className="px-6 border dark:border-gray-500 py-3">{t('company')}</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white dark:bg-slate-800">
+                                    {filteredData.length > 0 ? (
+                                        // Display filtered data if available
+                                        filteredData.map((user, index) => (
+                                            <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
+                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap underline" title="Click to edit" onClick={() => showModal("Edit", user._id)}>{user.name}</td>
+                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">{user.roles}</td>
+                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
+                                                    <a href={`mailto:${user.email}`} className="text-blue-500">{user.email}</a>
+                                                </td>
+                                                <td className="px-6 border dark:border-gray-500 py-3 font-medium whitespace-nowrap">
+                                                    {String(user.company_name)}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        // Display message if no data found
+                                        <tr className="text-center border dark:border-gray-500">
+                                            <td colSpan={4} className="py-4">
+                                                {t('not-found')}
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>

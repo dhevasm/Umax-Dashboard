@@ -14,6 +14,8 @@ import { useTranslations } from "next-intl"
 import countryMap from "@/helpers/CountryMap"
 import Currency from "@/helpers/Currency"
 import Image from "next/image"
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 export default function TenantProfile({tenant_id}){
 
@@ -168,13 +170,16 @@ export default function TenantProfile({tenant_id}){
                 document.getElementById('contact').value = null
                 document.getElementById('email').value = null
                 setIsLoading(false)
-                Swal.fire("Success", "Tenant Updated", "success")
+                // Swal.fire("Success", "Tenant Updated", "success")
+                toastr.success('Tenant Updated', "Success")
             }else{
-                Swal.fire("Error", response.detail.ErrMsg, "error")
+                // Swal.fire("Error", response.detail.ErrMsg, "error")
+                toastr.error(response.detail.ErrMsg, "Error")
                 setIsLoading(false)
             }
             }else{
-                Swal.fire("Failed!","Please fill all required fields!", "error")
+                // Swal.fire("Failed!","Please fill all required fields!", "error")
+                toastr.error("Please fill all required fields!", "Failed")
                 setIsLoading(false)
             }
             

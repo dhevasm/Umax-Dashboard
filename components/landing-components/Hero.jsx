@@ -65,16 +65,16 @@ const Hero = () => {
                   </a> */}
                 </li>
               </ul>
-              {/* <div className="pt-16 clients">
-                <h6 className="flex items-center mb-2 text-xs font-normal dark:text-white">
+              <div className="pt-16 clients">
+                {/* <h6 className="flex items-center mb-2 text-xs font-normal dark:text-white">
                   Used by Thriving Brands
                   <span className="ml-2 inline-block h-[1px] w-8 bg-body-color"></span>
-                </h6>
+                </h6> */}
                 <div className="flex max-w-[550px] items-center">
                   <div className="w-full py-3 mr-4">
                     <Image
                       src="../assets/ayroui.svg"
-                      alt="ayroui"
+                      alt="Umax"
                       width={200}
                       height={10}
                     />
@@ -96,7 +96,7 @@ const Hero = () => {
                     />
                   </div>
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
           <div className="hidden px-4 lg:block lg:w-1/12"></div>

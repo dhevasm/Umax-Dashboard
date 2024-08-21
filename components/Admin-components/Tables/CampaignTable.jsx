@@ -17,6 +17,8 @@ import CountCard from "../CountCard"
 import { BiPlus } from "react-icons/bi"
 import { date } from "yup"
 import { useTranslations } from "next-intl"
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 export default function CampaignTable() {
 
@@ -35,6 +37,7 @@ export default function CampaignTable() {
     const t = useTranslations("admin-campaigns");
     const tfile = useTranslations("swal-file");
     const tdel = useTranslations("swal-delete");
+    const [selectedTenant, setSelectedTenant] = useState("");
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
 
@@ -195,11 +198,12 @@ export default function CampaignTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteCampaign(campaign_id)
-            Swal.fire({
-                title: tdel('success'),
-                text: tdel('suc-msg'),
-                icon: "success"
-            })
+            // Swal.fire({
+            //     title: tdel('success'),
+            //     text: tdel('suc-msg'),
+            //     icon: "success"
+            // })
+            toastr.success(tdel('suc-msg'), tdel('success'))
             }
           });
     }
@@ -235,14 +239,14 @@ export default function CampaignTable() {
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('suc-msg')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(tfile('suc-msg'), tfile('success'))
             }
-          });
-        
+        });
     }
 
     const { onDownload } = useDownloadExcel({
@@ -270,11 +274,12 @@ export default function CampaignTable() {
                     body: campaigns.map((campaign) => [campaign.name, campaign.client_name, campaign.account_name, campaign.platform, campaign.objective, campaign.status, campaign.company_name]),
                 });
                 doc.save('DataCampaign.pdf');
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('suc-msg')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(tfile('suc-msg'), tfile('success'))
             }
           });
     };
@@ -392,16 +397,19 @@ export default function CampaignTable() {
                 setUpdateCard(true)
                 document.getElementById('name').value = null
                 document.getElementById('notes').value = null
-                Swal.fire("Success", "Campaing created successfully", "success")
+                // Swal.fire("Success", "Campaing created successfully", "success")
+                toastr.success('Campaign created successfully', 'Success')
             }else{
-                Swal.fire("Error", response.detail, "error")
+                // Swal.fire("Error", response.detail, "error")
+                toastr.error(response.detail, 'Error')
             }
         }else{
-            Swal.fire({
-                title: "Failed!",
-                text: "Please Fill The Blank!",
-                icon: "error"
-              });
+            // Swal.fire({
+            //     title: "Failed!",
+            //     text: "Please Fill The Blank!",
+            //     icon: "error"
+            //   });
+            toastr.error('Please Fill The Blank!', 'Failed')
         }
     }
     async function updateCampaign(){
@@ -442,16 +450,19 @@ export default function CampaignTable() {
                     closeModal()
                     document.getElementById('name').value = null
                     document.getElementById('notes').value = null
-                    Swal.fire("Success", "Campaign Updated", "success")
+                    // Swal.fire("Success", "Campaign Updated", "success")
+                    toastr.success('Campaign Updated', 'Success')
                 }else{
-                    Swal.fire("Error", response.detail.ErrMsg, "error")
+                    // Swal.fire("Error", response.detail.ErrMsg, "error")
+                    toastr.error(response.detail.ErrMsg, 'Error')
                 }
             }else{
-                Swal.fire({
-                    title: "Failed!",
-                    text: "Please Fill The Blank!",
-                    icon: "error"
-                  });
+                // Swal.fire({
+                //     title: "Failed!",
+                //     text: "Please Fill The Blank!",
+                //     icon: "error"
+                //   });
+                toastr.error('Please Fill The Blank!', 'Failed')
             }
         }
     }
@@ -661,11 +672,17 @@ export default function CampaignTable() {
         setCurrentPage(1);
     };
 
+    const handleTenantChange = (event) => {
+        setSelectedTenant(event.target.value);
+        setCurrentPage(1);
+    };
+
     const filteredData = campaigns.filter((data) => {
         return (
             (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
             (!selectedObjective || data.objective === Number(selectedObjective)) &&
             (!selectedStatus || data.status === Number(selectedStatus)) &&
+            (!selectedTenant || data.tenant_id === selectedTenant) &&
             (!searchTerm ||
                 data.name.toLowerCase().includes(searchTerm.toLowerCase()))
         );
@@ -756,6 +773,7 @@ export default function CampaignTable() {
     const indexOfLastcampaign = currentPage * dataPerPage;
     const indexOfFirstcampaign = indexOfLastcampaign - dataPerPage;
     const currentcampaigns = filteredData.slice(indexOfFirstcampaign, indexOfLastcampaign);
+    
 
     function dateconvert(date){
         let [day, month, year, hour] = date.split(" ");
@@ -811,6 +829,28 @@ export default function CampaignTable() {
                                             <BiPlus className="text-thin"/>
                                         </IconContext.Provider>
                                     </button>
+                                    {
+                                        userData.roles == "sadmin" && (
+                                            <div>
+                                                <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
+                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md md:rounded-none block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                                    value={selectedTenant}
+                                                    onChange={handleTenantChange}
+                                                >
+                                                    <option value="" disabled hidden>Tenant</option>
+                                                    <option value="">All Tenant</option>
+                                                    {
+                                                        tenant ? tenant.map((tenant, index) => {
+                                                            return (
+                                                                <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                            )
+                                                        }) : <option value="">Loading...</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        )
+                                    }
+                                    
                                     {/* Button end */}
                                 </div>
 
@@ -842,8 +882,8 @@ export default function CampaignTable() {
                                         </select>  
                                     </div>
                                     <div className="mb-4">
-                                        <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                        <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <label htmlFor="objectivefilter" className="text-sm font-medium  hidden">Objective</label>
+                                        <select id="objectivefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                             value={selectedObjective}
                                             onChange={handleObjectiveChange}
                                         >
@@ -854,6 +894,7 @@ export default function CampaignTable() {
                                             <option value="3">Consideration</option>
                                         </select>
                                     </div>
+                                    
                                     {/* Filter by select end */}
                                 </div>
                             </div>
@@ -876,7 +917,7 @@ export default function CampaignTable() {
                         </div>
 
                         <div className="bg-white h-fit overflow-auto">
-                            <table className="w-full text-sm text-left" ref={tableRef}>
+                            <table className="w-full text-sm text-left">
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('name')}</th>
@@ -923,6 +964,42 @@ export default function CampaignTable() {
                                     }
                                 </tbody>
                             </table>
+                            <table className="w-full text-sm text-left hidden" ref={tableRef}>
+                                    <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
+                                        <tr>
+                                            <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('name')}</th>
+                                            <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('client')}</th>
+                                            <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('account')}</th>
+                                            <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
+                                            <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('objective')}</th>
+                                            <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
+                                            <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('company')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white dark:bg-slate-800">
+                                        {filteredData.length > 0 ? (
+                                            // Jika data ditemukan
+                                            filteredData.map((campaign, index) => (
+                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300" onClick={() => showModal("Edit", campaign._id)}>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.name}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.client_name}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.account_name}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.platform == 1 ? "Meta Ads" : campaign.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.objective == 1 ? "Awareness" : campaign.objective == 2 ? "Conversion" : "Consideration"}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.status == 1 ? t('active') : campaign.status == 3 ? t('complete') : t('draft')}</td>
+                                                    <td scope="row" className="px-5 py-3 border dark:border-gray-500 font-medium whitespace-nowrap">{campaign.company_name}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            // Jika data tidak ditemukan
+                                            <tr className="text-center border dark:border-gray-500">
+                                                <td colSpan={8} className="py-4">
+                                                    {t('not-found')}
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
                         </div>
 
                         <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">

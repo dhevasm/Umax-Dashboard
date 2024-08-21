@@ -18,6 +18,7 @@ import { RiFileExcel2Fill, RiFileExcel2Line, RiIdCardLine } from "react-icons/ri
 import CountCard from "../CountCard"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
+import toastr from "toastr"
 export default function AccountTable() {
 
     const [account, setaccount] = useState([])
@@ -31,11 +32,23 @@ export default function AccountTable() {
     const [dataPerPage, setDataPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true);
     const [selectLoading, setSelectLoading] = useState(true)
+    const [selectedTenant, setSelectedTenant] = useState("")
     const passwordInput = useRef(null)
     const passwordverifyInput = useRef(null)
     const t = useTranslations('admin-accounts')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations('swal-delete')
+    const [crudLoading, setCrudLoading] = useState(false)
+
+    function LoadingCrud() {
+        return (
+          <div className="flex justify-center items-center h-6">
+            <div className="relative">
+              <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+            </div>
+          </div>
+        );
+    };
 
     function handleShowPassword() {
         setShowPassword(!showPassword)
@@ -217,18 +230,21 @@ export default function AccountTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteaccount(account_id)
-            Swal.fire({
-                title: tdel('success'),
-                text: tdel('suc-msg'),
-                icon: "success"
-            })
+            // Swal.fire({
+            //     title: tdel('success'),
+            //     text: tdel('suc-msg'),
+            //     icon: "success"
+            // })   
+            setCrudLoading(false)
+            toastr.success(tdel('suc-msg'), tdel('success'))
             }
-          });
+        });
     }
 
     const deleteaccount = async (account_id) => {
         closeModal()
         try {
+            setCrudLoading(true)
             const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/account-delete?account_id=${account_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -238,6 +254,7 @@ export default function AccountTable() {
             setUpdateCard(true)
             
         } catch (error) {
+            setCrudLoading(false)
             console.log(error)
         }
     }
@@ -257,11 +274,7 @@ export default function AccountTable() {
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            toastr.success(tfile('suc-msg'), tfile('success'))
             }
           });
     }
@@ -291,11 +304,12 @@ export default function AccountTable() {
                     body: account.map((account) => [account.username, account.client_name, account.platform, account.email, account.status, account.notes, account.company_name]),
                 });
                 doc.save('DataAccount.pdf');
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('suc-msg')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(tfile('suc-msg'), tfile('success'))
             }
           });
     };
@@ -363,7 +377,8 @@ export default function AccountTable() {
             }else if(userData.roles == "admin"){
                 url = `${process.env.NEXT_PUBLIC_API_URL}/account-create`
             }
-    
+            
+            setCrudLoading(true)
             const response = await axios.post(url, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -379,16 +394,21 @@ export default function AccountTable() {
                 document.getElementById('password').value = null
                 document.getElementById('passwordverify').value = null
                 document.getElementById('notes').value = null
-                Swal.fire("Success", "Account created successfully", "success")
+                // Swal.fire("Success", "Account created successfully", "success")
+                toastr.success("Account created successfully", "Success")
+                setCrudLoading(false)
             }else{
-                Swal.fire("Error", response.detail, "error")
+                // Swal.fire("Error", response.detail, "error")
+                setCrudLoading(false)
+                toastr.error(response.detail, "Error")
             }
         }else{
-            Swal.fire({
-                title: "Failed!",
-                text: "Please Fill The Blank!",
-                icon: "error"
-              });
+            // Swal.fire({
+            //     title: "Failed!",
+            //     text: "Please Fill The Blank!",
+            //     icon: "error"
+            //   });
+            toastr.warning("Please Fill The Blank!", "Failed")
         }
     }
 
@@ -417,6 +437,7 @@ export default function AccountTable() {
                 formData.append('status', status);
                 formData.append('notes', notes);
             
+                setCrudLoading(true)
                     const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/account-edit?account_id=${EditaccountId}`, formData, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -431,17 +452,21 @@ export default function AccountTable() {
                         document.getElementById('password').value = null
                         document.getElementById('passwordverify').value = null
                         document.getElementById('notes').value = null
-                        Swal.fire("Success", "Campaing Updated", "success")
+                        // Swal.fire("Success", "Campaing Updated", "success")
+                        setCrudLoading(false)
+                        toastr.success("Account Updated", "Success")
                     }else{
-                        Swal.fire("Error", response.detail.ErrMsg, "error")
+                        // Swal.fire("Error", response.detail.ErrMsg, "error")
+                        setCrudLoading(false)
+                        toastr.error(response.detail.ErrMsg, "Error")
                     }
             }else{
-                Swal.fire({
-                    title: "Failed!",
-                    text: "Please Fill The Blank!",
-                    icon: "error"
-                  });
-            
+                // Swal.fire({
+                //     title: "Failed!",
+                //     text: "Please Fill The Blank!",
+                //     icon: "error"
+                //   });
+                toastr.warning("Please Fill The Blank!", "Failed")
             }
         }
     }
@@ -522,10 +547,16 @@ export default function AccountTable() {
         setCurrentPage(1);
     };
 
+    const handleSelectedTenant = (event) => {
+        setSelectedTenant(event.target.value)
+        setCurrentPage(1)
+    };
+
     const filteredData = account.filter((data) => {
         return (
             (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
             (!selectedStatus || data.status === Number(selectedStatus)) &&
+            (!selectedTenant || data.tenant_id === selectedTenant) &&
             (!searchTerm ||
                 data.username.toLowerCase().includes(searchTerm.toLowerCase()))
         );
@@ -638,29 +669,51 @@ export default function AccountTable() {
                     {/* Body */}
                     <div className="w-full h-fit bg-white dark:bg-slate-800  rounded-b-md p-4">
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
-                            <div className="flex">
+                            <div className="flex flex-col md:flex-row">
                                 {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 dark:text-white mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
-                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                        <AiOutlineFilePdf />
-                                    </IconContext.Provider>
-                                </button>
-                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
-                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                        <RiFileExcel2Line />
-                                    </IconContext.Provider>
-                                </button>
-                                <button className="bg-white mb-4 dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
-                                    <IconContext.Provider value={{ className: "text-xl" }}>
-                                        <BiPlus className="text-thin"/>
-                                    </IconContext.Provider>
-                                </button>
+                                <div className="flex mb-4">
+                                    <button className="bg-white dark:bg-slate-800 dark:text-white border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                        <IconContext.Provider value={{ className: "text-xl" }}>
+                                            <AiOutlineFilePdf/>
+                                        </IconContext.Provider>
+                                    </button>
+                                    <button className="bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
+                                        <IconContext.Provider value={{ className: "text-xl" }}>
+                                            <RiFileExcel2Line/>
+                                        </IconContext.Provider>
+                                    </button>
+                                    <button className="bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                        <IconContext.Provider value={{ className: "text-xl" }}>
+                                            <BiPlus className="text-thin"/>
+                                        </IconContext.Provider>
+                                    </button>
+                                    {
+                                        userData.roles == "sadmin" && (
+                                            <div>
+                                                <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
+                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 rounded-e-md md:rounded-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                                    value={selectedTenant}
+                                                    onChange={handleSelectedTenant}
+                                                >
+                                                    <option value="" disabled hidden>Tenant</option>
+                                                    <option value="">All Tenant</option>
+                                                    {
+                                                        tenant ? tenant.map((tenant, index) => (
+                                                            <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                        )) : <option value="">No Tenant</option>
+                                                    }
+                                                </select>  
+                                            </div>
+                                        )
+                                    }
+                                    
+                                </div>
                                 {/* Button end */}
 
-                                {/* Filter by select */}
+                                <div className="flex w-[100%]">
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border rounded-s-md md:rounded-none dark:border-gray-500  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="" hidden disabled>Status</option>
@@ -682,6 +735,10 @@ export default function AccountTable() {
                                         <option value="3">Tiktok Ads</option>
                                     </select>  
                                 </div>
+                                </div>
+                                {/* Filter by select */}
+                                
+                                
                                 {/* Filter by select end */}
                             </div>
 
@@ -703,13 +760,14 @@ export default function AccountTable() {
                         </div>
 
                         <div className="bg-white h-fit overflow-auto">
-                            <table className="w-full text-sm text-left" ref={tableRef}>
+                            <table className="w-full text-sm text-left">
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700 dark:text-white">
                                     <tr>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('username')}</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('client')}</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Email</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Company</th>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
                                     </tr>
                                 </thead>
@@ -731,6 +789,7 @@ export default function AccountTable() {
                                                         <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.client_name}</td>
                                                         <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
                                                         <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap"><a href={`mailto:${account.email}`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
+                                                        <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.company_name}</td>
                                                         <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? t('active') : t('deactive')}</td>
                                                     </tr>
                                                 ))
@@ -742,6 +801,40 @@ export default function AccountTable() {
                                                     </td>
                                                 </tr>
                                             )
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                            <table className="w-full text-sm text-left hidden" ref={tableRef}>
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-700 dark:text-white">
+                                    <tr>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('username')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('client')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Platform</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Email</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white dark:bg-slate-800 dark:text-white">
+                                    {
+                                        filteredData.length > 0 ? (
+                                            // Jika data ditemukan
+                                            filteredData.map((account, index) => (
+                                                <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 hover:cursor-pointer dark:odd:bg-slate-600 dark:even:bg-slate-700 transition-colors duration-300">
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 dark:text-white whitespace-nowrap underline font-semibold" title="Click to edit" onClick={() => showModal("Edit", account._id)}>{account.username}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.client_name}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap">{account.platform == 1 ? "Meta Ads" : account.platform == 2 ? "Google Ads" : "Tiktok Ads"}</td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium dark:text-white whitespace-nowrap"><a href={`mailto:${account.email}`} className="text-blue-500 dark:text-blue-300">{account.email}</a></td>
+                                                    <td scope="row" className="px-5 border dark:border-gray-500 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{account.status == 1 ? t('active') : t('deactive')}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            // Jika tidak ada data setelah loading
+                                            <tr className="text-center border dark:border-gray-500">
+                                                <td colSpan={8} className="py-4">
+                                                    {t('not-found')}
+                                                </td>
+                                            </tr>
                                         )
                                     }
                                 </tbody>
@@ -877,19 +970,18 @@ export default function AccountTable() {
                                 {
                                     modeModal === 'Edit' ? (
                                         <div className="flex gap-3">
-                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateAccount}>
-                                                {t('save')}
+                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateAccount} disabled={crudLoading}>
+                                                {crudLoading ? <LoadingCrud /> : t('save')}
                                             </button>
                                             <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditaccountId)}>
                                                 {t('delete')}
                                             </button>
                                         </div>
                                     ) : (
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createAccount}>
-                                            {t('submit')}
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createAccount} disabled={crudLoading}>
+                                                {crudLoading ? <LoadingCrud /> : t('submit')}
                                         </button>
                                     )
-                                    
                                 }
                         </div>
                     </div>

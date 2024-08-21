@@ -263,7 +263,7 @@ const VideoSection = () => {
             <iframe
               width="100%"
               height="100%"
-              src="https://youtube.com/embed/AL_xxRhykGk?si=dPzV23Rv5M9ZtFyz?autoplay=1"
+              src="https://www.youtube.com/embed/h11GJtFhuG4?autoplay=1"
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

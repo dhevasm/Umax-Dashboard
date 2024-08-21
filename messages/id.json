@@ -250,7 +250,8 @@
       "not-found": "Klien tidak ditemukan",
       "details-of": "Detail dari",
       "create-client": "Tambah Klien",
-      "save": "Simpan"
+      "save": "Simpan",
+      "Delete" : "Hapus"
     },
 
     "admin-dashboard": {
@@ -389,7 +390,8 @@
       "page": "Halaman",
       "save": "Simpan",
       "submit": "Kirim",
-      "not-found": "Pengguna tidak ditemukan"
+      "not-found": "Pengguna tidak ditemukan",
+      "delete" : "Hapus"
     },
 
     "admin-campaigns": {
@@ -572,7 +574,7 @@
       "email-placeholder": "Email",
       "email-error":"Email tidak valid",
       "email-required":"Email tidak boleh kosong",
-      "reset-email-sent": "Silahkan cek email Anda. Token telah dikirim ke alamat email Anda.",
+      "reset-email-sent": "Silahkan cek email anda untuk mengganti password",
       "reset-email-error": "Gagal mengirim email reset. Silahkan coba lagi.",
       "ok": "OK",
       "submit": "Kirim",

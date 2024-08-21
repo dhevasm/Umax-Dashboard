@@ -15,6 +15,9 @@ import { FaTimes } from "react-icons/fa"
 import { RiBuildingLine, RiFileExcel2Line } from "react-icons/ri"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
+
 export default function TenantTable() {
 
     const [tenants, setTenants] = useState([])
@@ -165,11 +168,12 @@ export default function TenantTable() {
             if (result.isConfirmed) {
             deleteTenant(tenant_id)
             closeModal()
-            Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success"
-            })
+            // Swal.fire({
+            //     title: "Deleted!",
+            //     text: "Your file has been deleted.",
+            //     icon: "success"
+            // })
+            toastr.success('Tenant was deleted!', 'Success');
             }
           });
     }
@@ -212,11 +216,13 @@ export default function TenantTable() {
                     setFirstPage(backupFirstPage);
                     setLastPage(backupLastPage);
                 }, 100);
-              Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
-                icon: "success"
-              });
+                
+            //   Swal.fire({
+            //     title: "Downloaded!",
+            //     text: "Your file has been downloaded.",
+            //     icon: "success"
+            //   });
+            toastr.success('document was downloaded!', 'Success');
             }
           });
     }
@@ -245,11 +251,12 @@ export default function TenantTable() {
                     body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
                 });
                 doc.save('DataTenant.pdf');
-              Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: "Downloaded!",
+            //     text: "Your file has been downloaded.",
+            //     icon: "success"
+            //   });
+            toastr.success('document was downloaded!', 'Success');
             }
           });
     };
@@ -330,12 +337,15 @@ export default function TenantTable() {
                 document.getElementById('currency').value = ""  
                 document.getElementById('country').value = ""  
                 document.getElementById('city').value = ""  
-                Swal.fire("Success", "Tenant created successfully", "success")
+                // Swal.fire("Success", "Tenant created successfully", "success")
+                toastr.success('Tenant was created!', 'Success');
             }else{
-                Swal.fire("Error", response.detail, "error")
+                // Swal.fire("Error", response.detail, "error")
+                toastr.error(response.detail, "Error");
             }
         }else{
-            Swal.fire("Failed!","Please fill all required fields!", "error")
+            // Swal.fire("Failed!","Please fill all required fields!", "error")
+            toastr.warning('Please fill all required fields!', 'Warning');
         }
     }
 
@@ -387,12 +397,15 @@ export default function TenantTable() {
                     document.getElementById('currency').value = ""  
                     document.getElementById('country').value = ""  
                     document.getElementById('city').value = ""  
-                    Swal.fire("Success", "Tenant Updated", "success")
+                    // Swal.fire("Success", "Tenant Updated", "success")
+                    toastr.success('Tenant was Updated!', 'Success');
                 }else{
-                    Swal.fire("Error", response.detail.ErrMsg, "error")
+                    // Swal.fire("Error", response.detail.ErrMsg, "error")
+                    toastr.error(response.detail.ErrMsg, "Error");
                 }
             }else{
-                Swal.fire("Failed!","Please fill all required fields!", "error")
+                // Swal.fire("Failed!","Please fill all required fields!", "error")
+                toastr.warning('Please fill all required fields!', 'Warning');
             }
             
         }
@@ -550,7 +563,7 @@ export default function TenantTable() {
             </div>
         );
     };
-       
+    
     const indexOfLasttenant = currentPage * dataPerPage;
     const indexOfFirsttenant = indexOfLasttenant - dataPerPage;
     const currenttenants = filteredData.slice(indexOfFirsttenant, indexOfLasttenant);
@@ -614,7 +627,7 @@ export default function TenantTable() {
                         </div>
 
                         <div className="bg-white h-fit overflow-auto">
-                            <table className="w-full text-sm text-left" ref={tableRef}>
+                            <table className="w-full text-sm text-left">
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
                                         <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('company')}</th>
@@ -632,6 +645,47 @@ export default function TenantTable() {
                                         </tr>
                                     ) : currenttenants.length > 0 ? (
                                             currenttenants.map((tenant, index) => {
+                                                return (
+                                                    <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap underline"  onClick={() => showModal("Edit", tenant._id)}>{tenant.company}</td>
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">{tenant.address}</td>
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">
+                                                            <a href={`mailto:${tenant.email}`} className="text-blue-500">{tenant.email}</a>
+                                                        </td>
+                                                        <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap">
+                                                            <a className="text-blue-500" href={`https://wa.me/${tenant.contact.slice(1)}`} target="_blank">{String(tenant.contact)}</a>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                    ) : (
+                                        // Jika data tida ditemukan
+                                        <tr className="text-center border dark:border-gray-500">
+                                            <td colSpan={8} className=" py-4">
+                                                {t('not-found')}
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                            <table className="w-full text-sm text-left hidden" ref={tableRef}>
+                                <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
+                                    <tr>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('company')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('address')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('email')}</th>
+                                        <th scope="col" className="px-5 border dark:border-gray-500 py-3">{t('contact')}</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white dark:bg-slate-800">
+                                    {isLoading ? (
+                                        <tr className="text-center py-3 border dark:border-gray-500">
+                                            <td colSpan={8}>
+                                                <LoadingCircle />
+                                            </td>
+                                        </tr>
+                                    ) : filteredData.length > 0 ? (
+                                            filteredData.map((tenant, index) => {
                                                 return (
                                                     <tr key={index} className="hover:bg-gray-100 dark:hover:bg-slate-400 dark:odd:bg-slate-600 dark:even:bg-slate-700 hover:cursor-pointer transition-colors duration-300">
                                                         <td scope="row" className="px-6 py-3 font-medium border dark:border-gray-500 whitespace-nowrap underline"  onClick={() => showModal("Edit", tenant._id)}>{tenant.company}</td>

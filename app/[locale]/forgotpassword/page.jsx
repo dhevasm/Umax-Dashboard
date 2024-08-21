@@ -30,8 +30,7 @@ const ForgotPassword = () => {
             setLoading(true); // Set loading to true when submission starts
             try {
                 const response = await fetch(
-                    // `${process.env.NEXT_PUBLIC_API_URL}/send-password-reset-email`,
-                    `${process.env.NEXT_PUBLIC_API_URL_2}/send-password-reset-email`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/send-password-reset-email`,
                     {
                         method: 'POST',
                         headers: {
@@ -54,14 +53,7 @@ const ForgotPassword = () => {
                     confirmButtonText: t('ok'),
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // router.push(`${lang}/resetpassword`);
-                        Swal.fire({
-                            icon: 'info',
-                            title: "Email Was Send",
-                            text: "Please check your email to reset your password",
-                            confirmButtonColor: '#3D5FD9',
-                            confirmButtonText: "Understand",
-                        });
+                        router.push(`${lang}/login`);
                     }
                 });
             } catch (error) {

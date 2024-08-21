@@ -75,9 +75,9 @@ const Footer = () => {
                             <h4 className="text-lg font-semibold text-white mb-9">Umax</h4>
                             <ul>
                                 <li>
-                                    <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
+                                    <Link href={"https://umax.co.id/about"} className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
                                         About Us
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">

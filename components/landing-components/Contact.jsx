@@ -7,10 +7,14 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 const Contact = () => {
     const t = useTranslations("landing");
     const [loading, setLoading] = useState(false);
+    const [cooldown, setCooldown] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(0);
 
     const formik = useFormik({
         initialValues: {
@@ -95,6 +99,12 @@ const Contact = () => {
             `);
     
             try {
+                if(cooldown){
+                    toastr.info('Send Email is cooldown.', 'Info');
+                    // Swal.fire('Please Wait!', "Send Email is cooldown", 'info');
+                    setLoading(false);
+                    return;
+                }
                 await axios.post('/en/api/send', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -104,6 +114,7 @@ const Contact = () => {
                 // Mengatur ulang formulir jika pengiriman berhasil
                 formik.resetForm();
                 setLoading(false);
+                handleCooldown();
                 Swal.fire('Success', t('success'), 'success');
             } catch (error) {
                 console.error(error);
@@ -112,6 +123,43 @@ const Contact = () => {
             }
         },
     });
+    
+    useEffect(() => {
+        // Check if there’s a stored cooldown time
+        const cooldownStartTime = localStorage.getItem('cooldownStartTime');
+        if (cooldownStartTime) {
+            const timeElapsed = Date.now() - parseInt(cooldownStartTime, 10);
+            const remainingTime = 60000 - timeElapsed;
+            if (remainingTime > 0) {
+                startCooldown(remainingTime / 1000);
+            } else {
+                localStorage.removeItem('cooldownStartTime');
+            }
+        }
+    }, []);
+
+    const startCooldown = (seconds) => {
+        setCooldown(true);
+        setTimeLeft(seconds);
+
+        const countdown = setInterval(() => {
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
+                    clearInterval(countdown);
+                    setCooldown(false);
+                    localStorage.removeItem('cooldownStartTime');
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+    };
+
+    const handleCooldown = () => {
+        const cooldownTime = 60000; // 60 seconds
+        localStorage.setItem('cooldownStartTime', Date.now().toString());
+        startCooldown(cooldownTime / 1000);
+    };
 
     const LoadingCircle = () => (
         <div className="flex justify-center items-center h-8">
@@ -197,13 +245,13 @@ const Contact = () => {
                         <div className="relative p-8 bg-white rounded-lg shadow-lg dark:bg-slate-800 dark:text-white sm:p-12">
                         <form onSubmit={formik.handleSubmit}>
                             <div className="mb-6">
-                            <input type="text" placeholder={t("your-name")} id='name' value={formik.values.name} onChange={formik.handleChange} className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
+                            <input type="text" placeholder={t("your-name")} id='name' value={formik.values.name} onChange={formik.handleChange} className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" required/>
                             </div>
                             <div className="mb-6">
-                            <input type="email" placeholder={t("your-email")} id='email' value={formik.values.email} onChange={formik.handleChange} className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
+                            <input type="email" placeholder={t("your-email")} id='email' value={formik.values.email} onChange={formik.handleChange} className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" required/>
                             </div>
                             <div className="mb-6">
-                            <input type="text" placeholder={t('your-phone')} id='phonenumber' value={formik.values.phonenumber} onChange={formik.handleChange} className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" />
+                            <input type="text" placeholder={t('your-phone')} id='phonenumber' value={formik.values.phonenumber} onChange={formik.handleChange} className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none" required/>
                             </div>
                             <div className="mb-6">
                                 <textarea
@@ -213,11 +261,12 @@ const Contact = () => {
                                     value={formik.values.message}
                                     onChange={formik.handleChange}
                                     className="border-stroke dark:border-slate-500 dark:text-dark-6 dark:bg-slate-900 text-body-color focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none"
+                                    required
                                 />
                             </div>
                             <div>
                             <button type="submit" className="w-full p-3 text-white transition border rounded border-blue-600 bg-blue-700 hover:bg-opacity-90">
-                                {loading ? <LoadingCircle/> : t('send-message')}
+                                {loading ? <LoadingCircle/> : timeLeft !== 0 ? parseInt(timeLeft) : t('send-message')}
                             </button>
                             </div>
                         </form>
