@@ -35,6 +35,17 @@ export default function ClientTable() {
     const t = useTranslations("admin-clients")
     const tfile = useTranslations("swal-file")
     const tdel = useTranslations("swal-delete")
+    const [crudLoading, setCrudLoading] = useState(false)
+
+    function LoadingCrud() {
+            return (
+            <div className="flex justify-center items-center h-6">
+                <div className="relative">
+                <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+                </div>
+            </div>
+            );
+        };
 
     function handleShowPassword() {
         setShowPassword(!showPassword)
@@ -234,7 +245,7 @@ export default function ClientTable() {
             //     text: tdel('suc-msg'),
             //     icon: "success"
             // })
-            toastr.success(tdel('suc-msg'), tdel('success'))
+            
             }
           });
     }
@@ -242,6 +253,7 @@ export default function ClientTable() {
     const deleteclient = async (client_id) => {
         closeModal()
         try {
+            setCrudLoading(true)
             const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/client-delete?client_id=${client_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -249,8 +261,10 @@ export default function ClientTable() {
             })
             getclient()
             setUpdateCard(true)
-            
+            setCrudLoading(false)
+            toastr.success(tdel('suc-msg'), tdel('success'))
         } catch (error) {
+            setCrudLoading(false)
             console.log(error)
         }
     }
@@ -381,6 +395,7 @@ export default function ClientTable() {
                 url = `${process.env.NEXT_PUBLIC_API_URL}/client-create`
             }
 
+            setCrudLoading(true)
             const response = await axios.post(url, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -400,9 +415,11 @@ export default function ClientTable() {
                 document.getElementById('passwordverify').value = null
                 document.getElementById('notes').value = ""
                 // Swal.fire("Success", "Client created successfully", "success")
+                setCrudLoading(false)
                 toastr.success('Client created successfully', 'Success')
             }else{
                 // Swal.fire("Error", response.detail, "error")
+                setCrudLoading(false)
                 toastr.error(response.detail, 'Error')
             }
         }else{
@@ -411,6 +428,7 @@ export default function ClientTable() {
             //     text: "Please Fill The Blank!",
             //     icon: "error"
             //   });
+            setCrudLoading(false)
             toastr.warning('Please Fill The Blank!', 'Failed')
             //   validateForm()
             
@@ -441,6 +459,7 @@ export default function ClientTable() {
                 formData.append('status', status);  
                 formData.append('notes', notes)
         
+                setCrudLoading(true)
                 const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/client-edit?client_id=${EditclientId}`, formData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -457,9 +476,11 @@ export default function ClientTable() {
                     document.getElementById('email').value = null
                     document.getElementById('password').value = null
                     // Swal.fire("Success", "Client Updated", "success")
+                    setCrudLoading(false)
                     toastr.success('Client Updated', 'Success')
                 }else{
                     // Swal.fire("Error", response.detail.ErrMsg, "error")
+                    setCrudLoading(false)
                     toastr.error(response.detail.ErrMsg, 'Error')
                 }
             }else{
@@ -468,6 +489,7 @@ export default function ClientTable() {
                 //     text: "Please Fill The Blank!",
                 //     icon: "error"
                 //   });
+                setCrudLoading(false)
                 toastr.warning('Please Fill The Blank!', 'Failed')
             
             }
@@ -966,19 +988,20 @@ export default function ClientTable() {
 
                                 {
                                     modeModal === 'Edit' ? (
-                                        <div className="flex gap-3 mt-5">
-                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateClient}>
-                                                {t('save')}
+                                        <div className="flex gap-3">
+                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateClient} disabled={crudLoading}>
+                                                {crudLoading ? <LoadingCrud /> : t('save')}
                                             </button>
                                             <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditclientId)}>
                                                 {t('delete')}
                                             </button>
                                         </div>
                                     ) : (
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createClient}>
-                                            {t('submit')}
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createClient} disabled={crudLoading}>
+                                                {crudLoading ? <LoadingCrud /> : t('submit')}
                                         </button>
                                     )
+
                                     
                                 }
                         </div>

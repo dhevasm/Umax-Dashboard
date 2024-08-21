@@ -230,13 +230,13 @@ export default function AccountTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteaccount(account_id)
+            
             // Swal.fire({
             //     title: tdel('success'),
             //     text: tdel('suc-msg'),
             //     icon: "success"
             // })   
-            setCrudLoading(false)
-            toastr.success(tdel('suc-msg'), tdel('success'))
+            
             }
         });
     }
@@ -252,6 +252,8 @@ export default function AccountTable() {
             })
             getaccount()
             setUpdateCard(true)
+            toastr.success(tdel('suc-msg'), tdel('success'))
+            setCrudLoading(false)
             
         } catch (error) {
             setCrudLoading(false)
@@ -525,6 +527,7 @@ export default function AccountTable() {
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
+        setCurrentPage(1);
     };
 
     function LoadingCircle() {

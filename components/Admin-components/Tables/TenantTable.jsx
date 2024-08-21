@@ -17,6 +17,17 @@ import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+const [crudLoading, setCrudLoading] = useState(false)
+
+    function LoadingCrud() {
+            return (
+            <div className="flex justify-center items-center h-6">
+                <div className="relative">
+                <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+                </div>
+            </div>
+            );
+        };
 
 export default function TenantTable() {
 
@@ -317,6 +328,7 @@ export default function TenantTable() {
             formData.append('input_timezone', timezone);
             formData.append('currency_position', currencyposition);
     
+            setCrudLoading(true)
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/tenant-create`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -338,13 +350,16 @@ export default function TenantTable() {
                 document.getElementById('country').value = ""  
                 document.getElementById('city').value = ""  
                 // Swal.fire("Success", "Tenant created successfully", "success")
+                setCrudLoading(false)
                 toastr.success('Tenant was created!', 'Success');
             }else{
                 // Swal.fire("Error", response.detail, "error")
+                setCrudLoading(false)
                 toastr.error(response.detail, "Error");
             }
         }else{
             // Swal.fire("Failed!","Please fill all required fields!", "error")
+            setCrudLoading(false)
             toastr.warning('Please fill all required fields!', 'Warning');
         }
     }
@@ -378,6 +393,7 @@ export default function TenantTable() {
             formData.append('input_timezone', timezone);
             formData.append('currency_position', currencyposition);
     
+            setCrudLoading(true)
             const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tenant-edit?tenantId=${EditTenantId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -398,13 +414,16 @@ export default function TenantTable() {
                     document.getElementById('country').value = ""  
                     document.getElementById('city').value = ""  
                     // Swal.fire("Success", "Tenant Updated", "success")
+                    setCrudLoading(false)
                     toastr.success('Tenant was Updated!', 'Success');
                 }else{
                     // Swal.fire("Error", response.detail.ErrMsg, "error")
+                    setCrudLoading(false)
                     toastr.error(response.detail.ErrMsg, "Error");
                 }
             }else{
                 // Swal.fire("Failed!","Please fill all required fields!", "error")
+                setCrudLoading(false)
                 toastr.warning('Please fill all required fields!', 'Warning');
             }
             
@@ -744,7 +763,7 @@ export default function TenantTable() {
 
                             <div className="flex gap-2 items-center">
                             {
-                                modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>{t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded" onClick={createTenant}>{t('submit')}</button>
+                                modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>{crudLoading ? <LoadingCrud /> : t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded" onClick={createTenant}>{crudLoading ? <LoadingCrud /> : t('submit')}</button>
                             }
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1.5 px-4 rounded" ref={deleteButton} onClick={() => handleDelete(EditTenantId)}>
                                 <FaTrash className="text-xl"/>

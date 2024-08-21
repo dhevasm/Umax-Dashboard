@@ -38,6 +38,17 @@ export default function CampaignTable() {
     const tfile = useTranslations("swal-file");
     const tdel = useTranslations("swal-delete");
     const [selectedTenant, setSelectedTenant] = useState("");
+    const [crudLoading, setCrudLoading] = useState(false)
+
+    function LoadingCrud() {
+        return (
+          <div className="flex justify-center items-center h-6">
+            <div className="relative">
+              <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+            </div>
+          </div>
+        );
+    };
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable,  userData, dataDashboard} = useContext(AdminDashboardContext)
 
@@ -203,7 +214,6 @@ export default function CampaignTable() {
             //     text: tdel('suc-msg'),
             //     icon: "success"
             // })
-            toastr.success(tdel('suc-msg'), tdel('success'))
             }
           });
     }
@@ -211,6 +221,7 @@ export default function CampaignTable() {
     const deleteCampaign = async (campaing_id) => {
         closeModal()
         try {
+            setCrudLoading(true)
             const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/campaign-delete?campaign_id=${campaing_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -218,8 +229,10 @@ export default function CampaignTable() {
             })
             getCampaign()
             setUpdateCard(true)
-            
+            toastr.success(tdel('suc-msg'), tdel('success'))
+            setCrudLoading(false)
         } catch (error) {
+            setCrudLoading(false)
             console.log(error)
         }
     }
@@ -350,7 +363,6 @@ export default function CampaignTable() {
     }, [campaigns])
 
     async function createCampaign(){
-
         if(isvalid){
             const name = document.getElementById('name').value
             const account = document.getElementById('account').value
@@ -384,6 +396,7 @@ export default function CampaignTable() {
                 url = `${process.env.NEXT_PUBLIC_API_URL}/campaign-create`
             }
     
+            setCrudLoading(true)
             const response = await axios.post(url, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -398,9 +411,11 @@ export default function CampaignTable() {
                 document.getElementById('name').value = null
                 document.getElementById('notes').value = null
                 // Swal.fire("Success", "Campaing created successfully", "success")
+                setCrudLoading(false)
                 toastr.success('Campaign created successfully', 'Success')
             }else{
                 // Swal.fire("Error", response.detail, "error")
+                setCrudLoading(false)
                 toastr.error(response.detail, 'Error')
             }
         }else{
@@ -409,6 +424,7 @@ export default function CampaignTable() {
             //     text: "Please Fill The Blank!",
             //     icon: "error"
             //   });
+            setCrudLoading(false)
             toastr.error('Please Fill The Blank!', 'Failed')
         }
     }
@@ -439,6 +455,7 @@ export default function CampaignTable() {
                 formData.append('end_date', end_date)
                 formData.append('notes', notes)
         
+                setCrudLoading(true)
                 const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/campaign-edit?campaign_id=${EditCampaignId}`, formData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -451,9 +468,11 @@ export default function CampaignTable() {
                     document.getElementById('name').value = null
                     document.getElementById('notes').value = null
                     // Swal.fire("Success", "Campaign Updated", "success")
+                    setCrudLoading(false)
                     toastr.success('Campaign Updated', 'Success')
                 }else{
                     // Swal.fire("Error", response.detail.ErrMsg, "error")
+                    setCrudLoading(false)
                     toastr.error(response.detail.ErrMsg, 'Error')
                 }
             }else{
@@ -462,6 +481,7 @@ export default function CampaignTable() {
                 //     text: "Please Fill The Blank!",
                 //     icon: "error"
                 //   });
+                setCrudLoading(false)
                 toastr.error('Please Fill The Blank!', 'Failed')
             }
         }
@@ -636,7 +656,6 @@ export default function CampaignTable() {
                         }
                 }
             })
-            
             console.log(satu)
         } catch (error) {
             console.log(error)
@@ -645,6 +664,7 @@ export default function CampaignTable() {
 
     const handlePlatformChange = (event) => {
         setSelectedPlatform(event.target.value);
+        setCurrentPage(1);
     };
 
     function LoadingCircle() {
@@ -1128,18 +1148,18 @@ export default function CampaignTable() {
                                 
                             </div>
                                 {
-                                    modeModal === 'Edit' ? (
-                                        <div className="flex gap-3">
-                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateCampaign}>
-                                                {t('save')}
-                                            </button>
-                                            <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}>
-                                                {t('delete')}
-                                            </button>
-                                        </div>
+                                   modeModal === 'Edit' ? (
+                                    <div className="flex gap-3">
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateCampaign} disabled={crudLoading}>
+                                            {crudLoading ? <LoadingCrud /> : t('save')}
+                                        </button>
+                                        <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}>
+                                            {t('delete')}
+                                        </button>
+                                    </div>
                                     ) : (
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createCampaign}>
-                                            {t('submit')}
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createCampaign} disabled={crudLoading}>
+                                                {crudLoading ? <LoadingCrud /> : t('submit')}
                                         </button>
                                     )
                                     
