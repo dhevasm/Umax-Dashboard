@@ -53,6 +53,16 @@ function Dashboard() {
         setActiveContent(Link)
     }
     // Dashboard Link active end
+    function isTokenExpired(token) {
+        // Decode the token (base64)
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        
+        // Dapatkan timestamp saat ini
+        const currentTime = Math.floor(Date.now() / 1000);
+    
+        // Cek apakah token sudah expired
+        return payload.exp < currentTime;
+    }
 
     // Check if user is already logged in
     useEffect(() => {
@@ -61,6 +71,15 @@ function Dashboard() {
         Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
             router.push('/en/login');
         });
+        }else if(isTokenExpired(token)) {
+            Swal.fire('Authentication failed', 'Token Expired', 'error').then(() => {
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('tenantId');
+                localStorage.removeItem('roles');
+                localStorage.removeItem('name');
+                localStorage.removeItem('lang');
+                router.push('/en/login')
+            })
         }
     }, [router]);
 

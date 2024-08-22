@@ -24,11 +24,11 @@
       "vidio-button" : "Know more",
       "contact-us" : "Contact Us",
       "contact-title" : "GET IN TOUCH WITH US",
-      "contact-desc" : "Need help or want to know more about our app? Call our support team at 0812-1212-2388 or send a message via the contact form. We are ready to help you!", 
+      "contact-desc" : "Need help or want to know more about our app? Call our support team at 0812-1212-2388 or send a message via the contact form. We are ready to help you!",
       "contact-location" : "Our Location",
       "contact-phone" : "Our Phone Number",
       "contact-email" : "Our Email",
-      "your-name" : "Your Name", 
+      "your-name" : "Your Name",
       "your-email" : "Your Email",
       "your-phone" : "Your Phone Number",
       "your-message" : "Your Message",
@@ -67,7 +67,7 @@
       "dark-mode": "Dark mode",
       "light-mode": "Light mode"
     },
- 
+
     "navbar": {
       "dashboard": "Dashboard",
       "account": "Account",
@@ -208,7 +208,7 @@
       "draft": "Draft",
       "complete": "Complete",
       "page": "Page",
-      "not-found": "Campaign not found", 
+      "not-found": "Campaign not found",
       "details-of": "Details of"
     },
 
@@ -231,7 +231,7 @@
       "name": "Name",
       "holder-name":"Type client name here",
       "email": "Email",
-      "holder-email": "example@gmail.com",                                                                                                                                                                                                    
+      "holder-email": "example@gmail.com",
       "password": "Password",
       "holder-password": "Type password here",
       "confirm": "Confirm Password",
@@ -578,7 +578,7 @@
     "login":{
       "sign-in": "Sign In",
       "email-error":"Email is required",
-      "email-error2": "Invalid Email Address",  
+      "email-error2": "Invalid Email Address",
       "password-error": "Password is required",
       "password-error2": "Password must be at least 6 characters",
       "forgot-password": "Forgot Password?",
@@ -636,9 +636,11 @@
       "company-address-error": "Company address is required",
       "company-country": "Country",
       "select-country": "Select Country",
+      "getting-country-list": "Getting Country List..",
       "company-country-error": "Company country is required",
       "company-city": "City",
       "select-city": "Select City",
+      "getting-city-list": "getting City List...",
       "company-city-error": "Company city is required",
       "company-email": "Company Email",
       "company-email-error": "Company email is required",
@@ -653,12 +655,15 @@
       "language-error": "Language is required",
       "culture": "Culture",
       "select-culture": "Select Culture",
+      "getting-culture-list": "Getting Culture List...",
       "culture-error": "Culture is required",
       "timezone": "Timezone",
       "select-timezone": "Select Timezone",
+      "getting-timezone-list": "Getting Timezone List...",
       "timezone-error": "Timezone is required",
       "currency": "Currency",
       "select-currency": "Select Currency",
+      "getting-currency-list": "Getting Currency List...",
       "currency-error": "Currency is required",
       "currency-position": "Currency Position",
       "before-amount": "Before Amount",
@@ -669,6 +674,7 @@
       "submit": "Submit",
       "success": "Your request has been sent. Please wait for the confirmation email.",
       "error": "Failed to register. Please try again.",
-      "error2": "Please check your form again"
+      "error2": "Please check your form again",
+      "pilihbahasa" : "Select language"
     }
 }
