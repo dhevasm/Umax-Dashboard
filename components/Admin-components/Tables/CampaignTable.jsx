@@ -542,66 +542,73 @@ export default function CampaignTable() {
     
     function createMetrics(campaignID) {
         const getRandomValue = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        
-        function getRandomDateInFuture() {
-            const currentDate = new Date();
-            const randomDaysToAdd = Math.floor(Math.random() * 30) + 1; // Menambahkan antara 1 hingga 30 hari
-            currentDate.setDate(currentDate.getDate() + randomDaysToAdd);
-    
-            const year = currentDate.getFullYear();
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
-            const day = String(currentDate.getDate()).padStart(2, '0');
-    
-            return `${year}-${month}-${day}`;
-        }
 
-        const reach = getRandomValue(80000000, 120000000);
-        const impressions = reach * getRandomValue(2,3);
-        const click = impressions + getRandomValue(1000, 2000);
-        const amountspent = getRandomValue(400000, 5000000);
-        const result = getRandomValue(600, 900);
-        const purchase = getRandomValue(7000000, 8000000);
-        const lpview = click - getRandomValue(5000, 10000);
-        const atc = lpview - getRandomValue(2000, 3000);
-        const ctview = getRandomValue(8000, 12000);
-        const delivery = getRandomValue(80, 90);
-        const leads = getRandomValue(200, 240);
-        const cpc = getRandomValue(2500, 3500);
+function getRandomDateInFuture() {
+    const currentDate = new Date();
+    const randomDaysToAdd = Math.floor(Math.random() * 30) + 1; // Adding between 1 and 30 days
+    currentDate.setDate(currentDate.getDate() + randomDaysToAdd);
 
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months start from 0
+    const day = String(currentDate.getDate()).padStart(2, '0');
 
-        const formDataMetrics = new FormData();
-        formDataMetrics.append('clicks', click);
-        formDataMetrics.append('lpview', lpview);
-        formDataMetrics.append('atc', atc);
-        formDataMetrics.append('ctview', ctview);
-        formDataMetrics.append('results', result);
-        formDataMetrics.append('amountspent', amountspent);
-        formDataMetrics.append('reach', reach);
-        formDataMetrics.append('impressions', impressions);
-        formDataMetrics.append('delivery', delivery);
-        formDataMetrics.append('leads', leads);
-        formDataMetrics.append('purchase', purchase);
-        formDataMetrics.append('cpc', cpc);
-        formDataMetrics.append('frequency', impressions / reach);
-        formDataMetrics.append('ctr', click / impressions);
-        formDataMetrics.append('cpr', amountspent / result);
-        formDataMetrics.append('cpm', amountspent / (impressions / 1000));
-        formDataMetrics.append('roas', purchase / amountspent);
+    return `${year}-${month}-${day}`;
+}
 
-        const Hitung = new FormData();
-        Hitung.append('tanggal', '2024-02-02');
-        Hitung.append('clicks', click);
-        Hitung.append('lpview', lpview);
-        Hitung.append('atc', atc);
-        Hitung.append('ctview', ctview);
-        Hitung.append('results', result);
-        Hitung.append('amountspent', amountspent);
-        Hitung.append('reach', reach);
-        Hitung.append('impressions', impressions);
-        Hitung.append('delivery', delivery);
-        Hitung.append('leads', leads);
-        Hitung.append('purchase', purchase);
-        Hitung.append('cpc', cpc);
+const reach = getRandomValue(80000000, 120000000);
+const impressions = reach * getRandomValue(2, 3);
+const click = impressions + getRandomValue(1000, 2000);
+const amountspent = getRandomValue(400000, 5000000);
+const result = getRandomValue(600, 900);
+const purchase = getRandomValue(7000000, 8000000);
+const lpview = click - getRandomValue(5000, 10000);
+const atc = lpview - getRandomValue(2000, 3000);
+const ctview = getRandomValue(8000, 12000);
+const delivery = getRandomValue(80, 90);
+const leads = getRandomValue(200, 240);
+const cpc = getRandomValue(2500, 3500);
+
+// Ensure no division by zero
+const frequency = impressions > 0 ? impressions / reach : 0;
+const ctr = impressions > 0 ? click / impressions : 0;
+const cpr = result > 0 ? amountspent / result : 0;
+const cpm = impressions > 0 ? amountspent / (impressions / 1000) : 0;
+const roas = amountspent > 0 ? purchase / amountspent : 0;
+
+const formDataMetrics = new FormData();
+formDataMetrics.append('clicks', click);
+formDataMetrics.append('lpview', lpview);
+formDataMetrics.append('atc', atc);
+formDataMetrics.append('ctview', ctview);
+formDataMetrics.append('results', result);
+formDataMetrics.append('amountspent', amountspent);
+formDataMetrics.append('reach', reach);
+formDataMetrics.append('impressions', impressions);
+formDataMetrics.append('delivery', delivery);
+formDataMetrics.append('leads', leads);
+formDataMetrics.append('purchase', purchase);
+formDataMetrics.append('cpc', cpc);
+formDataMetrics.append('frequency', frequency);
+formDataMetrics.append('ctr', ctr);
+formDataMetrics.append('cpr', cpr);
+formDataMetrics.append('cpm', cpm);
+formDataMetrics.append('roas', roas);
+
+const Hitung = new FormData();
+Hitung.append('tanggal', '2024-02-02');
+Hitung.append('clicks', click);
+Hitung.append('lpview', lpview);
+Hitung.append('atc', atc);
+Hitung.append('ctview', ctview);
+Hitung.append('results', result);
+Hitung.append('amountspent', amountspent);
+Hitung.append('reach', reach);
+Hitung.append('impressions', impressions);
+Hitung.append('delivery', delivery);
+Hitung.append('leads', leads);
+Hitung.append('purchase', purchase);
+Hitung.append('cpc', cpc);
+
 
         try{
             const satu = axios.post(`${process.env.NEXT_PUBLIC_API_URL}/metrics-create?campaign_id=${campaignID}&tenantId=${localStorage.getItem('tenantId')}`, formDataMetrics, {
@@ -853,7 +860,7 @@ export default function CampaignTable() {
                                         userData.roles == "sadmin" && (
                                             <div>
                                                 <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md md:rounded-none block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md md:rounded-none block w-full px-3 py-2 select-no-arrow"
                                                     value={selectedTenant}
                                                     onChange={handleTenantChange}
                                                 >
@@ -878,7 +885,7 @@ export default function CampaignTable() {
                                     {/* Filter by select */}
                                     <div className="mb-4">
                                         <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s dark:border-gray-500 sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s dark:border-gray-500 sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow"
                                         value={selectedStatus} onChange={handleStatusChange}
                                         >
                                             <option value="" disabled hidden>Status</option>
@@ -890,7 +897,7 @@ export default function CampaignTable() {
                                     </div>
                                     <div className="mb-4">
                                         <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border dark:border-gray-500 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border dark:border-gray-500 text-sm block w-full px-3 py-2 select-no-arrow"
                                             value={selectedPlatform}
                                             onChange={handlePlatformChange}
                                         >
@@ -903,7 +910,7 @@ export default function CampaignTable() {
                                     </div>
                                     <div className="mb-4">
                                         <label htmlFor="objectivefilter" className="text-sm font-medium  hidden">Objective</label>
-                                        <select id="objectivefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="objectivefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow"
                                             value={selectedObjective}
                                             onChange={handleObjectiveChange}
                                         >
@@ -1066,7 +1073,7 @@ export default function CampaignTable() {
                                             selectLoading ? (
                                                 // Jika data sedang loading
                                                 <option disabled key={0} value={0}>
-                                                    <p className="animate-pulse">Loading account list...</p>
+                                                    Loading account list...
                                                 </option>
                                             ) : account.length > 0 ? (
                                                 // Jika data ditemukan

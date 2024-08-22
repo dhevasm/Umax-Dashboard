@@ -14,6 +14,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
     const [status, setStatus] = useState(0);
     const [hidden, setHidden] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const t = useTranslations('sidebar');
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -34,6 +35,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
 
     // fetch Campaign
     const fetchMetrics = useCallback(async () => {
+        setIsLoading(true);
         const clientId = localStorage.getItem('clientId'); // Ambil clientId dari localStorage
         try {
             const response = await axios.get(`${umaxUrl}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
@@ -48,26 +50,21 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
             if(localStorage.getItem('roles') == "client"){
                 const filteredCampaigns = response.data.Data.filter(campaign => campaign.client_id === clientId);
                 setCampaigns(filteredCampaigns);
+                setIsLoading(false);
             }else{
                 setCampaigns(response.data.Data);
+                setIsLoading(false);
             }
 
     
         } catch (error) {
             console.error(error);
+            setIsLoading(false);
         }
     }, [status, umaxUrl]);
 
     useEffect(() => {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // Timeout set to 5 seconds
-
-        fetchMetrics().finally(() => clearTimeout(timeoutId));
-
-        return () => {
-            clearTimeout(timeoutId);
-            controller.abort();
-        };
+        fetchMetrics()
     }, [fetchMetrics]);
 
     const filteredCampaigns = campaigns.filter(campaign => {
@@ -127,10 +124,14 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                 {/* Campaign Cards */}
                 <div className="w-full overflow-y-auto">
                     {/* Campaign Card */}
-                    {campaigns.length === 0 ? (
+                    {isLoading ? (
                         Array(3).fill(0).map((_, index) => (
                             <SidebarLoading key={index} />
                         ))
+                    ) : filteredCampaigns.length === 0 ? (
+                        <div className="text-center text-gray-500 py-4">
+                            No campaigns available
+                        </div>
                     ) : (
                         filteredCampaigns.map((campaign, index) => (
                             <SidebarCard 

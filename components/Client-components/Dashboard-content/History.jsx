@@ -71,7 +71,6 @@ export default function History({ id }) {
 
     const getMetricByCampaign = useCallback(async () => {
         if (id == '') {
-            console.warn("No campaign ID provided");
             return;
         }
 
@@ -261,21 +260,21 @@ export default function History({ id }) {
                                 <table className='w-full border-collapse' ref={tableRef}>
                                     <thead className={currentHistory.length > 0 ? 'bg-blue-100 dark:bg-blue-900' : 'bg-gray-100 dark:bg-slate-700 rounded-md'}>
                                         <tr>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('date')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('amount-spent')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('reach')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('impressions')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('frequency')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('rar')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('cpc')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('date')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('amount-spent')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('reach')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('impressions')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('frequency')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('rar')}</th>
+                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpc')}</th>
                                             {currentHistory.length > 0 && 
                                                 <>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('ctr')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('oclp')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('cpr')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('atc')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('roas')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{t('real-roas')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('ctr')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('oclp')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpr')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('atc')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('roas')}</th>
+                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('real-roas')}</th>
                                                 </>
                                             }               
                                         </tr>  
@@ -284,19 +283,19 @@ export default function History({ id }) {
                                         {currentHistory.length > 0 ? (
                                             currentHistory.map((data, index) => (
                                                 <tr key={index} className='border border-gray-300 text-center dark:border-gray-600'>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.timestamp_update}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.amountspent}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.reach}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.impressions}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.frequency}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.rar}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.cpc}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.ctr}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.oclp}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.cpr}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.atc}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.roas}</td>
-                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600'>{data.realroas}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.timestamp_update}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.amountspent}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.reach}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.impressions}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.frequency}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.rar}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.cpc}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.ctr}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.oclp}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.cpr}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.atc}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.roas}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.realroas}</td>
                                                 </tr>
                                             ))
                                         ) : (

@@ -435,11 +435,11 @@ const ClientTable = () => {
                         <thead className='bg-white dark:bg-blue-700'>
                             <tr className='text-left'>
                                 {/* <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>No.</th> */}
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('name')}</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('address')}</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('contact')}</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>{t('email')}</th>
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>Status</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('name')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('address')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('contact')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('email')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>Status</th>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 hidden'>Action</th>
                             </tr>
                         </thead>
@@ -456,20 +456,20 @@ const ClientTable = () => {
                                     // Jika data ditemukan
                                     currentClients.map((data, index) => (
                                         <tr key={index} className='text-center'>
-                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>
                                                 <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data, "edit")}>
                                                     {data.name}
                                                 </button>
                                             </td>
-                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.address}</td>
-                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>{data.address}</td>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap text-left'>
                                                 <a href={`https://wa.me/${data.contact.replace(/\D+/g, '')}`} title={`Message ${data.name} on WhatsApp`} target='_blank' rel='noopener noreferrer'>{data.contact}</a>
                                             </td>
-                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap'>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-blue-500 underline text-nowrap text-left'>
                                                 <a href={`mailto:${data.email}`} title={`Email ${data.name}`}>{data.email}</a>
                                             </td>
-                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'><StatusBadge status={data.status} /></td>
-                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap hidden justify-center gap-1'>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'><StatusBadge status={data.status} /></td>
+                                            <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap text-left hidden justify-center gap-1'>
                                                 <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
                                                     <BiEdit size={25}/>
                                                 </button>

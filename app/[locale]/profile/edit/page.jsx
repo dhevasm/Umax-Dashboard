@@ -287,7 +287,7 @@ const EditProfile = () => {
                                             <RiCameraLine className='text-white' />
                                         </label>
                                     </div>
-                                    <Image src={'/assets/defaultProfil.jpg'} width={128} height={128} alt='Profile'/>
+                                    <Image src={'/assets/defaultProfil.jpg'} width={128} priority height={128} alt='Profile'/>
                                 </div>
                             )}
                         </div>

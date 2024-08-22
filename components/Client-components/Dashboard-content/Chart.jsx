@@ -19,7 +19,6 @@ const Chart = ({ campaignID, time }) => {
     useEffect(() => {
         const getMetricByCampaign = async () => {
         if (!campaignID) {
-            console.warn("No campaign ID provided");
             return;
         }
 
@@ -109,7 +108,7 @@ const Chart = ({ campaignID, time }) => {
             </div>
             :
             <div className="w-full h-full flex justify-center items-center pb-10">
-                <Image src="/assets/NotFound.png" className="animate-pulse" width={320} height={320} alt="Campaign Not Selected"/>
+                <Image src="/assets/NotFound.png" className="animate-pulse" width={320} height={320} priority alt="Campaign Not Selected"/>
             </div>
             }
 

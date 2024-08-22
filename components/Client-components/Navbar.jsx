@@ -207,7 +207,9 @@ export default function Navbar() {
                         width={120}
                         height={48}
                         onClick={() => router.push(`/${lang}/dashboard`)}
+                        priority // Add this property to prioritize loading
                     />
+
 
                     {/* Menu */}
                     <div>

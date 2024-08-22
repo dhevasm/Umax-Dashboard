@@ -455,13 +455,13 @@ const CampaignTable = () => {
                         <thead className="bg-white dark:bg-blue-700">
                             <tr className="text-left">
                                 {/* <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">No.</th> */}
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('name')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('client')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('platform')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('account')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('objective')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('start-date')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">{t('status')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('name')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('client')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('platform')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('account')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('objective')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-center">{t('start-date')}</th>
+                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('status')}</th>
                                 <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 hidden">Action</th>
                             </tr>
                         </thead>
@@ -478,21 +478,21 @@ const CampaignTable = () => {
                                     // Jika data ditemukan
                                     currentCampaigns.map((data, index) => (
                                         <tr key={index} className="text-center">
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
                                                 <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data)}>
                                                     <p className="underline">{data.name}</p>
                                                 </button>
                                             </td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.client_name}</td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">{data.client_name}</td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
                                                 {data.platform === 1 ? "Meta Ads" : data.platform === 2 ? "Google Ads" : "Tiktok Ads"}
                                             </td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.account_name}</td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">{data.account_name}</td>
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
                                                 {data.objective === 1 ? "Awareness" : data.objective === 2 ? "Conservation" : "Consideration"}
                                             </td>
                                             <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.start_date}</td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
+                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
                                                 <StatusBadge status={data.status} />
                                             </td>
                                             <td className="px-2 py-2 border text-nowrap hidden gap-1 justify-center dark:border-gray-700 dark:text-gray-200">

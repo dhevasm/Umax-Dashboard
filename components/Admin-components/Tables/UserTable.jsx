@@ -17,8 +17,7 @@ import { RiFileExcel2Line, RiUser3Line } from "react-icons/ri"
 import CountCard from "../CountCard"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
-import toastr from 'toastr';
-import 'toastr/build/toastr.min.css';
+import { useFormik } from "formik"
 
 export default function UserTable() {
 
@@ -31,6 +30,9 @@ export default function UserTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true);
+    const [crudLoading, setCrudLoading] = useState(false)
+    const [create, setCreate] = useState(false)
+    const roles = localStorage.getItem("roles")
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
@@ -82,12 +84,11 @@ export default function UserTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteuser(user_id)
-            // Swal.fire({
-            //     title: tdel('success'),
-            //     text: tdel('suc-msg'),
-            //     icon: "success"
-            // })
-            toastr.success('User Deleted', 'Success')
+            Swal.fire({
+                title: tdel('success'),
+                text: tdel('suc-msg'),
+                icon: "success"
+            })
             setTimeout(() => {
                 closeModal()
             }, 100);
@@ -126,12 +127,11 @@ export default function UserTable() {
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
-            //   Swal.fire({
-            //     title: `${tfile('success')}`,
-            //     text: `${tfile('success')}`,
-            //     icon: "success"
-            //   });
-            toastr.success(`${tfile('success')}`, `${tfile('success')}`)
+              Swal.fire({
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
+                icon: "success"
+              });
             }
           });
     }
@@ -161,12 +161,11 @@ export default function UserTable() {
                     body: users.map((user) => [user.name, user.roles, user.email, user.company_name]),
                 });
                 doc.save('DataUsers.pdf');
-            //   Swal.fire({
-            //     title: `${tfile('success')}`,
-            //     text: `${tfile('suc-msg')}`,
-            //     icon: "success"
-            //   });
-            toastr.success(`${tfile('success')}`, `${tfile('suc-msg')}`)
+              Swal.fire({
+                title: `${tfile('success')}`,
+                text: `${tfile('suc-msg')}`,
+                icon: "success"
+              });
             }
           });
        
@@ -242,6 +241,7 @@ export default function UserTable() {
     // }
 
     async function updateUser(){
+        setCrudLoading(true)
         if(EditUserId !== null) {
             const role = document.getElementById('role').value
             const formData = new FormData();
@@ -254,13 +254,13 @@ export default function UserTable() {
             })
     
             if(response.data.Output.includes("Successfully changed") || response.data.Output.includes("Berhasil")){
+                setCrudLoading(false)
                 getUsers()
                 closeModal()
-                // Swal.fire("Success", "user Updated", "success")
-                toastr.success('User Updated', 'Success')
+                Swal.fire("Success", "user Updated", "success")
             }else{
-                // Swal.fire("Error", response.detail.ErrMsg, "error")
-                toastr.error(response.detail.ErrMsg, 'Error')
+                setCrudLoading(false)
+                Swal.fire("Error", response.detail.ErrMsg, "error")
             }
         }
     }
@@ -272,6 +272,7 @@ export default function UserTable() {
     const [tenants, setTenants] = useState([])
 
     async function getSelectFrontend(){
+        setIsLoading(true)
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
             setTimezone(response.data)
         })
@@ -285,14 +286,19 @@ export default function UserTable() {
         })
 
         if(localStorage.getItem('roles') == 'sadmin'){
-            await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
+            await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
                 headers : {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             }).then((response) => {
                 setTenants(response.data.Data)
+                setIsLoading(false)
+            }).catch((error) => {
+                console.log(error)
+                setIsLoading(false)
             })
         }
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -304,6 +310,16 @@ export default function UserTable() {
           <div className="flex justify-center items-center h-20">
             <div className="relative">
               <div className="w-10 h-10 border-4 border-[#1C2434] dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+            </div>
+          </div>
+        );
+    };
+
+    function LoadingCrud() {
+        return (
+          <div className="flex justify-center items-center h-6">
+            <div className="relative">
+              <div className="w-6 h-6 border-4 dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
             </div>
           </div>
         );
@@ -325,13 +341,81 @@ export default function UserTable() {
         setCurrentPage(1);
     };
 
+    const formik = useFormik({
+        initialValues: {
+          username: '',
+          email: '',
+          password: '',
+          passwordMatch: '',
+          tenant_id: '',
+          roles: '',
+        },
+        validate: (values) => {
+          const errors = {};
+          if (!values.username) {
+            errors.username = t('name-error');
+          }
+          if (!values.email) {
+            errors.email = t('email-error');
+          } else if (!values.email.includes('@')) {
+            errors.email = t('email-error2');
+          }
+          if (!values.password) {
+            errors.password = t('password-error');
+          }
+          if (!values.passwordMatch) {
+            errors.passwordMatch = t('confirm-error');
+          } else if (values.password !== values.passwordMatch) {
+            errors.password = t('password-error2');
+            errors.passwordMatch = t('password-error2');
+          }
+          if(roles == 'sadmin'){
+            if (!values.tenant_id) {
+              errors.tenant_id = t('tenant-error');
+            }
+          }
+          if (!values.roles) {
+            errors.roles = t('role-error');
+          }
+          return errors;
+        },
+        onSubmit: async (values) => {
+        setCrudLoading(true)
+          const url = roles == 'sadmin' ? `${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${values.tenant_id}` : `${process.env.NEXT_PUBLIC_API_URL}/register`;
+          try {
+            const formData = new FormData();
+            formData.append('name', values.username);
+            formData.append('email', values.email);
+            formData.append('password', values.password);
+            formData.append('confirm_password', values.passwordMatch);
+            formData.append('role', values.role);
+    
+            const response = await axios.post(`${url}`, formData, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+              },
+            });
+    
+            if (response.data.Output === 'Registration Successfully') {
+              Swal.fire('Register Success', 'Please Login', 'success').then(() => {
+                setCrudLoading(false);    
+                setCreate(false);
+              });
+            }
+          } catch (error) {
+            Swal.fire('Register Failed', 'Email already exists', 'error');
+            setCrudLoading(false)
+          }
+        },
+      });
+
     const filteredData = users.filter((data) => {
         const client_name = localStorage.getItem("name");
         const role = localStorage.getItem("roles");
         // if(role != 'client') {
         return (
             (!selectedRole || data.roles === selectedRole) &&
-            (!selectedTenant || data.tenant_id.toLowerCase() == selectedTenant.toLowerCase()) &&
+            (!selectedTenant || data.company_name.toLowerCase().includes(selectedTenant.toLowerCase())) &&
             (!searchTerm ||
                 data.name.toLowerCase().includes(searchTerm.toLowerCase()))
         );
@@ -433,6 +517,12 @@ export default function UserTable() {
     const indexOfFirstuser = indexOfLastuser - dataPerPage;
     const currentusers = filteredData.slice(indexOfFirstuser, indexOfLastuser);
 
+    function createModal() {
+        formik.handleReset();
+        setCreate(!create);
+        document.body.style.overflow = create ? 'hidden' : 'auto'
+    }
+
     return (
         <>
             <div className="w-full dark:text-white">
@@ -467,7 +557,7 @@ export default function UserTable() {
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => {Router.push('register')}} >
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={createModal} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -475,30 +565,9 @@ export default function UserTable() {
                                 {/* Button end */}
 
                                 {/* Filter by select */}
-                                <div className="mb-4 flex">
-                                {
-                                    userData.roles == 'sadmin' && (
-                                        <>
-                                            <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                            <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e text-sm block w-full px-3 py-2" defaultValue={0}
-                                            value={selectedTenant} onChange={handleTenantChange}
-                                            >
-                                                <option value="" key={0} disabled hidden>Tenant 
-                                                </option>
-                                                <option value="" key={0}> All Tenant </option>
-                                                {
-                                                    tenants.map((tenant, index) => {    
-                                                        return (
-                                                            <option value={tenant._id} key={index + 1}>{tenant.company}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>  
-                                        </>
-                                    )
-                                }
+                                <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2"
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
                                         <option value="" key={0} disabled hidden>Role 
@@ -508,7 +577,6 @@ export default function UserTable() {
                                         <option value="admin" key={2}>Admin</option>
                                         <option value="staff" key={3}>Staff</option>
                                     </select>  
-                                    
                                 </div>
                                 {/* Filter by select end */}
                             </div>
@@ -573,6 +641,7 @@ export default function UserTable() {
                                     }
                                 </tbody>
                             </table>
+
                             <table className="w-full text-sm text-left hidden" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
@@ -638,7 +707,7 @@ export default function UserTable() {
                                 <div className="col-span-2">
                                     <label htmlFor="name" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">{t('name')}</label>
                                     <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder="Type name here"
-                                    readolny/>
+                                    disabled/>
                                 </div>
                                 <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
                                     <label htmlFor="role" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">Role</label>
@@ -660,10 +729,10 @@ export default function UserTable() {
                                     }
                                 
                                     {
-                                        modeModal === 'Edit' ? <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateUser}>{t('save')}</button> : 
+                                        modeModal === 'Edit' ? <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap disabled:cursor-progress" disabled={crudLoading} onClick={updateUser}>{crudLoading ? <LoadingCrud/> : t('save')}</button> : 
                                         <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" 
                                         // onClick={creatUser}
-                                        >{t('submit')}</button>
+                                        >{crudLoading ? <LoadingCrud/> : t('submit')}</button>
                                     }
                                 </div>
                         </div>
@@ -671,6 +740,143 @@ export default function UserTable() {
                     </div>
                 </div>
             </div> 
+
+            {/* <!-- Main modal --> */}
+            <div className={`fixed inset-0 ${create ? "flex" : "hidden"} items-center justify-center bg-gray-500 bg-opacity-75 z-50`}>
+                <div className="relative p-4 w-full max-w-md max-h-full">
+                    {/* <!-- Modal content --> */}
+                    <div className="relative bg-white dark:bg-[#243040] rounded-lg shadow">
+                        {/* <!-- Modal header --> */}
+                        <div className="flex items-center justify-between p-4 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                            <h3 className="text-2xl font-semibold text-black dark:text-slate-200">
+                                {`${modeModal} ${t('users')}`}
+                            </h3>
+                            <button type="button" className="text-xl bg-transparent w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={createModal}>
+                                <FaTimes />
+                            </button>
+                        </div>
+                        {/* <!-- Modal body --> */}
+                        <div className="p-4">
+                            <form onSubmit={formik.handleSubmit}>
+                                <div className="grid gap-4 mb-4 grid-cols-2">
+                                    <div className="col-span-2">
+                                        <label htmlFor="username" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">{t('name')}</label>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            id="username"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Type name here"
+                                        />
+                                        {formik.touched.username && formik.errors.username && (
+                                            <div className="text-red-500">{formik.errors.username}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label htmlFor="email" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Email</label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Type email here"
+                                        />
+                                        {formik.touched.email && formik.errors.email && (
+                                            <div className="text-red-500">{formik.errors.email}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label htmlFor="password" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Password</label>
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            id="password"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Type password here"
+                                        />
+                                        {formik.touched.password && formik.errors.password && (
+                                            <div className="text-red-500">{formik.errors.password}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label htmlFor="passwordMatch" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Confirm Password</label>
+                                        <input
+                                            type="password"
+                                            name="passwordMatch"
+                                            id="passwordMatch"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Confirm password here"
+                                        />
+                                        {formik.touched.passwordMatch && formik.errors.passwordMatch && (
+                                            <div className="text-red-500">{formik.errors.passwordMatch}</div>
+                                        )}
+                                    </div>
+                                    {roles === 'sadmin' && (
+                                        <div className={`col-span-2 ${EditUserId === '64fa84403ce06f0129321ced' ? "hidden" : ""}`}>
+                                            <label htmlFor="tenant_id" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Tenant</label>
+                                            <select
+                                                id="tenant_id"
+                                                name="tenant_id"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            >
+                                                <option value="" hidden>{t('select-tenant')}</option>
+                                                {isLoading ? (
+                                                    <option value="">Loading ...</option>
+                                                ) : tenants.length > 0 ? (
+                                                    tenants.map((tenant) => (
+                                                        <option key={tenant._id} value={tenant._id}>
+                                                            {tenant.company}
+                                                        </option>
+                                                    ))
+                                                ) : (
+                                                    <option value="">{t('tenant-not-found')}</option>
+                                                )}
+                                            </select>
+                                            {formik.touched.tenant_id && formik.errors.tenant_id && (
+                                                <div className="text-red-500">{formik.errors.tenant_id}</div>
+                                            )}
+                                        </div>
+                                    )}
+                                    <div className={`col-span-2 ${EditUserId === '64fa84403ce06f0129321ced' ? "hidden" : ""}`}>
+                                        <label htmlFor="role" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Role</label>
+                                        <select
+                                            id="roles"
+                                            name="roles"
+                                            value={formik.values.roles}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                        >
+                                            <option value="" disabled>{t('select-role')}</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="staff">Staff</option>
+                                        </select>
+                                        {formik.touched.roles && formik.errors.roles && (
+                                            <div className="text-red-500">{formik.errors.roles}</div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex justify-end gap-3 mt-5">
+                                    <button type="submit" disabled={crudLoading} className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white font-bold py-2 px-4 rounded disabled:cursor-progress">
+                                        {crudLoading ? <LoadingCrud /> : t('submit')}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </>
     )
 }

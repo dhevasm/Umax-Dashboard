@@ -251,7 +251,7 @@
       "details-of":"Details of",
       "create-client": "Create Client",
       "save": "Save",
-      "Delete" : "Delete"
+      "delete" : "Delete"
     },
 
     "admin-dashboard": {
@@ -359,7 +359,7 @@
       "contact-error": "Contact is required",
       "holder-contact": "+1234567890",
       "format": "Format",
-      "currency_position": "Currency Position",
+      "currency-position": "Currency Position",
       "left": "Left",
       "right": "Right",
       "language": "Language",
@@ -390,7 +390,21 @@
       "save": "Save Changes",
       "submit": "Submit",
       "not-found": "User not found",
-      "delete" : "Delete"
+      "delete": "Delete",
+      "holder-name": "Name",
+      "holder-email": "example@gmail.com",
+      "holder-confirm": "Confirm Password",
+      "select-tenant": "Select Tenant",
+      "select-role": "Select Role",
+      "name-error": "Name is required",
+      "email-error": "Email is required",
+      "email-error2": "Invalid Email Address",
+      "password-error":"Password is required",
+      "password-error2":"Password does not match",
+      "confirm-error":"Password confirmation is required",
+      "tenant-error": "Tenant is required",
+      "role-error": "Please select Role",
+      "tenant-not-found": "Tenant not found"
     },
 
     "admin-campaigns": {
