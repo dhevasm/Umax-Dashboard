@@ -29,7 +29,6 @@ export default function TenantTable() {
     const [crudLoading, setCrudLoading] = useState(false)
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
     const [isLoading, setIsLoading] = useState(false)
-    const [crudLoading, setCrudLoading] = useState(false)
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
     const deleteButton = useRef(null)
@@ -197,11 +196,6 @@ export default function TenantTable() {
             handleCityList(e.target.value)
         }
         setValues({ ...values, [e.target.name]: e.target.value });
-    };
-
-    const handleBlur = (e) => {
-        setTouched({ ...touched, [e.target.name]: true });
-        validateForm();
     };
 
     const handleBlur = (e) => {
