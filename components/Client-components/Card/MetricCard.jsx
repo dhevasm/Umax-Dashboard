@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CSSTransition } from "react-transition-group";
 import { BarChart, Bar, ResponsiveContainer, Tooltip, Cell } from "recharts";
 
 export default function MetricCard({ id, Title, Value, isActive, onToggle, Description, data, totalSpent, averageSpent }) {
     const t = useTranslations('metrics');
-    const [isDark, setIsDark] = useState(false)
+    const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -21,15 +21,29 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
         }
     }, []);
 
+    // Formatter untuk angka di Tooltip
+    const numberFormatter = (value) => {
+        if (value >= 1000000) {
+            return `${(value / 1000000).toFixed(1)}M`; // Mengubah juta menjadi M
+        } else if (value >= 1000) {
+            return `${(value / 1000).toFixed(1)}K`; // Mengubah ribu menjadi K
+        }
+        return value;
+    };
+
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white dark:bg-slate-600 border border-gray-400 dark:border-gray-200 text-slate-800 dark:text-gray-200 py-1 px-7 rounded-lg shadow-lg" style={{ transform: 'translateY(-100%)', position: 'absolute', bottom: '1' }}>
-                    <p className="text-sm">{`${payload[0].value}`}</p>
+                <div className="bg-white w-fit dark:bg-slate-600 border border-gray-400 dark:border-gray-200 text-slate-800 dark:text-gray-200 py-1 px-7 rounded-lg shadow-lg" style={{ transform: 'translateY(-100%)', position: 'absolute', bottom: '1' }}>
+                    <p className="text-sm">{numberFormatter(payload[0].value)} 
+                    {
+                        Title == 'Reach Amount Spent Ratio' || Title == 'Click Through Rate' || Title == 'Outbound Click Landing Page' || Title == 'Add To Cart' ? '%'
+                        : Title == 'Return on Ad Spent' || Title == 'Real ROAS' ? 'x' : null
+                    }
+                    </p>
                 </div>
             );
         }
-    
         return null;
     };
 

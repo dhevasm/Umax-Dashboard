@@ -277,7 +277,7 @@ export default function TenantProfile({tenant_id}){
             <div className="w-full h-full rounded-sm">
                 <div className="flex flex-col sm:flex-row md:flex-row lg:flex-row xl:flex-row justify-between items-center">
                     <h1 className="text-2xl dark:text-white font-bold uppercase">{t('title')}</h1>
-                    <p className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a> / {t('title')}</p>
+                    <div className="dark:text-white"><a className="hover:cursor-pointer hover:text-blue-400 hover:underline dark:text-white" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a> / {t('title')}</div>
                 </div>
 
                 <div className="rounded-sm mt-3 rounded-t-md">
@@ -348,10 +348,10 @@ export default function TenantProfile({tenant_id}){
                                             <FaFlag className="text-xl text-[#3d50e0]" />
                                             <p className="ml-2 dark:text-white">
                                                 <span className="font-semibold">{t('language')}</span><br /> 
-                                                <div className="flex gap-2 items-center">
+                                                <span className="flex gap-2 items-center">
                                                     <Image src={getFlagSrc(tenant.language)} width={50} height={50} className="h-5 w-5" alt="flag" /> 
                                                     {tenant.language == 'id' ? t('indonesian') : tenant.language == 'en' ? t('english') : ''}
-                                                </div>
+                                                </span>
                                             </p>
                                         </div>
                                         <div className="flex gap-4 items-center p-5 bg-gray-50 dark:bg-slate-700 rounded-lg w-full">
@@ -403,6 +403,7 @@ export default function TenantProfile({tenant_id}){
                     </div>
                 </div>             
             </div>
+
              {/* <!-- Main modal --> */}
              <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none0 bg-opacity-75 z-50">
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">

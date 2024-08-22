@@ -450,13 +450,13 @@ const AccountTable = () => {
                 <div className='overflow-x-auto'>
                     <table className='w-full border-collapse'>
                         <thead className='bg-white dark:bg-blue-700'>
-                            <tr className='text-left'>
+                            <tr className=''>
                                 {/* <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>No.</th> */}
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>{t('name')}</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>{t('client')}</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Platform</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Email</th>
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>Status</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>{t('name')}</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>{t('client')}</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>Platform</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>Email</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>Status</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 hidden'>Action</th>
                             </tr>
                         </thead>
@@ -473,18 +473,18 @@ const AccountTable = () => {
                                     currentAccounts.length > 0 ? (
                                         // Jika data ditemukan
                                         currentAccounts.map((data, index) => (
-                                            <tr key={index} className='border dark:border-gray-700'>
-                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
+                                            <tr key={index} className='border text-center dark:border-gray-700'>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>
                                                     <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.username}`} onClick={() => handleOpenModal(data)}>
                                                         {data.username}
                                                     </button>
                                                 </td>
-                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.client_name}</td>
-                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
-                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>{data.client_name}</td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>{data.platform === 1 ? 'Meta Ads' : data.platform === 2 ? 'Google Ads' : 'Tiktok Ads'}</td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'>
                                                     <a href={`mailto:${data.email}`} className="text-blue-500 underline dark:text-blue-400">{data.email}</a>
                                                 </td>
-                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'><StatusBadge status={data.status} /></td>
+                                                <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap text-left'><StatusBadge status={data.status} /></td>
                                                 <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap hidden gap-1 justify-center'>
                                                     <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
                                                         <BiEdit size={25}/>

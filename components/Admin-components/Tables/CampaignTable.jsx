@@ -542,6 +542,7 @@ export default function CampaignTable() {
         }
     }, [])
     
+
     function createMetrics(campaignID, startDate) {
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -867,7 +868,7 @@ export default function CampaignTable() {
                                         userData.roles == "sadmin" && (
                                             <div>
                                                 <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md md:rounded-none block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md md:rounded-none block w-full px-3 py-2 select-no-arrow"
                                                     value={selectedTenant}
                                                     onChange={handleTenantChange}
                                                 >
@@ -892,7 +893,7 @@ export default function CampaignTable() {
                                     {/* Filter by select */}
                                     <div className="mb-4">
                                         <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s dark:border-gray-500 sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-t border-b border-s dark:border-gray-500 sm:border-s md:border-s lg:border-s-0 xl:border-s-0 rounded-s-md sm:rounded-s-md md:rounded-s-md lg:rounded-s-none xl:rounded-s-none text-sm block w-full px-3 py-2 select-no-arrow"
                                         value={selectedStatus} onChange={handleStatusChange}
                                         >
                                             <option value="" disabled hidden>Status</option>
@@ -904,7 +905,7 @@ export default function CampaignTable() {
                                     </div>
                                     <div className="mb-4">
                                         <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border dark:border-gray-500 text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border dark:border-gray-500 text-sm block w-full px-3 py-2 select-no-arrow"
                                             value={selectedPlatform}
                                             onChange={handlePlatformChange}
                                         >
@@ -917,7 +918,7 @@ export default function CampaignTable() {
                                     </div>
                                     <div className="mb-4">
                                         <label htmlFor="objectivefilter" className="text-sm font-medium  hidden">Objective</label>
-                                        <select id="objectivefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                        <select id="objectivefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md block w-full px-3 py-2 select-no-arrow"
                                             value={selectedObjective}
                                             onChange={handleObjectiveChange}
                                         >
@@ -1080,7 +1081,7 @@ export default function CampaignTable() {
                                             selectLoading ? (
                                                 // Jika data sedang loading
                                                 <option disabled key={0} value={0}>
-                                                    <p className="animate-pulse">Loading account list...</p>
+                                                    Loading account list...
                                                 </option>
                                             ) : account.length > 0 ? (
                                                 // Jika data ditemukan
