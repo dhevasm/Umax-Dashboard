@@ -29,6 +29,8 @@ import AdminNavbarLoading from "../Client-components/Loading/AdminProfileLoading
 import { AiOutlineProfile } from "react-icons/ai";
 import { MdAnalytics } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 function AdminNavbar({ userData }) {
   const {
@@ -292,8 +294,8 @@ function AdminNavbar({ userData }) {
         }
       )
       .then(async (res) => {
-        if (res.data.Output === "Registration Successfully") {
-          console.log("user register success");
+        if (res.data.IsError === false) {
+          toastr.success("user register success");
           await axios
             .delete(
               `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
@@ -410,6 +412,8 @@ function AdminNavbar({ userData }) {
                 });
               }
             });
+        }else{
+          toastr.error("user register failed");
         }
       });
   };
@@ -477,9 +481,9 @@ function AdminNavbar({ userData }) {
     );
 
     if (response.data.Output == "Registration Successfully") {
-      console.log("tenant register success");
+     toastr.success("tenant register success");
     } else {
-      console.log("tenant register failed");
+      toastr.error("tenant register failed");
       return;
     }
     createUser(data, response.data.tenant_id, request_id);
@@ -508,6 +512,7 @@ function AdminNavbar({ userData }) {
           )
           .then((response) => {
             if (!response.IsError) {
+                toastr.info("Please wait... Request is being processed");
                 createTenant(response.data.Data, request_id)
                 // .then(() => {
                 //   Swal.fire({
@@ -517,13 +522,8 @@ function AdminNavbar({ userData }) {
                 //   })
                 // })
             } else {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: response.ErrorMessage,
-              }).then(() => {
-                setLoading(false);
-              });
+              toastr.error(response.ErrorMessage)
+              setLoading(false)
             }
           });
       }
@@ -602,7 +602,7 @@ function AdminNavbar({ userData }) {
             </button>
           </div>
 
-          <div className=" flex items-center ms-15">
+          <div className="relative left-3 flex items-center ms-15">
             <div
               className={`w-16 h-9 flex justify-center items-center rounded-full`}
             >
@@ -645,8 +645,7 @@ function AdminNavbar({ userData }) {
 
             {showDropdown && (
               <>
-              <div className="absolute top-0 left-0 w-[100vw] h-[100vh] z-10" onClick={() => setShowDropdown(false)}></div>
-              <div className="absolute z-20 text-black dark:text-white top-20 right-10 p-5 w-[270px] max-h-[300px] overflow-y-auto bg-white dark:bg-slate-800 shadow-lg transition-transform transform duration-300 ease-in-out">
+              <div className="absolute z-20 text-black dark:text-white top-10 right-0 p-5 w-[270px] max-h-[300px] overflow-y-auto bg-white dark:bg-slate-800 shadow-lg transition-transform transform duration-300 ease-in-out">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4 border-b border-gray-500 pb-2">
                   <h2 className="text-lg font-semibold">Register Requests</h2>

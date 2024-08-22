@@ -81,7 +81,7 @@ const AccountTable = () => {
     
         const tableColumnNames = Object.keys(filteredData[0]);
         const tableColumnValues = filteredData.map((row) => Object.values(row));
-     
+    
         doc.autoTable({
             head: [tableColumnNames],
             body: tableColumnValues,
@@ -273,7 +273,7 @@ const AccountTable = () => {
                     backgroundColor: "#DFFFDF",
                     color: '#00A600',
                     border: '0.3px solid #00CA00',
-                    padding: '5px 13px',
+                    padding: '5px 22px',
                     fontSize: "12px",
                     borderRadius: '6px',
                     fontWeight: '500', 
@@ -510,11 +510,6 @@ const AccountTable = () => {
                     <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
                         {renderPagination()}
                     </div>
-
-                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
-                        {renderPagination()}
-                    </div>
-
                     <table className='hidden'ref={tableRef}>
                         <thead>
                             <tr>

@@ -211,7 +211,6 @@ export default function AccountTable() {
             client: false,
             platform: false,
         });
-    
         // Close the modal
         addModal.current.classList.add("hidden");
     }
@@ -230,13 +229,6 @@ export default function AccountTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteaccount(account_id)
-            
-            // Swal.fire({
-            //     title: tdel('success'),
-            //     text: tdel('suc-msg'),
-            //     icon: "success"
-            // })   
-            
             }
         });
     }
@@ -257,6 +249,7 @@ export default function AccountTable() {
             
         } catch (error) {
             setCrudLoading(false)
+            toastr.error('Delete user failed', 'Error')
             console.log(error)
         }
     }
@@ -273,19 +266,19 @@ export default function AccountTable() {
             cancelButtonColor: "#d33",
             confirmButtonText: `${tfile('yes')}`,
             cancelButtonText: `${tfile('no')}`
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
             toastr.success(tfile('suc-msg'), tfile('success'))
             }
-          });
+        });
     }
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
         filename: "Dataaccount",
         sheet: "Dataaccount",
-      });
+    });
 
     const generatePDF = () => {
         Swal.fire({
@@ -847,14 +840,12 @@ export default function AccountTable() {
                         </div>
                     </div>
                     {/* Body end */}
-
                 </div>
                 {/* Main Card end */}
             </div>
 
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 dark:text-white flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-
                 <div className="relative p-4 w-full max-w-2xl max-h-full ">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto pb-3">

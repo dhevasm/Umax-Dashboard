@@ -14,9 +14,9 @@ import { FaTrash } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { RiBuildingLine, RiFileExcel2Line } from "react-icons/ri"
 import { BiPlus } from "react-icons/bi"
-import { useTranslations } from "next-intl"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import { useTranslations } from "next-intl"
 
 export default function TenantTable() {
 
@@ -29,7 +29,7 @@ export default function TenantTable() {
     const [crudLoading, setCrudLoading] = useState(false)
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
     const [isLoading, setIsLoading] = useState(false)
-
+    const [crudLoading, setCrudLoading] = useState(false)
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("add")
     const deleteButton = useRef(null)
@@ -44,6 +44,20 @@ export default function TenantTable() {
     const t = useTranslations('admin-tenants')
 
     const [values, setValues] = useState({
+
+        name: '', 
+        address: '', 
+        contact: '', 
+        email: '', 
+        language:'', 
+        culture:'', 
+        timezone:'', 
+        currency:'', 
+        country:'', 
+        city:''
+    });
+
+    const [error, setError] = useState({
         name: '',
         address: '',
         contact: '',
@@ -51,40 +65,28 @@ export default function TenantTable() {
         language: '',
         culture: '',
         timezone: '',
-        currency: '',
-        country: '',
-        city: '',
+        currency : '',
+        country : '', 
+        city : '',
     });
-
-    const [error, setError] = useState({
-    name: '',
-    address: '',
-    contact: '',
-    email: '',
-    language: '',
-    culture: '',
-    timezone: '',
-    currency: '',
-    country: '',
-    city: '',
-    });
-
+    
     const [touched, setTouched] = useState({
-    name: false,
-    address: false,
-    contact: false,
-    email: false,
-    language: false,
-    culture: false,
-    timezone: false,
-    currency: false,
-    country: false,
-    city: false,
+        name: false,
+        address: false,
+        contact: false,
+        email: false,
+        language: false,
+        culture: false,
+        timezone: false,
+        currency: false,
+        country: false,
+        city: false,
     });
-
-    const [isValid, setIsValid] = useState(false);
+    
+    const [isvalid, setIsvalid] = useState(false);
 
     function showModal(mode, tenant_id = null ){
+        document.body.style.overflow = 'hidden'
         setModeModal(mode)
         if(mode == "Edit"){
             deleteButton.current.classList.remove("hidden")
@@ -131,61 +133,75 @@ export default function TenantTable() {
         addModal.current.classList.remove("hidden")
     }
     function closeModal(){
+        document.body.style.overflow = 'auto'
         addModal.current.classList.add("hidden")
     }
 
     // Validasi Form 
     const validateForm = useCallback(() => {
         let errors = {};
-    
         if (touched.name && values.name === '') {
-          errors.name = t('name-error');
+            errors.name = t('name-error');
         }
+    
         if (touched.address && values.address === '') {
-          errors.address = t('address-error');
+            errors.address = t('address-error');
         }
+    
         if (touched.contact && values.contact === '') {
-          errors.contact = t('contact-error');
+            errors.contact = t('contact-error');
         }
+    
         if (touched.email && values.email === '') {
-          errors.email = t('email-error');
+            errors.email = t('email-error');
         }
-        if (touched.email && !values.email.includes('@')) {
-          errors.email = t('email-error2');
+    
+        if (touched.email && !values.email.includes("@")) {
+            errors.email = t('email-error2');
         }
+    
         if (touched.language && values.language === '') {
-          errors.language = t('language-error');
+            errors.language = t('language-error');
         }
+    
         if (touched.culture && values.culture === '') {
-          errors.culture = t('culture-error');
+            errors.culture = t('culture-error');
         }
+    
         if (touched.timezone && values.timezone === '') {
-          errors.timezone = t('timezone-error');
+            errors.timezone = t('timezone-error');
         }
+    
         if (touched.currency && values.currency === '') {
-          errors.currency = t('currency-error');
+            errors.currency = t('currency-error');
         }
+    
         if (touched.country && values.country === '') {
-          errors.country = t('country-error');
+            errors.country = t('country-error');
         }
+    
         if (touched.city && values.city === '') {
-          errors.city = t('city-error');
+            errors.city = t('city-error');
         }
     
         setError(errors);
-        setIsValid(Object.keys(errors).length === 0);
+        setIsvalid(Object.keys(errors).length === 0);
     }, [values, touched, t]);
-
+    
     useEffect(() => {
-    validateForm();
+        validateForm();
     }, [values, touched, validateForm]);
-
+    
     const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues(prevValues => ({
-        ...prevValues,
-        [name]: value
-    }));
+        if(e.target.name === "country"){
+            handleCityList(e.target.value)
+        }
+        setValues({ ...values, [e.target.name]: e.target.value });
+    };
+
+    const handleBlur = (e) => {
+        setTouched({ ...touched, [e.target.name]: true });
+        validateForm();
     };
 
     const handleBlur = (e) => {
@@ -214,7 +230,6 @@ export default function TenantTable() {
             //     text: "Your file has been deleted.",
             //     icon: "success"
             // })
-            toastr.success('Tenant was deleted!', 'Success');
             }
           });
     }
@@ -223,14 +238,18 @@ export default function TenantTable() {
         // console.log(tenant_id)
         closeModal()
         try {
+            setCrudLoading(true)
             const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/tenant-delete?tenant_id=${tenant_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             })
             getTenants()
-            setUpdateCard(true)
+            toastr.success('Tenant deleted successfully', 'Success')
+            setUpdateCard(false)
         } catch (error) {
+            toastr.error('Failed to delete tenant', 'Error')
+            setCrudLoading(false)
             console.log(error)
         }
     }
@@ -257,13 +276,11 @@ export default function TenantTable() {
                     setFirstPage(backupFirstPage);
                     setLastPage(backupLastPage);
                 }, 100);
-                
-            //   Swal.fire({
-            //     title: "Downloaded!",
-            //     text: "Your file has been downloaded.",
-            //     icon: "success"
-            //   });
-            toastr.success('document was downloaded!', 'Success');
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
             }
           });
     }
@@ -292,12 +309,11 @@ export default function TenantTable() {
                     body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
                 });
                 doc.save('DataTenant.pdf');
-            //   Swal.fire({
-            //     title: "Downloaded!",
-            //     text: "Your file has been downloaded.",
-            //     icon: "success"
-            //   });
-            toastr.success('document was downloaded!', 'Success');
+              Swal.fire({
+                title: "Downloaded!",
+                text: "Your file has been downloaded.",
+                icon: "success"
+              });
             }
           });
     };
@@ -331,6 +347,7 @@ export default function TenantTable() {
     }, [])
 
     async function createTenant(){
+        
         if(isvalid){
             const company = document.getElementById('name').value
             const address = document.getElementById('address').value
@@ -367,6 +384,7 @@ export default function TenantTable() {
     
             if(response.data.Output == "Registration Successfully"){
                 getTenants()
+                setCrudLoading(false)
                 closeModal()
                 setUpdateCard(true)
                 document.getElementById('name').value = null
@@ -380,22 +398,23 @@ export default function TenantTable() {
                 document.getElementById('country').value = ""  
                 document.getElementById('city').value = ""  
                 // Swal.fire("Success", "Tenant created successfully", "success")
+                toastr.success('Tenant created successfully', 'Success')
                 setCrudLoading(false)
-                toastr.success('Tenant was created!', 'Success');
             }else{
+                toastr.error(response.data.detail, 'Error')
                 // Swal.fire("Error", response.detail, "error")
                 setCrudLoading(false)
-                toastr.error(response.detail, "Error");
             }
         }else{
+            toastr.warning('Please fill all required fields!', 'Failed')
             // Swal.fire("Failed!","Please fill all required fields!", "error")
             setCrudLoading(false)
-            toastr.warning('Please fill all required fields!', 'Warning');
         }
     }
 
     async function updateTenant(){
         if(EditTenantId !== null) {
+            setCrudLoading(true)
             if(isvalid){
             const company = document.getElementById('name').value
             const address = document.getElementById('address').value
@@ -444,17 +463,17 @@ export default function TenantTable() {
                     document.getElementById('country').value = ""  
                     document.getElementById('city').value = ""  
                     // Swal.fire("Success", "Tenant Updated", "success")
+                    toastr.success('Tenant Updated', 'Success')
                     setCrudLoading(false)
-                    toastr.success('Tenant was Updated!', 'Success');
                 }else{
                     // Swal.fire("Error", response.detail.ErrMsg, "error")
+                    toastr.error(response.data.detail, 'Error')
                     setCrudLoading(false)
-                    toastr.error(response.detail.ErrMsg, "Error");
                 }
             }else{
                 // Swal.fire("Failed!","Please fill all required fields!", "error")
+                toastr.warning('Please fill all required fields!', 'Failed')
                 setCrudLoading(false)
-                toastr.warning('Please fill all required fields!', 'Warning');
             }
             
         }
@@ -521,13 +540,13 @@ export default function TenantTable() {
 
     function LoadingCrud() {
         return (
-        <div className="flex justify-center items-center h-6">
+          <div className="flex justify-center items-center h-6">
             <div className="relative">
-            <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+              <div className="w-6 h-6 border-4 dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
             </div>
-        </div>
+          </div>
         );
-};
+    };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -622,7 +641,7 @@ export default function TenantTable() {
             </div>
         );
     };
-    
+       
     const indexOfLasttenant = currentPage * dataPerPage;
     const indexOfFirsttenant = indexOfLasttenant - dataPerPage;
     const currenttenants = filteredData.slice(indexOfFirsttenant, indexOfLasttenant);
@@ -651,7 +670,7 @@ export default function TenantTable() {
                         <div className=" flex flex-col-reverse sm:flex-row md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className=" py-2 mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button className=" py-2 mb-4 borde dark:border-gray-500 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
@@ -727,6 +746,7 @@ export default function TenantTable() {
                                     )}
                                 </tbody>
                             </table>
+
                             <table className="w-full text-sm text-left hidden" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
@@ -785,44 +805,51 @@ export default function TenantTable() {
 
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
-                    <div className="relative  rounded-lg shadow max-h-[100vh] overflow-auto pb-3">
+                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-[#3c50e0] dark:bg-slate-800 text-white ">
-                            <h3 className="text-xl font-semibold">
-                                {`${modeModal} ${'tenants'}`}
+                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                            <h3 className="text-2xl font-semibold">
+                                {`${modeModal} ${t('tenants')}`}
                             </h3>
                             
-                            <button type="button" className="text-xl bg-transparent hover:bg-blue-400 dark:hover:bg-slate-500 hover:text-slate-100 rounded-lg  w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                            <button type="button" className="text-xl bg-transparent w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                                 <FaTimes />
                             </button>
                         </div>
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5 bg-white dark:bg-slate-900 dark:text-white" >
-                            <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center">
                             <div className="text-xl font-semibold text-blue-500">{t('general')}</div>
 
                             <div className="flex gap-2 items-center">
-                            {
-                                modeModal === 'Edit' ? <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded text-nowrap" onClick={updateTenant}>{crudLoading ? <LoadingCrud /> : t('save')}</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded" onClick={createTenant}>{crudLoading ? <LoadingCrud /> : t('submit')}</button>
-                            }
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1.5 px-4 rounded" ref={deleteButton} onClick={() => handleDelete(EditTenantId)}>
-                                <FaTrash className="text-xl"/>
-                            </button>
+                                {
+                                    modeModal === 'Edit' ? 
+                                    <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-1 px-4 rounded text-nowrap" disabled={crudLoading} onClick={updateTenant}>
+                                        {crudLoading ? <LoadingCrud/> : t('save') }
+                                    </button> 
+                                    : 
+                                    <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-1 px-4 rounded-[3px]" disabled={crudLoading} onClick={createTenant}>
+                                        {crudLoading ? <LoadingCrud/> : t('submit')}
+                                    </button>
+                                }
+                                <button className="bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-1 px-4 rounded-[3px]" ref={deleteButton} onClick={() => handleDelete(EditTenantId)}>
+                                    {t('delete')}
+                                </button>
                             </div>
-                            
-                            </div>
-                        
-                        <div className="w-full h-0.5 my-3 bg-gray-300">
+                        </div>
+          
+                        <div className="w-full h-0.5 my-3 bg-gray-300 dark:bg-gray-500">
 
                         </div>
                        
                             <div className="grid gap-4 mb-4 grid-cols-2 pb-20 md:pb-3">
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('company-name')} {
+                                    <label htmlFor="name" className="mb-2 text-sm font-normal  flex">{t('company-name')} {
                                         error.name && <p className="text-red-500 text-sm">*</p>
                                     }
                                     </label>
                                     <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
+
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     
                                 {
@@ -830,10 +857,11 @@ export default function TenantTable() {
                                 }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="address" className="mb-2 text-sm font-medium  flex">{t('company-address')} {
+                                    <label htmlFor="address" className="mb-2 text-sm font-normal  flex">{t('company-address')} {
                                         error.address && <p className="text-red-500 text-sm">*</p>
                                     }</label>
                                     <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-address')}
+
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                      {
                                     touched.address && error.address && <p className="text-red-500 text-xs">{error.address}</p>
@@ -841,10 +869,11 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="country" className="flex mb-2 text-sm font-medium ">{t('country')} {
+                                    <label htmlFor="country" className="flex mb-2 text-sm font-normal ">{t('country')} {
                                             error.country && <p className="text-red-500 text-sm">*</p>
                                     }</label>
                                     <select id="country" name="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}  >
+
                                         <option value="" disabled hidden>{t('select-country')}</option>
                                         {
                                             Country.length > 0 ? Country.map((item, index) => (
@@ -858,9 +887,10 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')} {
+                                    <label htmlFor="city" className="block mb-2 text-sm font-normal ">{t('city')} {
                                         error.city && <p className="text-red-500 text-sm">*</p>}</label>
                                     <select id="city" name="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+
                                         {
                                             City.length > 0 ? City.map((item, index) => (
                                                 <option key={index} value={item}>{item}</option>
@@ -873,20 +903,23 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">{t('email')} {
+                                    <label htmlFor="email" className="flex mb-2 text-sm font-normal  ">{t('email')} {
                                         error.email && <p className="text-red-500 text-sm">*</p>
                                     }</label>
+
                                     <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required onChange={handleChange} onBlur={handleBlur}/>
+
                                     {
                                     touched.email && error.email && <p className="text-red-500 text-xs">{error.email}</p>
                                 }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">{t('contact')} {
+                                    <label htmlFor="contact" className="flex mb-2 text-sm font-normal  ">{t('contact')} {
                                         error.contact && <p className="text-red-500 text-sm">*</p>
                                     }</label>
                                     <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-contact')} required onChange={handleChange} onBlur={handleBlur}/>
+
                                     {
                                     touched.contact && error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
                                 }
@@ -899,12 +932,12 @@ export default function TenantTable() {
                                     <div className="flex items-center gap-1 me-1">
                                     <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
 
-                                    <span className="text-sm font-medium ">{t('currency-position')} :</span>
+                                    <span className="text-sm font-normal ">{t('currency-position')} :</span>
                                     <div className="flex flex-row gap-2 ">
                                         <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
-                                        <div className="text-sm font-medium">{t('right')}(-$)</div>
+                                        <div className="text-sm font-normal">{t('right')}(-$)</div>
                                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                        <div className="text-sm font-medium">{t('left')}($-)</div>
+                                        <div className="text-sm font-normal">{t('left')}($-)</div>
                                         {
                                         error.currency_position && <p className="text-red-500 text-xs">{error.currency_position}</p>
                                 }
@@ -912,11 +945,11 @@ export default function TenantTable() {
                                     </label>
                                     </div>
                                 </div>
-                                <div className="w-full h-0.5 my-1 bg-gray-300"></div>
+                                <div className="w-full h-0.5 my-1 bg-gray-300 dark:bg-gray-500"></div>
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="language" className="flex mb-2 text-sm font-medium ">Language {
+                                    <label htmlFor="language" className="flex mb-2 text-sm font-normal ">Language {
                                         error.language && <p className="text-red-500 text-sm">*</p>}</label>
                                     <select id="language" name="language" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>Select Language</option>
@@ -929,7 +962,7 @@ export default function TenantTable() {
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="culture" className="flex mb-2xs font-medium ">Culture {
+                                    <label htmlFor="culture" className="flex mb-2xs font-normal ">Culture {
                                         error.culture && <p className="text-red-500 text-sm">*</p>}</label>
                                     <select id="culture" name="culture" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                     <option value="" disabled hidden>Select Culture</option>
@@ -944,7 +977,7 @@ export default function TenantTable() {
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
-                                    <label htmlFor="input_timezone" className="flex mb-2 text-sm font-medium ">Time Zone {
+                                    <label htmlFor="input_timezone" className="flex mb-2 text-sm font-normal ">Time Zone {
                                         error.timezone && <p className="text-red-500 text-sm">*</p>}</label>
                                     <select id="input_timezone" name="input_timezone" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                     <option value="" index={0} disabled hidden>Select Timezone</option>
@@ -977,7 +1010,7 @@ export default function TenantTable() {
                             </div>
                         </div>
                     </div>
-                </div>
+            </div>
         </>
     )
 }

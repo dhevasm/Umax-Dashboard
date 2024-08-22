@@ -366,7 +366,7 @@
       "language": "Bahasa",
       "select-language": "Pilih Bahasa",
       "language-error": "Bahasa tidak boleh kosong",
-      "culture": "Kultur",
+      "culture": "Kultur",  
       "select-culture": "Pilih Kultur",
       "culture-error": "Kultur tidak boleh kosong",
       "timezone": "Zona Waktu",
@@ -376,7 +376,9 @@
       "select-currency": "Pilih Mata Uang",
       "currency-error": "Mata Uang tidak boleh kosong",
       "english": "Inggris",
-      "indonesian": "Indonesia"
+      "indonesian": "Indonesia",
+      "delete": "Hapus",
+      "currency-position" :"Posisi Mata Uang"
     },
 
     "admin-users": {

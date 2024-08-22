@@ -260,7 +260,7 @@ const ClientTable = () => {
             backgroundColor: "#DFFFDF",
             color: '#00A600',
             border: '0.3px solid #00CA00',
-            padding: '5px 13px',
+            padding: '5px 22px',
             fontSize: "12px",
             borderRadius: '6px',
             fontWeight: '500', 

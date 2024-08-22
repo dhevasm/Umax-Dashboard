@@ -140,7 +140,7 @@ const CampaignTable = () => {
             backgroundColor: "#DFFFDF",
             color: '#00A600',
             border: '0.3px solid #00CA00',
-            padding: '5px 13px',
+            padding: '5px 19px',
             fontSize: "12px",
             borderRadius: '6px',
             fontWeight: '500',
@@ -153,7 +153,7 @@ const CampaignTable = () => {
             backgroundColor: "#DCDCDC",
             color: '#6F6F6F',
             border: '0.3px solid #868686',
-            padding: '5px 15px',
+            padding: '5px 22px',
             fontSize: "12px",
             borderRadius: '6px',
             fontWeight: '500',
@@ -166,9 +166,9 @@ const CampaignTable = () => {
             backgroundColor: "#FFF2D1",
             color: '#E29117',
             border: '0.3px solid #FF6B00',
-            padding: '4px 10px',
+            padding: '5px 10px',
             fontSize: "12px",
-            borderRadius: '7px',
+            borderRadius: '6px',
             fontWeight: '500',
             };
             return (
@@ -397,6 +397,21 @@ const CampaignTable = () => {
     const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
     let currentCampaigns = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign)
     
+    function dateconvert(date){
+        let [day, month, year, hour] = date.split(" ");
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
+        let monthIndex = months.indexOf(month) + 1;
+        if(monthIndex < 10){
+            monthIndex = "0" + monthIndex;
+        }
+        if(day < 10){
+            day = "0" + day
+        }
+        hour = hour.slice(0, -3);
+        hour = hour.replace(".", ":");
+        return `${year}-${monthIndex}-${day}`;
+    }
+
     return (
         <>
             <div className={`font-semibold text-3xl text-slate-800 dark:text-slate-200 mb-10`}>
@@ -451,18 +466,18 @@ const CampaignTable = () => {
                     </div>
                 </div>
                 <div className="overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full table-auto">
                         <thead className="bg-white dark:bg-blue-700">
                             <tr className="text-left">
                                 {/* <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200">No.</th> */}
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('name')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('client')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('platform')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('account')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('objective')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-center">{t('start-date')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 text-left">{t('status')}</th>
-                                <th className="px-2 py-2 border dark:border-gray-600 dark:text-slate-200 hidden">Action</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200">{t('name')}</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200">{t('client')}</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200">{t('platform')}</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200">{t('account')}</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200">{t('objective')}</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200">{t('start-date')}</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200">{t('status')}</th>
+                                <th className="px-5 py-2 border dark:border-gray-600 dark:text-slate-200 hidden">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -483,19 +498,19 @@ const CampaignTable = () => {
                                                     <p className="underline">{data.name}</p>
                                                 </button>
                                             </td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">{data.client_name}</td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
+                                            <td className="px-5 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.client_name}</td>
+                                            <td className="px-5 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
                                                 {data.platform === 1 ? "Meta Ads" : data.platform === 2 ? "Google Ads" : "Tiktok Ads"}
                                             </td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">{data.account_name}</td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
+                                            <td className="px-5 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.account_name}</td>
+                                            <td className="px-5 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
                                                 {data.objective === 1 ? "Awareness" : data.objective === 2 ? "Conservation" : "Consideration"}
                                             </td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{data.start_date}</td>
-                                            <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
+                                            <td className="px-5 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">{dateconvert(data.start_date)}</td>
+                                            <td className="px-5 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200">
                                                 <StatusBadge status={data.status} />
                                             </td>
-                                            <td className="px-2 py-2 border text-nowrap hidden gap-1 justify-center dark:border-gray-700 dark:text-gray-200">
+                                            <td className="px-5 py-2 border text-nowrap hidden gap-1 justify-center dark:border-gray-700 dark:text-gray-200">
                                                 <button className='bg-orange-500 text-white px-2 py-2 rounded-md me-1'>
                                                     <BiEdit size={25} />
                                                 </button>
@@ -535,8 +550,8 @@ const CampaignTable = () => {
                         </thead>
                         <tbody>
                             {filteredData.length > 0 ? filteredData.map((data, index) => (
-                                <tr key={index} className="text-center">
-                                    <td className="px-4 py-2 border text-nowrap text-left dark:border-gray-700">{index + 1}.</td>
+                                <tr key={index}>
+                                    <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{index + 1}.</td>
                                     <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.name}</td>
                                     <td className="px-4 py-2 border text-nowrap dark:border-gray-700">{data.client_name}</td>
                                     <td className="px-4 py-2 border text-nowrap dark:border-gray-700">

@@ -375,7 +375,9 @@
       "select-currency": "Select Currency",
       "currency-error": "Currency is required",
       "english": "English",
-      "indonesian": "Indonesian"
+      "indonesian": "Indonesian",
+      "delete": "Delete",
+      "currency-position" :"Currency Position"
     },
 
     "admin-users": {
