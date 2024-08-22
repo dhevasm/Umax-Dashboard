@@ -21,6 +21,8 @@ import { map } from "leaflet"
 import Swal from "sweetalert2"
 import { LiaSpinnerSolid } from "react-icons/lia"
 import { html2pdf } from "html2pdf.js"
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 export default function Dashboard({ tenant_id }) {
     const t = useTranslations("admin-dashboard")
@@ -253,8 +255,8 @@ export default function Dashboard({ tenant_id }) {
             }
           )
           .then(async (res) => {
-            if (res.data.Output === "Registration Successfully") {
-              console.log("user register success");
+            if (res.data.IsError === false) {
+              toastr.success("user register success");
               await axios
                 .delete(
                   `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
@@ -371,10 +373,12 @@ export default function Dashboard({ tenant_id }) {
                     });
                   }
                 });
+            }else{
+              toastr.error("user register failed");
             }
           });
       };
-
+    
     const getTenantID = async(datatenant, request_id) => {
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`,{
             headers: {
@@ -428,12 +432,12 @@ export default function Dashboard({ tenant_id }) {
         })
 
         if(response.data.Output == "Registration Successfully"){
-            console.log("tenant register success")
+            toastr.success("tenant register success")
         }else{
-            console.log("tenant register failed")
+            toastr.error("tenant register failed")
             return;
         }
-        getTenantID(data, request_id)
+        createUser(data, response.data.tenant_id, request_id);
     }
 
     const handleAccept = (request_id) => {
@@ -454,21 +458,11 @@ export default function Dashboard({ tenant_id }) {
                     },
                 }).then((response) => {
                     if(!response.IsError){
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Please wait...',
-                            text: 'Request is being processed',
-                        }).then(() => {
-                            createTenant(response.data.Data, request_id)
-                        })
+                        toastr.info("Please wait... Request is being processed");
+                        createTenant(response.data.Data, request_id)
                     }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: response.ErrorMessage,
-                        }).then(() => {
-                            setLoading(false)
-                        })
+                        toastr.error("Failed to accept request")
+                        setLoading(false)
                     }
                 })
             }

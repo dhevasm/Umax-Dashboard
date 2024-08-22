@@ -19,6 +19,7 @@ import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import { useFormik } from "formik"
 
 export default function UserTable() {
 
@@ -34,6 +35,19 @@ export default function UserTable() {
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
+    const [crudLoading, setCrudLoading] = useState(false)
+    const [create, setCreate] = useState(false)
+    const roles = localStorage.getItem("roles")
+
+    function LoadingCrud() {
+            return (
+            <div className="flex justify-center items-center h-6">
+                <div className="relative">
+                <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+                </div>
+            </div>
+            );
+        };
 
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard} = useContext(AdminDashboardContext)
 
@@ -87,7 +101,7 @@ export default function UserTable() {
             //     text: tdel('suc-msg'),
             //     icon: "success"
             // })
-            toastr.success('User Deleted', 'Success')
+            
             setTimeout(() => {
                 closeModal()
             }, 100);
@@ -99,6 +113,7 @@ export default function UserTable() {
         closeModal()
         // console.log(user_id)
         try {
+            setCrudLoading(true)
             const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/user-delete?user_id=${user_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -106,7 +121,11 @@ export default function UserTable() {
             })
             getUsers()
             setUpdateCard(true)
+            setCrudLoading(false)
+            toastr.success('User Deleted', 'Success')
         } catch (error) {
+            setCrudLoading(false)
+            toastr.error('Delete user failed', 'Error')
             console.log(error)
         }
     }
@@ -205,48 +224,14 @@ export default function UserTable() {
         getUsers()
     }, [])
 
-    // async function creatUser(){
-    //     const name = document.getElementById('name').value
-    //     const email = document.getElementById('email').value
-    //     const language = document.getElementById('language').value
-    //     const culture = document.getElementById('culture').value
-    //     const currency = document.getElementById('currency').value
-    //     const timezone = document.getElementById('input_timezone').value
-    //     const currencyposition = document.getElementById('currencyposition').value
-
-    //     const formData = new FormData();
-    //     formData.append('name', name);
-    //     formData.append('email', email);
-    //     formData.append('language', language);
-    //     formData.append('culture', culture);
-    //     formData.append('currency', currency);
-    //     formData.append('input_timezone', timezone);
-    //     formData.append('currency_position', currencyposition);
-
-    //     const response = await axios.post('https://umaxxxxx-1-r8435045.deta.app/user-create', formData, {
-    //         headers: {
-    //             Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-    //         }
-    //     })
-
-    //     if(response.data.Output == "Registration Successfully"){
-    //         getUsers()
-    //         closeModal()
-    //         setUpdateCard(true)
-    //         document.getElementById('name').value = null
-    //         document.getElementById('email').value = null
-    //         Swal.fire("Success", "user created successfully", "success")
-    //     }else{
-    //         Swal.fire("Error", response.detail, "error")
-    //     }
-    // }
-
     async function updateUser(){
         if(EditUserId !== null) {
             const role = document.getElementById('role').value
             const formData = new FormData();
             formData.append('role', role);
             console.log(EditUserId)
+
+            setCrudLoading(true)
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/change-user-role?user_id=${EditUserId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
@@ -257,9 +242,11 @@ export default function UserTable() {
                 getUsers()
                 closeModal()
                 // Swal.fire("Success", "user Updated", "success")
+                setCrudLoading(false)
                 toastr.success('User Updated', 'Success')
             }else{
                 // Swal.fire("Error", response.detail.ErrMsg, "error")
+                setCrudLoading(false)
                 toastr.error(response.detail.ErrMsg, 'Error')
             }
         }
@@ -324,6 +311,76 @@ export default function UserTable() {
         setSearchTerm(event.target.value);
         setCurrentPage(1);
     };
+
+    const formik = useFormik({
+        initialValues: {
+          username: '',
+          email: '',
+          password: '',
+          passwordMatch: '',
+          tenant_id: '',
+          roles: '',
+        },
+        validate: (values) => {
+          const errors = {};
+          if (!values.username) {
+            errors.username = t('name-error');
+          }
+          if (!values.email) {
+            errors.email = t('email-error');
+          } else if (!values.email.includes('@')) {
+            errors.email = t('email-error2');
+          }
+          if (!values.password) {
+            errors.password = t('password-error');
+          }
+          if (!values.passwordMatch) {
+            errors.passwordMatch = t('confirm-error');
+          } else if (values.password !== values.passwordMatch) {
+            errors.password = t('password-error2');
+            errors.passwordMatch = t('password-error2');
+          }
+          if(roles == 'sadmin'){
+            if (!values.tenant_id) {
+              errors.tenant_id = t('tenant-error');
+            }
+          }
+          if (!values.roles) {
+            errors.roles = t('role-error');
+          }
+          return errors;
+        },
+        onSubmit: async (values) => {
+          const url = roles == 'sadmin' ? `${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${values.tenant_id}` : `${process.env.NEXT_PUBLIC_API_URL}/register`;
+          try {
+            const formData = new FormData();
+            formData.append('email', values.email);
+            formData.append('password', values.password);
+            formData.append('confirm_password', values.passwordMatch);
+            formData.append('role', values.roles);
+    
+            const response = await axios.post(`${url}`, formData, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+              },
+            });
+    
+            if (response.data.IsError === false) {
+            //   Swal.fire('Register Success', '', 'success').then(() => {
+                toastr.success('Register Success', '')
+                getUsers();
+                setCrudLoading(false);    
+                setCreate(false);
+            //   });
+            }
+          } catch (error) {
+            console.log(error)
+            // Swal.fire('Register Failed', error.response.data.ErrMsg, 'error');
+            toastr.error('Register Failed', error.response.data.detail.ErrMsg)
+            setCrudLoading(false)
+          }
+        },
+      });
 
     const filteredData = users.filter((data) => {
         const client_name = localStorage.getItem("name");
@@ -433,6 +490,11 @@ export default function UserTable() {
     const indexOfFirstuser = indexOfLastuser - dataPerPage;
     const currentusers = filteredData.slice(indexOfFirstuser, indexOfLastuser);
 
+
+    function createModal() {
+        formik.handleReset();
+        setCreate(!create);
+    }
     return (
         <>
             <div className="w-full dark:text-white">
@@ -467,7 +529,7 @@ export default function UserTable() {
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => {Router.push('register')}} >
+                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={createModal} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -619,7 +681,6 @@ export default function UserTable() {
 
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-
                 <div className="relative p-4 w-full max-w-md max-h-full ">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow">
@@ -638,7 +699,7 @@ export default function UserTable() {
                                 <div className="col-span-2">
                                     <label htmlFor="name" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">{t('name')}</label>
                                     <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder="Type name here"
-                                    readolny/>
+                                    readolny disabled/>
                                 </div>
                                 <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
                                     <label htmlFor="role" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">Role</label>
@@ -660,10 +721,10 @@ export default function UserTable() {
                                     }
                                 
                                     {
-                                        modeModal === 'Edit' ? <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateUser}>{t('save')}</button> : 
+                                        modeModal === 'Edit' ? <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap disabled:cursor-progress" disabled={crudLoading} onClick={updateUser}>{crudLoading ? <LoadingCrud/> : t('save')}</button> : 
                                         <button className="bg-blue-500 hover:bg-blue-700 mt-5 text-white font-bold py-2 px-4 rounded" 
                                         // onClick={creatUser}
-                                        >{t('submit')}</button>
+                                        >{crudLoading ? <LoadingCrud/> : t('submit')}</button>
                                     }
                                 </div>
                         </div>
@@ -671,6 +732,147 @@ export default function UserTable() {
                     </div>
                 </div>
             </div> 
+
+            <div className={`fixed inset-0 ${create ? "flex" : "hidden"} items-center justify-center bg-gray-500 bg-opacity-75 z-50`}>
+                <div className="relative p-4 w-screen md:w-full max-w-2xl max-h-screen">
+                    {/* <!-- Modal content --> */}
+                    <div className="relative bg-white dark:bg-[#243040] rounded-lg shadow">
+                        {/* <!-- Modal header --> */}
+                        <div className="flex items-center justify-between p-4 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                            <h3 className="text-2xl font-semibold text-black dark:text-slate-200">
+                                {`Create ${t('users')}`}
+                            </h3>
+                            <button type="button" className="text-xl bg-transparent w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={createModal}>
+                                <FaTimes />
+                            </button>
+                        </div>
+                        {/* <!-- Modal body --> */}
+                        <div className="p-4">
+                            <form onSubmit={formik.handleSubmit}>
+                                <div className="grid gap-4 mb-4 grid-cols-2">
+                                    <div className="col-span-2 md:col-span-1">
+                                        <label htmlFor="username" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">{t('name')}</label>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            id="username"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Type name here"
+                                            required
+                                        />
+                                        {formik.touched.username && formik.errors.username && (
+                                            <div className="text-red-500 text-xs">{formik.errors.username}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-span-2 md:col-span-1">
+                                        <label htmlFor="email" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Email</label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Type email here"
+                                            required
+                                        />
+                                        {formik.touched.email && formik.errors.email && (
+                                            <div className="text-red-500 text-xs">{formik.errors.email}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-span-2 md:col-span-1">
+                                        <label htmlFor="password" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Password</label>
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            id="password"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Type password here"
+                                            required
+                                        />
+                                        {formik.touched.password && formik.errors.password && (
+                                            <div className="text-red-500 text-xs">{formik.errors.password}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-span-2 md:col-span-1">
+                                        <label htmlFor="passwordMatch" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Confirm Password</label>
+                                        <input
+                                            type="password"
+                                            name="passwordMatch"
+                                            id="passwordMatch"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            placeholder="Confirm password here"
+                                            required
+                                        />
+                                        {formik.touched.passwordMatch && formik.errors.passwordMatch && (
+                                            <div className="text-red-500 text-xs">{formik.errors.passwordMatch}</div>
+                                        )}
+                                    </div>
+                                    {roles === 'sadmin' && (
+                                        <div className={`col-span-1 ${EditUserId === '64fa84403ce06f0129321ced' ? "hidden" : ""}`}>
+                                            <label htmlFor="tenant_id" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Tenant</label>
+                                            <select
+                                                id="tenant_id"
+                                                name="tenant_id"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                                required
+                                            >
+                                                <option value="" hidden>{t('select-tenant')}</option>
+                                                {isLoading ? (
+                                                    <option value="">Loading ...</option>
+                                                ) : tenants.length > 0 ? (
+                                                    tenants.map((tenant) => (
+                                                        <option key={tenant._id} value={tenant._id}>
+                                                            {tenant.company}
+                                                        </option>
+                                                    ))
+                                                ) : (
+                                                    <option value="">{t('tenant-not-found')}</option>
+                                                )}
+                                            </select>
+                                            {formik.touched.tenant_id && formik.errors.tenant_id && (
+                                                <div className="text-red-500 text-xs">{formik.errors.tenant_id}</div>
+                                            )}
+                                        </div>
+                                    )}
+                                    <div className={`${userData.roles == "sadmin" ? 'col-span-1' : 'col-span-2'} ${EditUserId === '64fa84403ce06f0129321ced' ? "hidden" : ""}`}>
+                                        <label htmlFor="role" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">Role</label>
+                                        <select
+                                            id="roles"
+                                            name="roles"
+                                            value={formik.values.roles}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                                            required
+                                        >
+                                            <option value="" disabled>{t('select-role')}</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="staff">Staff</option>
+                                        </select>
+                                        {formik.touched.roles && formik.errors.roles && (
+                                            <div className="text-red-500 text-xs">{formik.errors.roles}</div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex justify-end gap-3 mt-5">
+                                    <button type="submit" disabled={crudLoading} className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white font-bold py-2 px-4 rounded disabled:cursor-progress">
+                                        {crudLoading ? <LoadingCrud /> : t('submit')}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

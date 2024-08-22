@@ -81,7 +81,7 @@ const AccountTable = () => {
     
         const tableColumnNames = Object.keys(filteredData[0]);
         const tableColumnValues = filteredData.map((row) => Object.values(row));
-     
+    
         doc.autoTable({
             head: [tableColumnNames],
             body: tableColumnValues,
@@ -273,7 +273,7 @@ const AccountTable = () => {
                     backgroundColor: "#DFFFDF",
                     color: '#00A600',
                     border: '0.3px solid #00CA00',
-                    padding: '5px 13px',
+                    padding: '5px 22px',
                     fontSize: "12px",
                     borderRadius: '6px',
                     fontWeight: '500', 
@@ -473,7 +473,7 @@ const AccountTable = () => {
                                     currentAccounts.length > 0 ? (
                                         // Jika data ditemukan
                                         currentAccounts.map((data, index) => (
-                                            <tr key={index} className='border text-center dark:border-gray-700'>
+                                            <tr key={index} className='border dark:border-gray-700'>
                                                 <td className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-nowrap'>
                                                     <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.username}`} onClick={() => handleOpenModal(data)}>
                                                         {data.username}
@@ -510,11 +510,6 @@ const AccountTable = () => {
                     <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
                         {renderPagination()}
                     </div>
-
-                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
-                        {renderPagination()}
-                    </div>
-
                     <table className='hidden'ref={tableRef}>
                         <thead>
                             <tr>

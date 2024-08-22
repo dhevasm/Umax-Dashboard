@@ -233,6 +233,7 @@ export default function CampaignTable() {
             setCrudLoading(false)
         } catch (error) {
             setCrudLoading(false)
+            toastr.error('Delete user failed', 'Error')
             console.log(error)
         }
     }
@@ -346,8 +347,9 @@ export default function CampaignTable() {
             const lastData = response.data.Data[response.data.Data.length - 1];
     
                 setTimeout(() => {
-                    console.log(lastData._id);
-                    createMetrics(lastData._id);
+                    // console.log(lastData._id);
+                    // console.log(dateconvert(lastData.start_date));
+                    createMetrics(lastData._id, dateconvert(lastData.start_date));
                 }, 5000); // Menunda selama 5 detik
     
                 setIsCreate(false);
@@ -540,68 +542,66 @@ export default function CampaignTable() {
         }
     }, [])
     
-    function createMetrics(campaignID) {
-        const getRandomValue = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    function createMetrics(campaignID, startDate) {
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
         
-        function getRandomDateInFuture() {
-            const currentDate = new Date();
-            const randomDaysToAdd = Math.floor(Math.random() * 30) + 1; // Menambahkan antara 1 hingga 30 hari
-            currentDate.setDate(currentDate.getDate() + randomDaysToAdd);
-    
-            const year = currentDate.getFullYear();
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
-            const day = String(currentDate.getDate()).padStart(2, '0');
-    
-            return `${year}-${month}-${day}`;
-        }
+        function getRandomFloat(min, max, decimals = 2) {
+            const str = (Math.random() * (max - min) + min).toFixed(decimals);
+            return parseFloat(str);
+        }
 
-        const reach = getRandomValue(80000000, 120000000);
-        const impressions = reach * getRandomValue(2,3);
-        const click = impressions + getRandomValue(1000, 2000);
-        const amountspent = getRandomValue(400000, 5000000);
-        const result = getRandomValue(600, 900);
-        const purchase = getRandomValue(7000000, 8000000);
-        const lpview = click - getRandomValue(5000, 10000);
-        const atc = lpview - getRandomValue(2000, 3000);
-        const ctview = getRandomValue(8000, 12000);
-        const delivery = getRandomValue(80, 90);
-        const leads = getRandomValue(200, 240);
-        const cpc = getRandomValue(2500, 3500);
+        const date = new Date(startDate);
 
+        // Menentukan nilai pengeluaran dan reach
+        const amountSpent = getRandomInt(500000, 3000000); // Pengeluaran dalam Rupiah
+        const reach = getRandomInt(amountSpent, amountSpent * 2); // Reach minimal sama dengan amountSpent
+
+        // Metrik lainnya
+        const clicks = getRandomInt(200, 1500); // Jumlah klik yang lebih tinggi
+        const lpview = getRandomInt(300, 1500); // Jumlah tampilan halaman yang lebih tinggi
+        const atc = getRandomInt(100, 300); // Jumlah add-to-cart yang realistis
+        const ctview = getRandomInt(150, 1000); // Jumlah view yang lebih tinggi
+        const results = getRandomInt(50, 400); // Jumlah hasil yang realistis
+        const impressions = getRandomInt(reach + 500, reach * 2); // Impression lebih besar dari reach
+        const delivery = getRandomInt(90, 100); // Persentase antara 90% - 100%
+        const leads = getRandomInt(30, 300); // Jumlah leads yang realistis
+        
+        // Tentukan harga per pembelian sehingga ROAS lebih besar dari 1
+        const minROAS = 1.1; // Pastikan ROAS lebih besar dari 1
+        const pricePerPurchase = getRandomInt(Math.ceil(amountSpent / 150), Math.ceil(amountSpent / 50)); // Harga per pembelian dalam Rupiah
+        const purchase = Math.ceil((amountSpent * minROAS) / pricePerPurchase); // Jumlah pembelian yang memastikan total pendapatan melebihi amountSpent
+        // Menghitung total pendapatan dari pembelian
+        const totalRevenue = purchase * pricePerPurchase;
+
+        // Menghitung metrik turunan
+        const roas = parseFloat((totalRevenue / amountSpent).toFixed(2)); // Return on Ad Spend (ROAS)
+        const cpc = parseFloat((amountSpent / clicks).toFixed(2)); // Biaya per klik
+        const frequency = parseFloat((impressions / reach).toFixed(2)); // Frekuensi tayangan
+        const ctr = parseFloat(((clicks / impressions) * 100).toFixed(2)); // Click-through rate (CTR) dalam persentase
+        const cpr = parseFloat((amountSpent / results).toFixed(2)); // Biaya per hasil
+        const cpm = parseFloat(((amountSpent / impressions) * 1000).toFixed(2)); // Biaya per seribu tayangan (CPM)
+        const rar = parseFloat((reach / amountSpent).toFixed(2)); // Reach Amount Spend Ratio (RAR)
 
         const formDataMetrics = new FormData();
-        formDataMetrics.append('clicks', click);
+        formDataMetrics.append('clicks', clicks);
         formDataMetrics.append('lpview', lpview);
         formDataMetrics.append('atc', atc);
         formDataMetrics.append('ctview', ctview);
-        formDataMetrics.append('results', result);
-        formDataMetrics.append('amountspent', amountspent);
+        formDataMetrics.append('results', results);
+        formDataMetrics.append('amountspent', amountSpent);
         formDataMetrics.append('reach', reach);
         formDataMetrics.append('impressions', impressions);
         formDataMetrics.append('delivery', delivery);
         formDataMetrics.append('leads', leads);
-        formDataMetrics.append('purchase', purchase);
+        formDataMetrics.append('purchase', totalRevenue);
         formDataMetrics.append('cpc', cpc);
-        formDataMetrics.append('frequency', impressions / reach);
-        formDataMetrics.append('ctr', click / impressions);
-        formDataMetrics.append('cpr', amountspent / result);
-        formDataMetrics.append('cpm', amountspent / (impressions / 1000));
-        formDataMetrics.append('roas', purchase / amountspent);
-
-        const Hitung = new FormData();
-        Hitung.append('tanggal', '2024-02-02');
-        Hitung.append('clicks', click);
-        Hitung.append('lpview', lpview);
-        Hitung.append('atc', atc);
-        Hitung.append('ctview', ctview);
-        Hitung.append('results', result);
-        Hitung.append('amountspent', amountspent);
-        Hitung.append('reach', reach);
-        Hitung.append('impressions', impressions);
-        Hitung.append('delivery', delivery);
-        Hitung.append('leads', leads);
-        Hitung.append('purchase', purchase);
-        Hitung.append('cpc', cpc);
+        formDataMetrics.append('frequency', frequency);
+        formDataMetrics.append('ctr', ctr);
+        formDataMetrics.append('cpr', cpr);
+        formDataMetrics.append('cpm', cpm);
+        formDataMetrics.append('roas', roas);
 
         try{
             const satu = axios.post(`${process.env.NEXT_PUBLIC_API_URL}/metrics-create?campaign_id=${campaignID}&tenantId=${localStorage.getItem('tenantId')}`, formDataMetrics, {
@@ -613,33 +613,47 @@ export default function CampaignTable() {
             ).then((response) => {
                 if(!response.IsError){
                     for(let i = 0; i < 7; i++){
-                        const reach2 = getRandomValue(80000000, 120000000);
-                        const impressions2 = reach2 + getRandomValue(1000,5000);
-                        const click2 = impressions2 + getRandomValue(100000, 200000);
-                        const amountspent2 = getRandomValue(400000, 5000000);
-                        const result2 = getRandomValue(600, 900);
-                        const purchase2 = getRandomValue(7000000, 8000000);
-                        const lpview2 = click2 - getRandomValue(5000, 10000);
-                        const atc2 = lpview2 - getRandomValue(2000, 3000);
-                        const ctview2 = getRandomValue(8000, 12000);
-                        const delivery2 = getRandomValue(80, 90);
-                        const leads2 = getRandomValue(200, 240);
-                        const cpc2 = getRandomValue(2500, 3500);
+                        // Menentukan nilai pengeluaran dan reach
+                        const amountSpent2 = getRandomInt(500000, 3000000); // Pengeluaran dalam Rupiah
+                        const reach2= getRandomInt(amountSpent2, amountSpent2 * 2); // Reach minimal sama dengan amountSpent
 
+                        // Metrik lainnya
+                        const clicks2 = getRandomInt(200, 1500); // Jumlah klik yang lebih tinggi
+                        const lpview2 = getRandomInt(300, 1500); // Jumlah tampilan halaman yang lebih tinggi
+                        const atc2 = getRandomInt(100, 300); // Jumlah add-to-cart yang realistis
+                        const ctview2 = getRandomInt(150, 1000); // Jumlah view yang lebih tinggi
+                        const results2 = getRandomInt(50, 400); // Jumlah hasil yang realistis
+                        const impressions2 = getRandomInt(reach2 + 500, reach2 * 2); // Impression lebih besar dari reach
+                        const delivery2 = getRandomInt(90, 100); // Persentase antara 90% - 100%
+                        const leads2 = getRandomInt(30, 300); // Jumlah leads yang realistis
 
+                        // Tentukan harga per pembelian sehingga ROAS lebih besar dari 1
+                        const minROAS2 = 1.1; // Pastikan ROAS lebih besar dari 1
+                        const pricePerPurchase2 = getRandomInt(Math.ceil(amountSpent2 / 150), Math.ceil(amountSpent2 / 50)); // Harga per pembelian dalam Rupiah
+                        const purchase2 = Math.ceil((amountSpent2 * minROAS2) / pricePerPurchase2); // Jumlah pembelian yang memastikan total pendapatan melebihi amountSpent
+
+                        // Menghitung total pendapatan dari pembelian
+                        const totalRevenue2 = purchase2 * pricePerPurchase2;
+
+                        // Menghitung metrik turunan
+                        const roas2 = parseFloat((totalRevenue2 / amountSpent2).toFixed(2)); // Return on Ad Spend (ROAS)
+                        const cpc2 = parseFloat((amountSpent2 / clicks2).toFixed(2)); // Biaya per klik
+                        
+                        const formattedDate = date.toISOString().split('T')[0];
                         const formDua = new FormData()
-                        formDua.append('tanggal', `2024-08-${10 + i}` );
-                        formDua.append('clicks', click2);
+                        formDua.append('tanggal', formattedDate);
+                        date.setDate(date.getDate() + 1);
+                        formDua.append('clicks', clicks2);
                         formDua.append('lpview', lpview2);
                         formDua.append('atc', atc2);
                         formDua.append('ctview', ctview2);
-                        formDua.append('results', result2);
-                        formDua.append('amountspent', amountspent2);
+                        formDua.append('results', results2);
+                        formDua.append('amountspent', amountSpent2);
                         formDua.append('reach', reach2);
                         formDua.append('impressions', impressions2);
                         formDua.append('delivery', delivery2);
                         formDua.append('leads', leads2);
-                        formDua.append('purchase', purchase2);
+                        formDua.append('purchase', totalRevenue2);
                         formDua.append('cpc', cpc2);
                         try {
                             const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, formDua , {

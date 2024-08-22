@@ -101,6 +101,17 @@ function AdminDashboard() {
         }
     }, [updateCard])
 
+    function isTokenExpired(token) {
+        // Decode the token (base64)
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        
+        // Dapatkan timestamp saat ini
+        const currentTime = Math.floor(Date.now() / 1000);
+    
+        // Cek apakah token sudah expired
+        return payload.exp < currentTime;
+    }
+
     useEffect(() => {
         if (typeof window !== "undefined") {
             const token = localStorage.getItem('jwtToken')
@@ -112,6 +123,15 @@ function AdminDashboard() {
             } else if (role !== 'admin' && role !== 'sadmin') {
                 Swal.fire('Authorization failed', 'Request Denied', 'error').then(() => {
                     router.push(`/${localStorage.getItem('lang')}/dashboard`)
+                })
+            } else if(isTokenExpired(token)) {
+                Swal.fire('Authentication failed', 'Token Expired', 'error').then(() => {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('tenantId');
+                    localStorage.removeItem('roles');
+                    localStorage.removeItem('name');
+                    localStorage.removeItem('lang');
+                    router.push('/en/login')
                 })
             }
         }

@@ -260,7 +260,7 @@ const ClientTable = () => {
             backgroundColor: "#DFFFDF",
             color: '#00A600',
             border: '0.3px solid #00CA00',
-            padding: '5px 13px',
+            padding: '5px 22px',
             fontSize: "12px",
             borderRadius: '6px',
             fontWeight: '500', 
@@ -455,7 +455,7 @@ const ClientTable = () => {
                                 ) : currentClients.length > 0 ? (
                                     // Jika data ditemukan
                                     currentClients.map((data, index) => (
-                                        <tr key={index} className='text-center'>
+                                        <tr key={index} className='text-left'>
                                             <td className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-nowrap'>
                                                 <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data, "edit")}>
                                                     {data.name}

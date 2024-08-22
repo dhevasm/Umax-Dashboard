@@ -251,7 +251,7 @@
       "details-of": "Detail dari",
       "create-client": "Tambah Klien",
       "save": "Simpan",
-      "Delete" : "Hapus"
+      "delete" : "Hapus"
     },
 
     "admin-dashboard": {
@@ -366,7 +366,7 @@
       "language": "Bahasa",
       "select-language": "Pilih Bahasa",
       "language-error": "Bahasa tidak boleh kosong",
-      "culture": "Kultur",
+      "culture": "Kultur",  
       "select-culture": "Pilih Kultur",
       "culture-error": "Kultur tidak boleh kosong",
       "timezone": "Zona Waktu",
@@ -376,7 +376,9 @@
       "select-currency": "Pilih Mata Uang",
       "currency-error": "Mata Uang tidak boleh kosong",
       "english": "Inggris",
-      "indonesian": "Indonesia"
+      "indonesian": "Indonesia",
+      "delete": "Hapus",
+      "currency-position" :"Posisi Mata Uang"
     },
 
     "admin-users": {
@@ -391,7 +393,21 @@
       "save": "Simpan",
       "submit": "Kirim",
       "not-found": "Pengguna tidak ditemukan",
-      "delete" : "Hapus"
+      "delete": "Hapus",
+      "holder-name": "Nama",
+      "holder-email": "contoh@gmail.com",
+      "holder-confirm": "Konfirmasi Password",
+      "select-tenant": "Pilih Tenant",
+      "select-role": "Pilih Role",
+      "name-error": "Nama tidak boleh kosong",
+      "email-error": "Email tidak boleh kosong",
+      "email-error2": "Email tidak valid",
+      "password-error":"Password tidak boleh kosong",
+      "password-error2":"Password tidak sama",
+      "confirm-error":"Konfirmasi Password tidak boleh kosong",
+      "tenant-error": "Pilih Tenant",
+      "role-error": "Pilih Role Pengguna",
+      "tenant-not-found": "Tenant tidak ditemukan"
     },
 
     "admin-campaigns": {

@@ -265,6 +265,7 @@ export default function ClientTable() {
             toastr.success(tdel('suc-msg'), tdel('success'))
         } catch (error) {
             setCrudLoading(false)
+            toastr.error('Delete user failed', 'Error')
             console.log(error)
         }
     }
