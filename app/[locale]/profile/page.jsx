@@ -56,7 +56,6 @@ const Profile = () => {
                 timezoneName: data.timezone_name,
                 culture: data.culture,
             });
-            console.log(data.currency);
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
@@ -135,7 +134,7 @@ const Profile = () => {
                             {image ? (
                                 <Image src={`data:image/png;base64,${image}`} className="object-cover w-full h-full" width={128} height={128} alt="Profile" />
                             ) : (
-                                <Image src={'/assets/defaultProfil.jpg'} width={128} height={128} alt='Profile'/>
+                                <Image src={'/assets/defaultProfil.jpg'} width={128} height={128} priority alt='Profile'/>
                             )}
                         </div>
                         <h1 className="mt-4 text-white text-2xl font-semibold">{name}</h1>

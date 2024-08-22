@@ -544,6 +544,7 @@ function AdminNavbar({ userData }) {
               className="w-[60px] h-[60px] decoration-white"
               width={40}
               height={40}
+              priority
             />
             {/* <p className="text-white font-sans text-3xl">UMAX</p> */}
             <Image
@@ -552,6 +553,7 @@ function AdminNavbar({ userData }) {
               className="w-[140px] h-10 decoration-white mr-1 mt-2"
               width={140}
               height={40}
+              priority
             />
           </div>
           <button onClick={hideHandle} className="mx-5 me-20">
@@ -745,13 +747,19 @@ function AdminNavbar({ userData }) {
                     {isDropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 z-50">
                             <div className="flex items-center mb-4">
-                                <Image
-                                    src={`data:image/png;base64, ${userData.image}`}
-                                    alt="profile"
-                                    className="rounded-full w-[50px] h-[50px] bg-slate-200"
-                                    width={50}
-                                    height={50}   
-                                />
+                            <Image
+                              src={`data:image/png;base64,${userData.image}`}
+                              alt="profile"
+                              className="rounded-full bg-slate-200"
+                              width={50}
+                              height={50}
+                              style={{
+                                objectFit: 'cover',
+                                width: '50px',
+                                height: '50px',
+                              }}
+                            />
+
                                 <div className="ml-3">
                                     <h3 className="font-medium text-black dark:text-white">{userData.name}</h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-300">{userData.roles}</p>

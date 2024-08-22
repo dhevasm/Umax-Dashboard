@@ -668,17 +668,17 @@ export default function AccountTable() {
                             <div className="flex flex-col md:flex-row">
                                 {/* Button */}
                                 <div className="flex mb-4">
-                                    <button className="bg-white dark:bg-slate-800 dark:text-white border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <AiOutlineFilePdf/>
                                         </IconContext.Provider>
                                     </button>
-                                    <button className="bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <RiFileExcel2Line/>
                                         </IconContext.Provider>
                                     </button>
-                                    <button className="bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <BiPlus className="text-thin"/>
                                         </IconContext.Provider>
@@ -687,7 +687,7 @@ export default function AccountTable() {
                                         userData.roles == "sadmin" && (
                                             <div>
                                                 <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 rounded-e-md md:rounded-none text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 rounded-e-md md:rounded-none text-sm block w-full px-3 py-2 select-no-arrow"
                                                     value={selectedTenant}
                                                     onChange={handleSelectedTenant}
                                                 >
@@ -709,7 +709,7 @@ export default function AccountTable() {
                                 <div className="flex w-[100%]">
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border rounded-s-md md:rounded-none dark:border-gray-500  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border rounded-s-md md:rounded-none dark:border-gray-500  text-sm block w-full px-3 py-2 select-no-arrow"
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="" hidden disabled>Status</option>
@@ -720,7 +720,7 @@ export default function AccountTable() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 rounded-e-md  text-sm block w-full px-3 py-2 select-no-arrow" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 rounded-e-md  text-sm block w-full px-3 py-2 select-no-arrow"
                                         value={selectedPlatform}
                                         onChange={handlePlatformChange}
                                     >
@@ -742,8 +742,7 @@ export default function AccountTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 dark:bg-slate-800 dark:text-white border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')}
-                                    defaultValue="" 
+                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 dark:bg-slate-800 dark:text-white border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     />

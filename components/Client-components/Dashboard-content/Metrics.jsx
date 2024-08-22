@@ -14,7 +14,6 @@ export default function Metrics({ id }) {
     // Memoize getMetricByCampaign with useCallback
     const getMetricByCampaign = useCallback(async () => {
         if (!id) {
-            console.warn("No campaign ID provided");
             return;
         }
         
@@ -67,9 +66,32 @@ export default function Metrics({ id }) {
     };
 
     const cleanValue = (value) => {
-        return parseFloat(value.replace(/%|x|[^0-9.-]+/g, "")) || 0;
-    };
-
+        // Remove the "Rp" prefix if it exists
+        value = value.replace(/^Rp\s*/, '');
+    
+        // Remove the percentage sign and convert to a number
+        if (value.includes('%')) {
+            return parseFloat(value.replace('%', ''));
+        }
+    
+        // Remove the 'x' sign and convert to a number
+        if (value.includes('x')) {
+            return parseFloat(value.replace('x', ''));
+        }
+    
+        // Replace periods (.) used as thousand separators with an empty string
+        value = value.replace(/\./g, '');
+    
+        // Replace commas (,) used as decimal separators with a period
+        value = value.replace(',', '.');
+    
+        // Convert the cleaned string to a float
+        let number = parseFloat(value) || 0;
+    
+        // Return as an integer if the number is a whole number (e.g., 1.0 becomes 1)
+        return Number.isInteger(number) ? number : number;
+    }; 
+    
     const calculateMetrics = (metricName) => {
         const values = history.slice(-7).map(item => cleanValue(item[metricName]));
         const total = values.reduce((acc, value) => acc + value, 0);
@@ -79,7 +101,7 @@ export default function Metrics({ id }) {
             average: average.toFixed(1)
         };
     };
-
+    
     const metricCalculations = {
         amountspent: calculateMetrics('amountspent'),
         reach: calculateMetrics('reach'),
@@ -93,7 +115,7 @@ export default function Metrics({ id }) {
         atc: calculateMetrics('atc'),
         roas: calculateMetrics('roas'),
         realroas: calculateMetrics('realroas')
-    };
+    };    
 
     return (    
         <div className="w-full">

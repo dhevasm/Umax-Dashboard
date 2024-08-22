@@ -359,7 +359,7 @@
       "contact-error": "Contact is required",
       "holder-contact": "+1234567890",
       "format": "Format",
-      "currency_position": "Currency Position",
+      "currency-position": "Currency Position",
       "left": "Left",
       "right": "Right",
       "language": "Language",

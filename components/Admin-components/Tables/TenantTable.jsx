@@ -17,6 +17,7 @@ import { BiPlus } from "react-icons/bi"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { useTranslations } from "next-intl"
+
 export default function TenantTable() {
 
     const [tenants, setTenants] = useState([])
@@ -25,6 +26,7 @@ export default function TenantTable() {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [crudLoading, setCrudLoading] = useState(false)
     const {sidebarHide, setSidebarHide, updateCard, setUpdateCard, changeTable, setChangeTable, userData, dataDashboard } = useContext(AdminDashboardContext)
     const [isLoading, setIsLoading] = useState(false)
     const [crudLoading, setCrudLoading] = useState(false)
@@ -42,6 +44,7 @@ export default function TenantTable() {
     const t = useTranslations('admin-tenants')
 
     const [values, setValues] = useState({
+
         name: '', 
         address: '', 
         contact: '', 
@@ -53,14 +56,14 @@ export default function TenantTable() {
         country:'', 
         city:''
     });
-    
+
     const [error, setError] = useState({
         name: '',
         address: '',
         contact: '',
         email: '',
-        language:'',
-        culture : '',
+        language: '',
+        culture: '',
         timezone: '',
         currency : '',
         country : '', 
@@ -135,11 +138,8 @@ export default function TenantTable() {
     }
 
     // Validasi Form 
-    
-
     const validateForm = useCallback(() => {
         let errors = {};
-    
         if (touched.name && values.name === '') {
             errors.name = t('name-error');
         }
@@ -204,6 +204,13 @@ export default function TenantTable() {
         validateForm();
     };
 
+    const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched(prevTouched => ({
+        ...prevTouched,
+        [name]: true
+    }));
+    };
     
     function handleDelete(tenant_id){
         Swal.fire({
@@ -841,7 +848,8 @@ export default function TenantTable() {
                                         error.name && <p className="text-red-500 text-sm">*</p>
                                     }
                                     </label>
-                                    <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
+                                    <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
+
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                     
                                 {
@@ -852,7 +860,8 @@ export default function TenantTable() {
                                     <label htmlFor="address" className="mb-2 text-sm font-normal  flex">{t('company-address')} {
                                         error.address && <p className="text-red-500 text-sm">*</p>
                                     }</label>
-                                    <input type="text" name="address" id="address" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5 " placeholder={t('holder-address')}
+                                    <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-address')}
+
                                     required onChange={handleChange} onBlur={handleBlur}/>
                                      {
                                     touched.address && error.address && <p className="text-red-500 text-xs">{error.address}</p>
@@ -863,7 +872,8 @@ export default function TenantTable() {
                                     <label htmlFor="country" className="flex mb-2 text-sm font-normal ">{t('country')} {
                                             error.country && <p className="text-red-500 text-sm">*</p>
                                     }</label>
-                                    <select id="country" name="country" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5" onChange={handleChange} onBlur={handleBlur}  >
+                                    <select id="country" name="country" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}  >
+
                                         <option value="" disabled hidden>{t('select-country')}</option>
                                         {
                                             Country.length > 0 ? Country.map((item, index) => (
@@ -879,7 +889,8 @@ export default function TenantTable() {
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="city" className="block mb-2 text-sm font-normal ">{t('city')} {
                                         error.city && <p className="text-red-500 text-sm">*</p>}</label>
-                                    <select id="city" name="city" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5" onChange={handleChange} onBlur={handleBlur}>
+                                    <select id="city" name="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+
                                         {
                                             City.length > 0 ? City.map((item, index) => (
                                                 <option key={index} value={item}>{item}</option>
@@ -895,7 +906,9 @@ export default function TenantTable() {
                                     <label htmlFor="email" className="flex mb-2 text-sm font-normal  ">{t('email')} {
                                         error.email && <p className="text-red-500 text-sm">*</p>
                                     }</label>
-                                    <input type="email" name="email" id="email" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5 " placeholder={t('holder-email')} required onChange={handleChange} onBlur={handleBlur}/>
+
+                                    <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required onChange={handleChange} onBlur={handleBlur}/>
+
                                     {
                                     touched.email && error.email && <p className="text-red-500 text-xs">{error.email}</p>
                                 }
@@ -905,7 +918,8 @@ export default function TenantTable() {
                                     <label htmlFor="contact" className="flex mb-2 text-sm font-normal  ">{t('contact')} {
                                         error.contact && <p className="text-red-500 text-sm">*</p>
                                     }</label>
-                                    <input type="number" name="contact" id="contact" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5 " placeholder={t('holder-contact')} required onChange={handleChange} onBlur={handleBlur}/>
+                                    <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-contact')} required onChange={handleChange} onBlur={handleBlur}/>
+
                                     {
                                     touched.contact && error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
                                 }
@@ -925,7 +939,7 @@ export default function TenantTable() {
                                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                         <div className="text-sm font-normal">{t('left')}($-)</div>
                                         {
-                                    error.currency_position && <p className="text-red-500 text-xs">{error.currency_position}</p>
+                                        error.currency_position && <p className="text-red-500 text-xs">{error.currency_position}</p>
                                 }
                                     </div>
                                     </label>
@@ -937,20 +951,20 @@ export default function TenantTable() {
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="language" className="flex mb-2 text-sm font-normal ">Language {
                                         error.language && <p className="text-red-500 text-sm">*</p>}</label>
-                                    <select id="language" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, language: e.target.value})}>
+                                    <select id="language" name="language" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                         <option value="" disabled hidden>Select Language</option>
                                         <option value="en">English</option>
                                         <option value="id">Indonesia</option>
                                     </select>
                                     {
-                                        error.language && <p className="text-red-500 text-xs">{error.language}</p>
+                                        touched.language && error.language && <p className="text-red-500 text-xs">{error.language}</p>
                                     }
                                 </div>
 
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="culture" className="flex mb-2xs font-normal ">Culture {
                                         error.culture && <p className="text-red-500 text-sm">*</p>}</label>
-                                    <select id="culture" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, culture: e.target.value})}>
+                                    <select id="culture" name="culture" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                     <option value="" disabled hidden>Select Culture</option>
                                         {
                                             culture.length > 0 ? culture.map((item, index) => (
@@ -959,13 +973,13 @@ export default function TenantTable() {
                                         }
                                     </select>
                                     {
-                                        error.culture && <p className="text-red-500 text-xs">{error.culture}</p>
+                                        touched.culture && error.culture && <p className="text-red-500 text-xs">{error.culture}</p>
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="input_timezone" className="flex mb-2 text-sm font-normal ">Time Zone {
                                         error.timezone && <p className="text-red-500 text-sm">*</p>}</label>
-                                    <select id="input_timezone" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, timezone: e.target.value})}>
+                                    <select id="input_timezone" name="input_timezone" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                     <option value="" index={0} disabled hidden>Select Timezone</option>
                                     {
                                             timezone.length > 0 ? timezone.map((item, index) => (
@@ -974,13 +988,13 @@ export default function TenantTable() {
                                         }
                                     </select>
                                     {
-                                        error.timezone && <p className="text-red-500 text-xs">{error.timezone}</p>
+                                        touched.timezone && error.timezone && <p className="text-red-500 text-xs">{error.timezone}</p>
                                     }
                                 </div>
                                 <div className="col-span-2 md:col-span-1">
                                     <label htmlFor="currency" className="flex mb-2 text-sm font-medium ">Currency {
                                         error.currency && <p className="text-red-500 text-sm">*</p>}</label>
-                                    <select id="currency" className="bg-white dark:bg-[#1d2a3a] dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] placeholder-[#858c96] outline-none block w-full p-2.5" defaultValue={""} onChange={(e) => setValues({...values, currency: e.target.value})}>
+                                    <select id="currency" name="currency" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                     <option value="" disabled hidden>Select Currency</option>
                                     {
                                             currency.length > 0 ? currency.map((item, index) => (
@@ -989,7 +1003,7 @@ export default function TenantTable() {
                                         }
                                     </select>
                                     {
-                                        error.currency && <p className="text-red-500 text-xs">{error.currency}</p>
+                                        touched.currency && error.currency && <p className="text-red-500 text-xs">{error.currency}</p>
                                     }
                                     </div>
                                 </div>

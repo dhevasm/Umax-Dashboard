@@ -360,7 +360,7 @@
       "contact-error": "Kontak tidak boleh kosong",
       "holder-contact": "+1234567890",
       "format": "Format",
-      "currency_position": "Posisi Mata Uang",
+      "currency-position": "Posisi Mata Uang",
       "left": "Kiri",
       "right": "Kanan",
       "language": "Bahasa",
