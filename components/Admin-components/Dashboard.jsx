@@ -437,6 +437,28 @@ export default function Dashboard({ tenant_id }) {
             toastr.error("tenant register failed")
             return;
         }
+
+        if (data.subscription == true) {
+        const formData2 = new FormData();
+        formData2.append("subscription", true);
+        const response2 = await axios.put(
+            `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${response.data.tenant_id}`,
+            formData2,
+            {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+            }
+        );
+
+        if (response2.data.IsError == false) {
+            toastr.success("subscription success");
+        } else {
+            toastr.error("subscription failed");
+            return;
+        }
+        }
+
         createUser(data, response.data.tenant_id, request_id);
     }
 
