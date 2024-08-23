@@ -65,7 +65,6 @@ export default function Dashboard({ tenant_id }) {
 
     useEffect(() => {
         if(roles == 'admin'){
-            setFilterCampaign("reach")
             getCampaign()
         }
         if(roles == 'sadmin'){
@@ -93,9 +92,9 @@ export default function Dashboard({ tenant_id }) {
 
     async function getChartData() { 
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chart-data`, {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          },
+            headers: {
+                authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
         })
         const data = res.data.Output
         setChartData(data)
@@ -108,32 +107,32 @@ export default function Dashboard({ tenant_id }) {
 
     const handleReject = async (request_id, name, email) => {
         Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d33",
-          cancelButtonColor: "#3085d6",
-          confirmButtonText: "Yes, Reject it!",
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, Reject it!",
         }).then(async (result) => {
-          if (result.isConfirmed) {
-            setLoading(true);
-            await axios
-              .delete(
-                `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
-                {
-                  headers: {
-                    authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                  },
-                }
-              )
-              .then(async (response) => {
-                if (!response.IsError) {
-                  const formData = new FormData();
-                  formData.append("from", "UMAX Dashboard Team");
-                  formData.append("to", `${email}`);
-                  formData.append(
-                    "body",
+            if (result.isConfirmed) {
+                setLoading(true);
+                await axios
+                .delete(
+                    `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
+                    {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                    },
+                    }
+                )
+                .then(async (response) => {
+                    if (!response.IsError) {
+                    const formData = new FormData();
+                    formData.append("from", "UMAX Dashboard Team");
+                    formData.append("to", `${email}`);
+                    formData.append(
+                        "body",
                     `
                                 <!DOCTYPE html>
                                 <html lang="en">
@@ -202,78 +201,78 @@ export default function Dashboard({ tenant_id }) {
                                 </body>
                                 </html>
                             `
-                  );
-    
-                  try {
-                    await axios.post("/en/api/send", formData, {
-                      headers: {
-                        "Content-Type": "multipart/form-data",
-                      },
+                    );
+        
+                    try {
+                        await axios.post("/en/api/send", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
                     });
                     // Mengatur ulang formulir jika pengiriman berhasil
                     setLoading(false);
-                    Swal.fire("Success", "Request has rejected", "success").then(
-                      () => {
-                        getRequestList();
+                        Swal.fire("Success", "Request has rejected", "success").then(
+                        () => {
+                            getRequestList();
+                            setLoading(false);
+                        }
+                        );
+                    } catch (error) {
+                        console.error(error);
                         setLoading(false);
-                      }
-                    );
-                  } catch (error) {
-                    console.error(error);
-                    setLoading(false);
-                    Swal.fire("Error", "Failed to reject request", "error");
-                  }
-                } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: response.ErrorMessage,
-                  }).then(() => {
-                    setLoading(false);
-                  });
-                }
-              });
-          }
-        });
-      };
-
-      const createUser = async (datatenant, tenant_id, request_id) => {
-        const formData = new FormData();
-        formData.append("name", datatenant.username);
-        formData.append("email", datatenant.email);
-        formData.append("password", datatenant.password);
-        formData.append("confirm_password", datatenant.password);
-        formData.append("role", "admin");
-        await axios
-          .post(
-            `${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${tenant_id}`,
-            formData,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-              },
+                        Swal.fire("Error", "Failed to reject request", "error");
+                    }
+                    } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: response.ErrorMessage,
+                    }).then(() => {
+                        setLoading(false);
+                    });
+                    }
+                });
             }
-          )
-          .then(async (res) => {
-            if (res.data.IsError === false) {
-              toastr.success("user register success");
-              await axios
-                .delete(
-                  `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
-                  {
-                    headers: {
-                      authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                    },
-                  }
-                )
-                .then(async (response) => {
-                  if (!response.IsError) {
-                    const formData = new FormData();
-                    formData.append("from", "UMAX Dashboard Team");
-                    formData.append("to", `${datatenant.email}`);
-                    formData.append(
-                      "body",
-                      `
+            });
+        };
+
+        const createUser = async (datatenant, tenant_id, request_id) => {
+            const formData = new FormData();
+            formData.append("name", datatenant.username);
+            formData.append("email", datatenant.email);
+            formData.append("password", datatenant.password);
+            formData.append("confirm_password", datatenant.password);
+            formData.append("role", "admin");
+            await axios
+            .post(
+                `${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${tenant_id}`,
+                formData,
+                {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                },
+                }
+            )
+            .then(async (res) => {
+                if (res.data.IsError === false) {
+                toastr.success("user register success");
+                await axios
+                    .delete(
+                    `${process.env.NEXT_PUBLIC_API_URL}/request-reject?request_id=${request_id}`,
+                    {
+                        headers: {
+                        authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                        },
+                    }
+                    )
+                    .then(async (response) => {
+                    if (!response.IsError) {
+                        const formData = new FormData();
+                        formData.append("from", "UMAX Dashboard Team");
+                        formData.append("to", `${datatenant.email}`);
+                        formData.append(
+                        "body",
+                        `
                                 <!DOCTYPE html>
                                 <html lang="en">
                                 <head>
@@ -360,24 +359,24 @@ export default function Dashboard({ tenant_id }) {
                         setLoading(false);
                         getRequestList();
                       });
-                    } catch (error) {
-                      console.error(error);
-                      setLoading(false);
-                      Swal.fire("Error", "Failed to Accept request", "error");
+                        } catch (error) {
+                        console.error(error);
+                        setLoading(false);
+                        Swal.fire("Error", "Failed to Accept request", "error");
+                        }
+                    } else {
+                        Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: response.ErrorMessage,
+                        });
                     }
-                  } else {
-                    Swal.fire({
-                      icon: "error",
-                      title: "Oops...",
-                      text: response.ErrorMessage,
                     });
-                  }
-                });
-            }else{
-              toastr.error("user register failed");
-            }
-          });
-      };
+                }else{
+                toastr.error("user register failed");
+                }
+            });
+        };
     
     const getTenantID = async(datatenant, request_id) => {
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`,{

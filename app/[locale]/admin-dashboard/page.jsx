@@ -55,7 +55,7 @@ function AdminDashboard() {
         isDarkMode,
         setIsDarkMode,
         navbarBrandHide,
-        setNavbarBrandHide
+        setNavbarBrandHide,
     }
 
     useEffect(() => {
