@@ -558,13 +558,12 @@ export default function CampaignTable() {
         // Menentukan nilai pengeluaran dan reach
         const amountSpent = getRandomInt(500000, 3000000); // Pengeluaran dalam Rupiah
         const reach = getRandomInt(amountSpent, amountSpent * 2); // Reach minimal sama dengan amountSpent
-
         // Metrik lainnya
-        const clicks = getRandomInt(200, 1500); // Jumlah klik yang lebih tinggi
+        const clicks = getRandomInt(1500, 3000); // Jumlah klik yang lebih tinggi
         const lpview = getRandomInt(300, 1500); // Jumlah tampilan halaman yang lebih tinggi
-        const atc = getRandomInt(100, 300); // Jumlah add-to-cart yang realistis
+        const atc = getRandomInt(20, 100); // Jumlah add-to-cart yang realistis
         const ctview = getRandomInt(150, 1000); // Jumlah view yang lebih tinggi
-        const results = getRandomInt(50, 400); // Jumlah hasil yang realistis
+        const results = getRandomInt(50, 400); // Jumla h hasil yang realistis
         const impressions = getRandomInt(reach + 500, reach * 2); // Impression lebih besar dari reach
         const delivery = getRandomInt(90, 100); // Persentase antara 90% - 100%
         const leads = getRandomInt(30, 300); // Jumlah leads yang realistis
@@ -619,9 +618,9 @@ export default function CampaignTable() {
                         const reach2= getRandomInt(amountSpent2, amountSpent2 * 2); // Reach minimal sama dengan amountSpent
 
                         // Metrik lainnya
-                        const clicks2 = getRandomInt(200, 1500); // Jumlah klik yang lebih tinggi
+                        const clicks2 = getRandomInt(1500, 2000); // Jumlah klik yang lebih tinggi
                         const lpview2 = getRandomInt(300, 1500); // Jumlah tampilan halaman yang lebih tinggi
-                        const atc2 = getRandomInt(100, 300); // Jumlah add-to-cart yang realistis
+                        const atc2 = getRandomInt(20, 100); // Jumlah add-to-cart yang realistis
                         const ctview2 = getRandomInt(150, 1000); // Jumlah view yang lebih tinggi
                         const results2 = getRandomInt(50, 400); // Jumlah hasil yang realistis
                         const impressions2 = getRandomInt(reach2 + 500, reach2 * 2); // Impression lebih besar dari reach

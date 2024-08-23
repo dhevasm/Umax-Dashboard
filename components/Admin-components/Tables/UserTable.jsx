@@ -19,7 +19,6 @@ import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
-
 import { useFormik } from "formik"
 
 export default function UserTable() {
@@ -33,12 +32,12 @@ export default function UserTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true);
-    const [crudLoading, setCrudLoading] = useState(false)
-    const [create, setCreate] = useState(false)
-    const roles = localStorage.getItem("roles")
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
+    const [crudLoading, setCrudLoading] = useState(false)
+    const [create, setCreate] = useState(false)
+    const roles = localStorage.getItem("roles")
 
     function LoadingCrud() {
             return (
@@ -97,6 +96,12 @@ export default function UserTable() {
           }).then((result) => {
             if (result.isConfirmed) {
             deleteuser(user_id)
+            // Swal.fire({
+            //     title: tdel('success'),
+            //     text: tdel('suc-msg'),
+            //     icon: "success"
+            // })
+            
             setTimeout(() => {
                 closeModal()
             }, 100);
@@ -140,11 +145,12 @@ export default function UserTable() {
           }).then((result) => {
             if (result.isConfirmed) {
                 onDownload();
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('success')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(`${tfile('success')}`, `${tfile('success')}`)
             }
           });
     }
@@ -174,11 +180,12 @@ export default function UserTable() {
                     body: users.map((user) => [user.name, user.roles, user.email, user.company_name]),
                 });
                 doc.save('DataUsers.pdf');
-              Swal.fire({
-                title: `${tfile('success')}`,
-                text: `${tfile('suc-msg')}`,
-                icon: "success"
-              });
+            //   Swal.fire({
+            //     title: `${tfile('success')}`,
+            //     text: `${tfile('suc-msg')}`,
+            //     icon: "success"
+            //   });
+            toastr.success(`${tfile('success')}`, `${tfile('suc-msg')}`)
             }
           });
        
@@ -218,7 +225,6 @@ export default function UserTable() {
     }, [])
 
     async function updateUser(){
-        setCrudLoading(true)
         if(EditUserId !== null) {
             const role = document.getElementById('role').value
             const formData = new FormData();
@@ -233,7 +239,6 @@ export default function UserTable() {
             })
     
             if(response.data.Output.includes("Successfully changed") || response.data.Output.includes("Berhasil")){
-                setCrudLoading(false)
                 getUsers()
                 closeModal()
                 // Swal.fire("Success", "user Updated", "success")
@@ -254,7 +259,6 @@ export default function UserTable() {
     const [tenants, setTenants] = useState([])
 
     async function getSelectFrontend(){
-        setIsLoading(true)
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
             setTimezone(response.data)
         })
@@ -268,19 +272,14 @@ export default function UserTable() {
         })
 
         if(localStorage.getItem('roles') == 'sadmin'){
-            await axios.get('https://umaxxxxx-1-r8435045.deta.app/tenant-get-all', {
+            await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
                 headers : {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                 }
             }).then((response) => {
                 setTenants(response.data.Data)
-                setIsLoading(false)
-            }).catch((error) => {
-                console.log(error)
-                setIsLoading(false)
             })
         }
-        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -292,16 +291,6 @@ export default function UserTable() {
           <div className="flex justify-center items-center h-20">
             <div className="relative">
               <div className="w-10 h-10 border-4 border-[#1C2434] dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
-            </div>
-          </div>
-        );
-    };
-
-    function LoadingCrud() {
-        return (
-          <div className="flex justify-center items-center h-6">
-            <div className="relative">
-              <div className="w-6 h-6 border-4 dark:border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
             </div>
           </div>
         );
@@ -362,15 +351,13 @@ export default function UserTable() {
           return errors;
         },
         onSubmit: async (values) => {
-        setCrudLoading(true)
           const url = roles == 'sadmin' ? `${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${values.tenant_id}` : `${process.env.NEXT_PUBLIC_API_URL}/register`;
           try {
             const formData = new FormData();
-            formData.append('name', values.username);
             formData.append('email', values.email);
             formData.append('password', values.password);
             formData.append('confirm_password', values.passwordMatch);
-            formData.append('role', values.role);
+            formData.append('role', values.roles);
     
             const response = await axios.post(`${url}`, formData, {
               headers: {
@@ -401,10 +388,19 @@ export default function UserTable() {
         // if(role != 'client') {
         return (
             (!selectedRole || data.roles === selectedRole) &&
-            (!selectedTenant || data.company_name.toLowerCase().includes(selectedTenant.toLowerCase())) &&
+            (!selectedTenant || data.tenant_id.toLowerCase() == selectedTenant.toLowerCase()) &&
             (!searchTerm ||
                 data.name.toLowerCase().includes(searchTerm.toLowerCase()))
         );
+        // } else {
+        //     return (
+        //         (!selectedPlatform || data.platform === Number(selectedPlatform)) &&
+        //         (!selectedObjective || data.objective === Number(selectedObjective)) &&
+        //         (!searchTerm ||
+        //             data.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        //         (data.client_name.toLowerCase() == client_name.toLowerCase())
+        //     );
+        // }
     });
     // Filter function end
 
@@ -541,9 +537,30 @@ export default function UserTable() {
                                 {/* Button end */}
 
                                 {/* Filter by select */}
-                                <div className="mb-4">
+                                <div className="mb-4 flex">
+                                {
+                                    userData.roles == 'sadmin' && (
+                                        <>
+                                            <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
+                                            <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e text-sm block w-full px-3 py-2" defaultValue={0}
+                                            value={selectedTenant} onChange={handleTenantChange}
+                                            >
+                                                <option value="" key={0} disabled hidden>Tenant 
+                                                </option>
+                                                <option value="" key={0}> All Tenant </option>
+                                                {
+                                                    tenants.map((tenant, index) => {    
+                                                        return (
+                                                            <option value={tenant._id} key={index + 1}>{tenant.company}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>  
+                                        </>
+                                    )
+                                }
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2"
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
                                         <option value="" key={0} disabled hidden>Role 
@@ -553,6 +570,7 @@ export default function UserTable() {
                                         <option value="admin" key={2}>Admin</option>
                                         <option value="staff" key={3}>Staff</option>
                                     </select>  
+                                    
                                 </div>
                                 {/* Filter by select end */}
                             </div>
@@ -617,7 +635,6 @@ export default function UserTable() {
                                     }
                                 </tbody>
                             </table>
-
                             <table className="w-full text-sm text-left hidden" ref={tableRef}>
                                 <thead className="text-md text-left uppercase bg-white dark:bg-slate-700">
                                     <tr>
@@ -683,7 +700,6 @@ export default function UserTable() {
                                     <label htmlFor="name" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">{t('name')}</label>
                                     <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder="Type name here"
                                     readolny disabled/>
-
                                 </div>
                                 <div className={`col-span-2 ${EditUserId == '64fa84403ce06f0129321ced' ? "hidden" : "" }`}>
                                     <label htmlFor="role" className="block mb-2 text-sm font-normal text-black dark:text-slate-200">Role</label>
@@ -734,7 +750,6 @@ export default function UserTable() {
                         <div className="p-4">
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="grid gap-4 mb-4 grid-cols-2">
-
                                     <div className="col-span-2 md:col-span-1">
                                         <label htmlFor="username" className="block mb-1 text-sm font-normal text-black dark:text-slate-200">{t('name')}</label>
                                         <input
@@ -761,7 +776,6 @@ export default function UserTable() {
                                             onBlur={formik.handleBlur}
                                             className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                                             placeholder="Type email here"
-
                                             required
                                         />
                                         {formik.touched.email && formik.errors.email && (

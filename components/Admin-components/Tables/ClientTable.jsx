@@ -432,7 +432,6 @@ export default function ClientTable() {
             setCrudLoading(false)
             toastr.warning('Please Fill The Blank!', 'Failed')
             //   validateForm()
-            
         }
         
     }
@@ -985,10 +984,9 @@ export default function ClientTable() {
                                     <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
                                     </label>
                                 </div>
-
                                 {
                                     modeModal === 'Edit' ? (
-                                        <div className="flex gap-3">
+                                        <div className="flex gap-3 pt-5">
                                             <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateClient} disabled={crudLoading}>
                                                 {crudLoading ? <LoadingCrud /> : t('save')}
                                             </button>
