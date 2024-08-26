@@ -12,13 +12,14 @@ import { AiOutlineFilePdf } from "react-icons/ai"
 import { FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
-import { RiFileExcel2Line, RiMegaphoneLine } from "react-icons/ri"
+import { RiFileExcel2Line, RiMegaphoneLine, RiRefreshLine} from "react-icons/ri"
 import CountCard from "../CountCard"
 import { BiPlus } from "react-icons/bi"
 import { date } from "yup"
 import { useTranslations } from "next-intl"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import { useRouter } from "next/navigation"
 
 export default function CampaignTable() {
 
@@ -39,6 +40,7 @@ export default function CampaignTable() {
     const tdel = useTranslations("swal-delete");
     const [selectedTenant, setSelectedTenant] = useState("");
     const [crudLoading, setCrudLoading] = useState(false)
+    const Router = useRouter()
 
     function LoadingCrud() {
         return (
@@ -781,6 +783,11 @@ export default function CampaignTable() {
     const indexOfLastcampaign = currentPage * dataPerPage;
     const indexOfFirstcampaign = indexOfLastcampaign - dataPerPage;
     const currentcampaigns = filteredData.slice(indexOfFirstcampaign, indexOfLastcampaign);
+
+    const handleRefresh = () => {
+        Router.refresh()
+        getCampaign()
+    }
     
     function onSubmit(par){
         if(par == 1){
@@ -828,20 +835,26 @@ export default function CampaignTable() {
                     {/* Body */}
                     <div className="w-full h-fit bg-white dark:bg-slate-800 dark:text-white rounded-b-md p-4">
                         <div className="flex flex-col-reverse md:flex-row justify-between items-center w-full ">
-                            <div className="w-full flex justify-start flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
+                            <div className="w-full flex justify-start items-center flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
                                 <div className="flex mb-4 lg:mb-0 xl:mb-0">
                                     {/* Button */}
-                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                    <button title="Export Pdf" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <AiOutlineFilePdf />
                                         </IconContext.Provider>
                                     </button>
-                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
+                                    <button title="Export Excel" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <RiFileExcel2Line />
                                         </IconContext.Provider>
                                     </button>
-                                    <button className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                    <button title="Refresh" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
+                                        <IconContext.Provider value={{ className: "text-xl" }}>
+                                            <RiRefreshLine/>
+                                        </IconContext.Provider>
+                                    </button>
+                                    
+                                    <button title="Add Data" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <BiPlus className="text-thin"/>
                                         </IconContext.Provider>

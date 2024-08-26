@@ -13,7 +13,7 @@ import { FaArrowAltCircleDown, FaArrowDown, FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
 import { useRouter } from "next/navigation"
-import { RiFileExcel2Line, RiUser3Line } from "react-icons/ri"
+import { RiFileExcel2Line, RiUser3Line, RiRefreshLine } from "react-icons/ri"
 import CountCard from "../CountCard"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
@@ -40,7 +40,7 @@ export default function UserTable() {
             return (
             <div className="flex justify-center items-center h-6">
                 <div className="relative">
-                <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+                <div className="w-6 h-6 border-4 bord`er-white rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
                 </div>
             </div>
             );
@@ -487,6 +487,11 @@ export default function UserTable() {
     const indexOfFirstuser = indexOfLastuser - dataPerPage;
     const currentusers = filteredData.slice(indexOfFirstuser, indexOfLastuser);
 
+    const handleRefresh = () => {
+        Router.refresh()
+        getUsers()
+    }
+
 
     function createModal() {
         formik.handleReset();
@@ -514,32 +519,38 @@ export default function UserTable() {
                     {/* Body */}
                     <div className="w-full h-fit bg-white dark:bg-slate-800  rounded-b-md p-4">
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
-                            <div className="flex">
+                            <div className={`flex ${userData.roles == "sadmin" ? "flex-col md:flex-row" : "flex-row"} items-center`}>
+                                <div className="flex mb-4">
                                 {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 mb-4 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button title="Export Pdf" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
+                                <button title="Export Excel" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={createModal} >
+                                <button title="Refresh" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={handleRefresh}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
-                                        <BiPlus className="text-thin"/>
+                                        <RiRefreshLine/>
+                                    </IconContext.Provider>
+                                </button>
+                                <button title="Add Data" className={`bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border-e ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={createModal} >
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <BiPlus/>
                                     </IconContext.Provider>
                                 </button> 
                                 {/* Button end */}
-
+                                </div>
                                 {/* Filter by select */}
                                 <div className="mb-4 flex">
                                 {
                                     userData.roles == 'sadmin' && (
                                         <>
                                             <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                            <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e text-sm block w-full px-3 py-2" defaultValue={0}
+                                            <select id="tenantfilter" className="md:w-[150px] h-10 dark:border-gray-500 bg-white dark:bg-slate-800 border-s border-b  rounded-s-md md:rounded-s-none border-t border-e text-sm block w-full px-3 py-2" defaultValue={0}
                                             value={selectedTenant} onChange={handleTenantChange}
                                             >
                                                 <option value="" key={0} disabled hidden>Tenant 
@@ -557,7 +568,7 @@ export default function UserTable() {
                                     )
                                 }
                                     <label htmlFor="rolefilter" className="text-sm font-medium  hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
+                                    <select id="rolefilter" className="md:w-[150px] dark:border-gray-500 h-10 bg-white dark:bg-slate-800 border-b border-t border-e rounded-e-md text-sm block w-full px-3 py-2" defaultValue={0}
                                     value={selectedRole} onChange={handleRoleChange}
                                     >
                                         <option value="" key={0} disabled hidden>Role 
@@ -571,7 +582,6 @@ export default function UserTable() {
                                 </div>
                                 {/* Filter by select end */}
                             </div>
-
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
