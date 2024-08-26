@@ -651,11 +651,11 @@ export default function TenantTable() {
         } else {
             null
         }
+    }   
 
     const handleRefresh = () => {
         Router.refresh()
         getTenants()
-
     }
 
     return (

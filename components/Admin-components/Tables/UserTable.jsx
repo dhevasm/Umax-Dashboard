@@ -35,7 +35,10 @@ export default function UserTable() {
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
-
+    const [crudLoading, setCrudLoading] = useState(false)
+    const [create, setCreate] = useState(false)
+    const roles = localStorage.getItem("roles")
+    
     function LoadingCrud() {
             return (
             <div className="flex justify-center items-center h-6">

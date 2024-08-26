@@ -684,7 +684,12 @@ export default function ClientTable() {
         } else {
             null
         }
+    }
 
+    const handleRefresh = () => {
+        Router.refresh()
+        getclient()
+    }
 
     return (
         <>
