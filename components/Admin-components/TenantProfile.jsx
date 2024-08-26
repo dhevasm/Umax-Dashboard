@@ -64,13 +64,12 @@ export default function TenantProfile({tenant_id}){
                 document.getElementById('currencyposition').checked = tenant.currency_position
                 setValues({name: tenant.company, address: tenant.address, contact: tenant.contact, email: tenant.email})
                 setError({name: '', address: '', contact: '', email: ''})
-                document.getElementById('country').value = tenant.address.split(" - ")[2]
                 handleCityList(tenant.address.split(" - ")[2])
                 setTimeout(() => {
+                    document.getElementById('country').value = tenant.address.split(" - ")[2]
                     document.getElementById('city').value = tenant.address.split(" - ")[1]
                     document.getElementById('contact').value = tenant.contact.slice(1)
-                }, 300);
-                
+                }, 1000);
             } else{
                 Swal.fire("Tenant not found");
             }

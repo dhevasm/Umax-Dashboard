@@ -12,6 +12,7 @@ import {
   FaBuilding,
   FaCheck,
   FaMoon,
+  FaPrint,
   FaSignOutAlt,
   FaSpinner,
   FaSun,
@@ -486,6 +487,28 @@ function AdminNavbar({ userData }) {
       toastr.error("tenant register failed");
       return;
     }
+
+    if (data.subscription == true) {
+        const formData2 = new FormData();
+        formData2.append("subscription", true);
+        const response2 = await axios.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${response.data.tenant_id}`,
+          formData2,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+          }
+        );
+
+        if (response2.data.IsError == false) {
+          toastr.success("subscription success");
+        } else {
+          toastr.error("subscription failed");
+          return;
+        }
+      }
+
     createUser(data, response.data.tenant_id, request_id);
   };
 
@@ -530,9 +553,21 @@ function AdminNavbar({ userData }) {
     });
   };
 
+  const printRef = useRef(null)
+  
+  const handlePrint = () =>{
+    printRef.current.classList.add("hidden")
+    setSidebarHide(true);
+    setNavbarBrandHide(true);
+    setTimeout(() => {
+      window.print()
+      printRef.current.classList.remove("hidden")
+    }, 1000);
+  }
+
   return (
     <>
-      <nav className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
+      <nav ref={printRef} className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
         <div className="flex h-full">
           <div
             className="w-[300px] flex h-full bg-slate-800 shadow-none items-center p-3 transition-transform"
@@ -759,13 +794,15 @@ function AdminNavbar({ userData }) {
                                 height: '50px',
                               }}
                             />
-
                                 <div className="ml-3">
                                     <h3 className="font-medium text-black dark:text-white">{userData.name}</h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-300">{userData.roles}</p>
                                 </div>
                             </div>
                             <ul className="space-y-5">
+                              <li >
+                              <button onClick={handlePrint} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"><FaPrint  className="mr-2"/> Print</button>
+                              </li>
                                 <li>
                                     <button onClick={() => {Router.push(`/${localStorage.getItem("lang")}/profile`)}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                                         <AiOutlineProfile className="mr-2" /> Profile

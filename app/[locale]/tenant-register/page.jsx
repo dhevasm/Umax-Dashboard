@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -144,7 +144,7 @@ export default function TenantRegisterPage() {
     },  
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(3, t('useername-error2'))
+        .min(3, t('username-error2'))
         .required(t('username-error')),
       email: Yup.string().email(t('email-error2')).required(t('email-error')),
       password: Yup.string()
@@ -426,6 +426,7 @@ export default function TenantRegisterPage() {
                     }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     required
+                    defaultValue={""}
                   >
                     <option value="">{t('select-country')}</option>
                     {culture.length > 0 ? (
@@ -436,7 +437,7 @@ export default function TenantRegisterPage() {
                       ))
                     )
                     : (
-                      <option value="" disabled>{t('getting-country-list')}...{}</option>
+                      <option value="" hidden disabled>{t('getting-country-list')}...{}</option>
                     )
                     }
                   </select>
@@ -455,6 +456,7 @@ export default function TenantRegisterPage() {
                     {...formik.getFieldProps("companyCity")}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                     required
+                    defaultValue={""}
                   >
                     <option value="">{t('select-city')}</option>
                     {City.length > 0 ? (
@@ -464,7 +466,7 @@ export default function TenantRegisterPage() {
                         </option>
                       ))
                     ) : (
-                      <option value="" disabled>{t('getting-city-list')}...</option>
+                      <option value="" hidden disabled>{t('getting-city-list')}...</option>
                     )}
                   </select>
                   {formik.touched.companyCity && formik.errors.companyCity ? (
@@ -539,9 +541,11 @@ export default function TenantRegisterPage() {
                   id="language"
                   {...formik.getFieldProps("language")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  defaultValue={""}
                 >
-                  <option value="id">{t('indonesian')}</option>
-                  <option value="en">{t('english')}</option>
+                  <option value="" key={0} hidden disabled>{t('pilihbahasa')}</option>
+                  <option value="id" key={1}>{t('indonesian')}</option>
+                  <option value="en" key={2}>{t('english')}</option>
                 </select>
                 {formik.touched.language && formik.errors.language ? (
                   <p className="text-sm text-red-600">
@@ -561,8 +565,9 @@ export default function TenantRegisterPage() {
                   id="culture" 
                   {...formik.getFieldProps("culture")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+                  defaultValue={""}
                 >
-                  <option value="" selected disabled>{t('select-culture')}</option>
+                  <option value="" disabled>{t('select-culture')}</option>
                   {culture.length > 0 ? 
                     culture.map((item, index) => (
                       <option key={index} value={item.cultureInfoCode}>{item.country}</option>
@@ -589,8 +594,9 @@ export default function TenantRegisterPage() {
                   id="timezone" 
                   {...formik.getFieldProps("timezone")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+                  defaultValue={""}
                 >
-                  <option value="" selected disabled>{t('select-timezone')}</option>
+                  <option value="" disabled>{t('select-timezone')}</option>
                   {timezone.length > 0 ? 
                     timezone.map((item, index) => (
                       <option key={index} value={item.timezone}>{item.timezone}</option>
@@ -617,8 +623,9 @@ export default function TenantRegisterPage() {
                   id="currency" 
                   {...formik.getFieldProps("currency")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500"
+                  defaultValue={""}
                 >
-                  <option value="" selected disabled>{t('select-currency')}</option>
+                  <option value="" disabled>{t('select-currency')}</option>
                   {currency.length > 0 ? 
                     currency.map((item, index) => {
                       const [currencyCode, ...currencyNameParts] = item.currency.split('  -  ');

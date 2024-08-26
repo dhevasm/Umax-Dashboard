@@ -15,11 +15,12 @@ import { FaTimes } from "react-icons/fa"
 import { IoMdEye } from "react-icons/io"
 import { IoMdEyeOff } from "react-icons/io"
 import { MdPeopleOutline } from "react-icons/md"
-import { RiFileExcel2Line } from "react-icons/ri"
+import { RiFileExcel2Line, RiRefreshLine } from "react-icons/ri"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import { useRouter } from "next/navigation"
 export default function ClientTable() {
 
     const [client, setclient] = useState([])
@@ -36,6 +37,7 @@ export default function ClientTable() {
     const tfile = useTranslations("swal-file")
     const tdel = useTranslations("swal-delete")
     const [crudLoading, setCrudLoading] = useState(false)
+    const Router = useRouter()
 
     function LoadingCrud() {
             return (
@@ -432,7 +434,6 @@ export default function ClientTable() {
             setCrudLoading(false)
             toastr.warning('Please Fill The Blank!', 'Failed')
             //   validateForm()
-            
         }
         
     }
@@ -683,7 +684,7 @@ export default function ClientTable() {
         } else {
             null
         }
-    }
+
 
     return (
         <>
@@ -705,31 +706,39 @@ export default function ClientTable() {
 
                     <div className="w-full h-fit bg-white dark:bg-slate-800 dark:text-white rounded-b-md p-4">
                         <div className=" flex flex-col-reverse md:flex-row justify-between items-center w-full ">
-                            <div className="flex">
-                                {/* Button */}
-                                <button className="bg-white dark:bg-slate-800 mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                            <div className={`flex ${userData.roles == "sadmin" ? "flex-col md:flex-row" : ""} items-center `}>
+                                <div className="flex mb-4">
+                                    {/* Button */}
+                                <button title="Export Pdf" className="bg-white dark:bg-slate-800 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
+                                <button title="Export Excel" className="bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className="bg-white dark:bg-slate-800 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >
+                                <button title="Refresh" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <RiRefreshLine/>
+                                    </IconContext.Provider>
+                                </button>
+                                <button title="Add Data" className={`bg-white dark:bg-slate-800 border-b border-t border-e ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
                                 </button>
                                 {/* Button end */}
+                                </div>
 
-                                {/* Filter by select */}
+                                <div className="flex">
+                                     {/* Filter by select */}
                                 {
                                     userData.roles == "sadmin" && (
                                         <div className="mb-4">
                                             <label htmlFor="tenantfilter" className="text-sm font-medium hidden">Tenant</label>
-                                            <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm block w-full px-3 py-2 focus:border-none select-no-arrow"
+                                            <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e border-s md:border-s-0 rounded-s-md md:rounded-s-none dark:border-gray-500 text-sm block w-full px-3 py-2 select-no-arrow"
                                             value={selectedTenant} onChange={handleTenantChange}
                                             >
                                                 <option value="" disabled hidden>Tenant</option>
@@ -745,7 +754,7 @@ export default function ClientTable() {
                                 }
                                 <div className="mb-4">
                                     <label htmlFor="rolefilter" className="text-sm font-medium hidden">Role</label>
-                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 rounded-e-md text-sm block w-full px-3 py-2 focus:border-none select-no-arrow"
+                                    <select id="rolefilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 rounded-e-md text-sm block w-full px-3 py-2 select-no-arrow"
                                     value={selectedStatus} onChange={handleStatusChange}
                                     >
                                         <option value="" disabled hidden>Status</option>
@@ -754,8 +763,7 @@ export default function ClientTable() {
                                         <option value="2">{t("deactive")}</option>
                                     </select>  
                                 </div>
-                                
-                                
+                                </div>
                                 {/* Filter by select end */}
                             </div>
 
@@ -989,7 +997,6 @@ export default function ClientTable() {
                                         <label htmlFor="notes" className="mb-2 text-sm font-medium text-black dark:text-slate-200">Notes</label>
                                         <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 text-black dark:text-slate-200 dark:border-none border-gray-300 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                     </div>
-
                                     <div className="mt-3">
                                         <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
                                         <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
