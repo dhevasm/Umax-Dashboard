@@ -12,11 +12,12 @@ import { AiOutlineFilePdf } from "react-icons/ai"
 import { FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
-import { RiBuildingLine, RiFileExcel2Line } from "react-icons/ri"
+import { RiBuildingLine, RiFileExcel2Line, RiRefreshLine } from "react-icons/ri"
 import { BiPlus } from "react-icons/bi"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 
 export default function TenantTable() {
 
@@ -41,6 +42,7 @@ export default function TenantTable() {
     const [alldial, setDial] = useState([])
     const [DialCountry, setDialCountry] = useState([])
     const t = useTranslations('admin-tenants')
+    const Router = useRouter()
 
     const [values, setValues] = useState({
 
@@ -640,6 +642,11 @@ export default function TenantTable() {
     const indexOfFirsttenant = indexOfLasttenant - dataPerPage;
     const currenttenants = filteredData.slice(indexOfFirsttenant, indexOfLasttenant);
 
+    const handleRefresh = () => {
+        Router.refresh()
+        getTenants()
+    }
+
     return (
         <>
             <div className="w-full">
@@ -664,17 +671,22 @@ export default function TenantTable() {
                         <div className=" flex flex-col-reverse sm:flex-row md:flex-row justify-between items-center w-full ">
                             <div className="flex">
                                 {/* Button */}
-                                <button className=" py-2 mb-4 borde dark:border-gray-500 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button title="Export Pdf" className=" py-2 mb-4 dark:border-gray-500 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button className=" py-2 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
+                                <button title="Export Excel" className=" py-2 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button className=" py-2 mb-4 border-b border-t border-e dark:border-gray-500 rounded-e-md hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >
+                                <button title="Refresh" className="bg-white dark:bg-slate-800 py-2 mb-4 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <RiRefreshLine/>
+                                    </IconContext.Provider>
+                                </button>
+                                <button title="Add Data" className=" py-2 mb-4 border-b border-t border-e dark:border-gray-500 rounded-e-md hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
