@@ -414,7 +414,7 @@ export default function CampaignTable() {
                 document.getElementById('notes').value = null
                 // Swal.fire("Success", "Campaing created successfully", "success")
                 setCrudLoading(false)
-                toastr.success('Campaign created successfully', 'Success')
+                toastr.info('Creating metrics data in 5 second', 'Please Wait!')
             }else{
                 // Swal.fire("Error", response.detail, "error")
                 setCrudLoading(false)
@@ -555,35 +555,23 @@ export default function CampaignTable() {
 
         const date = new Date(startDate);
 
-        // Menentukan nilai pengeluaran dan reach
-        const amountSpent = getRandomInt(500000, 3000000); // Pengeluaran dalam Rupiah
-        const reach = getRandomInt(amountSpent, amountSpent * 2); // Reach minimal sama dengan amountSpent
-
-        // Metrik lainnya
-        const clicks = getRandomInt(200, 1500); // Jumlah klik yang lebih tinggi
-        const lpview = getRandomInt(300, 1500); // Jumlah tampilan halaman yang lebih tinggi
-        const atc = getRandomInt(100, 300); // Jumlah add-to-cart yang realistis
-        const ctview = getRandomInt(150, 1000); // Jumlah view yang lebih tinggi
-        const results = getRandomInt(50, 400); // Jumlah hasil yang realistis
-        const impressions = getRandomInt(reach + 500, reach * 2); // Impression lebih besar dari reach
+        const amountspent = getRandomInt(100000, 500000); // Dalam Rupiah
+        const reach = parseInt(getRandomFloat(amountspent / 100, amountspent));
+        const impressions = getRandomInt(reach, reach * 1.5); // Impressions biasanya lebih besar atau sama dengan reach
+        const clicks = getRandomInt(impressions, impressions * 1.5); // Clicks biasanya lebih kecil atau sama dengan impressions
+        const lpview = getRandomInt(clicks, clicks * 1.5);
+        const atc = parseInt(getRandomInt(lpview / 10, lpview));
+        const ctview = getRandomInt(80, 800);
+        const results = getRandomInt(30, 300);
         const delivery = getRandomInt(90, 100); // Persentase antara 90% - 100%
-        const leads = getRandomInt(30, 300); // Jumlah leads yang realistis
-        
-        // Tentukan harga per pembelian sehingga ROAS lebih besar dari 1
-        const minROAS = 1.1; // Pastikan ROAS lebih besar dari 1
-        const pricePerPurchase = getRandomInt(Math.ceil(amountSpent / 150), Math.ceil(amountSpent / 50)); // Harga per pembelian dalam Rupiah
-        const purchase = Math.ceil((amountSpent * minROAS) / pricePerPurchase); // Jumlah pembelian yang memastikan total pendapatan melebihi amountSpent
-        // Menghitung total pendapatan dari pembelian
-        const totalRevenue = purchase * pricePerPurchase;
-
-        // Menghitung metrik turunan
-        const roas = parseFloat((totalRevenue / amountSpent).toFixed(2)); // Return on Ad Spend (ROAS)
-        const cpc = parseFloat((amountSpent / clicks).toFixed(2)); // Biaya per klik
-        const frequency = parseFloat((impressions / reach).toFixed(2)); // Frekuensi tayangan
-        const ctr = parseFloat(((clicks / impressions) * 100).toFixed(2)); // Click-through rate (CTR) dalam persentase
-        const cpr = parseFloat((amountSpent / results).toFixed(2)); // Biaya per hasil
-        const cpm = parseFloat(((amountSpent / impressions) * 1000).toFixed(2)); // Biaya per seribu tayangan (CPM)
-        const rar = parseFloat((reach / amountSpent).toFixed(2)); // Reach Amount Spend Ratio (RAR)
+        const leads = getRandomInt(20, 200);
+        const purchase = getRandomInt(amountspent, amountspent * 1.5);
+        const cpc = parseFloat((amountspent / clicks).toFixed(2));
+        const frequency = parseFloat((impressions / reach).toFixed(2));
+        const ctr = parseFloat(((clicks / impressions) * 10).toFixed(2)); // Dalam persentase
+        const cpr = parseFloat((amountspent / results).toFixed(2));
+        const cpm = parseFloat(((amountspent / impressions) * 1000).toFixed(2));
+        const roas = parseFloat((purchase / amountspent).toFixed(2));
 
         const formDataMetrics = new FormData();
         formDataMetrics.append('clicks', clicks);
@@ -591,19 +579,18 @@ export default function CampaignTable() {
         formDataMetrics.append('atc', atc);
         formDataMetrics.append('ctview', ctview);
         formDataMetrics.append('results', results);
-        formDataMetrics.append('amountspent', amountSpent);
+        formDataMetrics.append('amountspent', amountspent);
         formDataMetrics.append('reach', reach);
         formDataMetrics.append('impressions', impressions);
         formDataMetrics.append('delivery', delivery);
         formDataMetrics.append('leads', leads);
-        formDataMetrics.append('purchase', totalRevenue);
+        formDataMetrics.append('purchase', purchase);
         formDataMetrics.append('cpc', cpc);
         formDataMetrics.append('frequency', frequency);
         formDataMetrics.append('ctr', ctr);
         formDataMetrics.append('cpr', cpr);
         formDataMetrics.append('cpm', cpm);
         formDataMetrics.append('roas', roas);
-
         try{
             const satu = axios.post(`${process.env.NEXT_PUBLIC_API_URL}/metrics-create?campaign_id=${campaignID}&tenantId=${localStorage.getItem('tenantId')}`, formDataMetrics, {
                 headers: {
@@ -614,34 +601,21 @@ export default function CampaignTable() {
             ).then((response) => {
                 if(!response.IsError){
                     for(let i = 0; i < 7; i++){
-                        // Menentukan nilai pengeluaran dan reach
-                        const amountSpent2 = getRandomInt(500000, 3000000); // Pengeluaran dalam Rupiah
-                        const reach2= getRandomInt(amountSpent2, amountSpent2 * 2); // Reach minimal sama dengan amountSpent
-
-                        // Metrik lainnya
-                        const clicks2 = getRandomInt(200, 1500); // Jumlah klik yang lebih tinggi
-                        const lpview2 = getRandomInt(300, 1500); // Jumlah tampilan halaman yang lebih tinggi
-                        const atc2 = getRandomInt(100, 300); // Jumlah add-to-cart yang realistis
-                        const ctview2 = getRandomInt(150, 1000); // Jumlah view yang lebih tinggi
-                        const results2 = getRandomInt(50, 400); // Jumlah hasil yang realistis
-                        const impressions2 = getRandomInt(reach2 + 500, reach2 * 2); // Impression lebih besar dari reach
+                        const amountspent2 = getRandomInt(100000, 500000); // Dalam Rupiah
+                        const reach2 = parseInt(getRandomFloat(amountspent2 / 10, amountspent2));
+                        const impressions2 = getRandomInt(reach2, reach2 * 1.5); // Impressions biasanya lebih besar atau sama dengan reach
+                        const clicks2 = getRandomInt(impressions2, impressions2 * 1.5);
+                        const lpview2 = getRandomInt(clicks2, clicks2 * 1.5);
+                        const atc2 = parseInt(getRandomInt(lpview2 / 10, lpview2));
+                        const ctview2 = getRandomInt(80, 800);
+                        const results2 = getRandomInt(30, 300);
                         const delivery2 = getRandomInt(90, 100); // Persentase antara 90% - 100%
-                        const leads2 = getRandomInt(30, 300); // Jumlah leads yang realistis
-
-                        // Tentukan harga per pembelian sehingga ROAS lebih besar dari 1
-                        const minROAS2 = 1.1; // Pastikan ROAS lebih besar dari 1
-                        const pricePerPurchase2 = getRandomInt(Math.ceil(amountSpent2 / 150), Math.ceil(amountSpent2 / 50)); // Harga per pembelian dalam Rupiah
-                        const purchase2 = Math.ceil((amountSpent2 * minROAS2) / pricePerPurchase2); // Jumlah pembelian yang memastikan total pendapatan melebihi amountSpent
-
-                        // Menghitung total pendapatan dari pembelian
-                        const totalRevenue2 = purchase2 * pricePerPurchase2;
-
-                        // Menghitung metrik turunan
-                        const roas2 = parseFloat((totalRevenue2 / amountSpent2).toFixed(2)); // Return on Ad Spend (ROAS)
-                        const cpc2 = parseFloat((amountSpent2 / clicks2).toFixed(2)); // Biaya per klik
-                        
+                        const leads2 = getRandomInt(20, 200);
+                        const purchase2 = getRandomInt(amountspent2, amountspent2 * 1.5);
+                        const cpc2 = parseFloat((amountspent2 / clicks2).toFixed(2));
                         const formattedDate = date.toISOString().split('T')[0];
                         const formDua = new FormData()
+
                         formDua.append('tanggal', formattedDate);
                         date.setDate(date.getDate() + 1);
                         formDua.append('clicks', clicks2);
@@ -649,23 +623,22 @@ export default function CampaignTable() {
                         formDua.append('atc', atc2);
                         formDua.append('ctview', ctview2);
                         formDua.append('results', results2);
-                        formDua.append('amountspent', amountSpent2);
+                        formDua.append('amountspent', amountspent2);
                         formDua.append('reach', reach2);
                         formDua.append('impressions', impressions2);
                         formDua.append('delivery', delivery2);
                         formDua.append('leads', leads2);
-                        formDua.append('purchase', totalRevenue2);
+                        formDua.append('purchase', purchase2);
                         formDua.append('cpc', cpc2);
                         try {
-                            const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, formDua , {
-                                headers: {
-                                    Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
-                                    "Content-Type": "application/x-www-form-urlencoded",
-                                }
+                            const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, formDua)
+                            if(!dua.IsError){
+                                toastr.success('Metrics created successfully', 'Success')
+                            }else{
+                                toastr.error("Metrics failed to create", "Error")
                             }
-                            )
-                            console.log(dua)
                         }catch (error) {
+                            toastr.error("Metrics failed to create", "Error")
                             console.log(error)
                         }
                         }

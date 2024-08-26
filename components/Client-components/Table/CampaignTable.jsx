@@ -492,7 +492,7 @@ const CampaignTable = () => {
                                 ) : currentCampaigns.length > 0 ? (
                                     // Jika data ditemukan
                                     currentCampaigns.map((data, index) => (
-                                        <tr key={index} className="text-center">
+                                        <tr key={index} className="text-left">
                                             <td className="px-2 py-2 border text-nowrap dark:border-gray-700 dark:text-gray-200 text-left">
                                                 <button className="text-gray-500 dark:text-gray-300 underline" title={`${t('details-of')} ${data.name}`} onClick={() => handleOpenModal(data)}>
                                                     <p className="underline">{data.name}</p>

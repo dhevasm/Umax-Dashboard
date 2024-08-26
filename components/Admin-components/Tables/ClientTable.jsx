@@ -432,7 +432,6 @@ export default function ClientTable() {
             setCrudLoading(false)
             toastr.warning('Please Fill The Blank!', 'Failed')
             //   validateForm()
-            
         }
         
     }

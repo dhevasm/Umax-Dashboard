@@ -167,10 +167,10 @@ const PasswordField = ({ id, name, placeholder, formik, showPassword, setShowPas
             value={formik.values[name]}
         />
         <div
-            className="absolute top-3 right-3 cursor-pointer"
+            className="absolute top-5 right-3 cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
         >
-            {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+            {showPassword ? <AiOutlineEye size={25} /> : <AiOutlineEyeInvisible size={25} />}
         </div>
         {formik.touched[name] && formik.errors[name] ? (
             <div className="text-red-500 text-sm mt-2">{formik.errors[name]}</div>

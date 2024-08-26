@@ -676,6 +676,7 @@
       "submit": "Kirim",
       "success": "Permintaan Anda telah dikirim. Harap tunggu email konfirmasi.",
       "error": "Permintaan Anda gagal dikirim. Silakan coba lagi.",
-      "error2": "Silakan periksa kembali formulir Anda"
+      "error2": "Silakan periksa kembali formulir Anda",
+      "pilihbahasa" : "Pilih bahasa"
     }
 }

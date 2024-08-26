@@ -21,7 +21,7 @@ const Chart = ({ campaignID, time }) => {
         if (!campaignID) {
             return;
         }
-
+        
         try {
             const token = localStorage.getItem("jwtToken");
             if (selected === "week") {
