@@ -789,6 +789,15 @@ export default function CampaignTable() {
         getCampaign()
     }
     
+    function onSubmit(par){
+        if(par == 1){
+            createCampaign()
+        } else if(par == 2){
+            updateCampaign()
+        } else {
+            null
+        }
+    }
 
     function dateconvert(date){
         let [day, month, year, hour] = date.split(" ");
@@ -1050,108 +1059,112 @@ export default function CampaignTable() {
                         </div>
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
-                            <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className={` ${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
-                                    <label htmlFor="name" className="mb-2 text-sm font-normal text-black dark:text-slate-200  flex">{t('campaign_name')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <input type="text" name="name" id="name" className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 text-black dark:text-slate-200" placeholder={t('holder-name')}
-                                    required onChange={handleChange} onBlur={handleBlur}/>
-                                    {
-                                        touched.name && error.name ? <div className="text-red-500 dark:text-red-600 text-sm">{error.name}</div> : ""
-                                    }
-                                </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="account" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="account" name="account" className={`bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] ${values.account ? "text-black dark:text-white" : "text-[#858c96]"} border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
-                                        <option value="" disabled hidden>{t('select-account')}</option>
+                            <form onSubmit={(e) => {
+                                e.preventDefault(); // Mencegah perilaku default formulir
+                                onSubmit(modeModal === 'Edit' ? 2 : 1);
+                            }}>
+                                <div className="grid gap-4 mb-4 grid-cols-2">
+                                    <div className={` ${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
+                                        <label htmlFor="name" className="mb-2 text-sm font-normal text-black dark:text-slate-200  flex">{t('campaign_name')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                        <input type="text" name="name" id="name" required className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 text-black dark:text-slate-200" placeholder={t('holder-name')}
+                                        onChange={handleChange} onBlur={handleBlur}/>
                                         {
-                                            selectLoading ? (
-                                                // Jika data sedang loading
-                                                <option disabled key={0} value={0}>
-                                                    Loading account list...
-                                                </option>
-                                            ) : account.length > 0 ? (
-                                                // Jika data ditemukan
-                                                account.map((account, index) => (
-                                                    <option key={index} value={account._id}>{account.username}</option>
-                                                ))
-                                            ) : (
-                                                // Jika tidak ada data
-                                                <option disabled key={0} value={0}>No accounts found</option>
-                                            )
+                                            touched.name && error.name ? <div className="text-red-500 dark:text-red-600 text-sm">{error.name}</div> : ""
                                         }
-                                    </select>
-                                    {
-                                        touched.account && error.account ? <div className="text-red-500 dark:text-red-600 text-sm">{error.account}</div> : ""
-                                    }
-                                </div>
-                                <div className="col-span-1" ref={tenantInput}>
-                                    <label htmlFor="tenant" className="block mb-2 text-sm font-normal text-black dark:text-slate-200 ">Tenant</label>
-                                    <select id="tenant" name="tenant" className="bg-white border text-[#858c96] dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
+                                    </div>
+                                    <div className="col-span-1">
+                                        <label htmlFor="account" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                        <select id="account" name="account" required className={`bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] ${values.account ? "text-black dark:text-white" : "text-[#858c96]"} border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                            <option value="" disabled hidden>{t('select-account')}</option>
+                                            {
+                                                selectLoading ? (
+                                                    // Jika data sedang loading
+                                                    <option disabled key={0} value={0}>
+                                                        Loading account list...
+                                                    </option>
+                                                ) : account.length > 0 ? (
+                                                    // Jika data ditemukan
+                                                    account.map((account, index) => (
+                                                        <option key={index} value={account._id}>{account.username}</option>
+                                                    ))
+                                                ) : (
+                                                    // Jika tidak ada data
+                                                    <option disabled key={0} value={0}>No accounts found</option>
+                                                )
+                                            }
+                                        </select>
                                         {
-                                            tenant.length > 0 ? tenant.map((tenant, index) => {
-                                                return <option key={index} value={tenant._id}>{tenant.company}</option>
-                                            }) : <option key={0} value={0}>Loading...</option>
+                                            touched.account && error.account ? <div className="text-red-500 dark:text-red-600 text-sm">{error.account}</div> : ""
                                         }
-                                    </select>
-                                </div>
-                                
-                                <div className="col-span-1">
-                                <label htmlFor="objective" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="objective" name="objective" className={`bg-white ${values.objective ? "text-black dark:text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}  defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
-                                        <option value="" disabled hidden>{t('select-objective')}</option>
-                                        <option value="1">Awareness</option>
-                                        <option value="2">Conversion</option>
-                                        <option value="3">Consideration</option>
-                                    </select>
-                                    {
-                                        touched.objective && error.objective ? <div className="text-red-500 dark:text-red-600 text-sm">{error.objective}</div> : ""
-                                    }
-                                </div>
-                                
-                                <div className="col-span-1">
-                                <label htmlFor="status" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">Status <div className="text-red-500 dark:text-red-600">*</div></label>
-                                    <select id="status" name="status" className={`bg-white ${values.status ? "text-black dark:text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
-                                        <option value="" disabled hidden>{t('select-status')}</option>
-                                        <option value="1">{t('active')}</option>
-                                        <option value="2">{t('draft')}</option>
-                                        <option value="3">{t('complete')}</option>
-                                    </select>
-                                    {
-                                        touched.status && error.status ? <div className="text-red-500 dark:text-red-600 text-sm">{error.status}</div> : ""
-                                    }
-                                </div>
+                                    </div>
+                                    <div className="col-span-1" ref={tenantInput}>
+                                        <label htmlFor="tenant" className="block mb-2 text-sm font-normal text-black dark:text-slate-200 ">Tenant</label>
+                                        <select id="tenant" name="tenant" required className="bg-white border text-[#858c96] dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
+                                            {
+                                                tenant.length > 0 ? tenant.map((tenant, index) => {
+                                                    return <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                }) : <option key={0} value={0}>Loading...</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    
+                                    <div className="col-span-1">
+                                    <label htmlFor="objective" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                        <select id="objective" name="objective" required className={`bg-white ${values.objective ? "text-black dark:text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}  defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                            <option value="" disabled hidden>{t('select-objective')}</option>
+                                            <option value="1">Awareness</option>
+                                            <option value="2">Conversion</option>
+                                            <option value="3">Consideration</option>
+                                        </select>
+                                        {
+                                            touched.objective && error.objective ? <div className="text-red-500 dark:text-red-600 text-sm">{error.objective}</div> : ""
+                                        }
+                                    </div>
+                                    
+                                    <div className="col-span-1">
+                                    <label htmlFor="status" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">Status <div className="text-red-500 dark:text-red-600">*</div></label>
+                                        <select id="status" name="status" required className={`bg-white ${values.status ? "text-black dark:text-white" : "text-[#858c96]"} border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                            <option value="" disabled hidden>{t('select-status')}</option>
+                                            <option value="1">{t('active')}</option>
+                                            <option value="2">{t('draft')}</option>
+                                            <option value="3">{t('complete')}</option>
+                                        </select>
+                                        {
+                                            touched.status && error.status ? <div className="text-red-500 dark:text-red-600 text-sm">{error.status}</div> : ""
+                                        }
+                                    </div>
 
-                                <div className="col-span-1">
-                                <label htmlFor="start_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="start_date" id="start_date" className={`bg-white border ${values.start_date ? "dark:text-white text-black" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
-                                    required onChange={handleChange} onBlur={handleBlur}/>
-                                    {
-                                        touched.start_date && error.start_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.start_date}</div> : ""
-                                    }
-                                </div>
-                                
+                                    <div className="col-span-1">
+                                    <label htmlFor="start_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('start-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <input type="date" name="start_date" required id="start_date" className={`bg-white border ${values.start_date ? "dark:text-white text-black" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                        onChange={handleChange} onBlur={handleBlur}/>
+                                        {
+                                            touched.start_date && error.start_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.start_date}</div> : ""
+                                        }
+                                    </div>
+                                    
 
-                                <div className="col-span-1">
-                                <label htmlFor="end_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
-                                <input type="date" name="end_date" id="end_date" className={`bg-white border ${values.end_date ? "dark:text-white text-black" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
-                                    required onChange={handleChange} onBlur={handleBlur}/>
-                                    {
-                                        touched.end_date && error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
-                                    }
-                                </div>
+                                    <div className="col-span-1">
+                                    <label htmlFor="end_date" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('end-date')} <div className="text-red-500 dark:text-red-600">*</div></label>
+                                    <input type="date" name="end_date" id="end_date" required className={`bg-white border ${values.end_date ? "dark:text-white text-black" : "text-[#858c96]"} dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} placeholder="Type Campaign name here"
+                                        onChange={handleChange} onBlur={handleBlur}/>
+                                        {
+                                            touched.end_date && error.end_date ? <div className="text-red-500 dark:text-red-600 text-sm">{error.end_date}</div> : ""
+                                        }
+                                    </div>
 
-                                <div className="col-span-2">
-                                    <label htmlFor="notes" className="mb-2 text-sm font-normal text-black dark:text-slate-200">Notes</label>
-                                    <textarea id="notes" name="notes" className="bg-white border text-black dark:text-slate-200 dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
+                                    <div className="col-span-2">
+                                        <label htmlFor="notes" className="mb-2 text-sm font-normal text-black dark:text-slate-200">Notes</label>
+                                        <textarea id="notes" name="notes" className="bg-white border text-black dark:text-slate-200 dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
+                                    </div>
+                                    
+                                    
+                                    
                                 </div>
-                                
-                                
-                                
-                            </div>
                                 {
-                                   modeModal === 'Edit' ? (
+                                    modeModal === 'Edit' ? (
                                     <div className="flex gap-3">
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateCampaign} disabled={crudLoading}>
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" disabled={crudLoading}>
                                             {crudLoading ? <LoadingCrud /> : t('save')}
                                         </button>
                                         <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}>
@@ -1159,12 +1172,13 @@ export default function CampaignTable() {
                                         </button>
                                     </div>
                                     ) : (
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createCampaign} disabled={crudLoading}>
+                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" disabled={crudLoading}>
                                                 {crudLoading ? <LoadingCrud /> : t('submit')}
                                         </button>
                                     )
                                     
                                 }   
+                            </form>
                         </div>
                     </div>
                 </div>

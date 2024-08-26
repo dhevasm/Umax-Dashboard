@@ -648,6 +648,16 @@ export default function AccountTable() {
     const indexOfFirstaccount = indexOfLastaccount - dataPerPage;
     const currentaccounts = filteredData.slice(indexOfFirstaccount, indexOfLastaccount);
 
+    function onSubmit(par){
+        if(par == 1){
+            createAccount()
+        } else if(par == 2){
+            updateAccount()
+        } else {
+            null
+        }
+    }
+    
     const handleRefresh = () => {
         Router.refresh()
         getaccount()
@@ -873,110 +883,114 @@ export default function AccountTable() {
                         </div>
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
-                            <div className="grid gap-4 mb-4 grid-cols-2">
-                                <div className="col-span-2">
-                                    <label htmlFor="name" className="flex mb-2 text-sm font-normal font-sans">{t('account_name')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
-                                    <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
-                                    required onChange={handleChange} onBlur={handleBlur}/>
-                                    {
-                                        touched.name && error.name ? <p className="text-red-500 dark:text-red-600 text-sm">{error.name}</p> : ""
-                                    }
-                                </div>
-                                <div className={`${userData.roles == "sadmin" ? "col-span-1" : "col-span-2"}`}>
-                                    <label htmlFor="email" className="flex mb-2 text-sm font-normal">Email <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
-                                    <input type="email" name="email" id="email" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-3" placeholder={t('holder-email')} required onChange={handleChange} onBlur={handleBlur}/>
-                                    {
-                                        touched.email && error.email ? <p className="text-red-500 dark:text-red-600 text-sm">{error.email}</p> : ""
-                                    }
-                                </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="client" className="flex mb-2 text-sm font-normal ">{t('client')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
-                                    <select id="client" name="client" className={`bg-white ${values.client ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
-                                        <option value="" disabled hidden>{t('select-client')}</option>
+                            <form onSubmit={(e) => {
+                                e.preventDefault()
+                                onSubmit(modeModal === 'Edit' ? 2 : 1);
+                            }}>
+                                <div className="grid gap-4 mb-4 grid-cols-2">
+                                    <div className="col-span-2">
+                                        <label htmlFor="name" className="flex mb-2 text-sm font-normal font-sans">{t('account_name')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
+                                        <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
+                                        required onChange={handleChange} onBlur={handleBlur}/>
                                         {
-                                            selectLoading ? (
-                                                // Jika data sedang loading
-                                                <option disabled key={0} value={0}>Loading clients list...</option>
-                                            ) : client.length > 0 ? (
-                                                // Jika data ditemukan
-                                                client.map((client, index) => (
-                                                    <option key={index} value={client._id}>{client.name}</option>
-                                                ))
-                                            ) : (
-                                                // Jika tidak ada data
-                                                <option disabled key={0} value={0}>No clients found</option>
-                                            )
+                                            touched.name && error.name ? <p className="text-red-500 dark:text-red-600 text-sm">{error.name}</p> : ""
                                         }
-                                    </select>
-                                    {
-                                        touched.client && error.client ? <p className="text-red-500 dark:text-red-600 text-sm">{error.client}</p> : ""
-                                    }
-                                </div>
-
-                                <div className="col-span-1" ref={tenantInput}>
-                                    <label htmlFor="tenant" className="block mb-2 text-sm font-normal ">Tenant</label>
-                                    <select id="tenant" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
+                                    </div>
+                                    <div className={`${userData.roles == "sadmin" ? "col-span-1" : "col-span-2"}`}>
+                                        <label htmlFor="email" className="flex mb-2 text-sm font-normal">Email <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
+                                        <input type="email" name="email" id="email" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-3" placeholder={t('holder-email')} required onChange={handleChange} onBlur={handleBlur}/>
                                         {
-                                            tenant.length > 0 ? tenant.map((tenant, index) => {
-                                                return <option key={index} value={tenant._id}>{tenant.company}</option>
-                                            }) : <option key={0} value={0}>Loading...</option>
+                                            touched.email && error.email ? <p className="text-red-500 dark:text-red-600 text-sm">{error.email}</p> : ""
                                         }
-                                    </select>
-                                </div>
-                                <div className="col-span-1">
-                                    <label htmlFor="platform" className="flex mb-2 text-sm font-normal ">Platform <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
-                                    <select id="platform" name="platform" className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${values.platform ? "text-black dark:text-white" : "text-[#858c96]"}`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
-                                        <option value="" disabled hidden className="">{t('select-platform')}</option>
-                                        <option value="1">Meta Ads</option>z
-                                        <option value="2">Google Ads</option>
-                                        <option value="3">Tiktok Ads</option>
-                                    </select>
-                                    {
-                                        touched.platform && error.platform ? <p className="text-red-500 dark:text-red-600 text-sm">{error.platform}</p> : ""
-                                    }
-                                </div>
-                                <div className="col-span-2 md:col-span-1" ref={passwordInput}>
-                                    <label htmlFor="password" className="flex mb-2 text-sm font-normal  ">Password <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
-                                    <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} required onChange={handleChange} onBlur={handleBlur}/>
-                                        <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
-                                            {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
-                                        </button>
                                     </div>
-                                    {
-                                        touched.password && error.password ? <p className="text-red-500 dark:text-red-600 text-sm">{error.password}</p> : ""
-                                    }
-                                </div>
-                                <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
-                                    <label htmlFor="passwordverify" className="flex mb-2 text-sm font-normal  ">{t('confirm_password')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
-                                    <div className="relative">
-                                        <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} required onChange={handleChange} onBlur={handleBlur}/>
-                                        <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
-                                            {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
-                                        </button>
+                                    <div className="col-span-1">
+                                        <label htmlFor="client" className="flex mb-2 text-sm font-normal ">{t('client')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
+                                        <select id="client" name="client" required className={`bg-white ${values.client ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                            <option value="" disabled hidden>{t('select-client')}</option>
+                                            {
+                                                selectLoading ? (
+                                                    // Jika data sedang loading
+                                                    <option disabled key={0} value={0}>Loading clients list...</option>
+                                                ) : client.length > 0 ? (
+                                                    // Jika data ditemukan
+                                                    client.map((client, index) => (
+                                                        <option key={index} value={client._id}>{client.name}</option>
+                                                    ))
+                                                ) : (
+                                                    // Jika tidak ada data
+                                                    <option disabled key={0} value={0}>No clients found</option>
+                                                )
+                                            }
+                                        </select>
+                                        {
+                                            touched.client && error.client ? <p className="text-red-500 dark:text-red-600 text-sm">{error.client}</p> : ""
+                                        }
                                     </div>
-                                    {
-                                        touched.passwordverify && error.passwordverify ? <p className="text-red-500 dark:text-red-600 text-sm">{error.passwordverify}</p> : ""
-                                    }
-                                </div>
 
-                                <div className="col-span-2">
-                                    <label htmlFor="notes" className="mb-2 text-sm font-normal">Notes</label>
-                                    <textarea id="notes" name="notes" className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] placeholder-[#858c96] border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={handleChange} onBlur={handleBlur}></textarea>
-                                </div>
-                                <div className="flex items-center">
-                                    <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
-                                        <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                        <span className="text-sm font-normal ">Status</span>
-                                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
-                                    </label>
-                                </div>
+                                    <div className="col-span-1" ref={tenantInput}>
+                                        <label htmlFor="tenant" className="block mb-2 text-sm font-normal ">Tenant<span className="text-red-500 dark:text-red-600 ml-[1.5px]">*</span></label>
+                                        <select id="tenant" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
+                                            {
+                                                tenant.length > 0 ? tenant.map((tenant, index) => {
+                                                    return <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                }) : <option key={0} value={0}>Loading...</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div className="col-span-1">
+                                        <label htmlFor="platform" className="flex mb-2 text-sm font-normal ">Platform <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
+                                        <select id="platform" name="platform" required className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${values.platform ? "text-black dark:text-white" : "text-[#858c96]"}`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                            <option value="" disabled hidden className="">{t('select-platform')}</option>
+                                            <option value="1">Meta Ads</option>z
+                                            <option value="2">Google Ads</option>
+                                            <option value="3">Tiktok Ads</option>
+                                        </select>
+                                        {
+                                            touched.platform && error.platform ? <p className="text-red-500 dark:text-red-600 text-sm">{error.platform}</p> : ""
+                                        }
+                                    </div>
+                                    <div className="col-span-2 md:col-span-1" ref={passwordInput}>
+                                        <label htmlFor="password" className="flex mb-2 text-sm font-normal">Password <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
+                                        <div className="relative">
+                                            <input type={showPassword ? "text" : "password"} name="password" id="password" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} onChange={handleChange} onBlur={handleBlur}/>
+                                            <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
+                                                {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
+                                            </button>
+                                        </div>
+                                        {
+                                            touched.password && error.password ? <p className="text-red-500 dark:text-red-600 text-sm">{error.password}</p> : ""
+                                        }
+                                    </div>
+                                    <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
+                                        <label htmlFor="passwordverify" className="flex mb-2 text-sm font-normal  ">{t('confirm_password')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
+                                        <div className="relative">
+                                            <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} onChange={handleChange} onBlur={handleBlur}/>
+                                            <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
+                                                {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
+                                            </button>
+                                        </div>
+                                        {
+                                            touched.passwordverify && error.passwordverify ? <p className="text-red-500 dark:text-red-600 text-sm">{error.passwordverify}</p> : ""
+                                        }
+                                    </div>
 
-                            </div>
+                                    <div className="col-span-2">
+                                        <label htmlFor="notes" className="mb-2 text-sm font-normal">Notes</label>
+                                        <textarea id="notes" name="notes" className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] placeholder-[#858c96] border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={handleChange} onBlur={handleBlur}></textarea>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
+                                            <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
+                                            <span className="text-sm font-normal ">Status</span>
+                                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
+                                        </label>
+                                    </div>
+
+                                </div>
                                 {
                                     modeModal === 'Edit' ? (
                                         <div className="flex gap-3">
-                                            <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" onClick={updateAccount} disabled={crudLoading}>
+                                            <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" disabled={crudLoading}>
                                                 {crudLoading ? <LoadingCrud /> : t('save')}
                                             </button>
                                             <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditaccountId)}>
@@ -984,11 +998,12 @@ export default function AccountTable() {
                                             </button>
                                         </div>
                                     ) : (
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" onClick={createAccount} disabled={crudLoading}>
+                                        <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" disabled={crudLoading}>
                                                 {crudLoading ? <LoadingCrud /> : t('submit')}
                                         </button>
                                     )
                                 }
+                            </form>
                         </div>
                     </div>
                 </div>
