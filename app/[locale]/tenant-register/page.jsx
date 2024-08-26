@@ -141,7 +141,7 @@ export default function TenantRegisterPage() {
       currencyPosition: "true",
       companyCountry: "",
       companyCity: "",
-    },
+    },  
     validationSchema: Yup.object({
       username: Yup.string()
         .min(3, t('useername-error2'))

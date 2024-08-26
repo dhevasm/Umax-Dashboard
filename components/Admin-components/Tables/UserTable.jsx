@@ -39,9 +39,6 @@ export default function UserTable() {
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
-    const [crudLoading, setCrudLoading] = useState(false)
-    const [create, setCreate] = useState(false)
-    const roles = localStorage.getItem("roles")
 
     function LoadingCrud() {
             return (
@@ -764,7 +761,6 @@ export default function UserTable() {
                                             onBlur={formik.handleBlur}
                                             className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                                             placeholder="Type email here"
-
                                             required
                                         />
                                         {formik.touched.email && formik.errors.email && (
