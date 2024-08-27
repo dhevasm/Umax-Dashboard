@@ -94,7 +94,7 @@ function Dashboard() {
         {/* Dashboard Card */}
             <div className={`${SidebarHide ? 'w-full' : 'w-full sm:w-full md:w-full lg:w-full xl:w-[calc(100%-378px)] 2xl:w-[calc(100%-378px)]'} min-h-screen bg-white dark:bg-slate-800 rounded-xl mt-[100px] md:me-3 md:ms-5 text-black dark:text-white transition-transform`} ref={Card}>
                 {/* header */}
-                <div className="m-10">
+                <div className="p-7 sm:p-7 md:p-10 xl:p-10">
                 {campaignID === '' ? (
                     <PerformenceNavLoading />
                 ) : (

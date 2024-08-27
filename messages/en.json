@@ -86,7 +86,8 @@
       "amount-spent": "Amount Spent",
       "reach": "Reach",
       "start-date": "Start Date",
-      "search": "Search"
+      "search": "Search",
+      "no-data": "Campaigns not found"
     },
 
     "dashboard": {
@@ -376,8 +377,7 @@
       "currency-error": "Currency is required",
       "english": "English",
       "indonesian": "Indonesian",
-      "delete": "Delete",
-      "currency-position" :"Currency Position"
+      "delete": "Delete"
     },
 
     "admin-users": {

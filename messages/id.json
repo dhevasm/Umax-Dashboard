@@ -83,10 +83,11 @@
       "active": "Aktif",
       "draft": "Draf",
       "complete": "Selesai",
-      "amount-spent": "pengeluaran",
+      "amount-spent": "Pengeluaran",
       "reach": "Jangkauan",
       "start-date": "Mulai Tanggal",
-      "search": "Cari"
+      "search": "Cari",
+      "no-data": "Kampanye tidak ditemukan"
     },
 
     "dashboard": {
@@ -377,8 +378,7 @@
       "currency-error": "Mata Uang tidak boleh kosong",
       "english": "Inggris",
       "indonesian": "Indonesia",
-      "delete": "Hapus",
-      "currency-position" :"Posisi Mata Uang"
+      "delete": "Hapus"
     },
 
     "admin-users": {

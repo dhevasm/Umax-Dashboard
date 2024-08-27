@@ -88,9 +88,15 @@ export default function Metrics({ id }) {
         // Convert the cleaned string to a float
         let number = parseFloat(value) || 0;
     
-        // Return as an integer if the number is a whole number (e.g., 1.0 becomes 1)
-        return Number.isInteger(number) ? number : number;
-    }; 
+        // Check if the number is a whole number like 1.0 and remove the decimal part
+        if (Number.isInteger(number)) {
+            return number;
+        } else {
+            // If the number is not an integer, return the float as is
+            return number;
+        }
+    };
+    
     
     const calculateMetrics = (metricName) => {
         const values = history.slice(-7).map(item => cleanValue(item[metricName]));
@@ -183,7 +189,7 @@ export default function Metrics({ id }) {
                                 isActive={activeCard === 4}
                                 data={history.slice(-7).map((item, index) => ({
                                     name: `Metric ${index + 1}`,
-                                    value: cleanValue(item.frequency)
+                                    value: parseInt(item.frequency)
                                 }))}
                                 totalSpent={metricCalculations.frequency.total}
                                 averageSpent={metricCalculations.frequency.average}

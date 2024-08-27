@@ -30,14 +30,14 @@ export default function SidebarCard({ platform, name, status, amountspend, reach
             height={23} 
             alt={`${name} logo`} 
           />
-          <p className="font-semibold text-md text-gray-600 dark:text-slate-200">{name}</p>
+          <p className="font-medium text-md text-gray-600 dark:text-slate-200">{name}</p>
         </div>
-        <p className={`${Status}  w-3 h-3 rounded-full`} title={`${status == 1 ? "active" : status == 2 ? "draft" : status == 3 ? "pending" : "unknown"}`}></p>
+        <p className={`${Status} w-3 h-3 rounded-full`} title={`${status == 1 ? "active" : status == 2 ? "draft" : status == 3 ? "pending" : "unknown"}`}></p>
       </div>
       <div className="flex flex-col text-xs gap-1 mt-3">
-        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">{t('amount-spent')}:</b> <span className="font-semibold">{amountspend}</span></p>
-        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">{t('reach')}:</b> <span className="font-semibold">{reach}</span></p>
-        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200">{t('start-date')}:</b> <span className="font-semibold">{startdate}</span></p>
+        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200 font-medium">{t('amount-spent')}:</b> <span className="font-semibold">{amountspend}</span></p>
+        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200 font-medium">{t('reach')}:</b> <span className="font-semibold">{reach}</span></p>
+        <p className="text-gray-500 dark:text-slate-300"><b className="text-gray-600 dark:text-slate-200 font-medium">{t('start-date')}:</b> <span className="font-semibold">{startdate}</span></p>
       </div>
     </div>
   );
