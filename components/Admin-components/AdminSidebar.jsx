@@ -63,8 +63,11 @@ export default function AdminSidebar() {
         });
     };
 
+    const [dashboardLoading, setDashboardLoading] = useState(false);
+
     const handleDashboardDirect = () => {
         // toastr.info("Redirecting to Client Dashboard" , "Please Wait!");
+        setDashboardLoading(true);
         Router.push(`/${localStorage.getItem("lang")}/dashboard`);
     }
 
@@ -79,7 +82,7 @@ export default function AdminSidebar() {
         userData.roles === "admin" && {
             key: 'analytics',
             icon: <FaChartLine size={13} />,
-            text: t('analytics'),
+            text: `${dashboardLoading ? "Loading..." : t('analytics')}`,
             onClick: () => handleDashboardDirect()
         },
         userData.roles === "admin" && {
