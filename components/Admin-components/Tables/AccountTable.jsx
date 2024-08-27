@@ -685,22 +685,22 @@ export default function AccountTable() {
                             <div className="flex flex-col md:flex-row items-center">
                                 {/* Button */}
                                 <div className="flex mb-4">
-                                    <button title="Export Pdf" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                    <button title="Export Pdf" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <AiOutlineFilePdf/>
                                         </IconContext.Provider>
                                     </button>
-                                    <button title="Export Excel" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
+                                    <button title="Export Excel" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <RiFileExcel2Line/>
                                         </IconContext.Provider>
                                     </button>
-                                    <button title="Refresh" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
+                                    <button title="Refresh" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <RiRefreshLine/>
                                         </IconContext.Provider>
                                     </button>
-                                    <button title="Add Data" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                    <button title="Add Data" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e sm:border-e md:border-e-0 lg:rounded-e-none xl:rounded-e-none dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <BiPlus className="text-thin"/>
                                         </IconContext.Provider>
@@ -709,7 +709,7 @@ export default function AccountTable() {
                                         userData.roles == "sadmin" && (
                                             <div>
                                                 <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e dark:border-gray-500 rounded-e-md md:rounded-none text-sm block w-full px-3 py-2 select-no-arrow"
+                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e sm:border-e md:border-e-0 xl:border-e-0 dark:border-gray-500 rounded-e-md md:rounded-none text-sm block w-full px-3 py-2 select-no-arrow"
                                                     value={selectedTenant}
                                                     onChange={handleSelectedTenant}
                                                 >
@@ -764,7 +764,7 @@ export default function AccountTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className="w-full px-4 py-2 dark:bg-slate-800 dark:text-white border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
+                                    <input type="text" id="search" name="search" className="w-full h-10 px-4 py-2 dark:bg-slate-800 dark:text-white border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     />

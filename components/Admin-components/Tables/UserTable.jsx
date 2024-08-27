@@ -32,6 +32,9 @@ export default function UserTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true);
+    const [crudLoading, setCrudLoading] = useState(false);
+    const [create, setCreate] = useState(false);
+    const roles = localStorage.getItem('roles')
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
@@ -528,7 +531,7 @@ export default function UserTable() {
                             <div className={`flex ${userData.roles == "sadmin" ? "flex-col md:flex-row" : "flex-row"} items-center`}>
                                 <div className="flex mb-4">
                                 {/* Button */}
-                                <button title="Export Pdf" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button title="Export Pdf" className="h-10 bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
@@ -543,7 +546,7 @@ export default function UserTable() {
                                         <RiRefreshLine/>
                                     </IconContext.Provider>
                                 </button>
-                                <button title="Add Data" className={`bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border-e ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={createModal} >
+                                <button title="Add Data" className={`bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border- ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={createModal} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus/>
                                     </IconContext.Provider>
@@ -591,7 +594,7 @@ export default function UserTable() {
                             {/* Search */}
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
-                                    <input type="text" className="w-full dark:bg-slate-800 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
+                                    <input type="text" className="w-full h-10 dark:bg-slate-800 px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t('search')} 
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     id="search"/>

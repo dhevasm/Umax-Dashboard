@@ -712,22 +712,22 @@ export default function ClientTable() {
                             <div className={`flex ${userData.roles == "sadmin" ? "flex-col md:flex-row" : ""} items-center `}>
                                 <div className="flex mb-4">
                                     {/* Button */}
-                                <button title="Export Pdf" className="bg-white dark:bg-slate-800 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                <button title="Export Pdf" className="h-10 bg-white dark:bg-slate-800 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <AiOutlineFilePdf />
                                     </IconContext.Provider>
                                 </button>
-                                <button title="Export Excel" className="bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
+                                <button title="Export Excel" className="h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button title="Refresh" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
+                                <button title="Refresh" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiRefreshLine/>
                                     </IconContext.Provider>
                                 </button>
-                                <button title="Add Data" className={`bg-white dark:bg-slate-800 border-b border-t border-e ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={() => showModal("Create")} >
+                                <button title="Add Data" className={`h-10 bg-white dark:bg-slate-800 border-b border-t border-e ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
                                     </IconContext.Provider>
@@ -774,7 +774,7 @@ export default function ClientTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className=" dark:bg-slate-800 w-full px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t("search")}
+                                    <input type="text" id="search" name="search" className="h-10 dark:bg-slate-800 w-full px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder={t("search")}
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     />
@@ -1009,10 +1009,11 @@ export default function ClientTable() {
                                         <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 text-black dark:text-slate-200 dark:border-none border-gray-300 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                     </div>
                                     <div className={`mt-3 ${modeModal == "Edit" && "pb-4"} `}>
-                                    <label htmlFor="status" className="flex flex-col md:flex-row gap-2 cursor-pointer">
-                                            <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                            <span className="text-sm font-normal ">Status</span>
-                                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
+                                        <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
+                                        <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
+                                        <span className="text-sm font-medium text-black dark:text-slate-200 ">Status</span>
+                                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
+
                                         </label>
                                     </div>
 

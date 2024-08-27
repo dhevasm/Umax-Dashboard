@@ -5,17 +5,21 @@ import { useState, useEffect } from 'react';
 
 export default function SuggestionCard({ Title, Desc, Value, Target, Message, Color }) {
     const [background, setBackground] = useState("");
+    const [bordercolor, setBordercolor] = useState("");
     const [icon, setIcon] = useState("");
 
     useEffect(() => {
         if (Color === "Success") {
             setBackground("bg-green-100 dark:bg-green-600");
-            setIcon(<FiCheckCircle className="text-green-500 dark:text-green-200" size={30} />);
+            setBordercolor("border-green-500 dark:border-green-200");
+            setIcon(<FiCheckCircle className="text-green-600 dark:text-green-200" size={30} />);
         } else if (Color === "Warning") {
             setBackground("bg-yellow-100 dark:bg-yellow-600");
-            setIcon(<FiAlertTriangle className="text-yellow-500 dark:text-yellow-200" size={30} />);
+            setBordercolor("border-yellow-500 dark:border-yellow-200");
+            setIcon(<FiAlertTriangle className="text-yellow-600 dark:text-yellow-200" size={30} />);
         } else {
             setBackground("bg-blue-100 dark:bg-blue-600");
+            setBordercolor("border-blue-500 dark:border-blue-200");
             setIcon("No Icon");
         }
     }, [Color]);
@@ -23,7 +27,7 @@ export default function SuggestionCard({ Title, Desc, Value, Target, Message, Co
     return (
         <>
             {/* Suggestion Card */}
-            <div className={`w-full p-7 rounded-lg shadow-sm ${background} mt-5 transition-all`}>
+            <div className={`w-full p-7 rounded-lg shadow-sm ${background} ${bordercolor} border mt-5 transition-all`}>
                 <div className="flex gap-5">
                     {/* Icon */}
                     <div>

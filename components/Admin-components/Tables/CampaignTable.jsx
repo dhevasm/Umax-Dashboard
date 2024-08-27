@@ -836,23 +836,23 @@ export default function CampaignTable() {
                             <div className="w-full flex justify-start items-center flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row">
                                 <div className="flex mb-4 lg:mb-0 xl:mb-0">
                                     {/* Button */}
-                                    <button title="Export Pdf" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
+                                    <button title="Export Pdf" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 rounded-s-md" onClick={generatePDF}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <AiOutlineFilePdf />
                                         </IconContext.Provider>
                                     </button>
-                                    <button title="Export Excel" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
+                                    <button title="Export Excel" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={generateExcel}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <RiFileExcel2Line />
                                         </IconContext.Provider>
                                     </button>
-                                    <button title="Refresh" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
+                                    <button title="Refresh" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border-b border-t dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3" onClick={handleRefresh}>
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <RiRefreshLine/>
                                         </IconContext.Provider>
                                     </button>
                                     
-                                    <button title="Add Data" className="bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                    <button title="Add Data" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 lg:mb-4 xl:mb-4 border dark:border-gray-500 hover:bg-gray-100 rounded-e-md sm:rounded-e-md md:rounded-e-md lg:rounded-e-none xl:rounded-e-none dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <BiPlus className="text-thin"/>
                                         </IconContext.Provider>
@@ -931,7 +931,7 @@ export default function CampaignTable() {
                             <div className="flex gap-5">
                                 <div className="relative mb-4 ">
                                     <label htmlFor="search" className="hidden"></label>
-                                    <input type="text" id="search" name="search" className= "w-full px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-800" placeholder={t('search')}
+                                    <input type="text" id="search" name="search" className= "h-10 w-full px-4 py-2 border dark:border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-800" placeholder={t('search')}
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     onFocus={() => setCurrentPage(1)}

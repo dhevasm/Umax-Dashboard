@@ -130,7 +130,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                         ))
                     ) : filteredCampaigns.length === 0 ? (
                         <div className="text-center text-gray-500 py-4">
-                            No campaigns available
+                            {t('no-data')}
                         </div>
                     ) : (
                         filteredCampaigns.map((campaign, index) => (
