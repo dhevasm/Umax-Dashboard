@@ -64,13 +64,13 @@ function Map() {
         color={isDarkMode ?  "#D1D5DB" : "#1E40AF" }
         backgroundColor={isDarkMode ? "#1E293B" : "#FFFFFF"}
         value-suffix="Client"
-        strokeOpacity={1}
+        strokeOpacity={0.5}
         borderColor={isDarkMode ?  "#D1D5DB" : "#1E40AF" }
         size={size[mapDisplay]}
         data={data}
       />
     </div>
-    <div className="flex absolute bottom-7 gap-3 self-end pe-5">
+    <div className="hidden md:flex absolute bottom-7 gap-3 self-end pe-5">
         <button onClick={handleZoomout}  className={`p-3 rounded-full border-2 ${
             isDarkMode ? "bg-gray-800 border-gray-600 text-white" : "bg-gray-200 border-gray-400 text-black"
           } hover:bg-opacity-80 transition-colors duration-300`}><FaMinus/></button>

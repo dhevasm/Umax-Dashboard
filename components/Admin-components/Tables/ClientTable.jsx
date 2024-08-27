@@ -166,9 +166,11 @@ export default function ClientTable() {
                 document.getElementById('contact').value = filteredclient[0].contact.slice(1)
                 document.getElementById('email').value = filteredclient[0].email
                 document.getElementById('status').checked = filteredclient[0].status == 1 ? true : false
-                passwordInput.current.classList.add("hidden")
-                passwordverifyInput.current.classList.add("hidden")
-                tenantInput.current.classList.add("hidden")
+                // passwordInput.current.classList.add("hidden")
+                // passwordverifyInput.current.classList.add("hidden")
+                if(userData.roles == "sadmin"){
+                    document.getElementById('tenant').value = filteredclient[0].tenant_id
+                }
                 if(filteredclient[0].notes == "empty"){
                     document.getElementById("notes").value = ""
                 }else{
@@ -186,17 +188,13 @@ export default function ClientTable() {
             document.getElementById('city').value = 0
             document.getElementById('contact').value = null
             document.getElementById('email').value = null  
-            document.getElementById('password').value = null  
-            document.getElementById('passwordverify').value = null 
+            setTimeout(() => {
+                document.getElementById('password').value = null  
+                document.getElementById('passwordverify').value = null 
+            }, 500);
             document.getElementById('notes').value = ""
-            passwordInput.current.classList.remove("hidden")
-            passwordverifyInput.current.classList.remove("hidden") 
-            if(userData.roles == "sadmin"){
-                tenantInput.current.classList.remove("hidden")
-            }
-            if(userData.roles == "admin"){
-                tenantInput.current.classList.add("hidden")
-            }
+            // passwordInput.current.classList.remove("hidden")
+            // passwordverifyInput.current.classList.remove("hidden") 
         }
         addModal.current.classList.remove("hidden")
     }
@@ -374,7 +372,7 @@ export default function ClientTable() {
             const status = document.getElementById('status').checked ? 1 : 2
             const password = document.getElementById('password').value
             const passwordverify = document.getElementById('passwordverify').value
-            const tenant_id = document.getElementById('tenant').value
+            
             let notes = document.getElementById('notes').value
             if(notes == ""){
                 notes = "empty"
@@ -393,6 +391,7 @@ export default function ClientTable() {
             let url = ""
 
             if(userData.roles == "sadmin"){
+                const tenant_id = document.getElementById('tenant').value
                 url = `${process.env.NEXT_PUBLIC_API_URL}/client-create?tenantId=${tenant_id}`
             }else if(userData.roles == "admin"){
                 url = `${process.env.NEXT_PUBLIC_API_URL}/client-create`
@@ -441,7 +440,6 @@ export default function ClientTable() {
     async function updateClient(){
         if(EditclientId !== null) {
             if(isValid){
-
                 const name = document.getElementById('name').value
                 const country = document.getElementById('country').value
                 const city = document.getElementById('city').value
@@ -467,7 +465,7 @@ export default function ClientTable() {
                         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
                     }
                 })
-        
+                
                 if(response.data.Output == "Data Updated Successfully"){
                     getclient()
                     closeModal()
@@ -475,8 +473,8 @@ export default function ClientTable() {
                     document.getElementById('country').value = 0
                     document.getElementById('city').value = 0
                     document.getElementById('contact').value = null
-                    document.getElementById('email').value = null
-                    document.getElementById('password').value = null
+                    // document.getElementById('email').value = null
+                    // document.getElementById('password').value = null
                     // Swal.fire("Success", "Client Updated", "success")
                     setCrudLoading(false)
                     toastr.success('Client Updated', 'Success')
@@ -505,17 +503,17 @@ export default function ClientTable() {
     const [tenants, setTenants] = useState([])
 
     async function getSelectFrontend(){
-        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
-            setTimezone(response.data)
-        })
+        // await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
+        //     setTimezone(response.data)
+        // })
 
-        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/currency`).then((response) => {
-            setCurrency(response.data)
-        })
+        // await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/currency`).then((response) => {
+        //     setCurrency(response.data)
+        // })
 
-        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/culture`).then((response) => {
-            setCulture(response.data)
-        })
+        // await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/culture`).then((response) => {
+        //     setCulture(response.data)
+        // })
 
         if(userData.roles == "sadmin"){
             await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tenant-get-all`, {
@@ -679,8 +677,8 @@ export default function ClientTable() {
     function onSubmit(par){
         if(par == 1){
             createClient()
-        } else if(par == 2){
-            updateTenant()
+        } else if(par == 2){    
+            updateClient()
         } else {
             null
         }
@@ -915,11 +913,11 @@ export default function ClientTable() {
                                     <div className="col-span-1">
                                     <label htmlFor="country" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('country')}<span className="text-red-500">*</span></label>
                                     <select id="country" name="country" required className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={(e) => handleCityList(e.target.value)}>
-                                        <option value="0" key={0} disabled hidden>{t('select-country')}</option>
+                                        <option value={""}>{t("select-country")}</option>
                                         {
-                                            Country.length > 0 ? Country.map((item, index) => (
+                                            Country.length > 0 && Country.map((item, index) => (
                                                 <option key={index} value={item.country}>{item.country}</option>
-                                            )) : <option disabled>Loading</option>
+                                            ))
                                         }
                                     </select>
                                     {
@@ -928,21 +926,17 @@ export default function ClientTable() {
                                 </div>
                                 <div className="col-span-1">
                                     <label htmlFor="city" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('city')}<span className="text-red-500">*</span></label>
-                                    <select id="city" name="address" required className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={handleChange} onBlur={handleBlur}>
-                                        {
-                                            City.length > 0 ? <option disabled value={0} key={0} hidden>{t('select-city')}</option> : ""
-                                        }
+                                    <select id="city" name="address" defaultValue={""} required className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={handleChange} onBlur={handleBlur}>
                                         {
                                             City.length > 0 ? City.map((item, index) => (
                                                 <option key={index} value={item}>{item}</option>
-                                            )) : <option disabled value={0} key={0} hidden>Please Select Country</option>
+                                            )) : <option disabled value={""} hidden>Please Select Country</option>
                                         }
                                     </select>
                                     {
                                         touched.address && error.address && <p className="text-red-500 text-xs">{error.address}</p>
                                     }
                                 </div>
-                                    
                                     <div className="col-span-1">
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Email<span className="text-red-500">*</span> </label>
                                         <input type="email" name="email" id="email" required className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-email')}
@@ -959,54 +953,66 @@ export default function ClientTable() {
                                             touched.contact && error.contact && <p className="text-red-500 text-xs">{error.contact}</p>
                                         }
                                     </div>
-                                    <div className="col-span-2 md:col-span-1" ref={passwordInput}>
-                                        <label htmlFor="password" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Password<span className="text-red-500">*</span> </label>
-                                        <div className="relative">
-                                            <input type={showPassword ? "text" : "password"} required name="password" id="password" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} 
-                                            onChange={handleChange} onBlur={handleBlur}/>
-                                            <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
-                                                {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
-                                            </button>
-                                        </div>
-                                        {
-                                            touched.password && error.password && <p className="text-red-500 text-xs">{error.password}</p>
-                                        }
-                                    </div>
-                                    <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
-                                        <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('confirm_password')}<span className="text-red-500">*</span> </label>
-                                        <div className="relative">
-                                            <input type={showPassword ? "text" : "password"} required name="passwordverify" id="passwordverify" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} onChange={handleChange} onBlur={handleBlur}/>
-                                            <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
-                                                {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
-                                            </button>
-                                        </div>
-                                        {
-                                            touched.passwordverify && error.passwordverify && <p className="text-red-500 text-xs">{error.passwordverify}</p>
-                                        }
-                                    </div>
+                                    {
+                                        modeModal == "Create" && (
+                                            <>
+                                                 <div className="col-span-2 md:col-span-1" ref={passwordInput}>
+                                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Password<span className="text-red-500">*</span> </label>
+                                                <div className="relative">
+                                                    <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} 
+                                                    onChange={handleChange} onBlur={handleBlur} required/>
+                                                    <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
+                                                        {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
+                                                    </button>
+                                                </div>
+                                                {
+                                                    touched.password && error.password && <p className="text-red-500 text-xs">{error.password}</p>
+                                                }
+                                            </div>
+                                            <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
+                                                <label htmlFor="passwordverify" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('confirm_password')}<span className="text-red-500">*</span> </label>
+                                                <div className="relative">
+                                                    <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} onChange={handleChange} onBlur={handleBlur} required/>
+                                                    <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
+                                                        {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
+                                                    </button>
+                                                </div>
+                                                {
+                                                    touched.passwordverify && error.passwordverify && <p className="text-red-500 text-xs">{error.passwordverify}</p>
+                                                }
+                                            </div>
+                                            </>
+                                        )
+                                    }
+                                   
+                                   {
+                                    userData.roles == "sadmin" && (
                                     <div className="col-span-2" ref={tenantInput}>
-                                        <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Tenant <span className="text-red-500">*</span> </label>
-                                        <select id="tenant" required className={`bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}>
+                                        <label htmlFor="tenant" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">Tenant <span className="text-red-500">*</span></label>
+                                        <select id="tenant" defaultValue={""} required className={`bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`}>
+                                            <option value={""} key={0} hidden disabled>{t("select-tenant")}</option>
                                             {
                                                 tenants.length > 0 ? tenants.map((tenant, index) => {
                                                     return (
                                                         <option key={index} value={tenant._id}>{tenant.company}</option>
                                                     )
-                                                }) : <option key={0} value={0}>Loading..</option>
+                                                }) : <option value={0}>Loading..</option>
                                             }
                                         </select>
                                     </div>
+                                    )
+                                }
                                 </div>
                                 
                                 <div className="col-span-2">
                                         <label htmlFor="notes" className="mb-2 text-sm font-medium text-black dark:text-slate-200">Notes</label>
                                         <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 text-black dark:text-slate-200 dark:border-none border-gray-300 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                     </div>
-                                    <div className="mt-3">
-                                        <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
-                                        <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
-                                        <span className="text-sm font-medium text-black dark:text-slate-200 ">Status</span>
-                                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
+                                    <div className={`mt-3 ${modeModal == "Edit" && "pb-4"} `}>
+                                    <label htmlFor="status" className="flex flex-col md:flex-row gap-2 cursor-pointer">
+                                            <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
+                                            <span className="text-sm font-normal ">Status</span>
+                                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
                                         </label>
                                     </div>
 
@@ -1016,9 +1022,9 @@ export default function ClientTable() {
                                                 <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" disabled={crudLoading}>
                                                     {crudLoading ? <LoadingCrud /> : t('save')}
                                                 </button>
-                                                <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditclientId)}>
+                                                <div className="text-center hover:cursor-pointer w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditclientId)}>
                                                     {t('delete')}
-                                                </button>
+                                                </div>
                                             </div>
                                         ) : (
                                             <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" disabled={crudLoading}>

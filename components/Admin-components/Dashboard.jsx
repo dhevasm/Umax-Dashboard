@@ -17,12 +17,11 @@ import { IconContext } from "react-icons"
 import { RiAdvertisementFill, RiGoogleFill, RiGoogleLine, RiMetaLine, RiRefreshFill, RiTiktokFill, RiTiktokLine } from "react-icons/ri"
 import { reach } from "yup"
 import { FaArrowUp, FaBuilding, FaCheck, FaTimes } from "react-icons/fa"
-import { map } from "leaflet"
 import Swal from "sweetalert2"
 import { LiaSpinnerSolid } from "react-icons/lia"
-import { html2pdf } from "html2pdf.js"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import ChartFour from "./Charts/ChartFour"
 
 export default function Dashboard({ tenant_id }) {
     const t = useTranslations("admin-dashboard")
@@ -45,7 +44,7 @@ export default function Dashboard({ tenant_id }) {
                 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
             }
         }).then((response) => {
-            setCampaigns(response.data.Data);
+            setCampaigns(response.data.Data.sort((a, b) => parseInt(b.reach.replace(/\./g, "")) - parseInt(a.reach.replace(/\./g, ""))));
             // console.log(response.data.Data)
             setDataLoading(false)
         })
@@ -534,13 +533,19 @@ export default function Dashboard({ tenant_id }) {
                             <CountCard title={t('clients')} value={loadingCount ? "Loading..." : clientCount} handleClick={"clients"} />
                 </div>  
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
-                    <div className="w-full max-w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
-                        <ChartOne chartData={chartData} />
-                    </div>
-                    <div className="w-full max-w-full flex justify-center lg:w-2/3 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                    <div className="w-full max-w-full flex justify-center h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartTwo chartData={chartData} />
                     </div>
                 </div>
+                <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
+                    <div className="w-full max-w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                        <ChartOne chartData={chartData} />
+                    </div>
+                    <div className="w-full max-w-full lg:w-2/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-hidden">
+                        <ChartFour chartData={chartData} />
+                    </div>
+                </div>
+               
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
                     <div className="w-full max-w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] relative bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-hidden">
                         <Map />

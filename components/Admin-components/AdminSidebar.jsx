@@ -121,7 +121,7 @@ export default function AdminSidebar() {
             key: 'profile',
             icon: <RiProfileFill />,
             text: t('profile'),
-            link: `/${localStorage.getItem("lang")}/profile/edit`,
+            link: `/${localStorage.getItem("lang")}/profile`,
         },
         {
             key: 'logout',

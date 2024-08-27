@@ -162,8 +162,11 @@ export default function AccountTable() {
                 document.getElementById('platform').value = filteredaccount[0].platform
                 document.getElementById('email').value = filteredaccount[0].email
                 document.getElementById('status').checked = filteredaccount[0].status == 1 ? true : false
-                passwordInput.current.classList.add("hidden")
-                passwordverifyInput.current.classList.add("hidden")
+                // passwordInput.current.classList.add("hidden")
+                // passwordverifyInput.current.classList.add("hidden")
+                if(userData.roles == "sadmin"){
+                    document.getElementById('tenant').value = filteredaccount[0].tenant_id
+                }
                 if(filteredaccount[0].notes == "empty"){
                     document.getElementById("notes").value = ""
                 }else{
@@ -177,12 +180,14 @@ export default function AccountTable() {
             setError({name: '', email: '', password: '', passwordverify: '', client: '', platform: ''})
             document.getElementById('name').value = null
             document.getElementById('email').value = null
-            document.getElementById('password').value = null
-            document.getElementById('passwordverify').value = null
+            setTimeout(() => {
+                document.getElementById('password').value = null
+                document.getElementById('passwordverify').value = null
+            }, 500);
             document.getElementById("client").value = ""
             document.getElementById("platform").value = ""
-            passwordInput.current.classList.remove("hidden")
-            passwordverifyInput.current.classList.remove("hidden")
+            // passwordInput.current.classList.remove("hidden")
+            // passwordverifyInput.current.classList.remove("hidden")
             document.getElementById('notes').value = ""
         }
         addModal.current.classList.remove("hidden")
@@ -352,7 +357,6 @@ export default function AccountTable() {
             const password = document.getElementById('password').value
             const passwordverify = document.getElementById('passwordverify').value
             const status = document.getElementById('status').checked ? 1 : 2
-            const tenant_id = document.getElementById('tenant').value
             let notes = document.getElementById('notes').value
             if(notes == ""){
                 notes = "empty"
@@ -371,6 +375,7 @@ export default function AccountTable() {
             let url = ""
     
             if(userData.roles == "sadmin"){
+                const tenant_id = document.getElementById('tenant').value
                 url = `${process.env.NEXT_PUBLIC_API_URL}/account-create?tenantId=${tenant_id}`
             }else if(userData.roles == "admin"){
                 url = `${process.env.NEXT_PUBLIC_API_URL}/account-create`
@@ -417,8 +422,8 @@ export default function AccountTable() {
                 const client = document.getElementById('client').value
                 const email = document.getElementById('email').value
                 const platform = document.getElementById('platform').value
-                const password = document.getElementById('password').value
-                const passwordverify = document.getElementById('passwordverify').value
+                // const password = document.getElementById('password').value
+                // const passwordverify = document.getElementById('passwordverify').value
                 const status = document.getElementById('status').checked ? 1 : 2
                 let notes = document.getElementById('notes').value
                 if(notes == ""){
@@ -430,8 +435,8 @@ export default function AccountTable() {
                 formData.append('client_id', client);
                 formData.append('email', email);
                 formData.append('platform', platform);
-                formData.append('password', password);
-                formData.append('confirm_password', passwordverify);
+                // formData.append('password', password);
+                // formData.append('confirm_password', passwordverify);
                 formData.append('status', status);
                 formData.append('notes', notes);
             
@@ -447,8 +452,8 @@ export default function AccountTable() {
                         closeModal()
                         document.getElementById('name').value = null
                         document.getElementById('email').value = null
-                        document.getElementById('password').value = null
-                        document.getElementById('passwordverify').value = null
+                        // document.getElementById('password').value = null
+                        // document.getElementById('passwordverify').value = null
                         document.getElementById('notes').value = null
                         // Swal.fire("Success", "Campaing Updated", "success")
                         setCrudLoading(false)
@@ -513,12 +518,6 @@ export default function AccountTable() {
 
     useEffect(() => {
         getSelectFrontend()
-        if(userData.roles == "sadmin"){
-            tenantInput.current.classList.remove("hidden")
-        }
-        if(userData.roles == "admin"){
-            tenantInput.current.classList.add("hidden")
-        }
     }, [])
 
     const handlePlatformChange = (event) => {
@@ -926,22 +925,28 @@ export default function AccountTable() {
                                             touched.client && error.client ? <p className="text-red-500 dark:text-red-600 text-sm">{error.client}</p> : ""
                                         }
                                     </div>
-
-                                    <div className="col-span-1" ref={tenantInput}>
-                                        <label htmlFor="tenant" className="block mb-2 text-sm font-normal ">Tenant<span className="text-red-500 dark:text-red-600 ml-[1.5px]">*</span></label>
-                                        <select id="tenant" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
-                                            {
-                                                tenant.length > 0 ? tenant.map((tenant, index) => {
-                                                    return <option key={index} value={tenant._id}>{tenant.company}</option>
-                                                }) : <option key={0} value={0}>Loading...</option>
-                                            }
-                                        </select>
-                                    </div>
+                                    
+                                    {
+                                        userData.roles == "sadmin" && (
+                                            <div className="col-span-1" ref={tenantInput}>
+                                            <label htmlFor="tenant" className="block mb-2 text-sm font-normal ">Tenant<span className="text-red-500 dark:text-red-600 ml-[1.5px]">*</span></label>
+                                            <select id="tenant" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5  " defaultValue={""}>
+                                            <option value={""} key={0} hidden disabled>{t("select-tenant")}</option>
+                                                {
+                                                    tenant.length > 0 ? tenant.map((tenant, index) => {
+                                                        return <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                    }) : <option key={0} value={0}>Loading...</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        )   
+                                    }
+                                    
                                     <div className="col-span-1">
                                         <label htmlFor="platform" className="flex mb-2 text-sm font-normal ">Platform <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
                                         <select id="platform" name="platform" required className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${values.platform ? "text-black dark:text-white" : "text-[#858c96]"}`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                             <option value="" disabled hidden className="">{t('select-platform')}</option>
-                                            <option value="1">Meta Ads</option>z
+                                            <option value="1">Meta Ads</option>
                                             <option value="2">Google Ads</option>
                                             <option value="3">Tiktok Ads</option>
                                         </select>
@@ -949,10 +954,13 @@ export default function AccountTable() {
                                             touched.platform && error.platform ? <p className="text-red-500 dark:text-red-600 text-sm">{error.platform}</p> : ""
                                         }
                                     </div>
-                                    <div className="col-span-2 md:col-span-1" ref={passwordInput}>
+                                    {
+                                        modeModal == "Create" && (
+                                            <>
+                                                <div className="col-span-2 md:col-span-1" ref={passwordInput}>
                                         <label htmlFor="password" className="flex mb-2 text-sm font-normal">Password <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
                                         <div className="relative">
-                                            <input type={showPassword ? "text" : "password"} name="password" id="password" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} onChange={handleChange} onBlur={handleBlur}/>
+                                            <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} onChange={handleChange} onBlur={handleBlur} required/>
                                             <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                                 {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                             </button>
@@ -964,7 +972,7 @@ export default function AccountTable() {
                                     <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
                                         <label htmlFor="passwordverify" className="flex mb-2 text-sm font-normal  ">{t('confirm_password')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
                                         <div className="relative">
-                                            <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} onChange={handleChange} onBlur={handleBlur}/>
+                                            <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} onChange={handleChange} onBlur={handleBlur} required/>
                                             <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                                 {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                             </button>
@@ -973,6 +981,10 @@ export default function AccountTable() {
                                             touched.passwordverify && error.passwordverify ? <p className="text-red-500 dark:text-red-600 text-sm">{error.passwordverify}</p> : ""
                                         }
                                     </div>
+                                            </>
+                                        )
+                                    }
+                                    
 
                                     <div className="col-span-2">
                                         <label htmlFor="notes" className="mb-2 text-sm font-normal">Notes</label>
@@ -993,9 +1005,9 @@ export default function AccountTable() {
                                             <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" disabled={crudLoading}>
                                                 {crudLoading ? <LoadingCrud /> : t('save')}
                                             </button>
-                                            <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditaccountId)}>
+                                            <div className="w-full text-center hover:cursor-pointer bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditaccountId)}>
                                                 {t('delete')}
-                                            </button>
+                                            </div>
                                         </div>
                                     ) : (
                                         <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" disabled={crudLoading}>
