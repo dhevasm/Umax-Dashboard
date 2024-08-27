@@ -147,6 +147,12 @@ export default function AccountTable() {
         validateForm();
     };
 
+    const [clientFilter, setClientFilter] = useState([])
+
+    const handleGetClientList = (tenant_id) => {
+        setClientFilter(client.filter((acc) => acc.tenant_id === tenant_id))
+    }
+
     function showModal(mode, account_id = null ){
         document.body.style.overflow = 'hidden'
         setModeModal(mode)
@@ -166,7 +172,9 @@ export default function AccountTable() {
                 // passwordverifyInput.current.classList.add("hidden")
                 if(userData.roles == "sadmin"){
                     document.getElementById('tenant').value = filteredaccount[0].tenant_id
+                    document.getElementById('tenant').disabled = true
                 }
+                handleGetClientList(filteredaccount[0].tenant_id)
                 if(filteredaccount[0].notes == "empty"){
                     document.getElementById("notes").value = ""
                 }else{
@@ -189,6 +197,12 @@ export default function AccountTable() {
             // passwordInput.current.classList.remove("hidden")
             // passwordverifyInput.current.classList.remove("hidden")
             document.getElementById('notes').value = ""
+            if(userData.roles == "sadmin"){
+                document.getElementById('tenant').value = ""
+                document.getElementById('tenant').disabled = false
+            }else{
+                handleGetClientList(localStorage.getItem('tenantId'))
+            }
         }
         addModal.current.classList.remove("hidden")
     }
@@ -483,17 +497,17 @@ export default function AccountTable() {
 
     async function getSelectFrontend(){
         setSelectLoading(true)
-        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
-            setTimezone(response.data)
-        })
+        // await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/timezone`).then((response) => {
+        //     setTimezone(response.data)
+        // })
 
-        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/currency`).then((response) => {
-            setCurrency(response.data)
-        })
+        // await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/currency`).then((response) => {
+        //     setCurrency(response.data)
+        // })
 
-        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/culture`).then((response) => {
-            setCulture(response.data)
-        })
+        // await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/culture`).then((response) => {
+        //     setCulture(response.data)
+        // })
 
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-by-tenant`, {
             headers: {
@@ -902,6 +916,23 @@ export default function AccountTable() {
                                             touched.email && error.email ? <p className="text-red-500 dark:text-red-600 text-sm">{error.email}</p> : ""
                                         }
                                     </div>
+
+                                    
+                                    {
+                                        userData.roles == "sadmin" && (
+                                            <div className="col-span-1" ref={tenantInput}>
+                                            <label htmlFor="tenant" className="block mb-2 text-sm font-normal ">Tenant<span className="text-red-500 dark:text-red-600 ml-[1.5px]">*</span></label>
+                                            <select id="tenant" onChange={(e) => handleGetClientList(e.target.value)} required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5  " defaultValue={""}>
+                                            <option value={""} key={0} hidden disabled>{t("select-tenant")}</option>
+                                                {
+                                                    tenant.length > 0 ? tenant.map((tenant, index) => {
+                                                        return <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                    }) : <option key={0} value={0}>Loading...</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        )   
+                                    }
                                     <div className="col-span-1">
                                         <label htmlFor="client" className="flex mb-2 text-sm font-normal ">{t('client')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
                                         <select id="client" name="client" required className={`bg-white ${values.client ? "text-black dark:text-white" : "text-[#858c96]"} dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
@@ -910,9 +941,9 @@ export default function AccountTable() {
                                                 selectLoading ? (
                                                     // Jika data sedang loading
                                                     <option disabled key={0} value={0}>Loading clients list...</option>
-                                                ) : client.length > 0 ? (
+                                                ) : clientFilter.length > 0 ? (
                                                     // Jika data ditemukan
-                                                    client.map((client, index) => (
+                                                    clientFilter.map((client, index) => (
                                                         <option key={index} value={client._id}>{client.name}</option>
                                                     ))
                                                 ) : (
@@ -925,22 +956,6 @@ export default function AccountTable() {
                                             touched.client && error.client ? <p className="text-red-500 dark:text-red-600 text-sm">{error.client}</p> : ""
                                         }
                                     </div>
-                                    
-                                    {
-                                        userData.roles == "sadmin" && (
-                                            <div className="col-span-1" ref={tenantInput}>
-                                            <label htmlFor="tenant" className="block mb-2 text-sm font-normal ">Tenant<span className="text-red-500 dark:text-red-600 ml-[1.5px]">*</span></label>
-                                            <select id="tenant" required className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5  " defaultValue={""}>
-                                            <option value={""} key={0} hidden disabled>{t("select-tenant")}</option>
-                                                {
-                                                    tenant.length > 0 ? tenant.map((tenant, index) => {
-                                                        return <option key={index} value={tenant._id}>{tenant.company}</option>
-                                                    }) : <option key={0} value={0}>Loading...</option>
-                                                }
-                                            </select>
-                                        </div>
-                                        )   
-                                    }
                                     
                                     <div className="col-span-1">
                                         <label htmlFor="platform" className="flex mb-2 text-sm font-normal ">Platform <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>

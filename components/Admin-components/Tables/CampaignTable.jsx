@@ -128,6 +128,13 @@ export default function CampaignTable() {
         }));
     };
 
+    const [accountFilter, setAccountFilter] = useState([])
+
+    const handleGetAccountList = (tenant_id) => {
+        setAccountFilter(account.filter((acc) => acc.tenant_id === tenant_id))
+        console.log(accountFilter)
+    }
+
     function showModal(mode, campaign_id = null ){
         document.body.style.overflow = 'hidden'
         setModeModal(mode)
@@ -144,6 +151,7 @@ export default function CampaignTable() {
                     document.getElementById('tenant').value = filteredCampaign[0].tenant_id
                     document.getElementById('tenant').disabled = true
                 }
+                handleGetAccountList(filteredCampaign[0].tenant_id)
                 document.getElementById('account').value = filteredCampaign[0].account_id
                 document.getElementById('objective').value = filteredCampaign[0].objective
                 document.getElementById('start_date').value = dateconvert(filteredCampaign[0].start_date)
@@ -172,10 +180,13 @@ export default function CampaignTable() {
             if(userData.roles == "sadmin"){
                 document.getElementById('tenant').value = ""
                 document.getElementById('tenant').disabled = false
+            }else{
+                handleGetAccountList(localStorage.getItem('tenantId'))
             }
         }
         addModal.current.classList.remove("hidden")
     }
+    
     function closeModal(){
         document.body.style.overflow = 'auto'
         setValues({
@@ -1070,6 +1081,24 @@ export default function CampaignTable() {
                                             touched.name && error.name ? <div className="text-red-500 dark:text-red-600 text-sm">{error.name}</div> : ""
                                         }
                                     </div>
+
+                                    {
+                                        userData.roles == "sadmin" && (
+                                            <div className="col-span-1" ref={tenantInput}>
+                                                <label htmlFor="tenant" className="block mb-2 text-sm font-normal text-black dark:text-slate-200 ">Tenant</label>
+                                                <select id="tenant" onChange={(e) => handleGetAccountList(e.target.value)} required defaultValue={""} name="tenant" className="bg-white border text-[#858c96] dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
+                                                    <option value={""} key={0} hidden disabled>{t("select-tenant")}</option>
+                                                    {
+                                                        tenant.length > 0 ? tenant.map((tenant, index) => {
+                                                            return <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                        }) : <option key={0} value={0}>Loading...</option>
+                                                    }
+                                                    
+                                                </select>
+                                            </div>
+                                        )
+                                    }
+                                    
                                     <div className="col-span-1">
                                         <label htmlFor="account" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200">{t('account')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                         <select id="account" name="account" required className={`bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] ${values.account ? "text-black dark:text-white" : "text-[#858c96]"} border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
@@ -1080,9 +1109,9 @@ export default function CampaignTable() {
                                                     <option disabled key={0} value={0}>
                                                         Loading account list...
                                                     </option>
-                                                ) : account.length > 0 ? (
+                                                ) : accountFilter.length > 0 ? (
                                                     // Jika data ditemukan
-                                                    account.map((account, index) => (
+                                                    accountFilter.map((account, index) => (
                                                         <option key={index} value={account._id}>{account.username}</option>
                                                     ))
                                                 ) : (
@@ -1095,22 +1124,6 @@ export default function CampaignTable() {
                                             touched.account && error.account ? <div className="text-red-500 dark:text-red-600 text-sm">{error.account}</div> : ""
                                         }
                                     </div>
-                                    {
-                                        userData.roles == "sadmin" && (
-                                            <div className="col-span-1" ref={tenantInput}>
-                                                <label htmlFor="tenant" className="block mb-2 text-sm font-normal text-black dark:text-slate-200 ">Tenant</label>
-                                                <select id="tenant" required defaultValue={""} name="tenant" className="bg-white border text-[#858c96] dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
-                                                    <option value={""} key={0} hidden disabled>{t("select-tenant")}</option>
-                                                    {
-                                                        tenant.length > 0 ? tenant.map((tenant, index) => {
-                                                            return <option key={index} value={tenant._id}>{tenant.company}</option>
-                                                        }) : <option key={0} value={0}>Loading...</option>
-                                                    }
-                                                    
-                                                </select>
-                                            </div>
-                                        )
-                                    }
                                     
                                     <div className="col-span-1">
                                     <label htmlFor="objective" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>

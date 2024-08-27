@@ -221,12 +221,12 @@ export default function TenantProfile({tenant_id}){
                 citylist= item.cities
             }
         })
-        alldial.map((item) => {
-            if(item.name == countryname){
-                setDialCountry(item.dial_code)
-                // console.log(item.dial_code)
-            }
-        })
+        // alldial.map((item) => {
+        //     if(item.name == countryname){
+        //         setDialCountry(item.dial_code)
+        //         // console.log(item.dial_code)
+        //     }
+        // })
 
         setCity(citylist)
     }

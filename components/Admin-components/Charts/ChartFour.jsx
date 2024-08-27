@@ -35,7 +35,7 @@ const ChartFour = ({ chartData }) => {
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: '70%',
+        barHeight: '20',
       }
     },
     dataLabels: {

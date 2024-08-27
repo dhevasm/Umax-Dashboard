@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 export default function AdminSidebar() {
     const sidebarLink = useRef(null);
@@ -61,6 +63,11 @@ export default function AdminSidebar() {
         });
     };
 
+    const handleDashboardDirect = () => {
+        // toastr.info("Redirecting to Client Dashboard" , "Please Wait!");
+        Router.push(`/${localStorage.getItem("lang")}/dashboard`);
+    }
+
     const sidebarItems = [
         {
             key: 'dashboard',
@@ -73,7 +80,7 @@ export default function AdminSidebar() {
             key: 'analytics',
             icon: <FaChartLine size={13} />,
             text: t('analytics'),
-            link: `/${localStorage.getItem("lang")}/dashboard`,
+            onClick: () => handleDashboardDirect()
         },
         userData.roles === "admin" && {
             key: 'tenant-profile',
@@ -121,7 +128,8 @@ export default function AdminSidebar() {
             key: 'profile',
             icon: <RiProfileFill />,
             text: t('profile'),
-            link: `/${localStorage.getItem("lang")}/profile`,
+            // link: `/${localStorage.getItem("lang")}/profile`,
+            onClick: () => setChangeTable("profile")
         },
         {
             key: 'logout',

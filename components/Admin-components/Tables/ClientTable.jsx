@@ -170,9 +170,11 @@ export default function ClientTable() {
                 // passwordverifyInput.current.classList.add("hidden")
                 if(userData.roles == "sadmin"){
                     document.getElementById('tenant').value = filteredclient[0].tenant_id
+                    document.getElementById('tenant').disabled = true
                 }
+                document.getElementById('email').disabled = true
                 if(filteredclient[0].notes == "empty"){
-                    document.getElementById("notes").value = ""
+                    document.getElementById("notes").value = "" 
                 }else{
                     document.getElementById('notes').value = filteredclient[0].notes 
                 }
@@ -184,10 +186,15 @@ export default function ClientTable() {
             setValues({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             setError({name: '', address: '', contact: '', email: '', password: '', passwordverify: ''})
             document.getElementById('name').value = null
-            document.getElementById('country').value = 0
-            document.getElementById('city').value = 0
+            document.getElementById('country').value = ""
+            document.getElementById('city').value = ""
             document.getElementById('contact').value = null
             document.getElementById('email').value = null  
+            document.getElementById('email').disabled = false
+            if(userData.roles == "sadmin"){
+                document.getElementById('tenant').value = ""
+                document.getElementById('tenant').disabled = false
+            }
             setTimeout(() => {
                 document.getElementById('password').value = null  
                 document.getElementById('passwordverify').value = null 
@@ -912,8 +919,8 @@ export default function ClientTable() {
                                     </div>
                                     <div className="col-span-1">
                                     <label htmlFor="country" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('country')}<span className="text-red-500">*</span></label>
-                                    <select id="country" name="country" required className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={(e) => handleCityList(e.target.value)}>
-                                        <option value={""}>{t("select-country")}</option>
+                                    <select id="country" defaultValue={""} name="country" required className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={(e) => handleCityList(e.target.value)}>
+                                        <option value={""} disabled hidden>{t("select-country")}</option>
                                         {
                                             Country.length > 0 && Country.map((item, index) => (
                                                 <option key={index} value={item.country}>{item.country}</option>
@@ -927,6 +934,7 @@ export default function ClientTable() {
                                 <div className="col-span-1">
                                     <label htmlFor="city" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('city')}<span className="text-red-500">*</span></label>
                                     <select id="city" name="address" defaultValue={""} required className={`bg-white dark:bg-[#1d2a3a] ${values.address ? 'text-black dark:text-white' : 'text-[#858c96]'} text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5`} onChange={handleChange} onBlur={handleBlur}>
+                                        <option value={""} disabled hidden>{t("select-city")}</option>
                                         {
                                             City.length > 0 ? City.map((item, index) => (
                                                 <option key={index} value={item}>{item}</option>
@@ -1009,7 +1017,7 @@ export default function ClientTable() {
                                         <textarea id="notes" name="notes" className="bg-gray-50 border dark:bg-slate-800 text-black dark:text-slate-200 dark:border-none border-gray-300 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                     </div>
                                     <div className={`mt-3 ${modeModal == "Edit" && "pb-4"} `}>
-                                        <label htmlFor="status" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
+                                        <label htmlFor="status" className="flex flex-col md:flex-row gap-2 cursor-pointer">
                                         <input type="checkbox" value="" id="status" name="status" className="sr-only peer"/>
                                         <span className="text-sm font-medium text-black dark:text-slate-200 ">Status</span>
                                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>

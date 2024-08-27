@@ -261,20 +261,8 @@ export default function TenantTable() {
             confirmButtonText: "Yes, download it!"
           }).then((result) => {
             if (result.isConfirmed) {
-                const backupLastPage = lastPage;
-                const backupFirstPage = firstPage;
-                setFirstPage(0);
-                setLastPage(tenants.length);
-                setTimeout(() => {
-                    onDownload();
-                    setFirstPage(backupFirstPage);
-                    setLastPage(backupLastPage);
-                }, 100);
-              Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
-                icon: "success"
-              });
+                onDownload();
+                toastr.success('PDF downloaded successfully', 'Success')
             }
           });
     }
@@ -303,11 +291,7 @@ export default function TenantTable() {
                     body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
                 });
                 doc.save('DataTenant.pdf');
-              Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
-                icon: "success"
-              });
+                toastr.success('PDF downloaded successfully', 'Success')
             }
           });
     };
@@ -503,12 +487,12 @@ export default function TenantTable() {
                 citylist= item.cities
             }
         })
-        alldial.map((item) => {
-            if(item.name == countryname){
-                setDialCountry(item.dial_code)
-                // console.log(item.dial_code)
-            }
-        })
+        // alldial.map((item) => {
+        //     if(item.name == countryname){
+        //         setDialCountry(item.dial_code)
+        //         // console.log(item.dial_code)
+        //     }
+        // })
 
         setCity(citylist)
     }
