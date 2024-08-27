@@ -648,6 +648,12 @@ export default function TenantTable() {
         } else {
             null
         }
+
+    }   
+
+    const handleRefresh = () => {
+        Router.refresh()
+        getTenants()
     }
 
     return (
@@ -840,9 +846,9 @@ export default function TenantTable() {
                                         {crudLoading ? <LoadingCrud/> : t('submit')}
                                     </button>
                                 }
-                                <button className="bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-1 px-4 rounded-[3px]" ref={deleteButton} onClick={() => handleDelete(EditTenantId)}>
+                                <div className="bg-[#3b50df] text-center hover:cursor-pointer hover:bg-blue-700 border border-indigo-700 text-white py-1 px-4 rounded-[3px]" ref={deleteButton} onClick={() => handleDelete(EditTenantId)}>
                                     {t('delete')}
-                                </button>
+                                </div>
                             </div>
                         </div>
           

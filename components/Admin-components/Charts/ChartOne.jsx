@@ -1,108 +1,102 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, Colors, Filler } from 'chart.js';
-import { useTranslations } from 'next-intl';
+import React, { useEffect, useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { useContext } from 'react';
 import { AdminDashboardContext } from '@/app/[locale]/admin-dashboard/page';
-import { FaDownload } from 'react-icons/fa';
 
-ChartJS.register(Filler, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+// Dynamically import ApexCharts to ensure it works with Next.js
+const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const ChartOne = ({ chartData }) => {
-  const chartRef = useRef(null); // Reference to the chart
-  const t = useTranslations("admin-dashboard");
-  const {
-    sidebarHide,
-    setSidebarHide,
-    updateCard,
-    setUpdateCard,
-    changeTable,
-    setChangeTable,
-    userData,
-    dataDashboard,
-    isDarkMode,
-    setIsDarkMode
-  } = useContext(AdminDashboardContext);
+  const { isDarkMode } = useContext(AdminDashboardContext);
 
   const [awareness, setAwareness] = useState(0);
   const [conversion, setConversion] = useState(0);
   const [consideration, setConsideration] = useState(0);
 
   useEffect(() => {
-    setAwareness(chartData.bar);
-    setConversion(chartData.bar2);
-    setConsideration(chartData.bar3);
+    if (chartData) {
+      setAwareness(chartData.bar || 0);
+      setConversion(chartData.bar2 || 0);
+      setConsideration(chartData.bar3 || 0);
+    }
   }, [chartData]);
 
-  const data = {
-    labels: ["Awareness", "Conversion", "Consideration"],
-    datasets: [
-      {
-        label: 'Campaign',
-        data: [awareness, conversion, consideration],
-        backgroundColor: '#1368DE',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-        barThickness: 40,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false, // Allows the chart to fill its parent container
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          color: isDarkMode ? "white" : "gray", // Change legend text color
-        },
-      },
-      title: {
-        display: true,
-        text: 'Campaign Objective',
-        color: isDarkMode ? "white" : "gray", // Change title text color,
-      },
+  const series = useMemo(() => [
+    {
+      name: 'Campaign',
+      data: [awareness, conversion, consideration],
     },
-    scales: {
-      x: {
-        ticks: {
-          color: isDarkMode ? "white" : "gray", // Change x-axis labels color,
+  ], [awareness, conversion, consideration]);
+
+  const options = useMemo(() => ({
+    chart: {
+      type: 'bar',
+      background: isDarkMode ? '#1E293B' : '#fff',
+      foreColor: isDarkMode ? '#fff' : '#1E293B',
+      toolbar: {
+        show: true, // Show toolbar with additional options
+        tools: {
+          download: true, // Enable download button
+          zoomin: false,   // Disable zoom-in button
+          zoomout: false,  // Disable zoom-out button
+          reset: true,    // Show reset button
         },
-        grid: {
-          color: isDarkMode ? "white" : "gray", // Optional: change grid line color,
-        },
-      },
-      y: {
-        ticks: {
-          color: isDarkMode ? "white" : "gray", // Change y-axis labels color,
-        },
-        grid: {
-          color: isDarkMode ? "white" : "gray", // Optional: change grid line color,
+        export: {
+          csv: {
+            columnDelimiter: ',',
+            headerCategory: 'Category',
+            headerValue: 'Value',
+            fileName: 'chart-data',
+            mimeType: 'text/csv',
+            useLocalTime: false,
+          },
         },
       },
     },
-  };
-
-  const downloadChart = () => {
-    const chart = chartRef.current;
-    const link = document.createElement('a');
-    link.href = chart.toBase64Image();
-    link.download = 'objective-report.png';
-    link.click();
-  };
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        horizontal: false,
+        columnWidth: '50%',
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    xaxis: {
+      categories: ["Awareness", "Conversion", "Consideration"],
+      labels: {
+        style: {
+          colors: isDarkMode ? '#fff' : '#333',
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: isDarkMode ? '#fff' : '#333',
+        },
+      },
+    },
+    fill: {
+      colors: [isDarkMode ? '#1A73E8' : '#1368DE'],
+    },
+    tooltip: {
+      theme: isDarkMode ? 'dark' : 'light',
+    },
+    title: {
+      text: 'Campaign Objective',
+      style: {
+        color: isDarkMode ? "white" : "gray",
+      },
+    },
+  }), [isDarkMode]);
 
   return (
-    <div className="relative w-full h-96"> {/* Parent container with a fixed height */}
-      <Bar ref={chartRef} data={data} options={options} />
-      <div
-        className="absolute top-7 right-4 cursor-pointer text-gray-500 hover:text-gray-700"
-        onClick={downloadChart}
-      >
-        <FaDownload className={`${isDarkMode ? "text-white" : "text-gray-500"} text-lg`} />
-      </div>
+    <div className="relative w-full h-96">
+      <ApexCharts options={options} series={series} type="bar" height="100%" />
     </div>
   );
 };

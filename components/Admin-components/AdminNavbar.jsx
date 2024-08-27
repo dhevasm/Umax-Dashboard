@@ -637,7 +637,7 @@ function AdminNavbar({ userData }) {
             </button>
           </div>
 
-          <div className="relative left-3 flex items-center ms-15">
+          <div className="relative left-10 flex items-center ms-15">
             <div
               className={`w-16 h-9 flex justify-center items-center rounded-full`}
             >
@@ -757,17 +757,11 @@ function AdminNavbar({ userData }) {
             )}
           </div>
 
-          <div className="relative">
+          <div className="relative left-5">
           {userData.image ? (
                 <>
                     <div onClick={toggleDropdown} className="flex items-center cursor-pointer">
-                      {
-                        isDropdownOpen ? (
-                          <FaAngleDown className="text-xl me-2 transform rotate-180"/>
-                        ) : (
-                          <FaAngleDown className="text-xl me-2"/>
-                        )
-                      }
+                      
                         <div className="block">
                             <Image
                                 src={`data:image/png;base64, ${userData.image}`}
@@ -777,6 +771,18 @@ function AdminNavbar({ userData }) {
                                 height={40}   
                             />
                         </div>
+                        <div className="mx-2 hidden md:block">
+                          <h1 className="font-bold">{userData.name}</h1>
+                          <p>{userData.email}</p>
+                        </div>
+
+                        {
+                        isDropdownOpen ? (
+                          <FaAngleDown className="text-xl me-2 transform rotate-180"/>
+                        ) : (
+                          <FaAngleDown className="text-xl me-2"/>
+                        )
+                      }
                     </div>
                     
                     {isDropdownOpen && (

@@ -38,7 +38,10 @@ export default function UserTable() {
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
-
+    const [crudLoading, setCrudLoading] = useState(false)
+    const [create, setCreate] = useState(false)
+    const roles = localStorage.getItem("roles")
+    
     function LoadingCrud() {
             return (
             <div className="flex justify-center items-center h-6">
@@ -353,7 +356,9 @@ export default function UserTable() {
         onSubmit: async (values) => {
           const url = roles == 'sadmin' ? `${process.env.NEXT_PUBLIC_API_URL}/register?tenantId=${values.tenant_id}` : `${process.env.NEXT_PUBLIC_API_URL}/register`;
           try {
+            setCrudLoading(true);
             const formData = new FormData();
+            formData.append('name', values.username);
             formData.append('email', values.email);
             formData.append('password', values.password);
             formData.append('confirm_password', values.passwordMatch);
@@ -371,6 +376,7 @@ export default function UserTable() {
                 getUsers();
                 setCrudLoading(false);    
                 setCreate(false);
+                formik.handleReset();
             //   });
             }
           } catch (error) {
@@ -834,6 +840,7 @@ export default function UserTable() {
                                                 onBlur={formik.handleBlur}
                                                 className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                                                 required
+                                                defaultValue={""}
                                             >
                                                 <option value="" hidden>{t('select-tenant')}</option>
                                                 {isLoading ? (

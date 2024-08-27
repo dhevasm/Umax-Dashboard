@@ -140,7 +140,10 @@ export default function CampaignTable() {
                 setEditCampaignId(campaign_id)
                 dateconvert(filteredCampaign[0].start_date)
                 document.getElementById('name').value = filteredCampaign[0].name
-                document.getElementById('tenant').value = filteredCampaign[0].tenant_id
+                if(userData.roles == "sadmin"){
+                    document.getElementById('tenant').value = filteredCampaign[0].tenant_id
+                    document.getElementById('tenant').disabled = true
+                }
                 document.getElementById('account').value = filteredCampaign[0].account_id
                 document.getElementById('objective').value = filteredCampaign[0].objective
                 document.getElementById('start_date').value = dateconvert(filteredCampaign[0].start_date)
@@ -166,6 +169,10 @@ export default function CampaignTable() {
             document.getElementById('start_date').value = ""
             document.getElementById('end_date').value = ""
             document.getElementById('notes').value = ""
+            if(userData.roles == "sadmin"){
+                document.getElementById('tenant').value = ""
+                document.getElementById('tenant').disabled = false
+            }
         }
         addModal.current.classList.remove("hidden")
     }
@@ -351,7 +358,7 @@ export default function CampaignTable() {
                 setTimeout(() => {
                     // console.log(lastData._id);
                     // console.log(dateconvert(lastData.start_date));
-                    createMetrics(lastData._id, dateconvert(lastData.start_date));
+                    createMetrics(lastData._id, dateconvert(lastData.start_date), dateconvert(lastData.end_date));
                 }, 5000); // Menunda selama 5 detik
     
                 setIsCreate(false);
@@ -370,7 +377,6 @@ export default function CampaignTable() {
         if(isvalid){
             const name = document.getElementById('name').value
             const account = document.getElementById('account').value
-            const tenant = document.getElementById('tenant').value
             const objective = document.getElementById('objective').value
             const status = document.getElementById('status').value
             const start_date = document.getElementById('start_date').value
@@ -380,8 +386,6 @@ export default function CampaignTable() {
             if(notes == ""){
                 notes = "empty"
             }
-            
-            console.log(tenant)
             
             const formData = new FormData();
             formData.append('name', name);
@@ -395,6 +399,7 @@ export default function CampaignTable() {
             let url = ""
     
             if(userData.roles == "sadmin"){
+                const tenant = document.getElementById('tenant').value
                 url = `${process.env.NEXT_PUBLIC_API_URL}/campaign-create?tenantId=${tenant}`
             }else if(userData.roles == "admin"){
                 url = `${process.env.NEXT_PUBLIC_API_URL}/campaign-create`
@@ -437,7 +442,6 @@ export default function CampaignTable() {
             if(isvalid){
                 const name = document.getElementById('name').value
                 const account = document.getElementById('account').value
-                const tenant = document.getElementById('tenant').value
                 const objective = document.getElementById('objective').value
                 const status = document.getElementById('status').value
                 const start_date = document.getElementById('start_date').value
@@ -536,16 +540,10 @@ export default function CampaignTable() {
 
     useEffect(() => {
         getSelectFrontend()
-        if(userData.roles == "sadmin"){
-            tenantInput.current.classList.remove("hidden")
-        }
-        if(userData.roles == "admin"){
-            tenantInput.current.classList.add("hidden")
-        }
     }, [])
     
 
-    function createMetrics(campaignID, startDate) {
+    function createMetrics(campaignID, startDate, endDate) {
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
@@ -556,6 +554,10 @@ export default function CampaignTable() {
         }
 
         const date = new Date(startDate);
+        const EndDate = new Date(endDate);
+
+        const selisihMilidetik = Math.abs(EndDate - date);
+        const selisihHari = Math.ceil(selisihMilidetik / (1000 * 60 * 60 * 24));
 
         const amountspent = getRandomInt(100000, 500000); // Dalam Rupiah
         const reach = parseInt(getRandomFloat(amountspent / 100, amountspent));
@@ -602,7 +604,7 @@ export default function CampaignTable() {
             }
             ).then((response) => {
                 if(!response.IsError){
-                    for(let i = 0; i < 7; i++){
+                    for(let i = 0; i < selisihHari; i++){
                         const amountspent2 = getRandomInt(100000, 500000); // Dalam Rupiah
                         const reach2 = parseInt(getRandomFloat(amountspent2 / 10, amountspent2));
                         const impressions2 = getRandomInt(reach2, reach2 * 1.5); // Impressions biasanya lebih besar atau sama dengan reach
@@ -634,11 +636,6 @@ export default function CampaignTable() {
                         formDua.append('cpc', cpc2);
                         try {
                             const dua = axios.put(`${process.env.NEXT_PUBLIC_API_URL}/metrics-hitung?campaign_id=${campaignID}`, formDua)
-                            if(!dua.IsError){
-                                toastr.success('Metrics created successfully', 'Success')
-                            }else{
-                                toastr.error("Metrics failed to create", "Error")
-                            }
                         }catch (error) {
                             toastr.error("Metrics failed to create", "Error")
                             console.log(error)
@@ -646,8 +643,9 @@ export default function CampaignTable() {
                         }
                 }
             })
-            console.log(satu)
+            toastr.success('Metrics created successfully', 'Success')
         } catch (error) {
+            toastr.error("Metrics failed to create", "Error")
             console.log(error)
         }
     }
@@ -862,7 +860,7 @@ export default function CampaignTable() {
                                     {
                                         userData.roles == "sadmin" && (
                                             <div>
-                                                <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
+                                                <label htmlFor="tenantfilter" className="text-sm font-medium hidden">Tenant</label>
                                                 <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 border-b border-t border-e dark:border-gray-500 text-sm rounded-e-md md:rounded-none block w-full px-3 py-2 select-no-arrow"
                                                     value={selectedTenant}
                                                     onChange={handleTenantChange}
@@ -1097,16 +1095,22 @@ export default function CampaignTable() {
                                             touched.account && error.account ? <div className="text-red-500 dark:text-red-600 text-sm">{error.account}</div> : ""
                                         }
                                     </div>
-                                    <div className="col-span-1" ref={tenantInput}>
-                                        <label htmlFor="tenant" className="block mb-2 text-sm font-normal text-black dark:text-slate-200 ">Tenant</label>
-                                        <select id="tenant" name="tenant" required className="bg-white border text-[#858c96] dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
-                                            {
-                                                tenant.length > 0 ? tenant.map((tenant, index) => {
-                                                    return <option key={index} value={tenant._id}>{tenant.company}</option>
-                                                }) : <option key={0} value={0}>Loading...</option>
-                                            }
-                                        </select>
-                                    </div>
+                                    {
+                                        userData.roles == "sadmin" && (
+                                            <div className="col-span-1" ref={tenantInput}>
+                                                <label htmlFor="tenant" className="block mb-2 text-sm font-normal text-black dark:text-slate-200 ">Tenant</label>
+                                                <select id="tenant" required defaultValue={""} name="tenant" className="bg-white border text-[#858c96] dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5  ">
+                                                    <option value={""} key={0} hidden disabled>{t("select-tenant")}</option>
+                                                    {
+                                                        tenant.length > 0 ? tenant.map((tenant, index) => {
+                                                            return <option key={index} value={tenant._id}>{tenant.company}</option>
+                                                        }) : <option key={0} value={0}>Loading...</option>
+                                                    }
+                                                    
+                                                </select>
+                                            </div>
+                                        )
+                                    }
                                     
                                     <div className="col-span-1">
                                     <label htmlFor="objective" className="flex mb-2 text-sm font-normal text-black dark:text-slate-200 ">{t('objective')} <div className="text-red-500 dark:text-red-600">*</div></label>
@@ -1157,22 +1161,19 @@ export default function CampaignTable() {
                                         <label htmlFor="notes" className="mb-2 text-sm font-normal text-black dark:text-slate-200">Notes</label>
                                         <textarea id="notes" name="notes" className="bg-white border text-black dark:text-slate-200 dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5" placeholder="Enter notes here" onChange={(e) => setValues({...values, notes: e.target.value})}></textarea>
                                     </div>
-                                    
-                                    
-                                    
                                 </div>
                                 {
                                     modeModal === 'Edit' ? (
                                     <div className="flex gap-3">
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" disabled={crudLoading}>
+                                        <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap" disabled={crudLoading}>
                                             {crudLoading ? <LoadingCrud /> : t('save')}
                                         </button>
-                                        <button className="w-full bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}>
+                                        <div className="w-full text-center hover:cursor-pointer bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap" onClick={() => handleDelete(EditCampaignId)}>
                                             {t('delete')}
-                                        </button>
+                                        </div>
                                     </div>
                                     ) : (
-                                        <button className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" disabled={crudLoading}>
+                                        <button type="submit" className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]" disabled={crudLoading}>
                                                 {crudLoading ? <LoadingCrud /> : t('submit')}
                                         </button>
                                     )
