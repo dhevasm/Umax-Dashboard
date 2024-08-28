@@ -674,6 +674,11 @@ export default function TenantTable() {
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
+                                <button title="Refresh" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={handleRefresh}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <RiRefreshLine/>
+                                    </IconContext.Provider>
+                                </button>
                                 <button className=" py-2 mb-4 border-b border-t border-e dark:border-gray-500 rounded-e-md hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus className="text-thin"/>
