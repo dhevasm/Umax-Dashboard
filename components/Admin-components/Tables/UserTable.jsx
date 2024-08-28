@@ -543,7 +543,7 @@ export default function UserTable() {
                                         <RiRefreshLine/>
                                     </IconContext.Provider>
                                 </button>
-                                <button title="Add Data" className={`bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border- ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={createModal} >
+                                <button title="Add Data" className={`bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border-e ${userData.roles == "sadmin" ? "rounded-e-md md:rounded-e-none" : ""} hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 `} onClick={createModal} >
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <BiPlus/>
                                     </IconContext.Provider>
