@@ -17,6 +17,7 @@ import { BiPlus } from "react-icons/bi"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 
 export default function TenantTable() {
 
@@ -41,6 +42,8 @@ export default function TenantTable() {
     const [alldial, setDial] = useState([])
     const [DialCountry, setDialCountry] = useState([])
     const t = useTranslations('admin-tenants')
+
+    const Router = useRouter()
 
     const [values, setValues] = useState({
 
@@ -674,7 +677,7 @@ export default function TenantTable() {
                                         <RiFileExcel2Line />
                                     </IconContext.Provider>
                                 </button>
-                                <button title="Refresh" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={handleRefresh}>
+                                <button title="Refresh" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={handleRefresh}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiRefreshLine/>
                                     </IconContext.Provider>
