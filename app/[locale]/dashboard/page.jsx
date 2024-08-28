@@ -138,7 +138,7 @@ function Dashboard() {
                 </div>
 
                 {/* Content */}
-                <div className="m-10">
+                <div className="mx-5">
                   {activeContent === "performance" && <Performance key={campaignID} spent={amountspent} atc={atc} id={campaignID} />}
                   {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID} />}
                   {activeContent === "history" && <History key={campaignID} id={campaignID} />}
