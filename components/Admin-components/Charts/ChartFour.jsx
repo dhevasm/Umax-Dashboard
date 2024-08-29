@@ -56,9 +56,6 @@ const ChartFour = ({ chartData }) => {
         },
       },
     },
-    grid: {
-      borderColor: isDarkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
-    },
     title: {
       text: 'Client City',
       align: 'left',

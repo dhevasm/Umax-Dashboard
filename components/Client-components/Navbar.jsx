@@ -146,13 +146,18 @@ export default function Navbar() {
     const ProfileDropdown = ({ name, email, role, image }) => (
         <div className="relative text-black dark:text-slate-200 hover:cursor-pointer">
             <div className="flex items-center" onClick={isHidden == 1 ? () => setIsHidden(0) : () => setIsHidden(1)}>
-                <Image 
-                    src={`data:image/png;base64, ${image}`} 
-                    alt="Profile" 
-                    className="w-11 h-11 rounded-full border-2 me-1 border-gray-300 dark:border-slate-700" 
-                    width={44} 
-                    height={44} 
-                />
+            <Image
+                src={`data:image/png;base64,${image}`}
+                alt="profile"
+                className="rounded-full bg-slate-200"
+                width={50}
+                height={50}
+                style={{
+                objectFit: 'cover',
+                width: '50px',
+                height: '50px',
+                }}
+            />
                 <span className="text-blue-500">
                     {isHidden ? 
                         <IoIosArrowUp size={18} className="font-semibold text-black dark:text-slate-200" /> :
@@ -205,7 +210,7 @@ export default function Navbar() {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <Image
-                        src="/assets/logo.png"
+                        src={`${ isDark ?  "/assets/logo-dark.png" : "/assets/logo.png"}`}
                         alt="Logo"
                         className="w-32 hover:cursor-pointer"
                         width={120}
@@ -303,11 +308,11 @@ export default function Navbar() {
                             </label> */}
                             {roles === 'client' && (
                                 activeLink.includes("id") ? 
-                                    <button onClick={() => changeLanguage('en')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                    <button onClick={() => changeLanguage('en')} className="text-white hidden md:block bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
                                         {'ID'}
                                     </button>
                                 : 
-                                    <button onClick={() => changeLanguage('id')} className="text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
+                                    <button onClick={() => changeLanguage('id')} className="text-white hidden md:block bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
                                         {'EN'}
                                     </button>
                             )}
