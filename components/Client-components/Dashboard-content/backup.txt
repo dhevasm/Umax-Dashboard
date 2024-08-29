@@ -1,0 +1,85 @@
+{id === '' ? (
+                        <Suspense fallback={<TableLoading />}>
+                            <TableLoading />
+                        </Suspense>
+                    ) : (
+                        <>
+                            <div className="w-full flex gap-3 justify-end pb-5">
+                                <select className="float-right border border-gray-300 dark:border-gray-700 rounded-lg px-2 md:text-[15px] text-[12px] dark:text-white text-semibold py-2 bg-white dark:bg-gray-800"
+                                    value={dataPerPage}
+                                    onChange={handleSortChange}
+                                >
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                </select>
+                                <button className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2">
+                                    <RiFileExcel2Line className="relative font-medium text-lg" onClick={() => ConfirmationModal('excel')} />
+                                </button>
+                                <button className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2" disabled title="Not yet available">
+                                    <AiOutlineFilePdf className="relative font-medium text-lg" onClick={() => ConfirmationModal('pdf')} />
+                                </button>
+                            </div>
+                            <div className={`overflow-x-auto max-w-full`}>
+                                <table className='w-full border-collapse' ref={tableRef}>
+                                    <thead className={currentHistory.length > 0 ? 'bg-blue-700 dark:bg-blue-900' : 'bg-blue-700 dark:bg-blue-900 rounded-md'}>
+                                        <tr>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('date')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('amount-spent')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('reach')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('impressions')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('frequency')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('rar')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpc')}</th>
+                                            {currentHistory.length > 0 && 
+                                                <>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('ctr')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('oclp')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpr')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('atc')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('roas')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('real-roas')}</th>
+                                                </>
+                                            }               
+                                        </tr>  
+                                    </thead>
+                                    <tbody>
+                                        {loading ? (
+                                            <tr>
+                                                <td className='px-4 py-2 border border-gray-300 text-center dark:border-gray-600' colSpan='9'>
+                                                    <LoadingCircle />
+                                                </td>
+                                            </tr>
+                                        ) : currentHistory.length > 0 ? (
+                                            currentHistory.map((data, index) => (
+                                                <tr key={index} className='border border-gray-300 text-center dark:border-gray-600'>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.timestamp_update}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.amountspent}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.reach}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.impressions}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.frequency}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.rar}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.cpc}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.ctr}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.oclp}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.cpr}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.atc}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.roas}</td>
+                                                    <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.realroas}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td className='px-4 py-2 border border-gray-300 text-center dark:border-gray-600' colSpan='6'>{th('no-data')}</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {currentHistory.length > 0 && (
+                                <div className="flex justify-end mt-4">
+                                    {renderPagination()}
+                                </div>
+                            )}
+                        </>
+                    )}

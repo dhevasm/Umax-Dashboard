@@ -94,7 +94,7 @@ function Dashboard() {
         {/* Dashboard Card */}
             <div className={`${SidebarHide ? 'w-full' : 'w-full sm:w-full md:w-full lg:w-full xl:w-[calc(100%-378px)] 2xl:w-[calc(100%-378px)]'} min-h-screen bg-white dark:bg-slate-800 rounded-xl mt-[100px] md:me-3 md:ms-5 text-black dark:text-white transition-transform`} ref={Card}>
                 {/* header */}
-                <div className="p-7 sm:p-7 md:p-10 xl:p-10">
+                <div className="px-6 pt-6 sm:px-8 sm:pt-8 md:px-10 md:pt-10 xl:px-10 xl:pt-10">
                 {campaignID === '' ? (
                     <PerformenceNavLoading />
                 ) : (
@@ -112,7 +112,7 @@ function Dashboard() {
                           color: rgb(38, 100, 235);
                           padding-bottom: 10px;
                           border-bottom: 3px solid blue;
-                          font-weight: 800;
+                          font-weight: 600;
                           transition: background-color 0.5s, color 0.5s;
                           }
                           .DashboardLink:hover {
@@ -120,15 +120,15 @@ function Dashboard() {
                           }
                       `}
                       </style>
-                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "performance" ? "dashboardActive" : ""}`} id="performance" onClick={() => SetActiveLink("performance")}>{t('performence')}</p>
-                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "metrics" ? "dashboardActive" : ""}`} id="metrics" onClick={() => SetActiveLink("metrics")}>{t('metrics')}</p>
-                      <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "history" ? "dashboardActive" : ""}`} id="history" onClick={() => SetActiveLink("history")}>{t('history')}</p>
+                      <p className={`DashboardLink font-sans text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "performance" ? "dashboardActive" : ""}`} id="performance" onClick={() => SetActiveLink("performance")}>{t('performence')}</p>
+                      <p className={`DashboardLink font-sans text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "metrics" ? "dashboardActive" : ""}`} id="metrics" onClick={() => SetActiveLink("metrics")}>{t('metrics')}</p>
+                      <p className={`DashboardLink font-sans text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "history" ? "dashboardActive" : ""}`} id="history" onClick={() => SetActiveLink("history")}>{t('history')}</p>
                       {/* <p className={`DashboardLink font-semibold text-gray-500 dark:text-gray-300 text-[15px] ${activeContent === "setting" ? "dashboardActive" : ""}`} id="setting" onClick={() => SetActiveLink("setting")}>{t('setting')}</p> */}
                   </div>
                 </div>
 
                 {/* Nav Select */}
-                <div className="flex md:hidden justify-end m-10">
+                <div className="flex md:hidden justify-end p-6 sm:p-8 md:p-10 xl:p-10">
                   <select className="border w-full border-gray-300 py-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-1 px-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" value={activeContent} onChange={(e) => SetActiveLink(e.target.value)}>
                       <option value="performance">{t('performence')}</option>
                       <option value="metrics">{t('metrics')}</option>
@@ -138,7 +138,7 @@ function Dashboard() {
                 </div>
 
                 {/* Content */}
-                <div className="m-10">
+                <div className="p-6 sm:p-8 md:p-10 xl:p-10">
                   {activeContent === "performance" && <Performance key={campaignID} spent={amountspent} atc={atc} id={campaignID} />}
                   {activeContent === "metrics" && <Metrics key={campaignID} id={campaignID} />}
                   {activeContent === "history" && <History key={campaignID} id={campaignID} />}

@@ -159,16 +159,16 @@ export default function Performance({ id, spent, atc }) {
                     <p className="flex items-center">
                         {dateTime}
                     </p>
-                    <div className="w-[150px] h-fit flex mb-3 me-3">
-                    <select
-                        className="w-full h-fit px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg"
-                        value={selected}
-                        onChange={(e) => setSelected(e.target.value)}
-                    >
-                        <option disabled={id === ''} value="week">{t('performence.last-week')}</option>
-                        <option disabled={id === ''} value="month">{t('performence.last-month')}</option>
-                        <option disabled={id === ''} value="year">{t('performence.last-year')}</option>
-                    </select>
+                    <div className="w-[150px] h-fit flex mb-3">
+                        <select
+                            className="w-full h-fit px-4 py-2 border-2 border-gray-300 dark:border-gray-600 dark:bg-slate-700 dark:text-white rounded-lg"
+                            value={selected}
+                            onChange={(e) => setSelected(e.target.value)}
+                        >
+                            <option disabled={id === ''} value="week">{t('performence.last-week')}</option>
+                            <option disabled={id === ''} value="month">{t('performence.last-month')}</option>
+                            <option disabled={id === ''} value="year">{t('performence.last-year')}</option>
+                        </select>
                     </div>
                 </div>
                 {/* Content */}

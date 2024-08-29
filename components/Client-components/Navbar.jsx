@@ -205,7 +205,7 @@ export default function Navbar() {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <Image
-                        src="/assets/logo.png"
+                        src={`/assets/${isDark ? 'logo-white.png' : 'logo.png'}`}
                         alt="Logo"
                         className="w-32 hover:cursor-pointer"
                         width={120}

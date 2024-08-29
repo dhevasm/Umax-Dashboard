@@ -16,9 +16,11 @@ export default function History({ id }) {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [loading, setLoading] = useState(false);
     const tableRef = useRef(null);
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
     const t = useTranslations("metrics");
+    const th = useTranslations('history')
     const date = new Date();
     const dateWithTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
@@ -74,6 +76,7 @@ export default function History({ id }) {
             return;
         }
 
+        setLoading(true);
         try {
             const token = localStorage.getItem('jwtToken');
             const response = await axios.get(`${umaxUrl}/history?campaign_id=${id}&tenantId=${localStorage.getItem('tenantId')}&page=${currentPage}&limit=${dataPerPage}`, {
@@ -84,7 +87,9 @@ export default function History({ id }) {
                 },
             });
             setData(response.data.Data);
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.error("Error fetching data:", error.message);
         }
     }, [id, currentPage, dataPerPage]);
@@ -233,7 +238,8 @@ export default function History({ id }) {
     return (
         <>
             <div className="w-full">
-                <div className="w-full p-3">
+                <div className="w-full">
+                    <div className="grid grid-cols-1">
                     {id === '' ? (
                         <Suspense fallback={<TableLoading />}>
                             <TableLoading />
@@ -256,31 +262,37 @@ export default function History({ id }) {
                                     <AiOutlineFilePdf className="relative font-medium text-lg" onClick={() => ConfirmationModal('pdf')} />
                                 </button>
                             </div>
-                            <div className={`overflow-x-auto`}>
+                            <div className={`overflow-x-auto max-w-full`}>
                                 <table className='w-full border-collapse' ref={tableRef}>
-                                    <thead className={currentHistory.length > 0 ? 'bg-blue-100 dark:bg-blue-900' : 'bg-gray-100 dark:bg-slate-700 rounded-md'}>
+                                    <thead className={currentHistory.length > 0 ? 'bg-blue-700 dark:bg-blue-900' : 'bg-blue-700 dark:bg-blue-900 rounded-md'}>
                                         <tr>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('date')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('amount-spent')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('reach')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('impressions')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('frequency')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('rar')}</th>
-                                            <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpc')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('date')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('amount-spent')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('reach')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('impressions')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('frequency')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('rar')}</th>
+                                            <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpc')}</th>
                                             {currentHistory.length > 0 && 
                                                 <>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('ctr')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('oclp')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpr')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('atc')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('roas')}</th>
-                                                    <th className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('real-roas')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('ctr')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('oclp')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('cpr')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('atc')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('roas')}</th>
+                                                    <th className='px-4 py-2 text-slate-200 border border-gray-300 text-nowrap dark:border-gray-600 text-left'>{t('real-roas')}</th>
                                                 </>
                                             }               
                                         </tr>  
                                     </thead>
                                     <tbody>
-                                        {currentHistory.length > 0 ? (
+                                        {loading ? (
+                                            <tr>
+                                                <td className='px-4 py-2 border border-gray-300 text-center dark:border-gray-600' colSpan='9'>
+                                                    <LoadingCircle />
+                                                </td>
+                                            </tr>
+                                        ) : currentHistory.length > 0 ? (
                                             currentHistory.map((data, index) => (
                                                 <tr key={index} className='border border-gray-300 text-center dark:border-gray-600'>
                                                     <td className='px-4 py-2 border border-gray-300 text-nowrap dark:border-gray-600 text-right'>{data.timestamp_update}</td>
@@ -300,21 +312,20 @@ export default function History({ id }) {
                                             ))
                                         ) : (
                                             <tr>
-                                                <td className='px-4 py-2 border border-gray-300 text-center dark:border-gray-600' colSpan='9'>
-                                                    <LoadingCircle />
-                                                </td>
+                                                <td className='px-4 py-3 border border-gray-300 text-center dark:border-gray-600' colSpan='7'>{th('no-data')}</td>
                                             </tr>
                                         )}
                                     </tbody>
                                 </table>
                             </div>
                             {currentHistory.length > 0 && (
-                                <div className="flex justify-end mt-4">
+                                <div className="flex justify-center sm:justify-center md:justify-end xl:justify-end mt-4">
                                     {renderPagination()}
                                 </div>
                             )}
                         </>
                     )}
+                    </div> 
                 </div>
             </div>
         </>

@@ -145,6 +145,7 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                                 startdate={campaign.start_date} 
                                 id={campaign.campaign_id}
                                 onCardClick={onCampaignIDChange}
+                                click={hideHandle}
                             />
                         ))
                     )}

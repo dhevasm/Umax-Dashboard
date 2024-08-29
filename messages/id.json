@@ -158,6 +158,10 @@
       "recommended": "Rekomendasi nilai"
     },
 
+    "history": {
+      "no-data": "Riwayat tidak ditemukan"
+    },
+
     "profile": {
       "edit-personal-information": "Edit Informasi Pribadi",
       "edit-international-information": "Edit Informasi Internasional",

@@ -26,7 +26,7 @@ const Page = () => {
     <div className='w-full h-screen bg-white dark:bg-slate-900'>
       <Navbar />
       <div className="w-full mt-20 h-fit">
-        <div className="w-full h-full md:p-10 p-5 bg-white dark:bg-slate-900">
+        <div className="w-full h-full md:px-10 md:pt-10 px-3 pt-5 sm:px-3 sm:pt-5 xl:px-10 xl:pt-10 bg-white dark:bg-slate-900">
           <Suspense fallback={<TableLoading/>}>
             <ClientTable/>
           </Suspense>

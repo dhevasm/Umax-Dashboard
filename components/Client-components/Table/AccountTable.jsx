@@ -7,10 +7,11 @@ import Swal from "sweetalert2";
 import { useDownloadExcel } from "react-export-table-to-excel";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
-import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from 'react-icons/bi';
+import { BiEdit } from 'react-icons/bi';
 import { MdDeleteForever } from 'react-icons/md';
 import AccountDetail from '../Detail/AccountDetail';
 import { useTranslations } from 'next-intl';
+import { FaSortUp, FaSortDown } from 'react-icons/fa';
 
 const AccountTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -20,6 +21,7 @@ const AccountTable = () => {
     const [isWideScreen, setIsWideScreen] = useState(true); // Set default to true
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedAccount, setSelectedAccount] = useState(null);
+    const [sortOrder, setSortOrder] = useState('asc');
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true);
@@ -253,6 +255,21 @@ const AccountTable = () => {
         }
     });
 
+    const handleSort = () => {
+        const sortedData = [...filteredData].sort((a, b) => {
+            if (sortOrder === 'asc') {
+                return a.username.localeCompare(b.username);
+            } else {
+                return b.username.localeCompare(a.username);
+            }
+        });
+    
+        setTableData(sortedData);
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        setCurrentPage(1); // Reset to the first page after sorting
+    };
+    
+
     const checkDeviceWidth = () => {
         setIsWideScreen(window.innerWidth >= 947);
     };
@@ -386,7 +403,7 @@ const AccountTable = () => {
         );
     
         return (
-            <div className="flex justify-center gap-2 mt-4">
+            <div className="flex justify-center sm:justify-center md:justify-end xl:justify-end gap-2 mt-4">
                 {pageButtons}
             </div>
         );
@@ -403,7 +420,7 @@ const AccountTable = () => {
                     {t("title")}
                 </h1>
             </div>
-            <div className="bg-white border dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-lg w-full h-fit p-5">
+            <div className="bg-white border dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-lg w-full h-fit p-3 sm:p-4 md:p-5 xl:p-5">
                 <div className={`flex ${isWideScreen ? `${'flex-row'}` : "flex-col-reverse"}`}>
                     <div className={`mb-4 flex flex-row items-start ${isWideScreen ? `gap-4` : "gap-2"}`}>
                         <input
@@ -452,7 +469,15 @@ const AccountTable = () => {
                         <thead className='bg-white dark:bg-blue-700'>
                             <tr className=''>
                                 {/* <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200'>No.</th> */}
-                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>{t('name')}</th>
+                                <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>
+                                    <span className='flex justify-between items-center'>
+                                        {t('name')}
+                                        <span className='flex flex-col items-center ml-1' style={{ lineHeight: 1 }}> {/* Adjusted line-height */}
+                                            <FaSortUp onClick={handleSort} className={sortOrder === 'asc' ? 'text-blue-500' : 'text-gray-400'} style={{ marginBottom: '-8.3px' }} /> 
+                                            <FaSortDown onClick={handleSort} className={sortOrder === 'desc' ? 'text-blue-500' : 'text-gray-400'} style={{ marginTop: '-8.3px' }} /> 
+                                        </span>
+                                    </span>
+                                </th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>{t('client')}</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>Platform</th>
                                 <th className='px-4 py-2 border border-gray-300 dark:border-gray-600 dark:text-slate-200 text-left'>Email</th>
@@ -507,9 +532,6 @@ const AccountTable = () => {
                             }
                         </tbody>
                     </table>
-                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end items-center">
-                        {renderPagination()}
-                    </div>
                     <table className='hidden'ref={tableRef}>
                         <thead>
                             <tr>
@@ -542,6 +564,7 @@ const AccountTable = () => {
                         </tbody>
                     </table>
                 </div>
+                {renderPagination()}
             </div>
 
             {selectedAccount && (

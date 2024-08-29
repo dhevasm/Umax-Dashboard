@@ -128,7 +128,7 @@ export default function Metrics({ id }) {
             {/* Content */}
             <div className="w-full">
                 {/* Metrics */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {id === '' 
                         ? Array(12).fill(0).map((_, index) => (
                             <MetricsLoading key={index + 1} />
