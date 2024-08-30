@@ -14,6 +14,7 @@ import CreateClient from '../Create/CreateClient';
 import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRight } from 'react-icons/bi';
 import ClientDetail from '../Detail/ClientDetail';
 import { useTranslations } from 'next-intl';
+import { FaSortDown, FaSortUp } from 'react-icons/fa';
 
 const ClientTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -23,6 +24,7 @@ const ClientTable = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataPerPage, setDataPerPage] = useState(10);
+    const [sortOrder, setSortOrder] = useState('asc');
     const [isLoading, setIsLoading] = useState(true);
     const [mode, setMode] = useState('');
     const t = useTranslations("clients");
@@ -241,6 +243,20 @@ const ClientTable = () => {
         );
     });
 
+    const handleSort = () => {
+        const sortedData = [...filteredData].sort((a, b) => {
+            if (sortOrder === 'asc') {
+                return a.name.localeCompare(b.name);
+            } else {
+                return b.name.localeCompare(a.name);
+            }
+        });
+    
+        setTableData(sortedData);
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        setCurrentPage(1); // Reset to the first page after sorting
+    };
+
     const checkDeviceWidth = () => {
         setIsWideScreen(window.innerWidth >= 947);
     };
@@ -374,7 +390,7 @@ const ClientTable = () => {
         );
     
         return (
-            <div className="flex justify-center gap-2 mt-4">
+            <div className="flex justify-center sm:justify-center md:justify-end xl:justify-end gap-2 mt-4">
                 {pageButtons}
             </div>
         );
@@ -393,7 +409,7 @@ const ClientTable = () => {
                 Tambah
             </button>
             </div>
-            <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-5 dark:bg-gray-800 dark:border-gray-700">
+            <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-3 sm:p-4 md:p-5 xl:p-5 dark:bg-gray-800 dark:border-gray-700">
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col-reverse"}`}>
                     <div className={`mb-4 flex flex-row items-start gap-4`}>
                         <input
@@ -435,7 +451,15 @@ const ClientTable = () => {
                         <thead className='bg-white dark:bg-blue-700'>
                             <tr className='text-left'>
                                 {/* <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200'>No.</th> */}
-                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('name')}</th>
+                                <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>
+                                    <span className='flex justify-between items-center'>
+                                        {t('name')}
+                                        <button className='flex flex-col items-center ml-1' style={{ lineHeight: 1 }}> {/* Adjusted line-height */}
+                                            <FaSortUp onClick={handleSort} className={sortOrder === 'asc' ? 'text-blue-500' : 'text-gray-400'} style={{ marginBottom: '-8.3px' }} /> 
+                                            <FaSortDown onClick={handleSort} className={sortOrder === 'desc' ? 'text-blue-500' : 'text-gray-400'} style={{ marginTop: '-8.3px' }} /> 
+                                        </button>
+                                    </span>
+                                </th>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('address')}</th>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('contact')}</th>
                                 <th className='px-4 py-2 border dark:border-gray-600 dark:text-slate-200 text-left'>{t('email')}</th>
@@ -491,10 +515,6 @@ const ClientTable = () => {
                         </tbody>
                     </table>
 
-                    <div className="flex justify-center sm:justify-end md:justify-end lg:justify-end xl:justify-end mt-4">
-                        {renderPagination()}
-                    </div>
-
                     {/* Table for export */}
                     <table className='w-full border hidden dark:border-gray-600' ref={tableRef}>
                         <thead className='bg-white dark:bg-gray-800'>
@@ -525,18 +545,28 @@ const ClientTable = () => {
                         </tbody>
                     </table>
                 </div>
+                {renderPagination()}
             </div>
 
 
-            {(selectedClient || mode === "create") && (
-                <ClientDetail 
+            {mode === "create" ? (
+                <CreateClient 
                     isOpen={modalIsOpen} 
                     onClose={handleCloseModal} 
-                    data={selectedClient} 
                     mode={mode} 
-                    deleteClient={handleDelete}
-                />
-            )}
+                    refresh={fetchData}
+                /> 
+            ) : mode == 'edit' ? (
+                    <ClientDetail 
+                        isOpen={modalIsOpen} 
+                        onClose={handleCloseModal} 
+                        data={selectedClient} 
+                        mode={mode} 
+                        deleteClient={handleDelete}
+                        refresh={fetchData}
+                    />
+                ) : (null)
+            }
         </>
     )
 }

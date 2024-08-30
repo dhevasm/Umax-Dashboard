@@ -158,6 +158,10 @@
       "recommended": "Recommended value"
     },
 
+    "history": {
+      "no-data": "History not found"
+    },
+
     "profile": {
       "edit-personal-information": "Edit Personal Infomation",
       "edit-international-information": "Edit International Infomation",

@@ -110,7 +110,7 @@ const Navbar = () => {
             <div className="max-w-full px-4 w-60">
               <a href="" className="block w-full py-2 ms-5">
               <Image
-                  src="/assets/logo.png"
+                  src={`/assets/${isDark ? 'logo-white.png' : 'logo.png'}`}
                   alt="Logo"
                   className="decoration-white mr-1 mt-2"
                   width={140}

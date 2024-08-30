@@ -7,13 +7,14 @@ import axios from "axios";
 import UserInfoLoading from "./Loading/UserInfoLoading";
 import { BiBell, BiGroup, BiSolidMegaphone } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { MdDashboard, MdOutlineDashboard } from "react-icons/md";
+import { MdDashboard, MdLanguage, MdOutlineDashboard } from "react-icons/md";
 import { AiOutlineProfile, AiOutlineUser } from "react-icons/ai";
 import { FaUser, FaTachometerAlt, FaSignOutAlt, FaMoon, FaSun, FaBars } from 'react-icons/fa';
 import Swal from "sweetalert2";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { RiAdminLine, RiLogoutBoxLine } from "react-icons/ri";
+import { active } from "d3";
 
 export default function Navbar() {
     const t = useTranslations('navbar');
@@ -191,6 +192,22 @@ export default function Navbar() {
                             </Link> 
                         </li>
                     )}
+                    {roles === 'client' && (
+                        <li>
+                            {activeLink.includes('id') ? (
+                                <button onClick={() => changeLanguage('en')} className="flex sm:flex md:hidden xl:hidden items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                                    <MdLanguage className="w-5 h-5 mr-2" />
+                                    {'Indonesia'}
+                                </button>   
+                            ) : (
+                                <button onClick={() => changeLanguage('id')} className="flex sm:flex md:hidden xl:hidden items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                                    <MdLanguage className="w-5 h-5 mr-2" />
+                                    {'English'}
+                                </button> 
+                            )}
+                            
+                        </li>
+                    )}
                     {/* Other links here */}
                     <li>
                     <button onClick={handleLogout} className="flex items-center text-sm text-red-500 hover:text-red-700">
@@ -210,7 +227,7 @@ export default function Navbar() {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <Image
-                        src={`${ isDark ?  "/assets/logo-dark.png" : "/assets/logo.png"}`}
+                        src={`/assets/${isDark ? 'logo-white.png' : 'logo.png'}`}
                         alt="Logo"
                         className="w-32 hover:cursor-pointer"
                         width={120}
@@ -305,18 +322,18 @@ export default function Navbar() {
                                 <input type="checkbox" checked={isDark} value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme} />
                                 <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                             </div>
-                            </label> */}
-                            {roles === 'client' && (
-                                activeLink.includes("id") ? 
-                                    <button onClick={() => changeLanguage('en')} className="text-white hidden md:block bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
-                                        {'ID'}
-                                    </button>
-                                : 
-                                    <button onClick={() => changeLanguage('id')} className="text-white hidden md:block bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 me-5">
-                                        {'EN'}
-                                    </button>
-                            )}
+                            </label> */}      
                     <div className="flex items-center space-x-4">
+                        {roles === 'client' && (
+                            activeLink.includes("id") ? 
+                                <button onClick={() => changeLanguage('en')} className="text-white hidden sm:hidden md:block xl:block bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5">
+                                    {'ID'}
+                                </button>
+                            : 
+                                <button onClick={() => changeLanguage('id')} className="text-white hidden sm:hidden md:block xl:block bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5">
+                                    {'EN'}
+                                </button>
+                        )}
                         <button
                             onClick={handleTheme}
                             className="hidden sm:flex xl:flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
@@ -354,10 +371,12 @@ export default function Navbar() {
                         <AiOutlineUser className="w-6 h-6 mr-2 dark:text-white"/>
                         <Link href={`/${lang}/accounts`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("account")}</Link>
                         </li>
-                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <BiGroup className="w-6 h-6 mr-2 dark:text-white"/>
-                        <Link href={`/${lang}/clients`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("client")}</Link>
-                        </li>
+                        {roles !== 'client' && (
+                            <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <BiGroup className="w-6 h-6 mr-2 dark:text-white"/>
+                            <Link href={`/${lang}/clients`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("client")}</Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
 

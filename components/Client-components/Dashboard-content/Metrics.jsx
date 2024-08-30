@@ -44,14 +44,15 @@ export default function Metrics({ id }) {
 
         try {
             const token = localStorage.getItem('jwtToken');
-            const response = await axios.get(`${umaxUrl}/metrics-7?campaign_id=${id}&tenantId=${localStorage.getItem('tenantId')}`, {
+            const response = await axios.get(`${umaxUrl}/history?campaign_id=${id}&tenantId=${localStorage.getItem('tenantId')}`, {
                 headers: {
                     'accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            setHistory(response.data.Data);
+            const latestHistory = response.data.Data.slice(-7); // Get the last 7 items
+            setHistory(latestHistory);
         } catch (error) {
             console.error("Error fetching data:", error.message);
         }
@@ -128,7 +129,7 @@ export default function Metrics({ id }) {
             {/* Content */}
             <div className="w-full">
                 {/* Metrics */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {id === '' 
                         ? Array(12).fill(0).map((_, index) => (
                             <MetricsLoading key={index + 1} />

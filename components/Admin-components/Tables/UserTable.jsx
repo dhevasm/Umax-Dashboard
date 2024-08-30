@@ -33,11 +33,11 @@ export default function UserTable() {
     const [dataPerPage, setDataPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true);
     const [crudLoading, setCrudLoading] = useState(false);
-    const [create, setCreate] = useState(false);
-    const roles = localStorage.getItem('roles')
     const t = useTranslations('admin-users')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations("swal-delete")
+    const [create, setCreate] = useState(false)
+    const roles = localStorage.getItem("roles")
     
     function LoadingCrud() {
             return (

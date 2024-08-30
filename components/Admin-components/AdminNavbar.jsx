@@ -576,7 +576,7 @@ function AdminNavbar({ userData }) {
            
             {/* <p className="text-white font-sans text-3xl">UMAX</p> */}
             <Image
-              src={`${ isDarkMode ? "/assets/logo-dark.png" : "/assets/logo.png" }`}
+              src={`/assets/${isDarkMode ? 'logo-white.png' : 'logo.png'}`}
               alt="Logo"
               className="w-[170px] h-12 decoration-white mx-5 mt-2"
               width={120}
