@@ -86,6 +86,8 @@ export default function History({ id }) {
                     'Authorization': `Bearer ${token}`,
                 },
             });
+            let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
+
             setData(response.data.Data);
             setLoading(false);
         } catch (error) {
