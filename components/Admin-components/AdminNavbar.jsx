@@ -20,7 +20,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { RiBellLine, RiChat3Line } from "react-icons/ri";
+import { RiBellLine, RiChat3Line, RiRefreshFill, RiRefreshLine } from "react-icons/ri";
 import { BiBell } from "react-icons/bi";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -570,23 +570,16 @@ function AdminNavbar({ userData }) {
       <nav ref={printRef} className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
         <div className="flex h-full">
           <div
-            className="w-[300px] flex h-full bg-slate-800 shadow-none items-center p-3 transition-transform"
+            className="w-[300px] flex h-full bg-white dark:bg-slate-800 shadow-none justify-center items-center p-3 transition-transform"
             ref={navbarBrand}
           >
-            <Image
-              src="/assets/icon.png"
-              alt="Logo"
-              className="w-[60px] h-[60px] decoration-white"
-              width={40}
-              height={40}
-              priority
-            />
+           
             {/* <p className="text-white font-sans text-3xl">UMAX</p> */}
             <Image
               src={`/assets/${isDarkMode ? 'logo-white.png' : 'logo.png'}`}
               alt="Logo"
-              className="w-[140px] h-10 decoration-white mr-1 mt-2"
-              width={140}
+              className="w-[170px] h-12 decoration-white mx-5 mt-2"
+              width={120}
               height={40}
               priority
             />
@@ -761,12 +754,11 @@ function AdminNavbar({ userData }) {
           {userData.image ? (
                 <>
                     <div onClick={toggleDropdown} className="flex items-center cursor-pointer">
-                      
                         <div className="block">
                             <Image
                                 src={`data:image/png;base64, ${userData.image}`}
                                 alt="profile"
-                                className="rounded-full w-[40px] h-[40px] bg-slate-200"
+                                className="rounded-full object-cover w-[40px] h-[40px] bg-slate-200"
                                 width={40}
                                 height={40}   
                             />
@@ -786,6 +778,8 @@ function AdminNavbar({ userData }) {
                     </div>
                     
                     {isDropdownOpen && (
+                        <>
+                        <div className="fixed w-full h-full left-0 top-0 z-50" onClick={toggleDropdown}></div>
                         <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 z-50">
                             <div className="flex items-center mb-4">
                             <Image
@@ -810,7 +804,7 @@ function AdminNavbar({ userData }) {
                               <button onClick={handlePrint} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"><FaPrint  className="mr-2"/> Print</button>
                               </li>
                                 <li>
-                                    <button onClick={() => {Router.push(`/${localStorage.getItem("lang")}/profile`)}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                                    <button onClick={() => {setChangeTable("profile")}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                                         <AiOutlineProfile className="mr-2" /> Profile
                                     </button>
                                 </li>
@@ -831,6 +825,7 @@ function AdminNavbar({ userData }) {
                                 </li>
                             </ul>
                         </div>
+                        </>
                     )}
                 </>
             ) : (

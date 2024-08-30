@@ -44,7 +44,7 @@ export default function CountCard({title, value, handleClick}){
                 }
             </div>
            
-            <div className={`font-semibold ${value.length > 10 ? "text-md" : "text-2xl pe-5"}  text-right`}>
+            <div className={`font-semibold ${value.length > 10 ? "text-xs md:text-base" : "text-2xl pe-5"}  text-right`}>
             {isNumber ? (
                 <CountUp end={parseInt(value)} duration={2} />
             ) : (

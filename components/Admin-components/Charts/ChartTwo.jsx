@@ -52,6 +52,9 @@ const ChartTwo = ({ chartData }) => {
       curve: "smooth",
       width: 3,
     },
+    dataLabels: {
+      enabled: false,
+  },
     xaxis: {
       categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       labels: {

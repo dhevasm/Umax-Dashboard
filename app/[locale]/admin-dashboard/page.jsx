@@ -4,6 +4,7 @@ import axios from "axios"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
+import AdminProfile from "@/components/Admin-components/AdminProfile"
 
 // Dynamically import components
 const AdminNavbar = dynamic(() => import("@/components/Admin-components/AdminNavbar"))
@@ -153,6 +154,7 @@ function AdminDashboard() {
                             {changeTable === "accounts" && <AccountTable />}
                             {changeTable === "clients" && <ClientTable />}
                             {changeTable === "dashboard" && <Dashboard />}
+                            {changeTable === "profile" && <AdminProfile />}
                         </div>
                     </div>
                 </div>

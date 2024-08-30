@@ -12,11 +12,12 @@ import { AiOutlineFilePdf } from "react-icons/ai"
 import { FaTable } from "react-icons/fa"
 import { FaTrash } from "react-icons/fa"
 import { FaTimes } from "react-icons/fa"
-import { RiBuildingLine, RiFileExcel2Line } from "react-icons/ri"
+import { RiBuildingLine, RiFileExcel2Line, RiRefreshLine } from "react-icons/ri"
 import { BiPlus } from "react-icons/bi"
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 
 export default function TenantTable() {
 
@@ -41,6 +42,8 @@ export default function TenantTable() {
     const [alldial, setDial] = useState([])
     const [DialCountry, setDialCountry] = useState([])
     const t = useTranslations('admin-tenants')
+
+    const Router = useRouter()
 
     const [values, setValues] = useState({
 
@@ -261,20 +264,8 @@ export default function TenantTable() {
             confirmButtonText: "Yes, download it!"
           }).then((result) => {
             if (result.isConfirmed) {
-                const backupLastPage = lastPage;
-                const backupFirstPage = firstPage;
-                setFirstPage(0);
-                setLastPage(tenants.length);
-                setTimeout(() => {
-                    onDownload();
-                    setFirstPage(backupFirstPage);
-                    setLastPage(backupLastPage);
-                }, 100);
-              Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
-                icon: "success"
-              });
+                onDownload();
+                toastr.success('PDF downloaded successfully', 'Success')
             }
           });
     }
@@ -303,11 +294,7 @@ export default function TenantTable() {
                     body: tenants.map((tenant) => [tenant.company, tenant.address, tenant.contact, tenant.email]),
                 });
                 doc.save('DataTenant.pdf');
-              Swal.fire({
-                title: "Downloaded!",
-                text: "Your file has been downloaded.",
-                icon: "success"
-              });
+                toastr.success('PDF downloaded successfully', 'Success')
             }
           });
     };
@@ -503,12 +490,12 @@ export default function TenantTable() {
                 citylist= item.cities
             }
         })
-        alldial.map((item) => {
-            if(item.name == countryname){
-                setDialCountry(item.dial_code)
-                // console.log(item.dial_code)
-            }
-        })
+        // alldial.map((item) => {
+        //     if(item.name == countryname){
+        //         setDialCountry(item.dial_code)
+        //         // console.log(item.dial_code)
+        //     }
+        // })
 
         setCity(citylist)
     }
@@ -688,6 +675,11 @@ export default function TenantTable() {
                                 <button className=" py-2 mb-4 border-b border-t border-e dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={generateExcel}>
                                     <IconContext.Provider value={{ className: "text-xl" }}>
                                         <RiFileExcel2Line />
+                                    </IconContext.Provider>
+                                </button>
+                                <button title="Refresh" className="bg-white dark:border-gray-500 dark:bg-slate-800 py-2 mb-4 border-b border-t border-e hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3" onClick={handleRefresh}>
+                                    <IconContext.Provider value={{ className: "text-xl" }}>
+                                        <RiRefreshLine/>
                                     </IconContext.Provider>
                                 </button>
                                 <button className=" py-2 mb-4 border-b border-t border-e dark:border-gray-500 rounded-e-md hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 " onClick={() => showModal("Create")} >

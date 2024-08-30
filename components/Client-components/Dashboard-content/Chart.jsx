@@ -9,7 +9,7 @@ const Chart = ({ campaignID, time }) => {
     const [data, setData] = useState([]);
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
     let chartUrl = "";
-    let category = [];
+    const [category, setCategory] = useState([]);
     const t = useTranslations();
 
     useEffect(() => {
@@ -17,11 +17,48 @@ const Chart = ({ campaignID, time }) => {
     }, [time]);
 
     useEffect(() => {
+        const formatDate = (date) => {
+            return date.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit',
+            });
+        };
+
+        const generateCategories = () => {
+            const categories = [];
+            const currentDate = new Date();
+
+            if (selected === "week") {
+                for (let i = 0; i < 7; i++) {
+                    const newDate = new Date(currentDate);
+                    newDate.setDate(currentDate.getDate() - i);
+                    categories.push(formatDate(newDate));
+                }
+            } else if (selected === "month") {
+                for (let i = 0; i < 30; i++) {
+                    const newDate = new Date(currentDate);
+                    newDate.setDate(currentDate.getDate() - i);
+                    categories.push(formatDate(newDate));
+                }
+            } else if (selected === "year") {
+                for (let i = 0; i < 12; i++) {
+                    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1, 0);
+                    categories.push(formatDate(newDate));
+                }
+                categories.reverse(); // Untuk mengurutkan dari Januari hingga Desember
+            }
+
+            setCategory(categories.reverse()); // Membalik urutan agar dari tanggal awal sampai akhir
+        };
+
+        generateCategories();
+
         const getMetricByCampaign = async () => {
             if (!campaignID) {
                 return;
             }
-        
+
             try {
                 const token = localStorage.getItem("jwtToken");
                 if (selected === "week") {
@@ -39,11 +76,11 @@ const Chart = ({ campaignID, time }) => {
                     },
                 });
                 setData(response.data.Data);
-                category = selected === "year" ? data.map((item) => item.month) : data.map((_, index) => index + 1);
             } catch (error) {
                 console.error("Error fetching data:", error.message);
             }
         };
+
         getMetricByCampaign();
     }, [selected, campaignID]);
 
@@ -51,21 +88,22 @@ const Chart = ({ campaignID, time }) => {
         series: [
             {
                 name: t("metric7.amount-spent"),
-                data: data.map((obj) => parseFloat(obj.amountspent.replace(/[^0-9.]/g, ""))),
+                data: data.map((obj) => (parseFloat(obj.amountspent.replace(/[^0-9.]/g, "")))).reverse(),
             },
             {
                 name: t("metric7.reach-amount-spent-ratio"),
-                data: data.map((obj) => parseFloat(obj.rar.replace(/[^0-9.]/g, ""))),
+                data: data.map((obj) => ((parseFloat(obj.rar.replace(/[^0-9.]/g, "")) / 100 * parseFloat(obj.amountspent.replace(/[^0-9.]/g, "")))).toFixed(2)).reverse(),
             },
             {
                 name: t("metric7.ctr"),
-                data: data.map((obj) => parseFloat(obj.ctr.replace(/[^0-9.]/g, ""))),
+                data: data.map((obj) => ((parseFloat(obj.ctr.replace(/[^0-9.]/g, "")) / 100 * parseFloat(obj.amountspent.replace(/[^0-9.]/g, "")))).toFixed(2)).reverse(),
             },
         ],
         categories: category,
     };
 
     const options = {
+        
         chart: {
             type: "area",
             height: 500,
@@ -77,7 +115,7 @@ const Chart = ({ campaignID, time }) => {
             curve: "smooth",
         },
         xaxis: {
-            categories: Data.categories,
+            categories: category,
             labels: {
                 style: {
                     colors: '#64748b',
@@ -91,11 +129,19 @@ const Chart = ({ campaignID, time }) => {
                 },
             },
         },
+        legend: {
+            labels: {
+                colors: '#64748b',
+            },
+        },
         colors: ["#FF5733", "#33FF57", "#3357FF", "#F39C12"],
+        markers: {
+            colors: ["#FF5733", "#33FF57", "#3357FF"], // Customize marker colors based on series
+        },
     };
 
     return (
-        <div>
+        <div className="text-black">
             {campaignID ? (
                 data.length > 0 ? (
                     <div id="chart">
