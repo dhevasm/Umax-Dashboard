@@ -693,7 +693,8 @@ export default function UserTable() {
             </div>
 
             {/* <!-- Main modal --> */}
-            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-60 z-50">
+            <div className="w-screen h-screen fixed top-0 left-0" onClick={closeModal}></div>
                 <div className="relative p-4 w-full max-w-md max-h-full ">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow">
@@ -746,7 +747,8 @@ export default function UserTable() {
                 </div>
             </div> 
 
-            <div className={`fixed inset-0 ${create ? "flex" : "hidden"} items-center justify-center bg-gray-500 bg-opacity-75 z-50`}>
+            <div className={`fixed inset-0 ${create ? "flex" : "hidden"} items-center justify-center bg-gray-500 bg-opacity-60 z-50`}>
+            <div className="w-screen h-screen fixed top-0 left-0" onClick={createModal}></div>
                 <div className="relative p-4 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
                     <div className="relative bg-white dark:bg-[#243040] shadow">
