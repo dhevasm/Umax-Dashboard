@@ -1,5 +1,4 @@
 'use client'
-
 import CountCard from "./CountCard"
 import ChartOne from "./Charts/ChartOne"
 import ChartTwo from "./Charts/ChartTwo"
@@ -34,24 +33,31 @@ export default function Dashboard({ tenant_id }) {
     const roles = localStorage.getItem('roles')
     const [isLoading, setLoading] = useState(false)
     const [dataLoading, setDataLoading] = useState(false)
+    const [campaignLoading, setCampaignLoading] = useState(false)
+    const [requestLoading, setRequestLoading] = useState(false)
 
     const getCampaign = async() => {
-        setDataLoading(true)
-        await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
-            }
-        }).then((response) => {
-            setCampaigns(response.data.Data.sort((a, b) => parseInt(b.reach.replace(/\./g, "")) - parseInt(a.reach.replace(/\./g, ""))));
-            // console.log(response.data.Data)
-            setDataLoading(false)
-        })
+        try{
+            setCampaignLoading(true)
+            const res =  await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/metric-by-tenant-id?tenantId=${localStorage.getItem('tenantId')}&status=${status}`, {
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+                }
+            })
+            setCampaigns(res.data.Data.sort((a, b) => parseInt(b.reach.replace(/\./g, "")) - parseInt(a.reach.replace(/\./g, ""))));
+            setCampaignLoading(false)
+        }catch(error){
+            console.error(error)    
+            setCampaignLoading(false)
+        }
+            
+        
     }
 
     async function getRequestList(){
-        setDataLoading(true)
+        setRequestLoading(true)
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/request-list`, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -59,7 +65,7 @@ export default function Dashboard({ tenant_id }) {
         })
         setRequestList(res.data.Output)
         setRequestCount(res.data.Output.length)
-        setDataLoading(false)
+        setRequestLoading(false)
     }
 
     useEffect(() => {
@@ -525,12 +531,12 @@ export default function Dashboard({ tenant_id }) {
         <>
             <div className="w-full h-full flex flex-wrap gap-5" ref={printPage}>
                 <div className="grid grid-cols-2 md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 w-full">
-                    {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-md animate-pulse">Loading...</div>} handleClick={"company"} /> :
-                        userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={loadingCount ? "Loading..." : tenantCount} handleClick={"tenants"} /> :
-                            <CountCard title={t('tenants')} value={<div className="text-md animate-pulse">Loading...</div>} />}
-                            <CountCard title={t('users')} value={loadingCount ? "Loading..." : userCount} handleClick={"users"} />
-                            <CountCard title={t('campaigns')} value={loadingCount ? "Loading..." : campaignCount} handleClick={"campaigns"} />
-                            <CountCard title={t('clients')} value={loadingCount ? "Loading..." : clientCount} handleClick={"clients"} />
+                    {userData.roles == "admin" ? <CountCard title={t('tenants')} value={userData.company_name ? userData.company_name : <div className="text-xs animate-pulse">Loading...</div>} handleClick={"company"} /> :
+                        userData.roles == "sadmin" ? <CountCard title={t('tenants')} value={loadingCount ? <div className='text-xs animate-pulse'>Loading...</div> : tenantCount} handleClick={"tenants"} /> :
+                            <CountCard title={t('tenants')} value={<div className='text-xs animate-pulse'>Loading...</div>} />}
+                            <CountCard title={t('users')} value={loadingCount ? <div className='text-xs animate-pulse'>Loading...</div> : userCount} handleClick={"users"} />
+                            <CountCard title={t('campaigns')} value={loadingCount ? <div className='text-xs animate-pulse'>Loading...</div> : campaignCount} handleClick={"campaigns"} />
+                            <CountCard title={t('clients')} value={loadingCount ? <div className='text-xs animate-pulse'>Loading...</div> : clientCount} handleClick={"clients"} />
                 </div>  
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
                     <div className="w-full max-w-full flex justify-center h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
@@ -579,7 +585,7 @@ export default function Dashboard({ tenant_id }) {
                             <div className="overflow-x-auto">
                                 <table className="min-w-full">
                                     <thead>
-                                        <tr className="bg-slate-200">
+                                        <tr className="dark:bg-slate-700 dark:text-white bg-slate-200 border-b dark:border-slate-500">
                                             <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">{t('campaigns')}</th>
                                             <th className="p-2.5 text-center xl:p-5 text-sm font-medium uppercase">
                                                 <span className={`hover:cursor-pointer ${filter == "amountspent" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("amountspent")}>
@@ -602,7 +608,7 @@ export default function Dashboard({ tenant_id }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {dataLoading ? (
+                                    {campaignLoading ? (
                                         <tr>
                                         <td colSpan="5" className="w-full text-center align-middle">
                                             <div className="flex items-center justify-center h-full">
@@ -667,94 +673,65 @@ export default function Dashboard({ tenant_id }) {
                                 </h4>
                             </div>
                             <div className="overflow-x-auto">
-                                <table className="min-w-full">
-                                    <thead>
-                                        <tr className="dark:bg-slate-600 bg-slate-200 border dark:border-gray-400">
-                                            <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">
-                                                <span className={``}>
-                                                    Company
-                                                </span>
-                                            </th>
-                                            <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">
-                                                <span className={``}>
-
-                                                    {"Company's Email"}
-
-                                                </span>
-                                            </th>
-                                            <th className="p-2.5 xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-left">
-                                                <span>
-                                                    Username
-                                                </span>
-                                            </th>
-                                            <th className="hidden p-2.5 sm:table-cell xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-center">
-                                                <span>
-                                                    Status
-                                                </span>
-                                            </th>
-                                            <th className="hidden p-2.5 sm:table-cell xl:p-3 text-md dark:text-slate-200 font-medium uppercase text-center">
-                                                Action
-                                            </th>
+                            <table className="min-w-full border-collapse">
+                                <thead>
+                                    <tr className="dark:bg-slate-700 bg-slate-200 border-b dark:border-slate-500">
+                                        <th className="p-3 text-md dark:text-slate-100 font-semibold uppercase text-left">Company</th>
+                                        <th className="p-3 text-md dark:text-slate-100 font-semibold uppercase text-left">{"Company's Email"}</th>
+                                        <th className="p-3 text-md dark:text-slate-100 font-semibold uppercase text-left">Username</th>
+                                        <th className="hidden p-3 sm:table-cell text-md dark:text-slate-100 font-semibold uppercase text-center">Status</th>
+                                        <th className="hidden p-3 sm:table-cell text-md dark:text-slate-100 font-semibold uppercase text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {requestLoading ? (
+                                        <tr>
+                                            <td colSpan="5" className="w-full text-center align-middle p-5">
+                                                <LoadingCircle />
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {dataLoading ? (
-                                            <tr>
-                                                <td colSpan="5" className="w-full text-center align-middle">
-                                                    <div className="flex items-center justify-center h-full">
-                                                        <LoadingCircle />
-                                                    </div>
+                                    ) : requestlist.length < 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="w-full text-center align-middle border-b dark:border-slate-500 py-5">
+                                                <div className="dark:text-slate-300">Request not found</div>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        requestlist.map((data, index) => (
+                                            <tr key={index} className="border-b dark:border-slate-500">
+                                                <td className="p-3 text-black dark:text-slate-200 text-left">{data.company}</td>
+                                                <td className="p-3 text-black dark:text-slate-200 text-left">{data.email}</td>
+                                                <td className="p-3 text-meta-3 dark:text-slate-200 text-left">{data.username}</td>
+                                                <td className="hidden sm:table-cell p-3 text-center">
+                                                    {data.subscription ? 
+                                                        <div className="px-3 py-1 rounded-full border-2 border-green-700 bg-green-100 text-green-700 font-semibold shadow-sm">
+                                                            Paid
+                                                        </div> : 
+                                                        <div className="px-3 py-1 rounded-full border-2 border-blue-700 bg-blue-100 text-blue-700 font-semibold shadow-sm">
+                                                            Free
+                                                        </div>}
+                                                </td>
+                                                <td className="hidden sm:table-cell p-3 text-center">
+                                                    {isLoading ? (
+                                                        <LiaSpinnerSolid className="w-6 h-6 dark:text-white animate-spin" />
+                                                    ) : (
+                                                        <div className="flex justify-center space-x-2">
+                                                            <button onClick={() => handleAccept(data._id)} className="flex items-center justify-center text-white bg-green-500 hover:bg-green-600 transition-colors duration-200 px-3 py-2 rounded-full shadow-md">
+                                                                <FaCheck size={18} />
+                                                            </button>
+                                                            <button onClick={() => handleReject(data._id, data.username, data.email)} className="flex items-center justify-center text-white bg-red-500 hover:bg-red-600 transition-colors duration-200 px-3 py-2 rounded-full shadow-md">
+                                                                <FaTimes size={18} />
+                                                            </button>
+                                                        </div>
+                                                    )}
                                                 </td>
                                             </tr>
-                                        ) : requestlist.length < 0 ? (
-                                                <tr>
-                                                    <td colSpan="5" className="w-full text-center align-middle border dark:border-slate-400">
-                                                        <div className="flex items-center justify-center h-full dark:text-slate-200 py-5">
-                                                            Request not found
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                        ) : (
-                                            requestlist.map((data, index) => (
-                                                <tr key={index} className="border dark:border-gray-400">
-                                                    <td className="p-2.5 xl:p-5 text-black dark:text-slate-200 text-left text-nowrap">
-                                                        {data.company}
-                                                    </td>
-                                                    <td className="p-2.5 xl:p-5 text-black dark:text-slate-200 text-left">
-                                                        {data.email}
-                                                    </td>
-                                                    <td className="p-2.5 xl:p-5 text-meta-3 dark:text-slate-200 text-left">
-                                                        {data.username}
-                                                    </td>
-                                                    <td className="hidden sm:table-cell p-2.5 xl:p-5 text-meta-5 dark:text-slate-200 text-center">
-                                                        {data.subscription ? 
-                                                            <div className="px-5 py-1 rounded-full border-2 border-green-800 bg-green-500 text-green-200">Paid</div> : 
-                                                            <div className="px-5 py-1 rounded-full border-2 border-blue-800 bg-blue-500 text-red-200">Free</div>}
-                                                    </td>
-                                                    <td className="hidden sm:table-cell p-2.5 xl:p-5 text-center">
-                                                        {isLoading ? (
-                                                            <LiaSpinnerSolid className="w-15 h-15 dark:text-white animate-spin" />
-                                                        ) : (
-                                                            <>
-                                                                <button onClick={() => handleAccept(data._id)} className="text-green-500 px-2 py-2 border border-green-500 hover:text-green-200 hover:bg-green-500 transition-colors duration-200">
-                                                                    <FaCheck size={20}/>
-                                                                </button>
-                                                                <button onClick={() => handleReject(
-                                                                        data._id,
-                                                                        data.username,
-                                                                        data.email
-                                                                    )} className="text-red-500 px-2 py-2 border border-red-500 hover:text-red-200 hover:bg-red-500 transition-colors duration-200 ms-2">
-                                                                    <FaTimes size={20}/>
-                                                                </button>
-                                                            </>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )
-                                        }
-                                    </tbody>
-                                </table>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+
+
                             </div>
                         </div>
                     </div>

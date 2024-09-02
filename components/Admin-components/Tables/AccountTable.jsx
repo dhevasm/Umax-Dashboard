@@ -200,8 +200,6 @@ export default function AccountTable() {
             if(userData.roles == "sadmin"){
                 document.getElementById('tenant').value = ""
                 document.getElementById('tenant').disabled = false
-            }else{
-                handleGetClientList(localStorage.getItem('tenantId'))
             }
         }
         addModal.current.classList.remove("hidden")
@@ -360,6 +358,7 @@ export default function AccountTable() {
     }, [])
 
     useEffect(() => {
+
     }, [account])
 
     async function createAccount(){
@@ -494,6 +493,12 @@ export default function AccountTable() {
     const [culture, setCulture] = useState([])
     const [client, setClient] = useState([])
     const [tenant, setTenant] = useState([])
+
+    useEffect(()=>{
+        if(client.length > 0 && userData.roles == "admin"){
+            handleGetClientList(localStorage.getItem("tenantId"))
+        }
+    }, [client])
 
     async function getSelectFrontend(){
         setSelectLoading(true)
@@ -662,19 +667,107 @@ export default function AccountTable() {
     const currentaccounts = filteredData.slice(indexOfFirstaccount, indexOfLastaccount);
 
     function onSubmit(par){
-        if(par == 1){
-            createAccount()
-        } else if(par == 2){
-            updateAccount()
-        } else {
+        const platform = document.getElementById('platform').value
+        if(platform == "1"){
+            handleFacebookLogin()
+        }else if(platform == "2"){
+            startGoogleSignIn()
+        }else if(platform == "3"){
+            alert("tiktok login")
+        }else{
             null
         }
+        // if(par == 1){
+        //     createAccount()
+        // } else if(par == 2){
+        //     updateAccount()
+        // } else {
+        //     null
+        // }
     }
     
     const handleRefresh = () => {
         Router.refresh()
         getaccount()
     }
+
+    // Login Section
+    // Facebook oauth
+    useEffect(() => {
+        window.fbAsyncInit = function() {
+        FB.init({
+            appId      : "2046271932412909",
+            cookie     : true,
+            xfbml      : true,
+            version    : "v19.0"
+        });
+        
+        FB.AppEvents.logPageView();   
+            
+        };
+    
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        }, []);
+
+        // Fungsi untuk menangani login Facebook
+        const handleFacebookLogin = () => {
+        FB.login(function(response) {
+            if (response.authResponse) {
+            const accessToken = response.authResponse.accessToken;
+            console.log('Access Token:', accessToken);
+            
+            // Fetch user information
+            FB.api('/me', { fields: 'name, email' }, function(response) {
+                console.log('Good to see you, ' + response.name + '.');
+                console.log('User email:', response.email);
+                // Anda bisa melakukan sesuatu dengan access token dan informasi user di sini
+            });
+            } else {
+            console.log('User cancelled login or did not fully authorize.');
+            }
+        }, {scope: 'public_profile,email'});
+        };
+
+            // Google oauth
+            /*
+ * Create form to request access token from Google's OAuth 2.0 server.
+ */
+function oauthSignIn() {
+    // Google's OAuth 2.0 endpoint for requesting an access token
+    var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+  
+    // Create <form> element to submit parameters to OAuth 2.0 endpoint.
+    var form = document.createElement('form');
+    form.setAttribute('method', 'GET'); // Send as a GET request.
+    form.setAttribute('action', oauth2Endpoint);
+  
+    // Parameters to pass to OAuth 2.0 endpoint.
+    var params = {'client_id': 'YOUR_CLIENT_ID',
+                  'redirect_uri': 'YOUR_REDIRECT_URI',
+                  'response_type': 'token',
+                  'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
+                  'include_granted_scopes': 'true',
+                  'state': 'pass-through value'};
+  
+    // Add form parameters as hidden input values.
+    for (var p in params) {
+      var input = document.createElement('input');
+      input.setAttribute('type', 'hidden');
+      input.setAttribute('name', p);
+      input.setAttribute('value', params[p]);
+      form.appendChild(input);
+    }
+  
+    // Add form to page and submit it to open the OAuth 2.0 endpoint.
+    document.body.appendChild(form);
+    form.submit();
+  }
 
     return (
         <>
@@ -723,7 +816,7 @@ export default function AccountTable() {
                                         userData.roles == "sadmin" && (
                                             <div>
                                                 <label htmlFor="tenantfilter" className="text-sm font-medium  hidden">Tenant</label>
-                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-e sm:border-e md:border-e-0 xl:border-e-0 dark:border-gray-500 rounded-e-md md:rounded-none text-sm block w-full px-3 py-2 select-no-arrow"
+                                                <select id="tenantfilter" className="md:w-[150px] h-10 bg-white dark:bg-slate-800 dark:text-white border-b border-t border-s border-e sm:border-e md:border-e-0 xl:border-e-0 dark:border-gray-500 rounded-e-md md:rounded-none text-sm block w-full px-3 py-2 select-no-arrow"
                                                     value={selectedTenant}
                                                     onChange={handleSelectedTenant}
                                                 >
@@ -882,11 +975,11 @@ export default function AccountTable() {
 
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 dark:text-white flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-                <div className="relative p-4 w-full max-w-2xl max-h-full ">
+                <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto pb-3">
+                    <div className="relative bg-white dark:bg-[#243040] shadow max-h-[100vh] overflow-auto">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                        <div className="fixed z-50 w-full max-w-2xl flex items-center justify-between p-4 md:p-5 border-b bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
                             <h3 className="text-2xl font-semibold">
                                 {`${modeModal} ${t('accounts')}`}
                             </h3>
@@ -900,7 +993,7 @@ export default function AccountTable() {
                                 e.preventDefault()
                                 onSubmit(modeModal === 'Edit' ? 2 : 1);
                             }}>
-                                <div className="grid gap-4 mb-4 grid-cols-2">
+                                <div className="grid gap-4 mb-4 grid-cols-2 bg-white dark:bg-[#243040] dark:text-white overflow-y-auto mt-[4.5rem]">
                                     <div className="col-span-2">
                                         <label htmlFor="name" className="flex mb-2 text-sm font-normal font-sans">{t('account_name')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
                                         <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}

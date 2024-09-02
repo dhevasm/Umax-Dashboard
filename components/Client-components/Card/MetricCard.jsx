@@ -128,6 +128,8 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
                 classNames="dropdown"
                 unmountOnExit
             >
+                <>
+                <div className="fixed w-screen h-screen z-40 top-0 left-0" onClick={() => onToggle(id)}></div>
                 <div className="absolute z-50 top-11 -right-8 w-full bg-white dark:bg-slate-700 rounded-lg shadow-lg transform transition-transform duration-500 ease-in-out">
                     <div className="border-b border-gray-300 dark:border-slate-600 px-4 py-2">
                         <h3 className="text-sm font-semibold text-blue-700 dark:text-blue-500">{Title}</h3> {/* Updated dropdown title color */}
@@ -136,6 +138,7 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
                         <p className="text-xs text-gray-700 dark:text-gray-300">{Description}</p>
                     </div>
                 </div>
+                </>
             </CSSTransition>
             <div className="w-full mt-4 flex justify-start items-center gap-2">
                 <div className={`text-white rounded-full gap-1 px-2 flex items-center ${getBadgeColor()}`}>

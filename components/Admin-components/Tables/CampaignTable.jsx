@@ -180,8 +180,6 @@ export default function CampaignTable() {
             if(userData.roles == "sadmin"){
                 document.getElementById('tenant').value = ""
                 document.getElementById('tenant').disabled = false
-            }else{
-                handleGetAccountList(localStorage.getItem('tenantId'))
             }
         }
         addModal.current.classList.remove("hidden")
@@ -511,6 +509,12 @@ export default function CampaignTable() {
     const [culture, setCulture] = useState([])
     const [account, setAccount] = useState([])
     const [tenant, setTenant] = useState([])
+
+    useEffect(()=>{
+        if(account.length > 0 && userData.roles == "admin"){
+            handleGetAccountList(localStorage.getItem("tenantId"))
+        }
+    }, [account])
 
     async function getSelectFrontend(){
         setSelectLoading(true)
@@ -1054,11 +1058,11 @@ export default function CampaignTable() {
             {/* <!-- Main modal --> */}
             <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
 
-                <div className="relative p-4 w-full max-w-2xl max-h-full ">
+                <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto pb-3">
+                    <div className="relative bg-white dark:bg-[#243040] shadow max-h-[100vh] overflow-auto pb-3">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                        <div className="fixed z-50 w-full max-w-2xl flex items-center justify-between p-4 md:p-5 border-b bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
                             <h3 className="text-2xl font-semibold ">
                                 {`${modeModal} ${t('campaigns')}`}
                             </h3>
@@ -1069,10 +1073,10 @@ export default function CampaignTable() {
                         {/* <!-- Modal body --> */}
                         <div className="p-4 md:p-5">
                             <form onSubmit={(e) => {
-                                e.preventDefault(); // Mencegah perilaku default formulir
+                                e.preventDefault(); // Mencegah perilaku defa   ult formulir
                                 onSubmit(modeModal === 'Edit' ? 2 : 1);
                             }}>
-                                <div className="grid gap-4 mb-4 grid-cols-2">
+                                <div className="grid gap-4 mb-4 grid-cols-2 bg-white dark:bg-[#243040] dark:text-white overflow-y-auto mt-[4.5rem]">
                                     <div className={` ${userData.roles == "sadmin" ? "col-span-2" : "col-span-1"}`}>
                                         <label htmlFor="name" className="mb-2 text-sm font-normal text-black dark:text-slate-200  flex">{t('campaign_name')} <div className="text-red-500 dark:text-red-600">*</div></label>
                                         <input type="text" name="name" id="name" required className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] border-gray-200 placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 text-black dark:text-slate-200" placeholder={t('holder-name')}
@@ -1093,7 +1097,6 @@ export default function CampaignTable() {
                                                             return <option key={index} value={tenant._id}>{tenant.company}</option>
                                                         }) : <option key={0} value={0}>Loading...</option>
                                                     }
-                                                    
                                                 </select>
                                             </div>
                                         )

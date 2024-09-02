@@ -8,8 +8,8 @@ const Footer = () => {
     <div>
         <footer className="relative z-10 bg-blue-600 max-w-full flex flex-col justify-center">
             <div className="container mx-auto px-10 md:px-20">
-                <div className="border-b border-gray-7/20 pt-[70px] pb-10">
-                    <div className="flex flex-wrap items-center justify-center -mx-4">
+                <div className="border-b border-gray-7/20 pt-[10px] pb-10">
+                    {/* <div className="flex flex-wrap items-center justify-center -mx-4">
                         <div className="w-full px-4 lg:w-1/2">
                             <div className="w-full mb-5 max-w-[470px]">
                                 <h3 className="text-2xl font-bold text-white sm:text-[28px] sm:leading-snug">
@@ -34,7 +34,7 @@ const Footer = () => {
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="container pt-14 lg:pt-20 px-10 md:px-20 w-full flex justify-center">

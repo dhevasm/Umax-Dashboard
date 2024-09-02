@@ -1,5 +1,6 @@
 {
     "landing" : {
+      "integration" : "Integrated With",
       "home" : "Home",
       "feature" : "Feature",
       "payment" : "Payment",

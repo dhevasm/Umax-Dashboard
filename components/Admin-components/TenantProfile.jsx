@@ -48,6 +48,36 @@ export default function TenantProfile({tenant_id}){
         getTenant()
     })
 
+    useEffect(() => {
+        if(Country.length > 0){
+            document.getElementById("country").value =  tenant.address.split(" - ")[2]
+            handleCityList(tenant.address.split(" - ")[2]).then(() => {
+                document.getElementById("city").value = tenant.address.split(" - ")[1]
+            })
+
+        }
+    }, [Country])
+
+    useEffect(() => {
+        if(culture.length > 0){
+            document.getElementById("culture").value = tenant.culture
+        }
+    }, [culture])
+
+    useEffect(() => {
+        if(currency.length > 0){
+            document.getElementById("currency").value = tenant.currency
+        }
+    }, [currency])
+
+    useEffect(() => {
+        if(timezone.length > 0){
+            document.getElementById("input_timezone").value = tenant.timezone_name
+        }
+    }, [timezone])
+
+    
+
     function showModal(mode, tenant_id = null ){
         setModeModal(mode)
         if(mode == "Edit"){
@@ -58,17 +88,9 @@ export default function TenantProfile({tenant_id}){
                 document.getElementById('address').value = tenant.address
                 document.getElementById('email').value = tenant.email
                 document.getElementById('language').value = tenant.language
-                document.getElementById('culture').value = tenant.culture
-                document.getElementById('currency').value = tenant.currency
-                document.getElementById('input_timezone').value = tenant.timezone_name
                 document.getElementById('currencyposition').checked = tenant.currency_position
                 document.getElementById('contact').value = tenant.contact.slice(1)
-                handleCityList(tenant.address.split(" - ")[2])
-                setTimeout(() => {
-                    document.getElementById('city').value = tenant.address.split(" - ")[1]
-                    document.getElementById('country').value = tenant.address.split(" - ")[2]
-                }, 1000);
-                
+
                 setValues({name: tenant.company, address: tenant.address, contact: tenant.contact, email: tenant.email})
                 setError({name: '', address: '', contact: '', email: ''})
                     
@@ -416,19 +438,20 @@ export default function TenantProfile({tenant_id}){
              <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none0 bg-opacity-75 z-50">
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                 {/* <!-- Modal content --> */}
-                <div className="relative bg-white rounded-sm outline-none shadow max-h-[100vh] overflow-auto">
+                <div className="relative bg-white dark:bg-[#243040] shadow max-h-[100vh] overflow-auto">
                     {/* <!-- Modal header --> */}
-                    <div className="flex items-center justify-between p-4 md:p-5  bg-[#3d50e0] dark:bg-slate-800 text-white">
+                    <div className="fixed z-50 w-full max-w-2xl flex items-center justify-between p-4 md:p-5 border-b bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
                         <h3 className="text-xl font-semibold">
                             {`${modeModal} ${t('tenant')}`}
                         </h3>
                         
-                        <button type="button" className="text-xl bg-transparent  hover:text-slate-100 rounded-sm outline-none w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
+                        <button type="button" className="text-xl bg-transparent hover:text-slate-500  dark:hover:text-slate-300 outline-none w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="crud-modal" onClick={closeModal}>
                             <FaTimes />
                         </button>
                     </div>
+                    <div className="w-full h-0.5 bg-gray-300"></div>
                     {/* <!-- Modal body --> */}
-                    <div className="p-4 pb-64 md:pb-1 md:p-5 dark:bg-slate-900 dark:text-white">
+                    <div className="p-4 md:p-5 bg-white dark:bg-[#243040] dark:text-white overflow-y-auto mt-[4.5rem]">
                         <div className="flex justify-between items-center">
                         <div className="text-xl font-semibold text-[#3d50e0]">{t('general')}</div>
 
@@ -445,7 +468,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="name" className="mb-2 text-sm font-medium  flex">{t('company-name')} {
                                     error.name && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border outline-1 border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-name')}
+                                <input type="text" name="name" id="name" className="bg-gray-50 dark:bg-slate-800 dark:border-none border outline-1 border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5 " placeholder={t('holder-name')}
                                 required onChange={(e) => setValues({...values, name: e.target.value})}/>
                                 {
                                     error.name && <p className="text-red-500 text-sm">{error.name}</p>
@@ -455,7 +478,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="address" className="mb-2 text-sm font-medium  flex">{t('company-address')} {
                                     error.address && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-address')}
+                                <input type="text" name="address" id="address" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5 " placeholder={t('holder-address')}
                                 required onChange={(e) => setValues({...values, address: e.target.value})}/>
                                 {
                                     error.address && <p className="text-red-500 text-sm">{error.address}</p>
@@ -464,7 +487,7 @@ export default function TenantProfile({tenant_id}){
 
                             <div className="col-span-2 md:col-span-1">
                                 <label htmlFor="country" className="block mb-2 text-sm font-medium ">{t('country')}</label>
-                                <select id="country" onChange={(e) => {handleCityList(e.target.value)}} className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"   defaultValue={0}>
+                                <select id="country" onChange={(e) => {handleCityList(e.target.value)}} className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5"   defaultValue={0}>
                                     <option value="0" key={0} disabled hidden>Select Country</option>
                                     {
                                         Country.length > 0 ? Country.map((item, index) => (
@@ -476,7 +499,7 @@ export default function TenantProfile({tenant_id}){
 
                             <div className="col-span-2 md:col-span-1">
                                 <label htmlFor="city" className="block mb-2 text-sm font-medium ">{t('city')}</label>
-                                <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <select id="city" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5" defaultValue={0}>
                                 <option disabled value={0} key={0} hidden>Please Select Country</option>
                                     {
                                         City.length > 0 ? City.map((item, index) => (
@@ -490,7 +513,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="email" className="flex mb-2 text-sm font-medium  ">Email{
                                     error.email && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-email')} required onChange={(e) => setValues({...values, email: e.target.value})}/>
+                                <input type="email" name="email" id="email" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5 " placeholder={t('holder-email')} required onChange={(e) => setValues({...values, email: e.target.value})}/>
                                 {
                                     error.email && <p className="text-red-500 text-sm">{error.email}</p>
                                 }
@@ -500,7 +523,7 @@ export default function TenantProfile({tenant_id}){
                                 <label htmlFor="contact" className="flex mb-2 text-sm font-medium  ">{t('contact')} {
                                     error.contact && <p className="text-red-500 text-sm">*</p>
                                 }</label>
-                                <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder={t('holder-contact')} required onChange={(e) => setValues({...values, contact: e.target.value})}/>
+                                <input type="number" name="contact" id="contact" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5 " placeholder={t('holder-contact')} required onChange={(e) => setValues({...values, contact: e.target.value})}/>
                                 {
                                     error.contact && <p className="text-red-500 text-sm">{error.contact}</p>
                                 }
@@ -528,7 +551,7 @@ export default function TenantProfile({tenant_id}){
 
                             <div className="col-span-2 md:col-span-1">
                                 <label htmlFor="language" className="block mb-2 text-sm font-medium ">{t('language')}</label>
-                                <select id="language" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <select id="language" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5" defaultValue={0}>
                                     <option value={null} index={0} disabled hidden>Select Language</option>
                                     <option value="en">English</option>
                                     <option value="id">Indonesia</option>
@@ -537,18 +560,18 @@ export default function TenantProfile({tenant_id}){
 
                             <div className="col-span-2 md:col-span-1">
                                 <label htmlFor="culture" className="block mb-2 text-sm font-medium ">{t('culture')}</label>
-                                <select id="culture" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <select id="culture" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Culture</option>
                                     {
                                         culture.length > 0 ? culture.map((item, index) => (
-                                            <option key={index} value={item.cultureInfoCode}>{item.country}</option>
+                                            <option key={index} value={item.cultureInfoCode}>{item.country} ({item.cultureInfoCode})</option>
                                         )) : <option disabled>Loading</option>
                                     }
                                 </select>
                             </div>
                             <div className="col-span-2 md:col-span-1">
                                 <label htmlFor="input_timezone" className="block mb-2 text-sm font-medium ">{t('timezone')}</label>
-                                <select id="input_timezone" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <select id="input_timezone" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Timezone</option>
                                 {
                                         timezone.length > 0 ? timezone.map((item, index) => (
@@ -559,7 +582,7 @@ export default function TenantProfile({tenant_id}){
                             </div>
                             <div className="col-span-2 md:col-span-1 pb-20 md:pb-2">
                                 <label htmlFor="currency" className="block mb-2 text-sm font-medium ">{t('currency')}</label>
-                                <select id="currency" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5" defaultValue={0}>
+                                <select id="currency" className="bg-gray-50 dark:bg-slate-800 dark:border-none border border-gray-300  text-sm rounded-sm outline-none focus:ring-[#3c54d9] focus:border-[#3c54d9] block w-full p-2.5" defaultValue={0}>
                                 <option value={null} index={0} disabled hidden>Select Currency</option>
                                 {
                                     currency.length > 0 ? currency.map((item, index) => (

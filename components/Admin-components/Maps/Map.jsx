@@ -57,7 +57,29 @@ function Map() {
     }
   }
   return (
-    <div className="flex flex-col items-center overflow-auto  h-full w-full">
+    <>
+    <style jsx>
+      {`
+      .custom-scrollbar > div {
+        direction: ltr; /* Reset the inner content direction to left-to-right */
+      }
+
+      /* Scrollbar styling (optional) */
+      .custom-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        display: none;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-track {
+        display: none;
+      }
+      `
+        }
+    </style>
+    <div className="flex flex-col items-center overflow-auto  h-full w-full custom-scrollbar">
     <div className="App">
       {/* <p className={`${isDarkMode ? "text-white" : "text-gray-500"}`}>Client Country</p> */}
       <WorldMap
@@ -79,6 +101,7 @@ function Map() {
           } hover:bg-opacity-80 transition-colors duration-300`}><FaPlus/></button>
       </div>
     </div>
+    </>
   );
 }
 

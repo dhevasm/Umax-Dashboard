@@ -353,7 +353,7 @@ const EditProfile = () => {
                                 >
                                     <option value="" disabled>{t('select-culture')}</option>
                                     {selectCulture.map((item, index) => (
-                                        <option key={index} value={item.cultureInfoCode}>{item.country}</option>
+                                        <option key={index} value={item.cultureInfoCode}>{item.country} ({item.cultureInfoCode})</option>
                                     ))}
                                 </select>
                             }

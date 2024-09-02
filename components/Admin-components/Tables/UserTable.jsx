@@ -749,9 +749,9 @@ export default function UserTable() {
             <div className={`fixed inset-0 ${create ? "flex" : "hidden"} items-center justify-center bg-gray-500 bg-opacity-75 z-50`}>
                 <div className="relative p-4 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-[#243040] rounded-lg shadow">
+                    <div className="relative bg-white dark:bg-[#243040] shadow">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                        <div className="flex items-center justify-between p-4 border-b bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
                             <h3 className="text-2xl font-semibold text-black dark:text-slate-200">
                                 {`Create ${t('users')}`}
                             </h3>
@@ -868,7 +868,7 @@ export default function UserTable() {
                                             className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                                             required
                                         >
-                                            <option value="" disabled>{t('select-role')}</option>
+                                            <option value="" disabled hidden>{t('select-role')}</option>
                                             <option value="admin">Admin</option>
                                             <option value="staff">Staff</option>
                                         </select>
