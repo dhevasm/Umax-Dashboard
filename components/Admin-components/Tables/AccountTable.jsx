@@ -723,11 +723,11 @@ export default function AccountTable() {
             console.log('Access Token:', accessToken);
             
             // Fetch user information
-            FB.api('/me', { fields: 'name, email' }, function(response) {
-                console.log('Good to see you, ' + response.name + '.');
-                console.log('User email:', response.email);
+            // FB.api('/me', { fields: 'name, email' }, function(response) {
+            //     console.log('Good to see you, ' + response.name + '.');
+            //     console.log('User email:', response.email);
                 // Anda bisa melakukan sesuatu dengan access token dan informasi user di sini
-            });
+            // });
             } else {
             console.log('User cancelled login or did not fully authorize.');
             }
