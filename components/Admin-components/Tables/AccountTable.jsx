@@ -696,10 +696,10 @@ export default function AccountTable() {
     useEffect(() => {
         window.fbAsyncInit = function() {
         FB.init({
-            appId      : "1509379943014206",
+            appId      : "2046271932412909",
             cookie     : true,
             xfbml      : true,
-            version    : "v20.0"
+            version    : "v19.0"
         });
         
         FB.AppEvents.logPageView();   
