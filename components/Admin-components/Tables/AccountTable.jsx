@@ -15,11 +15,12 @@ import { FaTimes } from "react-icons/fa"
 import { IoMdEye } from "react-icons/io"
 import { IoMdEyeOff } from "react-icons/io"
 import { RiFileExcel2Fill, RiFileExcel2Line, RiIdCardLine, RiRefreshFill, RiRefreshLine } from "react-icons/ri"
-import CountCard from "../CountCard"
 import { BiPlus } from "react-icons/bi"
 import { useTranslations } from "next-intl"
 import toastr from "toastr"
 import { useRouter } from "next/navigation"
+import { useGoogleLogin } from '@react-oauth/google';
+
 export default function AccountTable() {
 
     const [account, setaccount] = useState([])
@@ -671,7 +672,7 @@ export default function AccountTable() {
         if(platform == "1"){
             handleFacebookLogin()
         }else if(platform == "2"){
-            startGoogleSignIn()
+            GoogleLogin()
         }else if(platform == "3"){
             alert("tiktok login")
         }else{
@@ -696,14 +697,13 @@ export default function AccountTable() {
     useEffect(() => {
         window.fbAsyncInit = function() {
         FB.init({
-            appId      : "2046271932412909",
+            appId      : process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
             cookie     : true,
             xfbml      : true,
-            version    : "v19.0"
+            version    : process.env.NEXT_PUBLIC_FACEBOOK_API_VERSION
         });
         
         FB.AppEvents.logPageView();   
-            
         };
     
         (function(d, s, id){
@@ -718,56 +718,31 @@ export default function AccountTable() {
         // Fungsi untuk menangani login Facebook
         const handleFacebookLogin = () => {
         FB.login(function(response) {
-            if (response.authResponse) {
-            const accessToken = response.authResponse.accessToken;
-            console.log('Access Token:', accessToken);
-            
-            // Fetch user information
-            // FB.api('/me', { fields: 'name, email' }, function(response) {
-            //     console.log('Good to see you, ' + response.name + '.');
-            //     console.log('User email:', response.email);
-                // Anda bisa melakukan sesuatu dengan access token dan informasi user di sini
-            // });
-            } else {
-            console.log('User cancelled login or did not fully authorize.');
-            }
-        }, {scope: 'public_profile,email'});
+                if (response.authResponse) {
+                const accessToken = response.authResponse.accessToken;
+                console.log('Access Token:', accessToken);
+                
+                FB.api('/me', { fields: 'name, email' }, function(response) {
+                    console.log('Good to see you, ' + response.name + '.');
+                    console.log('User email:', response.email);
+                });
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            }, {scope: 'public_profile,email'});
         };
 
-            // Google oauth
-            /*
- * Create form to request access token from Google's OAuth 2.0 server.
- */
-function oauthSignIn() {
-    // Google's OAuth 2.0 endpoint for requesting an access token
-    var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
-  
-    // Create <form> element to submit parameters to OAuth 2.0 endpoint.
-    var form = document.createElement('form');
-    form.setAttribute('method', 'GET'); // Send as a GET request.
-    form.setAttribute('action', oauth2Endpoint);
-  
-    // Parameters to pass to OAuth 2.0 endpoint.
-    var params = {'client_id': 'YOUR_CLIENT_ID',
-                  'redirect_uri': 'YOUR_REDIRECT_URI',
-                  'response_type': 'token',
-                  'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
-                  'include_granted_scopes': 'true',
-                  'state': 'pass-through value'};
-  
-    // Add form parameters as hidden input values.
-    for (var p in params) {
-      var input = document.createElement('input');
-      input.setAttribute('type', 'hidden');
-      input.setAttribute('name', p);
-      input.setAttribute('value', params[p]);
-      form.appendChild(input);
-    }
-  
-    // Add form to page and submit it to open the OAuth 2.0 endpoint.
-    document.body.appendChild(form);
-    form.submit();
-  }
+        // Login Google
+        const GoogleLogin = useGoogleLogin({
+            onSuccess: tokenResponse => {
+              console.log('Access Token:', tokenResponse.access_token);
+            },
+            onError: (errorResponse) => {
+              setError('Login Failed');
+              console.error(errorResponse);
+            },
+            scope: 'openid profile email', // Specify scopes as needed
+          });
 
     return (
         <>
@@ -776,7 +751,6 @@ function oauthSignIn() {
                     <h1 className="text-3xl font-bold uppercase flex dark:text-white gap-2"><RiIdCardLine size={35}/> {t('title')}</h1>
                     <p className="dark:text-white"><a className="hover:cursor-pointer dark:text-white hover:text-blue-400 hover:underline" href="#" onClick={() => setChangeTable("dashboard")}>{t('dashboard')}</a>  / {t('accounts')}</p>
                 </div>
-
                 <div className="w-full h-fit mb-5 rounded-md shadow-md">
                     {/* Header */}
                     <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">

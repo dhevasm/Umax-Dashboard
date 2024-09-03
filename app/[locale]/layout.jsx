@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages} from 'next-intl/server';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,9 @@ export default async function LocaleLayout({
       {/* <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID" ></script> */}
       <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} async></script>
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+            {children}
+          </GoogleOAuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

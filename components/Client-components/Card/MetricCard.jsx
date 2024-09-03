@@ -70,7 +70,7 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
 
     const getPercent = () => {
         if (data && data.length >= 2) {
-            const amount = (data[0].value - data[1].value) / data[1].value
+            const amount = (data[6].value - data[5].value) / data[5].value
             const percent = amount * 100
 
             return percent.toFixed(1)

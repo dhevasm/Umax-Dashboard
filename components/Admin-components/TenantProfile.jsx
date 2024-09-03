@@ -51,12 +51,15 @@ export default function TenantProfile({tenant_id}){
     useEffect(() => {
         if(Country.length > 0){
             document.getElementById("country").value =  tenant.address.split(" - ")[2]
-            handleCityList(tenant.address.split(" - ")[2]).then(() => {
-                document.getElementById("city").value = tenant.address.split(" - ")[1]
-            })
-
+            handleCityList(tenant.address.split(" - ")[2])
         }
     }, [Country])
+
+    useEffect(() => {
+        if(City.length > 0){
+            document.getElementById("city").value = tenant.address.split(" - ")[1]
+        }
+    }, [City])
 
     useEffect(() => {
         if(culture.length > 0){
