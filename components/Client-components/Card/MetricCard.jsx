@@ -50,8 +50,8 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
     // Determine badge color based on value change
     const getBadgeColor = () => {
         if (data && data.length >= 2) {
-            const latestValue = data[6].value; // Assume Title maps to a key in data
-            const previousValue = data[5].value;
+            const latestValue = data[6]?.value; // Assume Title maps to a key in data
+            const previousValue = data[5]?.value;
 
             if (latestValue > previousValue) {
                 return 'bg-green-500'; // Green for increase
@@ -62,7 +62,7 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
             }
         }
         return 'bg-gray-300'; // Default color if not enough data
-    };
+    };   
 
     useEffect(() => {
         getBadgeColor();
@@ -70,7 +70,8 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
 
     const getPercent = () => {
         if (data && data.length >= 2) {
-            const amount = (data[6].value - data[5].value) / data[5].value
+            const amount = (data[6]?.value - data[5]?.value) / data[5].value
+
             const percent = amount * 100
 
             return percent.toFixed(1)

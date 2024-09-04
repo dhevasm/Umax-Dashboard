@@ -24,11 +24,11 @@ const ChartTwo = ({ chartData }) => {
 
   const series = useMemo(() => [
     {
-      name: "Campaign Start",
+      name: t('campaign-start'),
       data: start,
     },
     {
-      name: "Campaign End",
+      name: t('campaign-end'),
       data: end,
     },
   ], [start, end]);
@@ -85,7 +85,7 @@ const ChartTwo = ({ chartData }) => {
       position: "top",
     },
     title: {
-      text: "Campaign start and end date",
+      text: t('start-end'),
       align: "left",
       style: {
         color: isDarkMode ? "white" : "gray",

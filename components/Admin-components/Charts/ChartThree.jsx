@@ -71,7 +71,7 @@ const ChartThree = ({ chartData }) => {
       },
     },
     title: {
-      text: 'Campaign Platform',
+      text: t('campaign-by-platform'),
       align: 'center',
       style: {
         color: isDarkMode ? "white" : "gray",
