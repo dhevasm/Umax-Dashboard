@@ -614,7 +614,7 @@ export default function Dashboard({ tenant_id }) {
                                         <tr>
                                         <td colSpan="5" className="w-full text-center align-middle border dark:border-slate-400">
                                             <div className="flex items-center justify-center h-full dark:text-slate-200 py-5">
-                                            Campaign not found
+                                                {t('campaign-not-found')}
                                             </div>
                                         </td>
                                         </tr>

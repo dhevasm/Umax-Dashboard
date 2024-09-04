@@ -505,12 +505,12 @@ export default function TenantProfile({tenant_id}){
                                 <div className="flex w-[50%] justify-start items-center gap-1 me-1 py-3">
                                     <label htmlFor="currencyposition" className="flex flex-col md:flex-row gap-2 items-center cursor-pointer">
 
-                                    <span className="text-sm font-medium ">Currency position :</span>
+                                    <span className="text-sm font-medium ">{t('currency-position')} :</span>
                                     <div className="flex flex-row gap-2 items-center">
                                         <input type="checkbox" value="" id="currencyposition" name="currencyposition" className="sr-only peer"/>
-                                        <div className="text-sm font-medium">right(-$)</div>
+                                        <div className="text-sm font-medium">{t('right')}(-$)</div>
                                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white dark:bg-slate-800 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                        <div className="text-sm font-medium">left($-)</div>
+                                        <div className="text-sm font-medium">{t('left')}($-)</div>
                                     </div>
                                     </label>
                                     </div>

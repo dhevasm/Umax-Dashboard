@@ -4,12 +4,14 @@ import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useContext } from 'react';
 import { AdminDashboardContext } from '@/app/[locale]/admin-dashboard/page';
+import { useTranslations } from 'next-intl';
 
 // Dynamically import ApexCharts to ensure it works with Next.js
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const ChartOne = ({ chartData }) => {
   const { isDarkMode } = useContext(AdminDashboardContext);
+  const t = useTranslations('admin-dashboard');
 
   const [awareness, setAwareness] = useState(0);
   const [conversion, setConversion] = useState(0);
@@ -87,7 +89,7 @@ const ChartOne = ({ chartData }) => {
       theme: isDarkMode ? 'dark' : 'light',
     },
     title: {
-      text: 'Campaign Objective',
+      text: t('campaign-objective'),
       style: {
         color: isDarkMode ? "white" : "gray",
       },
