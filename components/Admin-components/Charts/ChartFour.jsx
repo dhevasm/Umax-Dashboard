@@ -35,7 +35,7 @@ const ChartFour = ({ chartData }) => {
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: '70%',
+        barHeight: '20',
       }
     },
     dataLabels: {
@@ -55,9 +55,6 @@ const ChartFour = ({ chartData }) => {
           colors: isDarkMode ? '#fff' : '#333',
         },
       },
-    },
-    grid: {
-      borderColor: isDarkMode ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
     },
     title: {
       text: 'Client City',

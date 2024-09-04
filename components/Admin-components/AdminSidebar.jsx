@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 export default function AdminSidebar() {
     const sidebarLink = useRef(null);
@@ -18,12 +20,41 @@ export default function AdminSidebar() {
     const Router = useRouter();
 
     const [minimizedSidebar, setMinimizedSidebar] = useState(false);
-    const { sidebarHide, setSidebarHide, changeTable ,setChangeTable, userData } = useContext(AdminDashboardContext);
+    const {
+        sidebarHide,
+        setSidebarHide,
+        updateCard,
+        setUpdateCard,
+        changeTable,
+        setChangeTable,
+        test,
+        dataDashboard,
+        isDarkMode,
+        setIsDarkMode,
+        navbarBrandHide,
+        setNavbarBrandHide,
+        userData
+      } = useContext(AdminDashboardContext);
 
     useEffect(() => {
         document.querySelector(".sidebaractivelink")?.classList.remove('sidebaractivelink');
-        document.getElementById(changeTable)?.classList.add('sidebaractivelink');
+        document.querySelector(".sidebaractivelinklight")?.classList.remove('sidebaractivelinklight');
+        if(isDarkMode){
+            document.getElementById(changeTable)?.classList.add('sidebaractivelink');
+        }else{
+            document.getElementById(changeTable)?.classList.add('sidebaractivelinklight');
+        }
     }, [changeTable])
+
+    useEffect(() => {
+        if(isDarkMode){
+            document.querySelector(".sidebaractivelinklight")?.classList.add('sidebaractivelink');
+            document.querySelector(".sidebaractivelinklight")?.classList.remove('sidebaractivelinklight');
+        }else{
+            document.querySelector(".sidebaractivelink")?.classList.add('sidebaractivelinklight');
+            document.querySelector(".sidebaractivelink")?.classList.remove('sidebaractivelink');
+        }
+    }, [isDarkMode])
 
     useEffect(() => {
         if (sidebarHide) {
@@ -61,6 +92,14 @@ export default function AdminSidebar() {
         });
     };
 
+    const [dashboardLoading, setDashboardLoading] = useState(false);
+
+    const handleDashboardDirect = () => {
+        // toastr.info("Redirecting to Client Dashboard" , "Please Wait!");
+        setDashboardLoading(true);
+        Router.push(`/${localStorage.getItem("lang")}/dashboard`);
+    }
+
     const sidebarItems = [
         {
             key: 'dashboard',
@@ -72,8 +111,8 @@ export default function AdminSidebar() {
         userData.roles === "admin" && {
             key: 'analytics',
             icon: <FaChartLine size={13} />,
-            text: t('analytics'),
-            link: `/${localStorage.getItem("lang")}/dashboard`,
+            text: `${dashboardLoading ? "Loading..." : t('analytics')}`,
+            onClick: () => handleDashboardDirect()
         },
         userData.roles === "admin" && {
             key: 'tenant-profile',
@@ -121,7 +160,8 @@ export default function AdminSidebar() {
             key: 'profile',
             icon: <RiProfileFill />,
             text: t('profile'),
-            link: `/${localStorage.getItem("lang")}/profile`,
+            // link: `/${localStorage.getItem("lang")}/profile`,
+            onClick: () => setChangeTable("profile")
         },
         {
             key: 'logout',
@@ -132,12 +172,15 @@ export default function AdminSidebar() {
     ];
 
     return (
-        <div className="fixed z-10 bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
+        <div className="fixed z-10 bg-white dark:bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
             <style>
                 {
                     `
                         .sidebaractivelink{
                             background-color: #333A48;
+                        }
+                        .sidebaractivelinklight{
+                            background-color: #F1F5F9;
                         }
                     `
                 }
@@ -149,10 +192,10 @@ export default function AdminSidebar() {
                 {sidebarItems.map(item => item && (
                     <li key={item.key} id={item.id} className="mb-4 text-sm">
                         <button
-                            className="flex items-center justify-between w-full px-4 py-2 text-sm rounded-md hover:bg-[#333A48] focus:outline-none focus:bg-[#333A48]"
+                            className="flex items-center justify-between w-full px-4 py-2 text-sm  hover:bg-[#F1F5F9] dark:hover:bg-[#333A48] focus:outline-none"
                             onClick={item.onClick}
                         >
-                            <div className="flex items-center gap-2 text-slate-300">
+                            <div className="flex items-center gap-2 text-gray-600 dark:text-slate-300">
                                 {item.icon}
                                 {item.link ? (
                                     <Link href={item.link}>{item.text}</Link>
