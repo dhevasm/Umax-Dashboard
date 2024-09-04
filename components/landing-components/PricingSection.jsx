@@ -631,13 +631,13 @@ const PricingSection = () => {
                       <div className="flex gap-4 pt-5">
                         <div className="flex items-center gap-2">
                           <input className="hidden" type="radio" id="midtrans" name="method" value="midtrans" onChange={handleChange} defaultChecked />
-                          <label htmlFor="midtrans" className={`flex hover:cursor-pointer border px-3 md:px-10 rounded-sm border-slate-700 items-center gap-2 ${formValues.method == "midtrans" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
+                          <label htmlFor="midtrans" className={`flex hover:cursor-pointer border px-3 md:px-10 rounded-sm border-slate-300 dark:border-slate-700 items-center gap-2 ${formValues.method == "midtrans" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
                             <Image src={"/assets/Midtrans.png"} alt="Midtrans" width={400} height={160} className="w-40 h-16 object-contain" />
                           </label>
                         </div> 
                         <div className="flex items-center gap-2">
                           <input className="hidden" type="radio" id="paypal" name="method" value="paypal" onChange={handleChange}/>
-                          <label htmlFor="paypal" className={`flex hover:cursor-pointer items-center gap-2 px-3 md:px-10 border rounded-sm border-slate-700 ${formValues.method == "paypal" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
+                          <label htmlFor="paypal" className={`flex hover:cursor-pointer items-center gap-2 px-3 md:px-10 border rounded-sm border-slate-300 dark:border-slate-700 ${formValues.method == "paypal" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
                             <Image src={"/assets/Paypal.png"} alt="Paypal" width={400} height={160} className="w-40 h-16 object-contain" />
                           </label>
                         </div>

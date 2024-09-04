@@ -664,7 +664,7 @@ export default function TenantTable() {
 
                     {/* Body */}
                     <div className="w-full h-fit bg-white dark:bg-slate-800 dark:text-white rounded-b-md p-4">
-                        <div className="flex flex-col sm:flex-row md:flex-row justify-between items-center w-full ">
+                        <div className="flex flex-col-reverse sm:flex-row md:flex-row justify-between items-center w-full ">
                             <div className="flex sm:w-full w-full md:w-1/2 xl:w-1/2 justify-start sm:justify-start">
                                 {/* Button */}
                                 <button className=" py-2 mb-4 borde dark:border-gray-500 border hover:bg-gray-100 dark:hover:bg-slate-400 font-bold px-3 rounded-s-md" onClick={generatePDF}>
@@ -803,13 +803,13 @@ export default function TenantTable() {
             </div>
 
             {/* <!-- Main modal --> */}
-            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none0 bg-opacity-75 z-50">
-
+            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none bg-opacity-60 z-50">
+                <div className="w-screen h-screen fixed top-0 left-0" onClick={closeModal}></div>
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto">
+                    <div className="relative bg-white dark:bg-[#243040] shadow max-h-[100vh] overflow-auto">
                         {/* <!-- Modal header --> */}
-                        <div className="fixed z-50 w-full max-w-2xl flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                        <div className="fixed z-50 w-full max-w-2xl flex items-center justify-between p-4 md:p-5 border-b bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
                             <h3 className="text-2xl font-semibold">
                                 {`${modeModal} ${t('tenants')}`}
                             </h3>
@@ -823,7 +823,7 @@ export default function TenantTable() {
                             e.preventDefault(); // Mencegah perilaku default formulir
                             onSubmit(modeModal === 'Edit' ? 2 : 1);
                         }}>
-                        <div className="p-4 md:p-5 bg-white dark:bg-slate-900 dark:text-white overflow-y-auto mt-[4.5rem]" >
+                        <div className="p-4 md:p-5 bg-white dark:bg-[#243040] dark:text-white overflow-y-auto mt-[4.5rem]" >
                         <div className="flex justify-between items-center">
                             <div className="text-xl font-semibold text-blue-500">{t('general')}</div>
 

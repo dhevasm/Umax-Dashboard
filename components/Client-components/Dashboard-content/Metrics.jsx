@@ -36,6 +36,21 @@ export default function Metrics({ id }) {
         getMetricByCampaign();
     }, [getMetricByCampaign]);
 
+    function dateconvert(date) {
+        let [day, month, year, hour] = date.split(" ");
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
+        let monthIndex = months.indexOf(month) + 1;
+        if (monthIndex < 10) {
+            monthIndex = "0" + monthIndex;
+        }
+        if (day < 10) {
+            day = "0" + day;
+        }
+        hour = hour.slice(0, -3);
+        hour = hour.replace(".", ":");
+        return new Date(`${year}-${monthIndex}-${day}T${hour}:00`);
+    }
+
     const getHistoryByCampaign = useCallback(async () => {
         if (!id) {
             console.warn("No campaign ID provided");
@@ -51,7 +66,14 @@ export default function Metrics({ id }) {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            const latestHistory = response.data.Data.slice(-7); // Get the last 7 items
+            let sortedHistory = response.data.Data
+                .map(item => ({
+                    ...item,
+                    convertedDate: dateconvert(item.timestamp_update) // Convert date
+                }))
+                .sort((a, b) => a.convertedDate - b.convertedDate); // Sort by date
+    
+            const latestHistory = sortedHistory.slice(-7); // Get the last 7 items
             setHistory(latestHistory);
         } catch (error) {
             console.error("Error fetching data:", error.message);

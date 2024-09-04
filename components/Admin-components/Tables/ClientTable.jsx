@@ -888,13 +888,13 @@ export default function ClientTable() {
             </div>
 
             {/* <!-- Main modal --> */}
-            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-
-                <div className="relative p-4 w-full max-w-2xl max-h-full ">
+            <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 bg-opacity-60 z-50">
+            <div className="w-screen h-screen fixed top-0 left-0" onClick={closeModal}></div>
+                <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                     {/* <!-- Modal content --> */}
-                    <div className="relative bg-white dark:bg-[#243040] rounded-[3px] shadow max-h-[100vh] overflow-auto pb-3">
+                    <div className="relative bg-white dark:bg-[#243040] shadow max-h-[100vh] overflow-auto">
                         {/* <!-- Modal header --> */}
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
+                        <div className="fixed z-50 w-full max-w-2xl flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
                             <h3 className="text-lg font-semibold">
                                 {`${modeModal} ${t('clients')}`}
                             </h3>
@@ -908,10 +908,10 @@ export default function ClientTable() {
                                 e.preventDefault(); // Mencegah perilaku default formulir
                                 onSubmit(modeModal === 'Edit' ? 2 : 1);
                             }}>
-                                <div className="grid gap-4 mb-4 grid-cols-2">
+                                <div className="grid gap-4 mb-4 grid-cols-2 bg-white dark:bg-[#243040] dark:text-white overflow-y-auto mt-[4.5rem]">
                                     <div className="col-span-2">
                                         <label htmlFor="name" className="block mb-2 text-sm font-medium text-black dark:text-slate-200 ">{t('client_name')}<span className="text-red-500">*</span> </label>
-                                        <input type="text" name="name" id="name" required className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
+                                        <input type="text" name="name" id="name" required className="bg-white dark:bg-[#1d2a3a] placeholder-[#858c96] text-black dark:text-slate-200 dark:border-[#314051] border border-gray-200 text-sm focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
                                         onChange={handleChange} onBlur={handleBlur}/>
                                         {
                                             touched.name && error.name && <p className="text-red-500 text-xs">{error.name}</p>
