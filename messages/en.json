@@ -117,11 +117,11 @@
     "cpr-desc": "The calculation of the cost spent for each result achieved",
     "oclp": "Outbound Click Landing Page",
     "oclp-desc": "Encourages visitors to click on links or buttons that direct them to relevant external pages or websites",
-    "ctr": "Click Through Rate",
+    "ctr": "CTR",
     "ctr-desc": "Measures the ratio of clicks on our ads compared to the number of ad impressions",
-    "atc": "Add To Cart",
+    "atc": "ATC",
     "atc-desc": "Measures the number of times users add products to their carts while shopping online on e-commerce sites or online stores",
-    "roas": "Return on Ad Spend",
+    "roas": "ROAS",
     "roas-desc": "Measures the revenue generated per advertising expense",
     "real-roas": "Real ROAS",
     "real-desc": "Measures the amount of actual revenue generated per advertising expense"
@@ -271,7 +271,8 @@
     "details-of": "Details of",
     "new-client": "New Client",
     "save": "Save",
-    "delete": "Delete"
+    "delete": "Delete",
+    "add-client": "Add Client"
   },
 
   "admin-dashboard": {

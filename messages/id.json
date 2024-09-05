@@ -269,7 +269,8 @@
     "details-of": "Detail dari",
     "new-client": "Klien Baru",
     "save": "Simpan",
-    "delete": "Hapus"
+    "delete": "Hapus",
+    "add-client": "Klien Baru"
   },
 
   "admin-dashboard": {

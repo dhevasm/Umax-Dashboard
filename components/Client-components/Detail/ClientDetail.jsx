@@ -143,8 +143,8 @@ const ClientDetail = ({ isOpen, onClose, data, deleteClient, refresh }) => {
                     <form onSubmit={formik.handleSubmit}>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                             <DetailItem label={t('name')} value={formik.values.name} error={formik.errors.name} touched={formik.touched.name} id="name" type="text" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaUser} t={t} holder={t('holder-name')} Country={null} City={null} />
-                            <DetailItem label={'Country'} value={formik.values.country} error={formik.errors.country} touched={formik.touched.country} id="country" type="select" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaRegClock} t={t} holder={'holder-country'} Country={Country} City={null} />
-                            <DetailItem label={'City'} value={formik.values.city} error={formik.errors.city} touched={formik.touched.city} id="city" type="select" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaRegClock} t={t} holder={t('holder-city')} Country={null} City={City} />
+                            <DetailItem label={t('country')} value={formik.values.country} error={formik.errors.country} touched={formik.touched.country} id="country" type="select" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaRegClock} t={t} holder={'holder-country'} Country={Country} City={null} />
+                            <DetailItem label={t('city')} value={formik.values.city} error={formik.errors.city} touched={formik.touched.city} id="city" type="select" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaRegClock} t={t} holder={t('holder-city')} Country={null} City={City} />
                             <DetailItem label={t('contact')} value={formik.values.contact} error={formik.errors.contact} touched={formik.touched.contact} id="contact" type="text" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={MdAccountCircle} t={t} holder={t('holder-contact')} Country={null} City={null} />
                             <DetailItem label={t('email')} value={formik.values.email} error={formik.errors.email} touched={formik.touched.email} id="email" type="email" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={MdEmail} t={t} holder={t('holder-email')} Country={null} City={null} />
                             <DetailItem label={t('status')} value={formik.values.status} error={formik.errors.status} touched={formik.touched.status} id="status" type="select" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={MdLock} t={t} holder={t('select-status')} Country={null} City={null} />
@@ -172,7 +172,7 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, handleBl
         <div className='flex flex-col gap-1 w-full'>
             <label htmlFor={id} className="text-gray-700 dark:text-gray-300 font-medium">{label}</label>
             {type === 'select' ? (
-                label === 'Country' ? (
+                label === t('country') ? (
                     <>
                         <select id={id} value={value} onChange={handleChange} onBlur={handleBlur} className='bg-transparent border-b-2 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:border-b-blue-500 dark:border-gray-600 dark:text-gray-300'>
                             <option value="">{holder}</option>
@@ -184,7 +184,7 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, handleBl
                         </select>
                         <span className='text-sm text-red-600'>{error && touched ? error : ''}</span>
                     </>
-                ) : label === 'City' ? (
+                ) : label === t('city') ? (
                     <>
                         <select id={id} value={value} onChange={handleChange} onBlur={handleBlur} className='bg-transparent border-b-2 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:border-b-blue-500 dark:border-gray-600 dark:text-gray-300'>
                             {

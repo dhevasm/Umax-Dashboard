@@ -182,7 +182,7 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, handleBl
         <div className='flex flex-col gap-1 w-full'>
             <label htmlFor={id} className="text-gray-700 dark:text-gray-300 font-medium">{label}</label>
             {type === 'select' ? (
-                label === 'Country' ? (
+                label === t('country') ? (
                     <>
                         <select id={id} value={value} onChange={handleChange} onBlur={handleBlur} className='bg-transparent border-b-2 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:border-b-blue-500 dark:border-gray-600 dark:text-gray-300'>
                             <option value="">{holder}</option>
@@ -194,7 +194,7 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, handleBl
                         </select>
                         <span className='text-sm text-red-600'>{error && touched ? error : ''}</span>
                     </>
-                ) : label === 'City' ? (
+                ) : label === t('city') ? (
                     <>
                         <select id={id} value={value} onChange={handleChange} onBlur={handleBlur} className='bg-transparent border-b-2 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:border-b-blue-500 dark:border-gray-600 dark:text-gray-300'>
                             <option disabled value={""} >Please Select City</option>

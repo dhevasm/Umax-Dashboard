@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { RiAdminLine, RiLogoutBoxLine } from "react-icons/ri";
 import { active } from "d3";
+import { FiMoon, FiSun } from "react-icons/fi";
 
 export default function Navbar() {
     const t = useTranslations('navbar');
@@ -341,7 +342,7 @@ export default function Navbar() {
                             onClick={handleTheme}
                             className="hidden sm:flex xl:flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
                         >
-                            {isDark ? <FaMoon className="text-lg text-white"/> : <FaSun className="text-xl text-blue-500" />}
+                            {isDark ? <FiMoon className="text-xl text-white"/> : <FiSun className="text-xl text-blue-600" />}
                         </button>
                         <button
                             onClick={isHidden == 2 ? setIsHidden : () => setIsHidden(2)}
@@ -362,20 +363,20 @@ export default function Navbar() {
 
                 <div className={`${isHidden === 2 ? 'block lg:hidden' : 'hidden'} absolute right-2 mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg w-60 transition-all duration-300 ease-in-out`}>
                     <ul className="space-y-1">
-                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700" onClick={() => router.push(`/${lang}/dashboard`)}>
                         <MdOutlineDashboard className="w-6 h-6 mr-2 dark:text-white"/>
                         <Link href={`/${lang}/dashboard`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("dashboard")}</Link>
                         </li>
-                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700" onClick={() => router.push(`/${lang}/campaigns`)}>
                         <BiSolidMegaphone className="w-6 h-6 mr-2 dark:text-white"/>
                         <Link href={`/${lang}/campaigns`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("campaign")}</Link>
                         </li>
-                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700" onClick={() => router.push(`/${lang}/accounts`) }>
                         <AiOutlineUser className="w-6 h-6 mr-2 dark:text-white"/>
                         <Link href={`/${lang}/accounts`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("account")}</Link>
                         </li>
                         {roles !== 'client' && (
-                            <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700" onClick={() => router.push(`/${lang}/clients`) }>
                             <BiGroup className="w-6 h-6 mr-2 dark:text-white"/>
                             <Link href={`/${lang}/clients`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("client")}</Link>
                             </li>
@@ -395,10 +396,10 @@ export default function Navbar() {
                         className="sr-only" 
                     />
                     <span className="block text-body-color dark:hidden">
-                        <FaSun className='text-2xl text-white'/>
+                        <FiSun className='text-2xl text-white'/>
                     </span>
                     <span className="hidden text-white dark:block">
-                        <FaMoon className='text-xl'/>
+                        <FiMoon className='text-xl'/>
                     </span>
                     </label>
                 </div>
