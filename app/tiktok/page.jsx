@@ -30,8 +30,7 @@ const TiktokPage = () => {
                 // Simpan token ke localStorage atau gunakan sesuai kebutuhan
                 localStorage.setItem("tiktok_access_token", data.data.access_token);
                 alert("Login successful!");
-                document.getElementById('platform').value = 3
-                router.push("/dashboard");
+                // router.push("/dashboard");
               } else {
                 console.error("Failed to retrieve access token:", data);
                 alert("We couldn't log in with TikTok.");
@@ -45,6 +44,12 @@ const TiktokPage = () => {
           fetchAccessToken();
         }
       }, []);
+
+      return(
+        <>
+            <h1>Tiktok Login Process</h1>
+        </>
+      )
 }
 
 export default TiktokPage;
