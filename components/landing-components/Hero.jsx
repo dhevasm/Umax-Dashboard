@@ -65,36 +65,57 @@ const Hero = () => {
                   </a> */}
                 </li>
               </ul>
-              <div className="pt-16 clients">
-                {/* <h6 className="flex items-center mb-2 text-xs font-normal dark:text-white">
-                  Used by Thriving Brands
-                  <span className="ml-2 inline-block h-[1px] w-8 bg-body-color"></span>
-                </h6> */}
+              <div className="pt-20 clients">
+                <h6 className="flex items-center text-sm font-normal dark:text-white">
+                {t("integration")} :
+                </h6>
                 <div className="flex max-w-[550px] items-center">
-                  <div className="w-full py-3 mr-4">
+                <div className="w-full py-3 mr-7">
                     <Image
-                      src="../assets/ayroui.svg"
-                      alt="Umax"
-                      width={200}
-                      height={10}
+                      src="/assets/Midtrans.png"
+                      alt="Midtrans Payment"
+                      title='Midtrans Payment'
+                      width={400} height={160} 
+                      className="w-40 h-16 object-contain"
                     />
                   </div>
-                  <div className="w-full py-3 mr-4">
+                  <div className="w-full py-3 mr-7">
                     <Image
-                      src="../assets/graygrids.svg"
-                      alt="graygrids"
-                      width={200}
-                      height={10}
+                      src="/assets/Paypal.png"
+                      alt="Paypal payment"
+                      title='Paypal payment'
+                      width={400} height={160} 
+                      className="w-40 h-16 object-contain"
                     />
                   </div>
-                  <div className="w-full py-3 mr-4">
+                  <div className="w-full py-3">
                     <Image
-                      src="../assets/uideck.svg"
-                      alt="uideck"
-                      width={200}
-                      height={10}
+                      src="/assets/google.svg"
+                      alt="Google Ads"
+                      title='Google Ads'
+                      width={30}
+                      height={30}
                     />
                   </div>
+                  <div className="w-full py-3">
+                    <Image
+                      src="/assets/meta.svg"
+                      alt="Meta Ads"
+                      title='Meta Ads'
+                      width={30}
+                      height={30}
+                    />
+                  </div>
+                  <div className="w-full py-3">
+                    <Image
+                      src="/assets/tiktok.svg"
+                      alt="Tiktok Ads"
+                      title='Tiktok Ads'
+                      width={30}
+                      height={30}
+                    />
+                  </div>
+                  
                 </div>
               </div>
             </div>

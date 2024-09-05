@@ -81,7 +81,6 @@ export default function Navbar() {
                     localStorage.setItem('locationChecked', 'true');
                 }
             };
-
             fetchLocation();
         }
     }, [locationChecked, router]);
@@ -146,21 +145,25 @@ export default function Navbar() {
     };
 
     const ProfileDropdown = ({ name, email, role, image }) => (
-        <div className="relative text-black dark:text-slate-200 hover:cursor-pointer">
+            <div className="relative z-50 text-black dark:text-slate-200 hover:cursor-pointer">
             <div className="flex items-center" onClick={isHidden == 1 ? () => setIsHidden(0) : () => setIsHidden(1)}>
             <Image
                 src={`data:image/png;base64,${image}`}
                 alt="profile"
                 className="rounded-full bg-slate-200"
-                width={50}
-                height={50}
+                width={40}
+                height={40}
                 style={{
                 objectFit: 'cover',
-                width: '50px',
-                height: '50px',
+                width: '40px',
+                height: '40px',
                 }}
             />
-                <span className="text-blue-500">
+            {/* <div className="hidden md:block">
+                <h3 className="text-md font-medium text-gray-800 dark:text-white">{name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-300">{email}</p>
+            </div> */}
+                <span className="text-blue-500 ms-2">
                     {isHidden ? 
                         <IoIosArrowUp size={18} className="font-semibold text-black dark:text-slate-200" /> :
                         <IoIosArrowDown size={18} className="font-semibold text-gray-800 dark:text-slate-200" />
@@ -219,7 +222,7 @@ export default function Navbar() {
                 </ul>
             </div>
 
-        </div>
+            </div>
     );
 
     return (

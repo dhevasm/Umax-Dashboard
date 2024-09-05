@@ -20,7 +20,12 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { RiBellLine, RiChat3Line, RiRefreshFill, RiRefreshLine } from "react-icons/ri";
+import {
+  RiBellLine,
+  RiChat3Line,
+  RiRefreshFill,
+  RiRefreshLine,
+} from "react-icons/ri";
 import { BiBell } from "react-icons/bi";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -30,8 +35,8 @@ import AdminNavbarLoading from "../Client-components/Loading/AdminProfileLoading
 import { AiOutlineProfile } from "react-icons/ai";
 import { MdAnalytics } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
-import toastr from 'toastr';
-import 'toastr/build/toastr.min.css';
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 function AdminNavbar({ userData }) {
   const {
@@ -54,9 +59,9 @@ function AdminNavbar({ userData }) {
   const [isLoading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
   const router = useRouter();
 
   const navbarBrand = useRef();
@@ -110,26 +115,25 @@ function AdminNavbar({ userData }) {
 
   const handleLogout = () => {
     Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Logout",
-        cancelButtonText: "Cancel",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Logout",
+      cancelButtonText: "Cancel",
     }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('tenantId');
-            localStorage.removeItem('roles');
-            localStorage.removeItem('name');
-            localStorage.removeItem('lang');
-            Router.push(`/`);
-
-        }
+      if (result.isConfirmed) {
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("tenantId");
+        localStorage.removeItem("roles");
+        localStorage.removeItem("name");
+        localStorage.removeItem("lang");
+        Router.push(`/`);
+      }
     });
-};
+  };
 
   function handleTheme() {
     setIsDarkMode(!isDarkMode);
@@ -413,7 +417,7 @@ function AdminNavbar({ userData }) {
                 });
               }
             });
-        }else{
+        } else {
           toastr.error("user register failed");
         }
       });
@@ -482,32 +486,32 @@ function AdminNavbar({ userData }) {
     );
 
     if (response.data.Output == "Registration Successfully") {
-     toastr.success("tenant register success");
+      toastr.success("tenant register success");
     } else {
       toastr.error("tenant register failed");
       return;
     }
 
     if (data.subscription == true) {
-        const formData2 = new FormData();
-        formData2.append("subscription", true);
-        const response2 = await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${response.data.tenant_id}`,
-          formData2,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-            },
-          }
-        );
-
-        if (response2.data.IsError == false) {
-          toastr.success("subscription success");
-        } else {
-          toastr.error("subscription failed");
-          return;
+      const formData2 = new FormData();
+      formData2.append("subscription", true);
+      const response2 = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/tenant-subscription?tenantId=${response.data.tenant_id}`,
+        formData2,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
         }
+      );
+
+      if (response2.data.IsError == false) {
+        toastr.success("subscription success");
+      } else {
+        toastr.error("subscription failed");
+        return;
       }
+    }
 
     createUser(data, response.data.tenant_id, request_id);
   };
@@ -535,51 +539,53 @@ function AdminNavbar({ userData }) {
           )
           .then((response) => {
             if (!response.IsError) {
-                toastr.info("Please wait... Request is being processed");
-                createTenant(response.data.Data, request_id)
-                // .then(() => {
-                //   Swal.fire({
-                //     icon: "info",
-                //     title: "Please wait...",
-                //     text: "Request is being processed",
-                //   })
-                // })
+              toastr.info("Please wait... Request is being processed");
+              createTenant(response.data.Data, request_id);
+              // .then(() => {
+              //   Swal.fire({
+              //     icon: "info",
+              //     title: "Please wait...",
+              //     text: "Request is being processed",
+              //   })
+              // })
             } else {
-              toastr.error(response.ErrorMessage)
-              setLoading(false)
+              toastr.error(response.ErrorMessage);
+              setLoading(false);
             }
           });
       }
     });
   };
 
-  const printRef = useRef(null)
-  
-  const handlePrint = () =>{
-    printRef.current.classList.add("hidden")
+  const printRef = useRef(null);
+
+  const handlePrint = () => {
+    printRef.current.classList.add("hidden");
     setSidebarHide(true);
     setNavbarBrandHide(true);
     setTimeout(() => {
-      window.print()
-      printRef.current.classList.remove("hidden")
+      window.print();
+      printRef.current.classList.remove("hidden");
     }, 1000);
-  }
+  };
 
   return (
     <>
-      <nav ref={printRef} className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center">
+      <nav
+        ref={printRef}
+        className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center"
+      >
         <div className="flex h-full">
           <div
             className="w-[300px] flex h-full bg-white dark:bg-slate-800 shadow-none justify-center items-center p-3 transition-transform"
             ref={navbarBrand}
           >
-           
             {/* <p className="text-white font-sans text-3xl">UMAX</p> */}
             <Image
-              src={`/assets/${isDarkMode ? 'logo-white.png' : 'logo.png'}`}
+              src={`/assets/${isDarkMode ? "logo-white.png" : "logo.png"}`}
               alt="Logo"
-              className="w-[170px] h-12 decoration-white mx-5 mt-2"
-              width={120}
+              className="w-[150px] h-10 decoration-white mx-5 mt-2"
+              width={100}
               height={40}
               priority
             />
@@ -639,11 +645,11 @@ function AdminNavbar({ userData }) {
                 className="inline-flex items-center cursor-pointer "
               >
                 <div className="p-2 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-full">
-                {isDarkMode ? (
-                  <FaMoon className="text-lg text-white" />
-                ) : (
-                  <FaSun className="text-xl text-blue-500" />
-                )}
+                  {isDarkMode ? (
+                    <FaMoon className="text-lg text-white" />
+                  ) : (
+                    <FaSun className="text-xl text-blue-500" />
+                  )}
                 </div>
                 {/* <input type="checkbox" value="" id="theme" name="theme" className="sr-only peer" onChange={handleTheme}/>
                         <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
@@ -664,7 +670,7 @@ function AdminNavbar({ userData }) {
                 className="text-md flex items-center gap-2"
                 onClick={handleDropdown}
               >
-                <FaBell className="text-2xl text-blue-500" />
+                <FaBell className="text-2xl text-blue-500 dark:text-white" />
                 <span className="relative top-0 right-5 bg-red-500 text-white rounded-full px-1 text-xs">
                   {requestCount}
                 </span>
@@ -673,167 +679,197 @@ function AdminNavbar({ userData }) {
 
             {showDropdown && (
               <>
-              <div className="absolute z-20 text-black dark:text-white top-10 right-0 p-5 w-[270px] max-h-[300px] overflow-y-auto bg-white dark:bg-slate-800 shadow-lg transition-transform transform duration-300 ease-in-out">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-4 border-b border-gray-500 pb-2">
-                  <h2 className="text-lg font-semibold">Register Requests</h2>
-                  <button
-                    onClick={() => setShowDropdown(false)}
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
+                <div
+                  className="fixed w-full h-full left-0 top-0 z-40"
+                  onClick={() => setShowDropdown(false)}
+                ></div>
+                <div className="absolute z-50 text-black dark:text-white top-10 right-0 p-5 w-[270px] bg-white dark:bg-slate-800 shadow-lg rounded-lg transition-transform transform duration-300 ease-in-out">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4 border-b border-gray-400 dark:border-gray-600 pb-2">
+                    <h2 className="text-lg font-semibold">Register Requests</h2>
+                    <button
+                      onClick={() => setShowDropdown(false)}
+                      className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
 
-                {/* Content */}
-                <ul className="space-y-3 max-h-24 overflow-y-auto overflow-x-auto custom-scrollbar">
-                  {requestlist.length === 0 && (
-                    <p className="text-center text-gray-500 dark:text-gray-400">
-                      No Request
-                    </p>
-                  )}
-                  {requestlist.map((request, index) => (
-                    <div key={index}>
-                      <li className="flex items-center justify-between">
-                        <div className="flex gap-3 items-center">
-                          <FaBuilding className="text-blue-500 text-lg" />
-                          <div className="flex flex-col">
-                            <p className="text-sm font-bold">
-                              {request.company}{" "}
-                              {request.subscription ? "(Paid)" : "(Free)"}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                              {request.email}
-                            </p>
+                  {/* Content */}
+                  <ul className="space-y-3">
+                    {requestlist.length === 0 && (
+                      <p className="text-center text-gray-500 dark:text-gray-400">
+                        No Request
+                      </p>
+                    )}
+                    {requestlist.map((request, index) => (
+                      <div key={index}>
+                        <li className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200">
+                          <div className="flex gap-3 items-center">
+                            <FaBuilding className="text-blue-500 text-lg" />
+                            <div className="flex flex-col">
+                              <div
+                                className={`text-xs font-bold truncate`}
+                                style={{ maxWidth: "130px" }}
+                              >
+                                <p>{request.company} </p>
+                                <p>
+                                  {request.subscription ? "(Paid)" : "(Free)"}
+                                </p>
+                                <p>{request.email}</p>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex" id="right-item">
-                          {isLoading ? (
-                            <>
+                          <div className="flex space-x-2">
+                            {isLoading ? (
                               <FaSpinner
                                 size={15}
-                                className="animate-spin text-gray-500 dark:text-gray-400 me-3"
+                                className="animate-spin text-gray-500 dark:text-gray-400"
                               />
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                onClick={() => handleAccept(request._id)}
-                                className="text-green-500 px-1 py-1 border border-green-500 hover:text-green-200 hover:bg-green-500 transition-colors duration-200"
-                              >
-                                <FaCheck />
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleReject(
-                                    request._id,
-                                    request.username,
-                                    request.email
-                                  )
-                                }
-                                className="text-red-500 px-1 py-1 border border-red-500 hover:text-red-200 hover:bg-red-500 transition-colors duration-200 me-2"
-                              >
-                                <FaTimes />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </li>
-                      {index < requestlist.length - 1 && (
-                        <div className="w-full h-px bg-gray-300 dark:bg-gray-600 my-2"></div>
-                      )}
-                    </div>
-                  ))}
-                </ul>
-              </div>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => handleAccept(request._id)}
+                                  className="text-white bg-green-500 hover:bg-green-600 rounded-full p-1.5 transition-colors duration-200 shadow-sm"
+                                >
+                                  <FaCheck size={14} />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleReject(
+                                      request._id,
+                                      request.username,
+                                      request.email
+                                    )
+                                  }
+                                  className="text-white bg-red-500 hover:bg-red-600 rounded-full p-1.5 transition-colors duration-200 shadow-sm"
+                                >
+                                  <FaTimes size={14} />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </li>
+                        {index < requestlist.length - 1 && (
+                          <div className="w-full h-px bg-gray-300 dark:bg-gray-600 my-2"></div>
+                        )}
+                      </div>
+                    ))}
+                  </ul>
+                </div>
               </>
             )}
           </div>
 
           <div className="relative left-5">
-          {userData.image ? (
-                <>
-                    <div onClick={toggleDropdown} className="flex items-center cursor-pointer">
-                        <div className="block">
-                            <Image
-                                src={`data:image/png;base64, ${userData.image}`}
-                                alt="profile"
-                                className="rounded-full object-cover w-[40px] h-[40px] bg-slate-200"
-                                width={40}
-                                height={40}   
-                            />
-                        </div>
-                        <div className="mx-2 hidden md:block">
-                          <h1 className="font-bold">{userData.name}</h1>
-                          <p>{userData.email}</p>
-                        </div>
+            {userData.image ? (
+              <>
+                <div
+                  onClick={toggleDropdown}
+                  className="flex items-center cursor-pointer"
+                >
+                  <div className="block">
+                    <Image
+                      src={`data:image/png;base64, ${userData.image}`}
+                      alt="profile"
+                      className="rounded-full object-cover w-[40px] h-[40px] bg-slate-200"
+                      width={40}
+                      height={40}
+                    />
+                  </div>
+                  <div className="mx-2 hidden md:block">
+                    <h1 className="font-bold">{userData.name}</h1>
+                    <p>{userData.email}</p>
+                  </div>
 
-                        {
-                        isDropdownOpen ? (
-                          <FaAngleDown className="text-xl me-2 transform rotate-180"/>
-                        ) : (
-                          <FaAngleDown className="text-xl me-2"/>
-                        )
-                      }
-                    </div>
-                    
-                    {isDropdownOpen && (
-                        <>
-                        <div className="fixed w-full h-full left-0 top-0 z-50" onClick={toggleDropdown}></div>
-                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 z-50">
-                            <div className="flex items-center mb-4">
-                            <Image
-                              src={`data:image/png;base64,${userData.image}`}
-                              alt="profile"
-                              className="rounded-full bg-slate-200"
-                              width={50}
-                              height={50}
-                              style={{
-                                objectFit: 'cover',
-                                width: '50px',
-                                height: '50px',
-                              }}
-                            />
-                                <div className="ml-3">
-                                    <h3 className="font-medium text-black dark:text-white">{userData.name}</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-300">{userData.roles}</p>
-                                </div>
-                            </div>
-                            <ul className="space-y-5">
-                              <li >
-                              <button onClick={handlePrint} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"><FaPrint  className="mr-2"/> Print</button>
-                              </li>
-                                <li>
-                                    <button onClick={() => {setChangeTable("profile")}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
-                                        <AiOutlineProfile className="mr-2" /> Profile
-                                    </button>
-                                </li>
-                                <li>
-                                  {
-                                    userData.roles == "admin" && (
-                                      <button onClick={() => {Router.push(`/${localStorage.getItem("lang")}/dashboard`)}} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
-                                        <MdAnalytics className="mr-2" /> Analytics
-                                      </button>
-                                    )
-                                  }
-                                    
-                                </li>
-                                <li>
-                                    <button onClick={handleLogout} className="flex items-center text-sm text-red-500 hover:text-red-700">
-                                        <FaSignOutAlt className="mr-2" /> Logout
-                                    </button>
-                                </li>
-                            </ul>
+                  {isDropdownOpen ? (
+                    <FaAngleDown className="text-xl me-2 transform rotate-180" />
+                  ) : (
+                    <FaAngleDown className="text-xl me-2" />
+                  )}
+                </div>
+
+                {isDropdownOpen && (
+                  <>
+                    <div
+                      className="fixed w-full h-full left-0 top-0 z-40"
+                      onClick={toggleDropdown}
+                    ></div>
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 z-50">
+                      <div className="flex items-center mb-4">
+                        <Image
+                          src={`data:image/png;base64,${userData.image}`}
+                          alt="profile"
+                          className="rounded-full bg-slate-200"
+                          width={50}
+                          height={50}
+                          style={{
+                            objectFit: "cover",
+                            width: "50px",
+                            height: "50px",
+                          }}
+                        />
+                        <div className="ml-3">
+                          <h3 className="font-medium text-black dark:text-white">
+                            {userData.name}
+                          </h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-300">
+                            {userData.roles}
+                          </p>
                         </div>
-                        </>
-                    )}
-                </>
+                      </div>
+                      <ul className="space-y-5">
+                        <li>
+                          <button
+                            onClick={handlePrint}
+                            className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                          >
+                            <FaPrint className="mr-2" /> Print
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => {
+                              setChangeTable("profile");
+                            }}
+                            className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                          >
+                            <AiOutlineProfile className="mr-2" /> Profile
+                          </button>
+                        </li>
+                        <li>
+                          {userData.roles == "admin" && (
+                            <button
+                              onClick={() => {
+                                Router.push(
+                                  `/${localStorage.getItem("lang")}/dashboard`
+                                );
+                              }}
+                              className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                            >
+                              <MdAnalytics className="mr-2" /> Analytics
+                            </button>
+                          )}
+                        </li>
+                        <li>
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center text-sm text-red-500 hover:text-red-700"
+                          >
+                            <FaSignOutAlt className="mr-2" /> Logout
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </>
+                )}
+              </>
             ) : (
-                <>
-                    <AdminNavbarLoading />
-                </>
+              <>
+                <AdminNavbarLoading />
+              </>
             )}
-            </div>
+          </div>
         </div>
       </nav>
     </>

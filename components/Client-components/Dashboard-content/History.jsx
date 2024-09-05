@@ -71,11 +71,27 @@ export default function History({ id }) {
         doc.save(`History ${dateWithTime}.pdf`);
     };
 
+    function dateconvert(date) {
+        let [day, month, year, hour] = date.split(" ");
+        let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
+        let monthIndex = months.indexOf(month) + 1;
+        if (monthIndex < 10) {
+            monthIndex = "0" + monthIndex;
+        }
+        if (day < 10) {
+            day = "0" + day;
+        }
+        hour = hour.slice(0, -3);
+        hour = hour.replace(".", ":");
+        return new Date(`${year}-${monthIndex}-${day}T${hour}:00`);
+    }
+    
+
     const getMetricByCampaign = useCallback(async () => {
-        if (id == '') {
+        if (id === '') {
             return;
         }
-
+    
         setLoading(true);
         try {
             const token = localStorage.getItem('jwtToken');
@@ -86,16 +102,23 @@ export default function History({ id }) {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Agu","Sep","Oct","Nov","Dec"];
-
-            setData(response.data.Data);
+    
+            // Convert and sort the data
+            let sortedData = response.data.Data
+                .map(item => ({
+                    ...item,
+                    convertedDate: dateconvert(item.timestamp_update) // Convert date
+                }))
+                .sort((a, b) => b.convertedDate - a.convertedDate); // Sort by date
+    
+            setData(sortedData);
             setLoading(false);
         } catch (error) {
             setLoading(false);
             console.error("Error fetching data:", error.message);
         }
     }, [id, currentPage, dataPerPage]);
-
+    
     useEffect(() => {
         getMetricByCampaign();
     }, [getMetricByCampaign]);
