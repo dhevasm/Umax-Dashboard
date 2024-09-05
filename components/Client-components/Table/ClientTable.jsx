@@ -15,6 +15,7 @@ import { BiEdit, BiFirstPage, BiLastPage, BiSolidArrowToLeft, BiSolidArrowToRigh
 import ClientDetail from '../Detail/ClientDetail';
 import { useTranslations } from 'next-intl';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
+import { useFormik } from 'formik';
 
 const ClientTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -401,12 +402,21 @@ const ClientTable = () => {
     const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
     const currentClients = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign);
 
+    const jumpToPage = useFormik({
+        initialValues: {
+            page: currentPage,
+        },
+        onSubmit: (values) => {
+            setCurrentPage(parseInt(values.page));
+        },
+    });
+
     return (
         <>
             <div className='font-semibold flex justify-between text-3xl text-slate-800 mb-10 dark:text-slate-200'>
             <h1>{t('title')}</h1>
             <button onClick={() => handleOpenModal(null, "create")} className='text-sm dark:text-gray-300 dark:bg-gray-700 font-normal border border-gray-300 dark:border-gray-600 rounded-md flex justify-center items-center py-2 px-4'>
-                Tambah
+                {t('add-client')}
             </button>
             </div>
             <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-3 sm:p-4 md:p-5 xl:p-5 dark:bg-gray-800 dark:border-gray-700">
@@ -545,7 +555,24 @@ const ClientTable = () => {
                         </tbody>
                     </table>
                 </div>
-                {renderPagination()}
+                <div className='flex flex-wrap justify-between items-center mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg'>
+                    <div className='flex gap-3 items-center mb-2 md:mb-0'>
+                        <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
+                        <form action="" onSubmit={jumpToPage.handleSubmit} className="flex items-center">
+                            <input
+                                type="text"
+                                className='border border-gray-300 dark:border-gray-600 rounded-lg w-16 h-10 px-2 text-center bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition duration-150 ease-in-out'
+                                name="page"
+                                onChange={jumpToPage.handleChange}
+                                value={jumpToPage.values.page}
+                            />
+                            <button type='submit' hidden></button>
+                        </form>
+                    </div>
+                    <div className='w-full md:w-auto flex justify-end'>
+                        {renderPagination()}
+                    </div>
+                </div>
             </div>
 
 

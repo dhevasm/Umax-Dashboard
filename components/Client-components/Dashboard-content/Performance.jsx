@@ -157,7 +157,7 @@ export default function Performance({ id, spent, atc }) {
                 {/* Header */}
                 <div className="w-full flex items-center justify-end gap-2">
                     <p className="flex items-center">
-                        {dateTime}
+                        {dateTime ? dateTime : <div className="w-40 h-7 dark:bg-slate-600 bg-gray-300 opacity-40 rounded-lg animate-pulse"></div>}
                     </p>
                     <div className="w-[150px] h-fit flex mb-3">
                         <select

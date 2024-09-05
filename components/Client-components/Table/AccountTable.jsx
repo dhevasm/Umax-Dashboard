@@ -12,6 +12,7 @@ import { MdDeleteForever } from 'react-icons/md';
 import AccountDetail from '../Detail/AccountDetail';
 import { useTranslations } from 'next-intl';
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
+import { useFormik } from 'formik';
 
 const AccountTable = () => {
     const [tableData, setTableData] = useState([]);
@@ -413,6 +414,15 @@ const AccountTable = () => {
     const indexOfFirstCampaign = indexOfLastCampaign - dataPerPage;
     const currentAccounts = filteredData.slice(indexOfFirstCampaign, indexOfLastCampaign);
 
+    const jumpToPage = useFormik({
+        initialValues: {
+            page: currentPage,
+        },
+        onSubmit: (values) => {
+            setCurrentPage(parseInt(values.page));
+        },
+    });
+
     return (
         <>
             <div className='font-semibold text-3xl text-slate-800 mb-10 dark:text-slate-200'>
@@ -564,7 +574,22 @@ const AccountTable = () => {
                         </tbody>
                     </table>
                 </div>
-                {renderPagination()}
+                <div className='flex flex-wrap justify-between items-center mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg'>
+                    <div className='flex gap-3 items-center'>
+                        <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
+                        <form action="" onSubmit={jumpToPage.handleSubmit} className="flex items-center">
+                            <input
+                                type="text"
+                                className='border border-gray-300 dark:border-gray-600 rounded-lg w-12 h-10 px-2 text-center bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 transition duration-150 ease-in-out'
+                                name="page"
+                                onChange={jumpToPage.handleChange}
+                                value={jumpToPage.values.page}
+                            />
+                            <button type='submit' hidden></button>
+                        </form>
+                    </div>
+                    {renderPagination()}
+                </div>
             </div>
 
             {selectedAccount && (
