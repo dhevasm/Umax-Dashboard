@@ -234,7 +234,6 @@ const Page = () => {
                 <p className="text-red-500">{error}</p>
               </div>
             )}
-
             
             <button
               type="submit"
