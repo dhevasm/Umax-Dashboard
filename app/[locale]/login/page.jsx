@@ -179,7 +179,7 @@ const Page = () => {
 
   return (
     <div className="min-h-screen overflow-y-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">
-      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      {/* <script src="https://www.google.com/recaptcha/api.js" async defer></script> */}
       <div className="w-full md:max-w-md mx-auto mb-[100px]">
         <Image
           src="/assets/logo.png"
@@ -251,9 +251,9 @@ const Page = () => {
                 {t('forgot-password')}
               </Link>
             </div>
-            <div className="mt-3 flex justify-center">
+            {/* <div className="mt-3 flex justify-center">
               <div className="g-recaptcha" data-sitekey={`${process.env.NEXT_PUBLIC_RECHAPTA_SITE_KEY}`}></div>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>
