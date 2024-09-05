@@ -179,6 +179,7 @@ const Page = () => {
 
   return (
     <div className="min-h-screen overflow-y-hidden flex flex-col items-center justify-center bg-bg-login bg-cover bg-no-repeat bg-left">
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       <div className="w-full md:max-w-md mx-auto mb-[100px]">
         <Image
           src="/assets/logo.png"
@@ -234,12 +235,14 @@ const Page = () => {
               </div>
             )}
 
+            
             <button
               type="submit"
               className="w-full h-12 rounded-md bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5"
             >
               {loading ? <LoadingCircle /> : t('sign-in')}
             </button>
+
 
             <div className="flex justify-between items-center mt-3">
               <Link
@@ -248,6 +251,9 @@ const Page = () => {
               >
                 {t('forgot-password')}
               </Link>
+            </div>
+            <div className="mt-3 flex justify-center">
+              <div className="g-recaptcha" data-sitekey={`${process.env.NEXT_PUBLIC_RECHAPTA_SITE_KEY}`}></div>
             </div>
           </form>
         </div>

@@ -20,6 +20,7 @@ import { useTranslations } from "next-intl"
 import toastr from "toastr"
 import { useRouter } from "next/navigation"
 import { useGoogleLogin } from '@react-oauth/google';
+import { FaGoogle, FaFacebookF, FaTiktok } from 'react-icons/fa';
 
 export default function AccountTable() {
 
@@ -36,12 +37,11 @@ export default function AccountTable() {
     const [selectLoading, setSelectLoading] = useState(true)
     const [selectedTenant, setSelectedTenant] = useState("")
     const passwordInput = useRef(null)
-    const passwordverifyInput = useRef(null)
     const t = useTranslations('admin-accounts')
     const tfile = useTranslations('swal-file')
     const tdel = useTranslations('swal-delete')
     const [crudLoading, setCrudLoading] = useState(false)
-
+    const [showModalOauth, setShowModalOauth] = useState(false);
     const Router = useRouter()
 
     function LoadingCrud() {
@@ -109,17 +109,9 @@ export default function AccountTable() {
             errors.email = t('email-error');
         }
         
-        if (touched.password && values.password !== values.passwordverify) {
-            errors.password = t('password-error2');
-            errors.passwordverify = t('password-error2');
-        }
         
         if (touched.password && values.password === '') {
             errors.password = t('password-error');
-        }
-        
-        if (touched.passwordverify && values.passwordverify === '') {
-            errors.passwordverify = t('confirm-error');
         }
         
         if (touched.client && values.client === '') {
@@ -185,16 +177,12 @@ export default function AccountTable() {
                 Swal.fire("Campaing not found");
             }
         }else if(mode == "Create") {
-            setValues({name: "", email: "", password: "", passwordverify: "", client: "", platform: ""})
-            setError({name: '', email: '', password: '', passwordverify: '', client: '', platform: ''})
-            document.getElementById('name').value = null
-            document.getElementById('email').value = null
-            setTimeout(() => {
-                document.getElementById('password').value = null
-                document.getElementById('passwordverify').value = null
-            }, 500);
+            setValues({client: ""})
+            setError({client: ''})
+            // document.getElementById('name').value = null
+            // document.getElementById('email').value = null
             document.getElementById("client").value = ""
-            document.getElementById("platform").value = ""
+            // document.getElementById("platform").value = ""
             // passwordInput.current.classList.remove("hidden")
             // passwordverifyInput.current.classList.remove("hidden")
             document.getElementById('notes').value = ""
@@ -367,9 +355,8 @@ export default function AccountTable() {
             const name = document.getElementById('name').value
             const client = document.getElementById('client').value
             const email = document.getElementById('email').value
-            const platform = document.getElementById('platform').value
             const password = document.getElementById('password').value
-            const passwordverify = document.getElementById('passwordverify').value
+            const platform = document.getElementById('platform').value
             const status = document.getElementById('status').checked ? 1 : 2
             let notes = document.getElementById('notes').value
             if(notes == ""){
@@ -382,7 +369,7 @@ export default function AccountTable() {
             formData.append('email', email);
             formData.append('platform', platform);
             formData.append('password', password);
-            formData.append('confirm_password', passwordverify);
+            formData.append('confirm_password', password);
             formData.append('status', status);
             formData.append('notes', notes);
     
@@ -409,7 +396,6 @@ export default function AccountTable() {
                 document.getElementById('name').value = null
                 document.getElementById('email').value = null
                 document.getElementById('password').value = null
-                document.getElementById('passwordverify').value = null
                 document.getElementById('notes').value = null
                 // Swal.fire("Success", "Account created successfully", "success")
                 toastr.success("Account created successfully", "Success")
@@ -668,23 +654,14 @@ export default function AccountTable() {
     const currentaccounts = filteredData.slice(indexOfFirstaccount, indexOfLastaccount);
 
     function onSubmit(par){
-        const platform = document.getElementById('platform').value
-        if(platform == "1"){
-            handleFacebookLogin()
-        }else if(platform == "2"){
-            GoogleLogin()
-        }else if(platform == "3"){
-            alert("tiktok login")
-        }else{
+        
+        if(par == 1){
+            createAccount()
+        } else if(par == 2){
+            updateAccount()
+        } else {
             null
         }
-        // if(par == 1){
-        //     createAccount()
-        // } else if(par == 2){
-        //     updateAccount()
-        // } else {
-        //     null
-        // }
     }
     
     const handleRefresh = () => {
@@ -716,7 +693,7 @@ export default function AccountTable() {
         }, []);
 
         // Fungsi untuk menangani login Facebook
-        const handleFacebookLogin = () => {
+        const FacebookLogin = () => {
         FB.login(function(response) {
                 if (response.authResponse) {
                 const accessToken = response.authResponse.accessToken;
@@ -725,6 +702,7 @@ export default function AccountTable() {
                 FB.api('/me', { fields: 'name, email' }, function(response) {
                     console.log('Good to see you, ' + response.name + '.');
                     console.log('User email:', response.email);
+                    document.getElementById('platform').value = 1
                 });
                 } else {
                     console.log('User cancelled login or did not fully authorize.');
@@ -734,15 +712,98 @@ export default function AccountTable() {
 
         // Login Google
         const GoogleLogin = useGoogleLogin({
-            onSuccess: tokenResponse => {
-              console.log('Access Token:', tokenResponse.access_token);
+            onSuccess: async (tokenResponse) => {
+              console.log(tokenResponse);
+          
+              setTimeout(() => {
+                document.getElementById('password').value = tokenResponse.access_token;
+              }, 1000);
+          
+              try {
+                await axios
+                  .get('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: {
+                      Authorization: `Bearer ${tokenResponse.access_token}`,
+                    },
+                  })
+                  .then((res) => {
+                    document.getElementById('platform').value = 2;
+                    document.getElementById('name').value = res.data.name;
+                    document.getElementById('email').value = res.data.email;
+                    showModal('Create');
+                    setShowModalOauth(false);
+                  });
+              } catch (error) {
+                console.error('Error fetching user info:', error);
+              }
             },
             onError: (errorResponse) => {
               setError('Login Failed');
               console.error(errorResponse);
             },
             scope: 'openid profile email', // Specify scopes as needed
+            access_type: 'offline', // Request for refresh token
+            prompt: 'consent',
           });
+          
+
+
+        //   Login Tiktok
+        const TiktokLogin = () => {
+            const clientId = process.env.NEXT_PUBLIC_TIKTOK_CLIENT_ID;
+            const redirectUrl = `https://umax-dashboard.vercel.app/`;
+            const scope = "user.info.basic";
+        
+            const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientId}&response_type=code&scope=${scope}&redirect_uri=${redirectUrl}&state=state123`;
+          
+            const width = 600;
+            const height = 600;
+            const left = (window.innerWidth / 2) - (width / 2);
+            const top = (window.innerHeight / 2) - (height / 2);
+          
+            window.open(authUrl, 'TikTokLogin', `width=${width},height=${height},top=${top},left=${left}`);
+          };
+        
+          // Callback untuk menangani kode dari TikTok
+          useEffect(() => {
+            const searchParams = new URLSearchParams(window.location.search);
+            const code = searchParams.get("code");
+          
+            if (code) {
+              const fetchAccessToken = async () => {
+                try {
+                  const response = await axios.post(
+                    "https://open-api.tiktok.com/oauth/access_token/",
+                    {
+                      client_key: process.env.NEXT_PUBLIC_TIKTOK_CLIENT_ID,
+                      client_secret: process.env.NEXT_PUBLIC_TIKTOK_CLIENT_SECRET,
+                      code,
+                      grant_type: "authorization_code",
+                      redirect_uri: `${window.location.origin}/tiktok`,
+                    }
+                  );
+          
+                  const { data } = response;
+          
+                  if (data.data && data.data.access_token) {
+                    // Simpan token ke localStorage atau gunakan sesuai kebutuhan
+                    localStorage.setItem("tiktok_access_token", data.data.access_token);
+                    alert("Login successful!");
+                    document.getElementById('platform').value = 3
+                    router.push("/dashboard");
+                  } else {
+                    console.error("Failed to retrieve access token:", data);
+                    alert("We couldn't log in with TikTok.");
+                  }
+                } catch (error) {
+                  console.error("Error fetching access token:", error.response?.data || error.message);
+                  alert("An error occurred while logging in with TikTok.");
+                }
+              };
+          
+              fetchAccessToken();
+            }
+          }, []);
 
     return (
         <>
@@ -781,7 +842,9 @@ export default function AccountTable() {
                                             <RiRefreshLine/>
                                         </IconContext.Provider>
                                     </button>
-                                    <button title="Add Data" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e sm:border-e md:border-e-0 lg:rounded-e-none xl:rounded-e-none dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} >
+                                    
+                                    {/* <button title="Add Data" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e sm:border-e md:border-e-0 lg:rounded-e-none xl:rounded-e-none dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => showModal("Create")} > */}
+                                    <button title="Add Data" className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e sm:border-e md:border-e-0 lg:rounded-e-none xl:rounded-e-none dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 " onClick={() => setShowModalOauth(true)} >
                                         <IconContext.Provider value={{ className: "text-xl" }}>
                                             <BiPlus className="text-thin"/>
                                         </IconContext.Provider>
@@ -971,7 +1034,7 @@ export default function AccountTable() {
                                 <div className="grid gap-4 mb-4 grid-cols-2 bg-white dark:bg-[#243040] dark:text-white overflow-y-auto mt-[4.5rem]">
                                     <div className="col-span-2">
                                         <label htmlFor="name" className="flex mb-2 text-sm font-normal font-sans">{t('account_name')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
-                                        <input type="text" name="name" id="name" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
+                                        <input type="text" name="name" id="name" disabled className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-name')}
                                         required onChange={handleChange} onBlur={handleBlur}/>
                                         {
                                             touched.name && error.name ? <p className="text-red-500 dark:text-red-600 text-sm">{error.name}</p> : ""
@@ -979,7 +1042,7 @@ export default function AccountTable() {
                                     </div>
                                     <div className={`${userData.roles == "sadmin" ? "col-span-1" : "col-span-2"}`}>
                                         <label htmlFor="email" className="flex mb-2 text-sm font-normal">Email <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
-                                        <input type="email" name="email" id="email" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-3" placeholder={t('holder-email')} required onChange={handleChange} onBlur={handleBlur}/>
+                                        <input type="email" name="email" disabled id="email" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-3" placeholder={t('holder-email')} required onChange={handleChange} onBlur={handleBlur}/>
                                         {
                                             touched.email && error.email ? <p className="text-red-500 dark:text-red-600 text-sm">{error.email}</p> : ""
                                         }
@@ -1027,7 +1090,7 @@ export default function AccountTable() {
                                     
                                     <div className="col-span-1">
                                         <label htmlFor="platform" className="flex mb-2 text-sm font-normal ">Platform <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div> </label>
-                                        <select id="platform" name="platform" required className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${values.platform ? "text-black dark:text-white" : "text-[#858c96]"}`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
+                                        <select id="platform" disabled name="platform" required className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${values.platform ? "text-black dark:text-white" : "text-[#858c96]"}`} defaultValue={""} onChange={handleChange} onBlur={handleBlur}>
                                             <option value="" disabled hidden className="">{t('select-platform')}</option>
                                             <option value="1">Meta Ads</option>
                                             <option value="2">Google Ads</option>
@@ -1040,28 +1103,16 @@ export default function AccountTable() {
                                     {
                                         modeModal == "Create" && (
                                             <>
-                                                <div className="col-span-2 md:col-span-1" ref={passwordInput}>
-                                        <label htmlFor="password" className="flex mb-2 text-sm font-normal">Password <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
+                                                <div className="col-span-2" ref={passwordInput}>
+                                        <label htmlFor="password" className="flex mb-2 text-sm font-normal">Access Token <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
                                         <div className="relative">
-                                            <input type={showPassword ? "text" : "password"} name="password" id="password" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} onChange={handleChange} onBlur={handleBlur} required/>
+                                            <input type={showPassword ? "text" : "password"} disabled name="password" id="password" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-password')} onChange={handleChange} onBlur={handleBlur} required/>
                                             <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
                                                 {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
                                             </button>
                                         </div>
                                         {
                                             touched.password && error.password ? <p className="text-red-500 dark:text-red-600 text-sm">{error.password}</p> : ""
-                                        }
-                                    </div>
-                                    <div className="col-span-2 md:col-span-1" ref={passwordverifyInput}>
-                                        <label htmlFor="passwordverify" className="flex mb-2 text-sm font-normal  ">{t('confirm_password')} <div className="text-red-500 dark:text-red-600 ml-[1.5px]">*</div></label>
-                                        <div className="relative">
-                                            <input type={showPassword ? "text" : "password"} name="passwordverify" id="passwordverify" className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 " placeholder={t('holder-confirm')} onChange={handleChange} onBlur={handleBlur} required/>
-                                            <button onClick={handleShowPassword} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" type="button">
-                                                {showPassword ? <IoMdEye/> : <IoMdEyeOff/>}
-                                            </button>
-                                        </div>
-                                        {
-                                            touched.passwordverify && error.passwordverify ? <p className="text-red-500 dark:text-red-600 text-sm">{error.passwordverify}</p> : ""
                                         }
                                     </div>
                                             </>
@@ -1103,7 +1154,42 @@ export default function AccountTable() {
                     </div>
                 </div>
             </div> 
-                                        
+            {showModalOauth ? (
+                <>
+                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none bg-black bg-opacity-50">
+                    <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                    {/* Modal Content */}
+                    <div className="bg-white rounded-lg shadow-lg p-8">
+                        {/* Modal Header */}
+                        <div className="flex justify-between items-center border-b border-solid border-gray-200 pb-4">
+                        <h3 className="text-2xl font-semibold me-5">Add Umax Ads Account</h3>
+                        <button
+                            className="text-gray-400 hover:text-gray-600"
+                            onClick={() => setShowModalOauth(false)}
+                        >
+                            <FaTimes />
+                        </button>
+                        </div>
+
+                        {/* Modal Body with Buttons */}
+                        <div className="my-4 flex flex-col gap-4">
+                        <button className="flex items-center justify-center bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition" onClick={GoogleLogin}>
+                            <FaGoogle className="mr-2" /> Login with Google
+                        </button>
+
+                        <button className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition" onClick={FacebookLogin}>
+                            <FaFacebookF     className="mr-2" /> Login with Facebook
+                        </button>
+
+                        <button className="flex items-center justify-center bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition" onClick={TiktokLogin}>
+                            <FaTiktok className="mr-2" /> Login with TikTok
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </>
+            ) : null}                             
         </>
     )
 }
