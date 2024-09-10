@@ -142,8 +142,8 @@ export default function MetricCard({ id, Title, Value, isActive, onToggle, Descr
                 </>
             </CSSTransition>
             <div className="w-full mt-4 flex justify-start items-center gap-2">
-                <div className={`text-white rounded-full gap-1 px-2 flex items-center ${getBadgeColor()}`}>
-                    <span className="text-xs">{getPercent()}%</span>
+                <div className={`text-white rounded-full gap-1 px-2 flex items-center ${getBadgeColor() ? getBadgeColor() : 'bg-gray-300'}`}>
+                    <span className="text-xs">{getPercent() ? getPercent() : 0}%</span>
                 </div>
                 <span className="text-[10px] w-full text-gray-500 dark:text-gray-400">Total {Title} {t('desc')}</span>
             </div>
