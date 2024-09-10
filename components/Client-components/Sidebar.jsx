@@ -105,12 +105,19 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                         }
                         `}
                     </style>
-                    <p className="SidebarFilterActive text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>{t('all')}</p>
-                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="draft" onClick={() => handleClick(2, 'draft')}>{t('draft')}</p>
-                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="active" onClick={() => handleClick(1, 'active')}>{t('active')}</p>
-                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="complete" onClick={() => handleClick(3, 'complete')}>{t('complete')}</p>
+                    <p className="SidebarFilterActive text-gray-600 md:text-[17px] dark:text-slate-100" id="all" onClick={() => handleClick(0, 'all')}>
+                        {t('all')}
+                    </p>
+                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="draft" onClick={() => handleClick(2, 'draft')}>
+                        {t('draft')}
+                    </p>
+                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="active" onClick={() => handleClick(1, 'active')}>
+                        {t('active')}
+                    </p>
+                    <p className="text-gray-600 md:text-[17px] dark:text-slate-100" id="complete" onClick={() => handleClick(3, 'complete')}>
+                        {t('complete')}
+                    </p>
                 </div>
-
                 {/* Search Bar */}
                 <div className="w-full flex items-center">
                     <div className="relative w-full px-2 mb-2 flex justify-center">

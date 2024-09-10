@@ -416,10 +416,22 @@ const AccountTable = () => {
 
     const jumpToPage = useFormik({
         initialValues: {
-            page: currentPage,
+            page: '',
         },
         onSubmit: (values) => {
-            setCurrentPage(parseInt(values.page));
+            const page = parseInt(values.page);
+            if(isNaN(page)) {
+                Swal.fire('warning', 'Page must be a number', 'warning');
+                jumpToPage.resetForm();          
+            } else {
+                if (page > totalPages || page < 1) {
+                    Swal.fire('warning', 'Page not found', 'warning');
+                    jumpToPage.resetForm();
+                } else {
+                    setCurrentPage(page);
+                    jumpToPage.resetForm();          
+                }
+            }
         },
     });
 
