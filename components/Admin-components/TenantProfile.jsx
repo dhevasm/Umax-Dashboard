@@ -439,6 +439,10 @@ export default function TenantProfile({tenant_id}){
 
              {/* <!-- Main modal --> */}
              <div id="crud-modal" ref={addModal} className="fixed inset-0 flex hidden items-center justify-center bg-gray-500 dark:border-none0 bg-opacity-75 z-50">
+             <div
+                className="w-screen h-screen fixed top-0 left-0"
+                onClick={closeModal}
+            ></div>
                 <div className="relative mt-1 w-screen md:w-full max-w-2xl max-h-screen">
                 {/* <!-- Modal content --> */}
                 <div className="relative bg-white dark:bg-[#243040] shadow max-h-[100vh] overflow-auto">

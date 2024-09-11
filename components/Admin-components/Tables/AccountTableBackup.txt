@@ -27,7 +27,6 @@ import toastr from "toastr";
 import { useRouter } from "next/navigation";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FaGoogle, FaFacebookF, FaTiktok } from "react-icons/fa";
-import ModalHowToUse from "../Modal/ModalHowToUse";
 
 export default function AccountTable() {
   const [account, setaccount] = useState([]);
@@ -116,12 +115,16 @@ export default function AccountTable() {
       errors.name = t("name-error");
     }
 
-    // if (touched.email && !values.email.includes("@")) {
-    //   errors.email = t("email-error2");
-    // }
+    if (touched.email && !values.email.includes("@")) {
+      errors.email = t("email-error2");
+    }
 
     if (touched.email && values.email === "") {
       errors.email = t("email-error");
+    }
+
+    if (touched.password && values.password === "") {
+      errors.password = t("password-error");
     }
 
     if (touched.client && values.client === "") {
@@ -198,13 +201,10 @@ export default function AccountTable() {
     } else if (mode == "Create") {
       setValues({ client: "" });
       setError({ client: "" });
-      document.getElementById("name").value = null;
-      document.getElementById("email").value = null;
+      // document.getElementById('name').value = null
+      // document.getElementById('email').value = null
       document.getElementById("client").value = "";
-      document.getElementById("platform").value = "";
-      setTimeout(() => {
-        document.getElementById("password").value = "";
-      }, 1000);
+      // document.getElementById("platform").value = ""
       // passwordInput.current.classList.remove("hidden")
       // passwordverifyInput.current.classList.remove("hidden")
       document.getElementById("notes").value = "";
@@ -707,14 +707,7 @@ export default function AccountTable() {
 
   function onSubmit(par) {
     if (par == 1) {
-      const platform = document.getElementById("platform").value;
-      if (platform == 1) {
-        FacebookLogin();
-      } else if (platform == 2) {
-        GoogleLogin();
-      } else if (platform == 3) {
-        TiktokLogin();
-      }
+      createAccount();
     } else if (par == 2) {
       updateAccount();
     } else {
@@ -780,11 +773,8 @@ export default function AccountTable() {
                 document.getElementById("platform").value = 1;
                 document.getElementById("name").value = response.name;
                 document.getElementById("email").value = response.email;
-                setTimeout(() => {
-                  createAccount();
-                }, 1000);
-                // showModal("Create");
-                // setShowModalOauth(false);
+                showModal("Create");
+                setShowModalOauth(false);
               });
             })
             .catch((error) =>
@@ -818,11 +808,8 @@ export default function AccountTable() {
             document.getElementById("platform").value = 2;
             document.getElementById("name").value = res.data.name;
             document.getElementById("email").value = res.data.email;
-            setTimeout(() => {
-              createAccount();
-            }, 1000);
-            // showModal("Create");
-            // setShowModalOauth(false);
+            showModal("Create");
+            setShowModalOauth(false);
           });
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -878,11 +865,9 @@ export default function AccountTable() {
         <div className="w-full h-fit mb-5 rounded-md shadow-md">
           {/* Header */}
           <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
-            <h1 className="flex gap-2 p-4 items-center w-full justify-between text">
+            <h1 className="flex gap-2 p-4 items-center text">
               <FaTable className="text-blue-200" size={18} />
-              <ModalHowToUse/>
             </h1>
-            
           </div>
           {/* Header end */}
 
@@ -924,7 +909,7 @@ export default function AccountTable() {
                   <button
                     title="Add Data"
                     className="h-10 bg-white dark:bg-slate-800 py-2 sm:py-2 md:py-2 dark:text-white border-b border-t border-e sm:border-e md:border-e-0 lg:rounded-e-none xl:rounded-e-none dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-500 font-bold px-3 "
-                    onClick={() => showModal("Create")}
+                    onClick={() => setShowModalOauth(true)}
                   >
                     <IconContext.Provider value={{ className: "text-xl" }}>
                       <BiPlus className="text-thin" />
@@ -1319,6 +1304,7 @@ export default function AccountTable() {
                       type="text"
                       name="name"
                       id="name"
+                      disabled
                       className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 "
                       placeholder={t("holder-name")}
                       required
@@ -1350,6 +1336,7 @@ export default function AccountTable() {
                     <input
                       type="email"
                       name="email"
+                      disabled
                       id="email"
                       className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-3"
                       placeholder={t("holder-email")}
@@ -1469,6 +1456,7 @@ export default function AccountTable() {
                     </label>
                     <select
                       id="platform"
+                      disabled
                       name="platform"
                       required
                       className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${
@@ -1497,7 +1485,7 @@ export default function AccountTable() {
                   </div>
                   {modeModal == "Create" && (
                     <>
-                      <div className="col-span-2 hidden" ref={passwordInput}>
+                      <div className="col-span-2" ref={passwordInput}>
                         <label
                           htmlFor="password"
                           className="flex mb-2 text-sm font-normal"
@@ -1517,6 +1505,7 @@ export default function AccountTable() {
                             placeholder={"access token"}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            required
                           />
                           <button
                             onClick={handleShowPassword}
@@ -1600,10 +1589,10 @@ export default function AccountTable() {
       {showModalOauth ? (
         <>
           <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none bg-black bg-opacity-50">
-            <div
-              className="w-screen h-screen fixed top-0 left-0"
-              onClick={() => setShowModalOauth(false)}
-            ></div>
+          <div
+          className="w-screen h-screen fixed top-0 left-0"
+          onClick={() => setShowModalOauth(false)}
+        ></div>
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/* Modal Content */}
               <div className="bg-white rounded-lg shadow-lg p-8">

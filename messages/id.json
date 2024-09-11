@@ -297,7 +297,8 @@
     "username": "Nama Pengguna",
     "company's-email": "Email Perusahaan",
     "action": "Tindakan",
-    "start-end": "Tanggal Mulai dan Selesai Kampanye"
+    "start-end": "Tanggal Kampanye",
+    "client-city" : "Kota Klien"
   },
 
   "admin-sidebar": {
@@ -704,5 +705,17 @@
     "error": "Gagal mendaftar. Silakan coba lagi.",
     "error2": "Silakan periksa formulir Anda lagi",
     "pilihbahasa": "Pilih bahasa"
+  },
+  "tutorial": {
+    "title": "Cara Menambahkan Akun Baru",
+    "t1": "tekan '+' tombol untuk membuka formulir buat akun.",
+    "t2": "Isi kolom input yang tersedia dan pilih platform, kemudian klik 'Kirim'.",
+    "t3": "Jika platform Google memilih akun Google yang memiliki kampanye iklan, lalu klik 'Continue'.",
+    "t4": "Jika platform Facebook, masukkan email dan kata sandi akun Facebook",
+    "t5": "Jika platform Tiktok, masuk ke akun Tiktok Anda dan klik 'Continue'.",
+    "t6": "Akun iklan Anda berhasil ditambahkan.",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "finish": "Selesai"
   }
 }

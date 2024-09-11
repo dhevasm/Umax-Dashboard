@@ -35,7 +35,7 @@ export default function CountCard({title, value, handleClick}){
     return (    
         <div className={`bg-white dark:bg-slate-800 dark:text-white text-black p-4 flex flex-col justify-between shadow-lg w-full mb-3`}> 
         <div className="flex justify-between items-center">
-            <div className="w-12 h-12 flex justify-center items-center rounded-full bg-slate-50">
+            <div className="w-12 h-12 flex justify-center items-center rounded-full bg-slate-50 dark:bg-slate-800">
                 {
                 title == t('tenants') ? <RiBuildingLine className="text-[#3d50e0] font-thin" size={22}/> :
                 title == t('users') ? <RiUser3Line className="text-[#3d50e0] font-thin" size={22}/> :

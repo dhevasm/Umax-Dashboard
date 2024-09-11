@@ -68,7 +68,7 @@ const ChartOne = ({ chartData }) => {
       enabled: false,
     },
     xaxis: {
-      categories: ["Awareness", "Conversion", "Consideration"],
+      categories: ["Aware", "Conv", "Consid"],
       labels: {
         style: {
           colors: isDarkMode ? '#fff' : '#333',

@@ -538,23 +538,26 @@ export default function Dashboard({ tenant_id }) {
                             <CountCard title={t('campaigns')} value={loadingCount ? <div className='text-xs animate-pulse'>Loading...</div> : campaignCount} handleClick={"campaigns"} />
                             <CountCard title={t('clients')} value={loadingCount ? <div className='text-xs animate-pulse'>Loading...</div> : clientCount} handleClick={"clients"} />
                 </div>  
-                <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
+                {/* <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
                     <div className="w-full max-w-full flex justify-center h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartTwo chartData={chartData} />
                     </div>
-                </div>
-                <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
+                </div> */}
+                <div className="w-full flex flex-col-reverse lg:flex-row gap-7 mb-3 max-w-full">
                     <div className="w-full max-w-full lg:w-1/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartOne chartData={chartData} />
                     </div>
-                    <div className="w-full max-w-full lg:w-2/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-hidden">
-                        <ChartFour chartData={chartData} />
+                    <div className="w-full max-w-full flex justify-center lg:w-4/5 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
+                        <ChartTwo chartData={chartData} />
                     </div>
                 </div>
                
                 <div className="w-full flex flex-col lg:flex-row gap-7 mb-3 max-w-full">
-                    <div className="w-full max-w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] relative bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-hidden">
+                    {/* <div className="w-full max-w-full flex justify-center lg:w-3/5 h-[300px] md:h-[450px] relative bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-hidden">
                         <Map />
+                    </div> */}
+                    <div className="w-full max-w-full lg:w-2/3 h-[450px] flex justify-center bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5 overflow-hidden">
+                        <ChartFour chartData={chartData} />
                     </div>
                     <div className="w-full max-w-full flex justify-center lg:w-2/5 h-[450px] bg-white dark:bg-slate-800 rounded-sm shadow-lg p-5">
                         <ChartThree chartData={chartData} />

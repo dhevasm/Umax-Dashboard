@@ -299,7 +299,8 @@
     "username": "Username",
     "company's-email": "Company's Email",
     "action": "Action",
-    "start-end": "Campaign Start and End Date"
+    "start-end": "Campaign's Date",
+    "client-city" : "Client's City"
   },
 
   "admin-sidebar": {
@@ -706,5 +707,18 @@
     "error": "Failed to register. Please try again.",
     "error2": "Please check your form again",
     "pilihbahasa": "Select language"
+  },
+
+  "tutorial": {
+    "title" : "How to Add New Account",
+    "t1" : "Press '+' button to open the create account form.",
+    "t2" : "Fill in the available input column and select the platform, then click 'Submit'.",
+    "t3" : "If the Google platform selects a Google account that has an ad campaign, then click 'Continue'.",
+    "t4" : "If the Facebook platform, enter the Facebook account email and password",
+    "t5" : "If the Tiktok platform, log in to your Tiktok account and click 'Continue'.",
+    "t6" : "Your ad account is successfully added.",
+    "next" : "Next",
+    "previous" : "Previous",
+    "finish" : "Finish"
   }
 }

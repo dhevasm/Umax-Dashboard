@@ -42,8 +42,9 @@ const ChartThree = ({ chartData }) => {
         },
       },
     },
-    labels: ["Meta", "Google", "Tiktok"],
-    colors: ['#3B82F6', '#F7A102', '#1C1917'],
+    labels: ["Meta", "Google", "TikTok"],
+    // Updated colors to fit TailwindCSS theme around blue-500
+    colors: ['#3B82F6', '#60A5FA', '#93C5FD'], // Different shades of blue
     legend: {
       position: 'bottom',
       labels: {
@@ -82,11 +83,11 @@ const ChartThree = ({ chartData }) => {
     tooltip: {
       theme: isDarkMode ? "dark" : "dark",
     },
-  }), [isDarkMode]);
+  }), [isDarkMode, t]);
 
   return (
-    <div className="relative w-full h-96"> {/* Adjusted height to fit chart */}
-      <ApexCharts options={options} series={series} type="donut" height="100%" />
+    <div className="relative w-full h-full"> {/* Use h-full to fit the parent element */}
+      <ApexCharts options={options} series={series} type="donut" height="100%" width="100%" />
     </div>
   );
 };
