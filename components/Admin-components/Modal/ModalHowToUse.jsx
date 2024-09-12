@@ -3,8 +3,8 @@ import { FaQuestion, FaQuestionCircle, FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-const ModalHowToUse = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const ModalHowToUse = ({IsOpen = false}) => {
+  const [isOpen, setIsOpen] = useState(IsOpen);
   const [step, setStep] = useState(0);
   const t = useTranslations("tutorial");
 
@@ -64,7 +64,6 @@ const ModalHowToUse = () => {
 
       {/* Modal */}
       {isOpen && (
-
         <>
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
         <div className="fixed z-40 w-screen h-screen top-0 left-0" onClick={closeModal}></div>
@@ -93,9 +92,9 @@ const ModalHowToUse = () => {
             </div>
 
             {/* Modal Footer with Next and Previous Buttons */}
-            <div className="mt-6 flex justify-between">
+            <div className="mt-6 flex justify-between items-center">
               <button
-                className={`px-4 py-2 bg-gray-300  text-gray-600  rounded-md ${
+                className={`px-4 py-2 bg-gray-300 text-gray-600 rounded-md ${
                   step === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-400"
                 }`}
                 onClick={handlePrevious}
@@ -103,6 +102,11 @@ const ModalHowToUse = () => {
               >
                 {t("previous")}
               </button>
+
+              {/* Current Page / Total Pages */}
+              <span className="text-gray-600 dark:text-white">
+                {step + 1} / {steps.length}
+              </span>
 
               <button
                 className={`px-4 py-2 ${

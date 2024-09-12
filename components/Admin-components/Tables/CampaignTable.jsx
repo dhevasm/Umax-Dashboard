@@ -664,6 +664,7 @@ export default function CampaignTable() {
 
     const date = new Date(startDate);
     const EndDate = new Date(endDate);
+    const dateNow = new Date()
 
     const selisihMilidetik = Math.abs(EndDate - date);
     const selisihHari = Math.ceil(selisihMilidetik / (1000 * 60 * 60 * 24));

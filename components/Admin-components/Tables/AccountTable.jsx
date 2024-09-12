@@ -171,12 +171,14 @@ export default function AccountTable() {
           email: filteredaccount[0].email,
           client: filteredaccount[0].client_id,
           platform: filteredaccount[0].platform,
+          password: filteredaccount[0].password,
         });
         setError({ name: "", email: "", client: "", platform: "" });
         document.getElementById("name").value = filteredaccount[0].username;
         document.getElementById("client").value = filteredaccount[0].client_id;
         document.getElementById("platform").value = filteredaccount[0].platform;
         document.getElementById("email").value = filteredaccount[0].email;
+        document.getElementById("password").value = filteredaccount[0].password;
         document.getElementById("status").checked =
           filteredaccount[0].status == 1 ? true : false;
         // passwordInput.current.classList.add("hidden")
@@ -707,14 +709,7 @@ export default function AccountTable() {
 
   function onSubmit(par) {
     if (par == 1) {
-      const platform = document.getElementById("platform").value;
-      if (platform == 1) {
-        FacebookLogin();
-      } else if (platform == 2) {
-        GoogleLogin();
-      } else if (platform == 3) {
-        TiktokLogin();
-      }
+      createAccount();
     } else if (par == 2) {
       updateAccount();
     } else {
@@ -727,123 +722,19 @@ export default function AccountTable() {
     getaccount();
   };
 
-  // Login Section
-  // Facebook oauth
-  useEffect(() => {
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
-        cookie: true,
-        xfbml: true,
-        version: process.env.NEXT_PUBLIC_FACEBOOK_API_VERSION,
-      });
 
-      FB.AppEvents.logPageView();
-    };
-    (function (d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
-  }, []);
 
-  // Fungsi untuk menangani login Facebook
-  const FacebookLogin = () => {
-    FB.login(
-      function (response) {
-        if (response.authResponse) {
-          const shortLivedToken = response.authResponse.accessToken;
-          console.log(response.authResponse);
-          // Tukar dengan long-lived token
-          fetch(
-            `https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}&client_secret=${process.env.NEXT_PUBLIC_FACEBOOK_APP_SECRET}&fb_exchange_token=${shortLivedToken}`
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              const longLivedToken = data.access_token;
-              const expiresIn = data.expires_in;
+  const getFacebookToken = () => {
+    const clientId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
+    const redirectUrl = `https://umax-dashboard.vercel.app/fbactoken/`;
+    const scope = "ads_management,ads_read,read_insights";
+    const responseType = "token";
 
-              console.log("long live token : ", longLivedToken);
-              console.log("expired in : ", expiresIn);
-              setTimeout(() => {
-                document.getElementById("password").value = longLivedToken;
-              }, 1000);
-
-              // Mengambil data pengguna
-              FB.api("/me", { fields: "name, email" }, function (response) {
-                document.getElementById("platform").value = 1;
-                document.getElementById("name").value = response.name;
-                document.getElementById("email").value = response.email;
-                setTimeout(() => {
-                  createAccount();
-                }, 1000);
-                // showModal("Create");
-                // setShowModalOauth(false);
-              });
-            })
-            .catch((error) =>
-              console.error("Error fetching long-lived token:", error)
-            );
-        } else {
-          console.log("User cancelled login or did not fully authorize.");
-        }
-      },
-      { scope: "public_profile,email" }
-    );
-  };
-
-  // Login Google
-  const GoogleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      console.log(tokenResponse);
-
-      setTimeout(() => {
-        document.getElementById("password").value = tokenResponse.access_token;
-      }, 1000);
-
-      try {
-        await axios
-          .get("https://www.googleapis.com/oauth2/v3/userinfo", {
-            headers: {
-              Authorization: `Bearer ${tokenResponse.access_token}`,
-            },
-          })
-          .then((res) => {
-            document.getElementById("platform").value = 2;
-            document.getElementById("name").value = res.data.name;
-            document.getElementById("email").value = res.data.email;
-            setTimeout(() => {
-              createAccount();
-            }, 1000);
-            // showModal("Create");
-            // setShowModalOauth(false);
-          });
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-    },
-    onError: (errorResponse) => {
-      setError("Login Failed");
-      console.error(errorResponse);
-    },
-    scope: "openid profile email", // Specify scopes as needed
-    access_type: "offline", // Request for refresh token
-    prompt: "consent",
-  });
-
-  //   Login Tiktok
-  const TiktokLogin = () => {
-    const clientId = process.env.NEXT_PUBLIC_TIKTOK_CLIENT_ID;
-    const redirectUrl = `https://umax-dashboard.vercel.app/tiktok`;
-    const scope = "user.info.basic";
-
-    const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientId}&response_type=code&scope=${scope}&redirect_uri=${redirectUrl}&state=state123`;
+    const authUrl = `https://www.facebook.com/${process.env.NEXT_PUBLIC_FACEBOOK_API_VERSION}/dialog/oauth?
+  client_id=${clientId}&
+  redirect_uri=${redirectUrl}&
+  scope=${scope}&
+  response_type=${responseType}`;
 
     const width = 600;
     const height = 600;
@@ -852,7 +743,7 @@ export default function AccountTable() {
 
     window.open(
       authUrl,
-      "TikTokLogin",
+      "GetFacebookAccessToken",
       `width=${width},height=${height},top=${top},left=${left}`
     );
   };
@@ -1305,7 +1196,7 @@ export default function AccountTable() {
                 }}
               >
                 <div className="grid gap-4 mb-4 grid-cols-2 bg-white dark:bg-[#243040] dark:text-white overflow-y-auto mt-[4.5rem]">
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label
                       htmlFor="name"
                       className="flex mb-2 text-sm font-normal font-sans"
@@ -1334,9 +1225,7 @@ export default function AccountTable() {
                     )}
                   </div>
                   <div
-                    className={`${
-                      userData.roles == "sadmin" ? "col-span-1" : "col-span-2"
-                    }`}
+                    className={`col-span-1`}
                   >
                     <label
                       htmlFor="email"
@@ -1495,47 +1384,6 @@ export default function AccountTable() {
                       ""
                     )}
                   </div>
-                  {modeModal == "Create" && (
-                    <>
-                      <div className="col-span-2 hidden" ref={passwordInput}>
-                        <label
-                          htmlFor="password"
-                          className="flex mb-2 text-sm font-normal"
-                        >
-                          Access Token{" "}
-                          <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
-                            *
-                          </div>
-                        </label>
-                        <div className="relative">
-                          <input
-                            type={showPassword ? "text" : "password"}
-                            disabled
-                            name="password"
-                            id="password"
-                            className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 "
-                            placeholder={"access token"}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                          <button
-                            onClick={handleShowPassword}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                            type="button"
-                          >
-                            {showPassword ? <IoMdEye /> : <IoMdEyeOff />}
-                          </button>
-                        </div>
-                        {touched.password && error.password ? (
-                          <p className="text-red-500 dark:text-red-600 text-sm">
-                            {error.password}
-                          </p>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </>
-                  )}
 
                   <div className="col-span-2">
                     <label htmlFor="notes" className="mb-2 text-sm font-normal">
@@ -1550,7 +1398,57 @@ export default function AccountTable() {
                       onBlur={handleBlur}
                     ></textarea>
                   </div>
-                  <div className="flex items-center">
+                  <div className="col-span-2" ref={passwordInput}>
+                        <label
+                          htmlFor="password"
+                          className="flex mb-2 text-sm font-normal"
+                        >
+                          Access Token
+                          <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
+                            *
+                          </div>
+                          {
+                            modeModal === "Edit" && (
+                              <div className="ms-2">
+                                {document.getElementById("status")?.checked ? "(Active)" : "(Expired)"}
+                              </div>
+                            )
+                          }
+                          
+                        </label>
+                        <div className="relative">
+                          <textarea
+                            type="text"
+                            name="password"
+                            id="password"
+                            className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 "
+                            placeholder={"access token"}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            required
+                          />
+                        </div>
+                        {touched.password && error.password ? (
+                          <p className="text-red-500 dark:text-red-600 text-sm">
+                            {error.password}
+                          </p>
+                        ) : (
+                          ""
+                        )}
+                        <div className="flex gap-2">
+                          {
+                            values.platform == 1 ? (
+                              <div className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getFacebookToken}>Get Access Token</div>
+                            ) : (
+                              <div className="w-full hover:cursor-not-allowed bg-slate-500 border border-slate-600 mt-5 text-white py-2 px-4 rounded-[3px] text-center">Select Plaform first</div>
+                            )
+                          } 
+                        <div className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center">How to Get token</div>
+
+                        </div>
+                      </div>
+
+                  <div className="flex items-center hidden">
                     <label
                       htmlFor="status"
                       className="flex flex-col md:flex-row gap-2 items-center cursor-pointer"
@@ -1561,6 +1459,7 @@ export default function AccountTable() {
                         id="status"
                         name="status"
                         className="sr-only peer"
+                        checked
                       />
                       <span className="text-sm font-normal ">Status</span>
                       <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
@@ -1586,7 +1485,7 @@ export default function AccountTable() {
                 ) : (
                   <button
                     type="submit"
-                    className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px]"
+                    className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-2 px-4 rounded-[3px]"
                     disabled={crudLoading}
                   >
                     {crudLoading ? <LoadingCrud /> : t("submit")}
