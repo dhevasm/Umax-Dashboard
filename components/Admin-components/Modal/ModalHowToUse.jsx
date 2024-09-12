@@ -1,10 +1,11 @@
+'use client'
 import React, { useState } from "react";
 import { FaQuestion, FaQuestionCircle, FaTimes } from "react-icons/fa"; 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-const ModalHowToUse = ({IsOpen = false}) => {
-  const [isOpen, setIsOpen] = useState(IsOpen);
+const ModalHowToUse = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
   const t = useTranslations("tutorial");
 

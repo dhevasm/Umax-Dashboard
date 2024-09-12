@@ -506,7 +506,9 @@
       "platform-error": "Platform is required",
       "all-status": "All status",
       "all-platform": "All platform",
-      "delete": "Delete"
+      "delete": "Delete",
+      "Select-platform-first": "Select platform first",
+      "get-token": "Get access token"
     },
 
   "admin-clients": {
@@ -719,6 +721,11 @@
     "t6" : "Your ad account is successfully added.",
     "next" : "Next",
     "previous" : "Previous",
-    "finish" : "Finish"
+    "finish" : "Finish",
+    "fb-title" : "How to get meta ads access token",
+    "fb-t1" : "Select the Meta Ads platform then press 'Get Access Token' button",
+    "fb-t2" : "Facebook Login Pop-Up will appear, login with a Facebook Business account that has an advertising campaign",
+    "fb-t3" : "Access token will appear then copy and paste to the Access Token column. after that click 'Submit'",
+    "how-to": "How to get access token"
   }
 }

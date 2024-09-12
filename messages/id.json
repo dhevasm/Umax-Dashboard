@@ -504,7 +504,9 @@
     "platform-error": "Platform wajib dipilih",
     "all-status": "Semua status",
     "all-platform": "Semua platform",
-    "delete": "Hapus"
+    "delete": "Hapus",
+    "Select-platform-first": "Pilih platform terlebih dahulu",
+    "get-token": "Dapatkan Token Akses"
   },
 
   "admin-clients": {
@@ -716,6 +718,11 @@
     "t6": "Akun iklan Anda berhasil ditambahkan.",
     "next": "Selanjutnya",
     "previous": "Sebelumnya",
-    "finish": "Selesai"
+    "finish": "Selesai",
+    "fb-title" : "Cara mendapatkan token akses iklan meta",
+    "fb-t1" : "Pilih Meta ADS pada pilihan platform lalu tekan tombol 'Dapatkan Akses Token'",
+    "fb-t2" : "Pop-up login Facebook akan muncul, login dengan akun bisnis Facebook yang memiliki kampanye iklan",
+    "fb-t3" : "Token akses akan muncul kemudian salin dan tempel ke kolom Token Access. Setelah itu klik 'Kirim'",
+    "how-to": "Cara Mendapatkan Token Akses"
   }
 }

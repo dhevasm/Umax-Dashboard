@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FaGoogle, FaFacebookF, FaTiktok } from "react-icons/fa";
 import ModalHowToUse from "../Modal/ModalHowToUse";
+import FacebookgetActoken from "../Modal/FacebookgetActoken";
 
 export default function AccountTable() {
   const [account, setaccount] = useState([]);
@@ -204,9 +205,7 @@ export default function AccountTable() {
       document.getElementById("email").value = null;
       document.getElementById("client").value = "";
       document.getElementById("platform").value = "";
-      setTimeout(() => {
-        document.getElementById("password").value = "";
-      }, 1000);
+      document.getElementById("password").value = "";
       // passwordInput.current.classList.remove("hidden")
       // passwordverifyInput.current.classList.remove("hidden")
       document.getElementById("notes").value = "";
@@ -748,6 +747,54 @@ export default function AccountTable() {
     );
   };
 
+  const getGoogleAdsToken = () => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    const redirectUrl = `https://umax-dashboard.vercel.app/googleactoken/`;
+    const scope = "https://www.googleapis.com/auth/adwords";
+    const responseType = "token"; // response_type should be "code"
+    const accessType = "online"; // To request a refresh token
+    const prompt = "consent"; // To force showing the consent screen every time
+  
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${encodeURIComponent(clientId)}&` +
+      `redirect_uri=${encodeURIComponent(redirectUrl)}&` +
+      `scope=${encodeURIComponent(scope)}&` +
+      `response_type=${encodeURIComponent(responseType)}&` +
+      `access_type=${encodeURIComponent(accessType)}&` +
+      `prompt=${encodeURIComponent(prompt)}`;
+  
+    const width = 600;
+    const height = 600;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+  
+    window.open(
+      authUrl,
+      "GetGoogleAdsAccessToken",
+      `width=${width},height=${height},top=${top},left=${left}`
+    );
+  };
+
+
+  const getTikTokToken = () => {
+    const clientId = process.env.NEXT_PUBLIC_TIKTOK_CLIENT_ID;
+    const redirectUrl = `https://umax-dashboard.vercel.app/tiktokactoken/`;
+    const scope = "user.info.basic";
+
+    const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientId}&response_type=code&scope=${scope}&redirect_uri=${redirectUrl}&state=state123`;
+
+    const width = 600;
+    const height = 600;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+
+    window.open(
+      authUrl,
+      "TikTokLogin",
+      `width=${width},height=${height},top=${top},left=${left}`
+    );
+};
+
   return (
     <>
       <div className="w-full">
@@ -771,7 +818,7 @@ export default function AccountTable() {
           <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
             <h1 className="flex gap-2 p-4 items-center w-full justify-between text">
               <FaTable className="text-blue-200" size={18} />
-              <ModalHowToUse/>
+              {/* <ModalHowToUse/> */}
             </h1>
             
           </div>
@@ -1435,17 +1482,33 @@ export default function AccountTable() {
                         ) : (
                           ""
                         )}
-                        <div className="flex gap-2">
                           {
                             values.platform == 1 ? (
-                              <div className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getFacebookToken}>Get Access Token</div>
+                              <div className="flex gap-2">
+                                <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getFacebookToken}>{t("get-token")}</div>
+                                <div className="w-1/2">
+                                  <FacebookgetActoken/>
+                                </div>
+                              </div>
+                            ) : values.platform == 2 ? (
+                              <div className="flex gap-2">
+                                <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getGoogleAdsToken}>{t("get-token")}</div>
+                                <div className="w-1/2">
+                                  <FacebookgetActoken/>
+                                </div>
+                              </div>
+                            ) : values.platform == 3 ? (
+                              <div className="flex gap-2">
+                                <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getTikTokToken}>{t("get-token")}</div>
+                                <div className="w-1/2">
+                                  <FacebookgetActoken/>
+                                </div>
+                              </div>
                             ) : (
-                              <div className="w-full hover:cursor-not-allowed bg-slate-500 border border-slate-600 mt-5 text-white py-2 px-4 rounded-[3px] text-center">Select Plaform first</div>
+                              <div className="w-full hover:cursor-not-allowed bg-slate-500 border border-slate-600 mt-5 text-white py-2 px-4 rounded-[3px] text-center">{t("Select-platform-first")}</div>
                             )
                           } 
-                        <div className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center">How to Get token</div>
-
-                        </div>
+                          
                       </div>
 
                   <div className="flex items-center hidden">
