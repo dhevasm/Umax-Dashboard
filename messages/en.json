@@ -726,6 +726,14 @@
     "fb-t1" : "Select the Meta Ads platform then press 'Get Access Token' button",
     "fb-t2" : "Facebook Login Pop-Up will appear, login with a Facebook Business account that has an advertising campaign",
     "fb-t3" : "Access token will appear then copy and paste to the Access Token column. after that click 'Submit'",
-    "how-to": "How to get access token"
+    "how-to": "How to get access token",
+    "google-title": "How to get google ads access token",
+    "google-t1": "Select the Google Ads platform then press 'Get Access Token' button",
+    "google-t2": "Google Login Pop-Up will appear, login with a Google account that has an advertising campaign",
+    "google-t3": "Access token will appear then copy and paste to the Access Token column. after that click 'Submit'",
+    "tiktok-title": "How to get tiktok ads access token",
+    "tiktok-t1": "Select the Tiktok Ads platform then press 'Get Access Token' button",
+    "tiktok-t2": "Tiktok Login Pop-Up will appear, login with a Tiktok account that has an advertising campaign",
+    "tiktok-t3": "Access token will appear then copy and paste to the Access Token column. after that click 'Submit'"
   }
 }

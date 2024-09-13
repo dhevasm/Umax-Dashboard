@@ -720,9 +720,17 @@
     "previous": "Sebelumnya",
     "finish": "Selesai",
     "fb-title" : "Cara mendapatkan token akses iklan meta",
-    "fb-t1" : "Pilih Meta ADS pada pilihan platform lalu tekan tombol 'Dapatkan Akses Token'",
+    "fb-t1" : "Pilih Meta Ads pada pilihan platform lalu tekan tombol 'Dapatkan Akses Token'",
     "fb-t2" : "Pop-up login Facebook akan muncul, login dengan akun bisnis Facebook yang memiliki kampanye iklan",
     "fb-t3" : "Token akses akan muncul kemudian salin dan tempel ke kolom Token Access. Setelah itu klik 'Kirim'",
-    "how-to": "Cara Mendapatkan Token Akses"
+    "how-to": "Cara Mendapatkan Token Akses",
+    "google-title" : "Cara mendapatkan token akses iklan google",
+    "google-t1" : "Pilih Google Ads pada pilihan platform lalu tekan tombol 'Dapatkan Akses Token'",
+    "google-t2" : "Pop-up login Google akan muncul, login dengan akun Google yang memiliki kampanye iklan",
+    "google-t3" : "Token akses akan muncul kemudian salin dan tempel ke kolom Token Access. Seteleh itu klik 'Kirim'",
+    "tiktok-title" : "Cara mendapatkan token akses iklan tiktok",
+    "tiktok-t1" : "Pilih Tiktok Ads pada pilihan platform lalu tekan tombol 'Dapatkan Akses Token'",
+    "tiktok-t2" : "Pop-up login Tiktok akan muncul, login dengan akun Tiktok yang memiliki kampanye iklan",
+    "tiktok-t3" : "Token akses akan muncul kemudian salin dan tempel ke kolom Token Access. Seteleh itu klik 'Kirim'"
   }
 }

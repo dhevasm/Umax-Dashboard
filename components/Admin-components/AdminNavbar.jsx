@@ -819,14 +819,14 @@ function AdminNavbar({ userData }) {
                         </div>
                       </div>
                       <ul className="space-y-5">
-                        <li>
+                        {/* <li>
                           <button
                             onClick={handlePrint}
                             className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                           >
                             <FaPrint className="mr-2" /> Print
                           </button>
-                        </li>
+                        </li> */}
                         <li>
                           <button
                             onClick={() => {

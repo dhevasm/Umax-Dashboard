@@ -9,32 +9,6 @@ const Footer = () => {
         <footer className="relative z-10 bg-blue-600 max-w-full flex flex-col justify-center">
             <div className="container mx-auto px-10 md:px-20">
                 <div className="border-b border-gray-7/20 pt-[10px] pb-10">
-                    {/* <div className="flex flex-wrap items-center justify-center -mx-4">
-                        <div className="w-full px-4 lg:w-1/2">
-                            <div className="w-full mb-5 max-w-[470px]">
-                                <h3 className="text-2xl font-bold text-white sm:text-[28px] sm:leading-snug">
-                                    Signup for latest news and insights from Umax Dashboard
-                                </h3>
-                            </div>
-                        </div>
-                        <div className="w-full px-4 lg:w-1/2">
-                            <div className="w-full mb-5">
-                                <form className="flex flex-wrap justify-center">
-                                    <div className="relative mr-5 mb-3 w-full max-w-[370px]">
-                                        <input type="email" placeholder="Enter your email address" className="w-full pr-5 text-white bg-white/5 border border-white/[.08] rounded-md outline-none h-[52px] pl-14 placeholder-dark-8 focus:border-white/40 focus-visible:shadow-none" />
-                                        <label className="absolute -translate-y-1/2 left-5 top-1/2">
-                                            <svg width={18} height={13} viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M16.3052 0H1.69481C0.75974 0 0 0.799055 0 1.78251V11.2175C0 12.2009 0.75974 13 1.69481 13H16.3052C17.2403 13 18 12.2009 18 11.2175V1.78251C18 0.799055 17.2403 0 16.3052 0ZM16.3052 1.07565C16.4513 1.07565 16.5682 1.10638 16.6851 1.19858L9.40909 5.83924C9.1461 5.99291 8.8539 5.99291 8.59091 5.83924L1.31494 1.19858C1.43182 1.13712 1.5487 1.07565 1.69481 1.07565H16.3052ZM16.3052 11.8936H1.69481C1.34416 11.8936 1.02273 11.5863 1.02273 11.1868V2.27423L8.03572 6.76123C8.32792 6.94563 8.64935 7.03782 8.97078 7.03782C9.29221 7.03782 9.61364 6.94563 9.90584 6.76123L16.9188 2.27423V11.1868C16.9773 11.5863 16.6558 11.8936 16.3052 11.8936Z" fill="white" />
-                                            </svg>
-                                        </label>
-                                    </div>
-                                    <button type="submit" className="px-7 border border-transparent mb-3 transition bg-white rounded-md text-dark h-[52px] font-medium hover:bg-opacity-90">
-                                        Subscribe
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             </div>
             <div className="container pt-14 lg:pt-20 px-10 md:px-20 w-full flex justify-center">
@@ -80,19 +54,19 @@ const Footer = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
-                                        Support
-                                    </a>
+                                    <Link href="https://umax.co.id/portfolio/" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
+                                        Portofolio
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
-                                        Our Blog
-                                    </a>
+                                    <Link href="https://umax.co.id/blog/" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
+                                        Blog
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
-                                        Our Products
-                                    </a>
+                                    <Link href="https://umax.co.id/gallery/" className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
+                                        Gallery
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -157,8 +131,8 @@ const Footer = () => {
                 <div className="flex flex-col gap-5 md:flex-row justify-between -mx-4">
                     <div className="w-full px-4 text-center sm:w-auto">
                         <p className="text-base text-white/70">
-                            {/* &copy;  */}
-                            @2024 Umax Dashboard. All Rights Reserved.
+                            &copy; 
+                            {new Date().getFullYear()} Umax Dashboard. All Rights Reserved.
                         </p>
                     </div>
                     <div className="w-full px-4 text-center sm:w-auto">

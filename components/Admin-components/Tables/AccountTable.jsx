@@ -29,6 +29,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { FaGoogle, FaFacebookF, FaTiktok } from "react-icons/fa";
 import ModalHowToUse from "../Modal/ModalHowToUse";
 import FacebookgetActoken from "../Modal/FacebookgetActoken";
+import GooglegetActoken from "../Modal/GooglegetActoken";
+import TiktokgetActoken from "../Modal/TiktokgetActoken";
 
 export default function AccountTable() {
   const [account, setaccount] = useState([]);
@@ -1494,14 +1496,14 @@ export default function AccountTable() {
                               <div className="flex gap-2">
                                 <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getGoogleAdsToken}>{t("get-token")}</div>
                                 <div className="w-1/2">
-                                  <FacebookgetActoken/>
+                                  <GooglegetActoken/>
                                 </div>
                               </div>
                             ) : values.platform == 3 ? (
                               <div className="flex gap-2">
                                 <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getTikTokToken}>{t("get-token")}</div>
                                 <div className="w-1/2">
-                                  <FacebookgetActoken/>
+                                  <TiktokgetActoken/>
                                 </div>
                               </div>
                             ) : (
