@@ -88,20 +88,17 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
             {/* Sidebar */}
             <div className="fixed mt-[100px] min-w-[300px] max-w-[340px] mb-3 me-3 md:ms-3 left-0 w-[300px] sm:w-[300px] md:w-[340px] lg:w-[340px] h-screen bg-white dark:bg-slate-800 rounded-xl flex flex-col items-center px-3 z-10 transition-transform shadow-md pb-28" ref={sidebar}>
                 {/* Campaign Status Filter */}
-                <div className="m-3 mt-5 px-4 md:px-5 w-full bg-gray-200 dark:bg-slate-500 p-2 rounded-full flex justify-between items-center text-md hover:cursor-pointer font-bold">
+                <div className="m-3 mt-5 px-4 md:px-5 mx-5 w-full bg-gray-200 dark:bg-slate-500 p-1 rounded-xl flex justify-between items-center text-md hover:cursor-pointer font-bold">
                     <style jsx>
                         {`
                         .SidebarFilterActive {
                             background-color: rgb(38, 100, 235);
-                            padding: 5px 10px;
-                            border-radius: 50px;
+                            padding: 5px 15px;
+                            border-radius: 10px;
                             color: white;
-                            transition: background-color 0.3s, color 0.3s;
                         }
                         .SidebarFilterActive:hover {
                             cursor: pointer;
-                            background-color: rgba(0, 0, 255, 0.1);
-                            color: blue;
                         }
                         `}
                     </style>
@@ -152,7 +149,11 @@ export default function Sidebar({ onCampaignIDChange, sidebarHide, setSidebarHid
                                 startdate={campaign.start_date} 
                                 id={campaign.campaign_id}
                                 onCardClick={onCampaignIDChange}
-                                click={hideHandle}
+                                click={() => {
+                                    if (window.innerWidth <= 768) {
+                                        hideHandle();
+                                    }
+                                }}  
                             />
                         ))
                     )}

@@ -149,7 +149,7 @@ const Page = () => {
                                     <select name="culture" id="" className='w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500'>
                                         <option value="" selected disabled>Select Culture</option>
                                         {selectCulture.map((item, index) => (
-                                            <option key={index} value={item.cultureInfoCode}>{item.country}</option>
+                                            <option key={index} value={item.cultureInfoCode}>{item.country} | {item.cultureInfoCode}</option>
                                         ))}
                                     </select>
                                 </div>

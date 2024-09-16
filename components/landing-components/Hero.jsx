@@ -28,41 +28,6 @@ const Hero = () => {
                   </a>
                 </li>
                 <li>
-                  {/* <a
-                    href=""
-                    className="inline-flex items-center justify-center py-3 px-5 text-center text-base font-medium text-[#464646] dark:text-white hover:text-primary"
-                  >
-                    <span className="mr-2">
-                      <svg
-                        width="24"
-                        height="25"
-                        viewBox="0 0 24 25"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle cx="12" cy="12.6152" r="12" fill="#3758F9" />
-                        <rect
-                          x="7.99893"
-                          y="14.979"
-                          width="8.18182"
-                          height="1.63636"
-                          fill="white"
-                        />
-                        <rect
-                          x="11.2717"
-                          y="7.61523"
-                          width="1.63636"
-                          height="4.09091"
-                          fill="white"
-                        />
-                        <path
-                          d="M12.0898 14.1606L14.9241 11.0925H9.25557L12.0898 14.1606Z"
-                          fill="white"
-                        />
-                      </svg>
-                    </span>
-                   {t("download_button")}
-                  </a> */}
                 </li>
               </ul>
               <div className="pt-20 clients">

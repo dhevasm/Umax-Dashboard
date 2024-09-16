@@ -111,7 +111,7 @@ export default function AdminSidebar() {
         userData.roles === "admin" && {
             key: 'analytics',
             icon: <FaChartLine size={13} />,
-            text: `${dashboardLoading ? "Loading..." : t('analytics')}`,
+            text: `${dashboardLoading ? t("loading") : t('analytics')}`,
             onClick: () => handleDashboardDirect()
         },
         userData.roles === "admin" && {

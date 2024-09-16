@@ -797,6 +797,15 @@ export default function AccountTable() {
     );
 };
 
+const [adsAccountList, setAdsAccountList] = useState([]);
+
+const getAdsAccountList = async (accessToken) => {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/ads/meta?access_token=${accessToken}`,
+  );
+  setAdsAccountList(response.data);
+}
+
   return (
     <>
       <div className="w-full">
@@ -1434,18 +1443,41 @@ export default function AccountTable() {
                     )}
                   </div>
 
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label htmlFor="notes" className="mb-2 text-sm font-normal">
                       Notes
                     </label>
                     <textarea
                       id="notes"
                       name="notes"
-                      className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] placeholder-[#858c96] border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                      className="bg-white h-[100px] border dark:bg-[#1d2a3a] dark:border-[#314051] placeholder-[#858c96] border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                       placeholder="Enter notes here"
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      
                     ></textarea>
+                  </div>
+                  <div className="col-span-1">
+                    <label htmlFor="acttoken" className="flex mb-2 text-sm font-normal">
+                      Akun Iklan
+                      <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
+                        *
+                        </div>
+                      </label>
+                      <select name="acttoken" id="acttoken" className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${
+                        values.platform
+                          ? "text-black dark:text-white"
+                          : "text-[#858c96]"
+                      }`}
+                      defaultValue={""}>
+                        
+                        {
+                          adsAccountList.length > 0 ? adsAccountList.map((account, index) => (
+                            <option key={index} value={account.id}>{account.id} | {account.name}</option>
+                          )) : <option value="" disabled hidden>Masukkan Access token dulu</option>
+                        }
+                      </select>
+                      <button type="button" className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-2 text-white py-2 px-4 rounded-[3px] text-center" onClick={() => getAdsAccountList(values.password)} >Dapatkan List akun</button>
                   </div>
                   <div className="col-span-2" ref={passwordInput}>
                         <label
@@ -1486,23 +1518,23 @@ export default function AccountTable() {
                         )}
                           {
                             values.platform == 1 ? (
-                              <div className="flex gap-2">
-                                <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getFacebookToken}>{t("get-token")}</div>
-                                <div className="w-1/2">
+                              <div className="flex flex-col md:flex-row md:gap-2">
+                                <div className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getFacebookToken}>{t("get-token")}</div>
+                                <div className="w-full md:w-1/2">
                                   <FacebookgetActoken/>
                                 </div>
                               </div>
                             ) : values.platform == 2 ? (
-                              <div className="flex gap-2">
-                                <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getGoogleAdsToken}>{t("get-token")}</div>
-                                <div className="w-1/2">
+                              <div className="flex flex-col md:flex-row md:gap-2">
+                                <div className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getGoogleAdsToken}>{t("get-token")}</div>
+                                <div className="w-full md:w-1/2">
                                   <GooglegetActoken/>
                                 </div>
                               </div>
                             ) : values.platform == 3 ? (
-                              <div className="flex gap-2">
-                                <div className="w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getTikTokToken}>{t("get-token")}</div>
-                                <div className="w-1/2">
+                              <div className="flex flex-col md:flex-row md:gap-2">
+                                <div className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getTikTokToken}>{t("get-token")}</div>
+                                <div className="w-full md:w-1/2">
                                   <TiktokgetActoken/>
                                 </div>
                               </div>

@@ -427,9 +427,7 @@ const ClientTable = () => {
         <>
             <div className='font-semibold flex justify-between text-3xl text-slate-800 mb-10 dark:text-slate-200'>
             <h1>{t('title')}</h1>
-            <button onClick={() => handleOpenModal(null, "create")} className='text-sm dark:text-gray-300 dark:bg-gray-700 font-normal border border-gray-300 dark:border-gray-600 rounded-md flex justify-center items-center py-2 px-4'>
-                {t('add-client')}
-            </button>
+            
             </div>
             <div className="bg-white border border-gray-300 rounded-lg w-full h-fit p-3 sm:p-4 md:p-5 xl:p-5 dark:bg-gray-800 dark:border-gray-700">
                 <div className={`flex ${isWideScreen ? "flex-row" : "flex-col-reverse"}`}>
@@ -446,12 +444,17 @@ const ClientTable = () => {
                             value={selectedStatus} 
                             onChange={handleStatusChange}
                         >
-                            <option value="">Status</option>
+                            <option value="" disabled hidden>Status</option>
+                            <option value="">All Status</option>
                             <option value="1">{t('active')}</option>
                             <option value="2">{t('deactive')}</option>
                         </select>
                     </div>
+                    
                     <div className={`w-full flex ${isWideScreen ? "gap-4" : "gap-2"} justify-end pb-5`}>
+                    <button onClick={() => handleOpenModal(null, "create")} className='text-sm dark:text-gray-300 dark:bg-gray-700 font-normal border border-gray-300 dark:border-gray-600 rounded-md flex justify-center items-center py-2 px-4'>
+                        {t('add-client')}
+                    </button>
                         <select className="float-right border border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] text-semibold py-2 bg-white dark:bg-gray-700 dark:text-gray-300"
                             value={dataPerPage}
                             onChange={handleSortChange}
@@ -569,7 +572,7 @@ const ClientTable = () => {
                 </div>
                 <div className='flex flex-wrap justify-between items-center mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg'>
                     <div className='flex gap-3 items-center mb-2 md:mb-0'>
-                        <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
+                        {/* <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
                         <form action="" onSubmit={jumpToPage.handleSubmit} className="flex items-center">
                             <input
                                 type="text"
@@ -579,7 +582,7 @@ const ClientTable = () => {
                                 value={jumpToPage.values.page}
                             />
                             <button type='submit' hidden></button>
-                        </form>
+                        </form> */}
                     </div>
                     <div className='w-full md:w-auto flex justify-end'>
                         {renderPagination()}

@@ -46,7 +46,7 @@
       "free-trial": "Free Trial",
       "free": "Free",
       "free-desc": "Analyze your advertising campaigns with essential metrics for free. Get started today with our limited free plan and elevate your campaign performance.",
-      "30-day-trial-period": "30-day trial period",
+      "30-day-trial-periosd": "30-day trial period",
       "admin-per-company": "Admin per Company",
       "staff-per-company": "Staff per Company",
       "accounts-per-company": "Accounts per Company",
@@ -197,7 +197,8 @@
     "right": "Right",
     "left": "Left",
     "english": "English",
-    "indonesian": "Indonesian"
+    "indonesian": "Indonesian",
+    "saving" : "Saving..."
   },
 
   "campaigns": {
@@ -272,7 +273,8 @@
     "new-client": "New Client",
     "save": "Save",
     "delete": "Delete",
-    "add-client": "Add Client"
+    "add-client": "Add Client",
+    "address" : "Address"
   },
 
   "admin-dashboard": {
@@ -313,7 +315,8 @@
     "clients": "Clients",
     "users": "Users",
     "profile": "Profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "loading" : "Loading..."
   },
 
   "tenant-profile": {

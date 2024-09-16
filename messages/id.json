@@ -197,7 +197,8 @@
     "right": "Kanan",
     "left": "Kiri",
     "english": "Bahasa Inggris",
-    "indonesian": "Bahasa Indonesia"
+    "indonesian": "Bahasa Indonesia",
+    "saving" : "Menyimpan..."
   },
 
   "campaigns": {
@@ -270,7 +271,8 @@
     "new-client": "Klien Baru",
     "save": "Simpan",
     "delete": "Hapus",
-    "add-client": "Klien Baru"
+    "add-client": "Klien Baru",
+    "address" : "Alamat"
   },
 
   "admin-dashboard": {
@@ -311,7 +313,8 @@
     "clients": "Klien",
     "users": "Pengguna",
     "profile": "Profil",
-    "logout": "Keluar"
+    "logout": "Keluar",
+    "loading" : "Memuat..."
   },
 
   "tenant-profile": {

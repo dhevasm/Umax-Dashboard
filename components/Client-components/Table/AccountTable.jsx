@@ -454,16 +454,18 @@ const AccountTable = () => {
                         />
                         <select 
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`} 
-                            onChange={handlePlatformChange}>
-                            <option value="">Platform</option>
+                            onChange={handlePlatformChange} defaultValue={""}>
+                            <option value="" disabled hidden>Platform</option>
+                            <option value="">All Platform</option>
                             <option value="1">Meta Ads</option>
                             <option value="2">Google Ads</option>
                             <option value="3">Tiktok Ads</option>
                         </select>
                         <select 
                             className={`border h-10 ${isWideScreen ? 'w-[200px]' : 'w-1/3'} border-gray-300 dark:border-gray-600 rounded-lg px-2 md:text-[15px] text-[12px] py-2 bg-white dark:bg-gray-700 dark:text-gray-300`} 
-                            onChange={handleStatusChange}>
-                            <option value="">Status</option>
+                            onChange={handleStatusChange} defaultValue={""}>
+                            <option value="" disabled hidden>Status</option>
+                            <option value="">All Status</option>
                             <option value="1">{t("active")}
                             </option>
                             <option value="2">{t("deactive")}</option>
@@ -588,7 +590,7 @@ const AccountTable = () => {
                 </div>
                 <div className='flex flex-wrap justify-between items-center mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg'>
                     <div className='flex gap-3 items-center'>
-                        <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
+                        {/* <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
                         <form action="" onSubmit={jumpToPage.handleSubmit} className="flex items-center">
                             <input
                                 type="text"
@@ -598,7 +600,7 @@ const AccountTable = () => {
                                 value={jumpToPage.values.page}
                             />
                             <button type='submit' hidden></button>
-                        </form>
+                        </form> */}
                     </div>
                     {renderPagination()}
                 </div>

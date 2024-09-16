@@ -666,7 +666,7 @@ export default function CampaignTable() {
     const EndDate = new Date(endDate);
     const dateNow = new Date()
 
-    const selisihMilidetik = Math.abs(EndDate - date);
+    const selisihMilidetik = Math.abs(dateNow - date);
     const selisihHari = Math.ceil(selisihMilidetik / (1000 * 60 * 60 * 24));
 
     const amountspent = getRandomInt(100000, 500000); // Dalam Rupiah

@@ -589,23 +589,23 @@ export default function Dashboard({ tenant_id }) {
                                 <table className="min-w-full">
                                     <thead>
                                         <tr className="dark:bg-slate-700 dark:text-white bg-slate-200 border-b dark:border-slate-500">
-                                            <th className="p-2.5 xl:p-5 text-sm font-medium uppercase">{t('campaigns')}</th>
-                                            <th className="p-2.5 text-center xl:p-5 text-sm font-medium uppercase">
+                                            <th className="p-2.5 xl:p-5 text-xs font-medium uppercase">{t('campaigns')}</th>
+                                            <th className="p-2.5 text-center xl:p-5 text-xs md:text-sm font-medium uppercase">
                                                 <span className={`hover:cursor-pointer ${filter == "amountspent" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("amountspent")}>
                                                     {t('amount-spent')}
                                                 </span>
                                             </th>
-                                            <th className="p-2.5 text-center xl:p-5 text-sm font-medium uppercase">
+                                            <th className="p-2.5 text-center xl:p-5 text-xs md:text-sm font-medium uppercase">
                                                 <span className={`hover:cursor-pointer ${filter == "reach" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("reach")}>
                                                     {t('reach')}
                                                 </span>
                                             </th>
-                                            <th className="p-2.5 text-center sm:table-cell xl:p-5 text-sm font-medium uppercase">
+                                            <th className="p-2.5 text-center sm:table-cell xl:p-5 text-xs md:text-sm font-medium uppercase">
                                                 <span className={`hover:cursor-pointer ${filter == "impressions" ? "text-blue-500" : ""}`} onClick={() => handlechangeFiilter("impressions")}>
                                                     {t('impressions')}
                                                 </span>
                                             </th>
-                                            <th className="p-2.5 text-center sm:table-cell xl:p-5 text-sm font-medium uppercase">
+                                            <th className="p-2.5 text-center sm:table-cell xl:p-5 text-xs md:text-sm font-medium uppercase">
                                                 {t('start-date')}
                                             </th>
                                         </tr>
@@ -644,16 +644,16 @@ export default function Dashboard({ tenant_id }) {
                                                 {data.campaign_name}
                                             </p>
                                             </td>
-                                            <td className="p-2.5 xl:p-5 text-nowrap text-black dark:text-slate-200 text-center">
+                                            <td className="p-2.5 xl:p-5 text-xs md:text-sm text-nowrap text-black dark:text-slate-200 text-center">
                                             {data.amountspent}
                                             </td>
-                                            <td className="p-2.5 xl:p-5 text-nowrap text-meta-3 dark:text-slate-200 text-center">
+                                            <td className="p-2.5 xl:p-5 text-xs md:text-sm text-nowrap text-meta-3 dark:text-slate-200 text-center">
                                             {data.reach}
                                             </td>
-                                            <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-meta-5 dark:text-slate-200 text-center">
+                                            <td className="sm:table-cell text-xs md:text-sm p-2.5 text-nowrap xl:p-5 text-meta-5 dark:text-slate-200 text-center">
                                             {data.impressions}
                                             </td>
-                                            <td className="sm:table-cell p-2.5 text-nowrap xl:p-5 text-black dark:text-slate-200 text-center">
+                                            <td className="sm:table-cell  text-xs md:text-sm p-2.5 text-nowrap xl:p-5 text-black dark:text-slate-200 text-center">
                                             {data.start_date}
                                             </td>
                                         </tr>

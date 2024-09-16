@@ -9,6 +9,8 @@ import InfoCardLoading from "../Loading/InfoCardLoading";
 import Chart from "./Chart";
 import Swal from "sweetalert2";
 import { useTranslations } from 'next-intl';
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 export default function Performance({ id, spent, atc }) {
     // Variabel for Metrics
@@ -139,12 +141,8 @@ export default function Performance({ id, spent, atc }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (!id) {
-                Swal.fire({
-                    icon: 'info',
-                    title: t('performence.data-not-appear'),
-                    text: t('performence.please-select-campaign'),
-                });
-            }
+                toastr.info(t('performence.please-select-campaign'), t('performence.data-not-appear'));
+            }   
         }, 10000); // 10 seconds delay
     
         // Cleanup function to clear the timer if the component unmounts

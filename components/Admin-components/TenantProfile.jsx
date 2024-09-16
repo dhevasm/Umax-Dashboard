@@ -24,6 +24,7 @@ export default function TenantProfile({tenant_id}){
     const addModal = useRef(null)
     const [modeModal, setModeModal] = useState("edit")
     const t = useTranslations('tenant-profile')
+    const s = useTranslations('profile')
 
     const [timezone, setTimezone] = useState([])
     const [currency, setCurrency] = useState([])
@@ -75,7 +76,9 @@ export default function TenantProfile({tenant_id}){
 
     useEffect(() => {
         if(timezone.length > 0){
-            document.getElementById("input_timezone").value = tenant.timezone_name
+            setTimeout(() => {
+                document.getElementById("input_timezone").value = tenant.timezone_name
+            }, 500);
         }
     }, [timezone])
 
@@ -464,7 +467,7 @@ export default function TenantProfile({tenant_id}){
 
                         <div className="flex gap-2 items-center">
                         {
-                            modeModal === 'Edit' ? <button className="bg-[#3d50e0] hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>{isLoading ? <LoadingCircle/> : t('save') }</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
+                            modeModal === 'Edit' ? <button className="bg-[#3d50e0] hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-nowrap" onClick={updateTenant}>{isLoading ? s('saving') : t('save') }</button> : <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Add Tenant</button>
                         }
                         </div>
                         </div>
@@ -499,7 +502,7 @@ export default function TenantProfile({tenant_id}){
                                     {
                                         Country.length > 0 ? Country.map((item, index) => (
                                             <option key={index} value={item.country}>{item.country}</option>
-                                        )) : <option disabled>Loading</option>
+                                        )) : <option disabled>Loading...</option>
                                     }
                                 </select>
                             </div>

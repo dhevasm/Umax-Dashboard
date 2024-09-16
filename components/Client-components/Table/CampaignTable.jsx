@@ -143,7 +143,7 @@ const CampaignTable = () => {
             backgroundColor: "#DFFFDF",
             color: '#00A600',
             border: '0.3px solid #00CA00',
-            padding: '5px 19px',
+            padding: '5px 20px',
             fontSize: "12px",
             borderRadius: '6px',
             fontWeight: '500',
@@ -156,7 +156,7 @@ const CampaignTable = () => {
             backgroundColor: "#DCDCDC",
             color: '#6F6F6F',
             border: '0.3px solid #868686',
-            padding: '5px 22px',
+            padding: '5px 23px',
             fontSize: "12px",
             borderRadius: '6px',
             fontWeight: '500',
@@ -169,7 +169,7 @@ const CampaignTable = () => {
             backgroundColor: "#FFF2D1",
             color: '#E29117',
             border: '0.3px solid #FF6B00',
-            padding: '5px 10px',
+            padding: '5px 15px',
             fontSize: "12px",
             borderRadius: '6px',
             fontWeight: '500',
@@ -471,7 +471,8 @@ const CampaignTable = () => {
                             value={selectedPlatform}
                             onChange={handlePlatformChange}
                         >
-                            <option value="">{t('platform')}</option>
+                            <option value="" disabled hidden>{t('platform')}</option>
+                            <option value="">All Platform</option>
                             <option value="1">Meta Ads</option>
                             <option value="2">Google Ads</option>
                             <option value="3">Tiktok Ads</option>
@@ -481,7 +482,8 @@ const CampaignTable = () => {
                             value={selectedObjective}
                             onChange={handleObjectiveChange}
                         >
-                            <option value="">Objective</option>
+                            <option value="" disabled hidden>Objective</option>
+                            <option value="">All Objective</option>
                             <option value="1">Awareness</option>
                             <option value="2">Concervation</option>
                             <option value="3">Consideration</option>
@@ -626,7 +628,7 @@ const CampaignTable = () => {
                 </div>
                 <div className='flex flex-wrap justify-between items-center mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg'>
                     <div className='flex gap-3 items-center'>
-                        <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
+                        {/* <p className='text-gray-700 dark:text-slate-300 font-medium'>Jump to</p>
                         <form action="" onSubmit={jumpToPage.handleSubmit} className="flex items-center">
                             <input
                                 type="text"
@@ -636,7 +638,7 @@ const CampaignTable = () => {
                                 value={jumpToPage.values.page}
                             />
                             <button type='submit' hidden></button>
-                        </form>
+                        </form> */}
                     </div>
                     {renderPagination()}
                 </div>

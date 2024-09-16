@@ -1017,6 +1017,7 @@ export default function UserTable() {
                       id="username"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      value={formik.values.username}
                       className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                       placeholder="Type name here"
                       required
@@ -1040,6 +1041,7 @@ export default function UserTable() {
                       id="email"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      value={formik.values.email}
                       className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                       placeholder="Type email here"
                       required
@@ -1063,6 +1065,7 @@ export default function UserTable() {
                       id="password"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      value={formik.values.password}
                       className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                       placeholder="Type password here"
                       required
@@ -1086,6 +1089,7 @@ export default function UserTable() {
                       id="passwordMatch"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      value={formik.values.passwordMatch}
                       className="bg-white dark:bg-[#1d2a3a] text-black dark:text-slate-200 placeholder-[#858c96] border dark:border-[#314051] text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
                       placeholder="Confirm password here"
                       required
