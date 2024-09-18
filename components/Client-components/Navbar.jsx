@@ -31,7 +31,6 @@ export default function Navbar() {
     const [isDark, setIsDark] = useState(false);
     const [locationChecked, setLocationChecked] = useState(false);
     const umaxUrl = process.env.NEXT_PUBLIC_API_URL;
-    const roles = localStorage.getItem('roles');
     const [lang, setLang] = useState(localStorage.getItem('lang'));
 
     const fetchUser = async () => {
@@ -53,7 +52,7 @@ export default function Navbar() {
     };
 
     useEffect(() => {
-        if (!localStorage.getItem('locationChecked') && roles === 'client') {
+        if (!localStorage.getItem('locationChecked') && role === 'client') {
             const fetchLocation = async () => {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -124,9 +123,6 @@ export default function Navbar() {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem('jwtToken');
-                localStorage.removeItem('tenantId');
-                localStorage.removeItem('roles');
-                localStorage.removeItem('name');
                 localStorage.removeItem('lang');
                 router.push('/');
             }
@@ -188,7 +184,7 @@ export default function Navbar() {
                             Profile
                         </Link>
                     </li>
-                    {roles === 'admin' && (
+                    {role === 'admin' && (
                         <li>
                             <Link href={`admin-dashboard`} className="flex items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                                 <RiAdminLine className="w-5 h-5 mr-2" />
@@ -196,7 +192,7 @@ export default function Navbar() {
                             </Link> 
                         </li>
                     )}
-                    {roles === 'client' && (
+                    {role === 'client' && (
                         <li>
                             {activeLink.includes('id') ? (
                                 <button onClick={() => changeLanguage('en')} className="flex sm:flex md:hidden xl:hidden items-center text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
@@ -302,7 +298,7 @@ export default function Navbar() {
                                 </span>
                                 {t("account")}
                             </li>
-                                {roles !== "client" && (
+                                {role !== "client" && (
                                     <li
                                         className={`font-semibold flex gap-1 items-center ${
                                             activeLink.slice(3) === "/clients" ? "active-link" : ""
@@ -328,7 +324,7 @@ export default function Navbar() {
                             </div>
                             </label> */}      
                     <div className="flex items-center space-x-4">
-                        {roles === 'client' && (
+                        {role === 'client' && (
                             activeLink.includes("id") ? 
                                 <button onClick={() => changeLanguage('en')} className="text-white hidden sm:hidden md:block xl:block bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5">
                                     {'ID'}
@@ -342,7 +338,7 @@ export default function Navbar() {
                             onClick={handleTheme}
                             className="hidden sm:flex xl:flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
                         >
-                            {isDark ? <FiMoon className="text-xl text-white"/> : <FiSun className="text-xl text-blue-600" />}
+                            {isDark ? <FaMoon className="text-xl text-white"/> : <FaSun className="text-xl text-blue-600" />}
                         </button>
                         <button
                             onClick={isHidden == 2 ? setIsHidden : () => setIsHidden(2)}
@@ -375,7 +371,7 @@ export default function Navbar() {
                         <AiOutlineUser className="w-6 h-6 mr-2 dark:text-white"/>
                         <Link href={`/${lang}/accounts`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("account")}</Link>
                         </li>
-                        {roles !== 'client' && (
+                        {role !== 'client' && (
                             <li className="flex items-center px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700" onClick={() => router.push(`/${lang}/clients`) }>
                             <BiGroup className="w-6 h-6 mr-2 dark:text-white"/>
                             <Link href={`/${lang}/clients`} className="text-sm font-medium text-gray-700 dark:text-gray-200">{t("client")}</Link>

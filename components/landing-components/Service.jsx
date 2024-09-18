@@ -5,8 +5,8 @@ const Service = () => {
   const t = useTranslations('landing');
 
   return (
-    <section className="pt-20 pb-12 lg:pt-[120px] dark:bg-slate-900 lg:pb-[90px] px-3 md:px-20">
-      <div className="container mx-auto" id='feature'>
+    <section id='feature' className="pt-20 pb-12 lg:pt-[120px] dark:bg-slate-900 lg:pb-[90px] px-3 md:px-20">
+      <div className="container mx-auto" >
         <div className="flex flex-wrap -mx-4">
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
@@ -24,7 +24,7 @@ const Service = () => {
         </div>
         <div className="flex flex-wrap justify-center -mx-4">
           <div className="w-full px-4 sm:w-4/5 md:w-1/2 lg:w-1/3">
-            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[400px]">
+            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[350px]">
               <div className="relative z-10 inline-flex items-center mx-auto mb-10 h-11">
                 <span className="bg-primary absolute -right-3 top-0 z-[-1] h-[34px] w-[34px] rounded-full opacity-10"></span>
                 <svg
@@ -40,17 +40,17 @@ const Service = () => {
                   />
                 </svg>
               </div>
-              <h4 className="text-dark dark:text-white mb-[14px] text-xl font-bold">
+              <h4 className="text-dark dark:text-white mb-3 text-start text-md font-bold">
                {t("service-title-1")}
               </h4>
-              <p className="text-body-color text-justify dark:text-slate-200">
+              <p className="text-body-color text-start text-sm dark:text-slate-200">
               {t("service-body-1")}
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>
           </div>
           <div className="w-full px-4 sm:w-4/5 md:w-1/2 lg:w-1/3">
-            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[400px]">
+            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[350px]">
               <div className="relative z-10 inline-flex items-center mx-auto mb-10 h-11">
                 <span className="bg-primary absolute -right-3 top-0 z-[-1] h-[34px] w-[34px] rounded-full opacity-10"></span>
                 <svg
@@ -70,17 +70,17 @@ const Service = () => {
                   />
                 </svg>
               </div>
-              <h4 className="text-dark dark:text-white mb-[14px] text-xl font-bold">
+              <h4 className="text-dark dark:text-white mb-3 text-start text-md font-bold">
               {t("service-title-2")}
               </h4>
-              <p className="text-body-color text-justify dark:text-slate-200">
+              <p className="text-body-color text-start text-sm dark:text-slate-200">
               {t("service-body-2")}
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
             </div>
           </div>
           <div className="w-full px-4 sm:w-4/5 md:w-1/2 lg:w-1/3">
-            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[400px]">
+            <div className="group relative mb-8 rounded-xl border border-stroke dark:border-gray-700 shadow-lg hover:scale-105 transition-all bg-white dark:bg-slate-800 p-10 text-center md:px-8 lg:py-9 lg:px-6 xl:py-[45px] xl:px-[43px] h-[350px]">
               <div className="relative z-10 inline-flex items-center mx-auto mb-10 h-11">
                 <span className="bg-primary absolute -right-3 top-0 z-[-1] h-[34px] w-[34px] rounded-full opacity-10"></span>
                 <svg
@@ -104,10 +104,10 @@ const Service = () => {
                   />
                 </svg>
               </div>
-              <h4 className="text-dark dark:text-white mb-[14px] text-xl font-bold">
+              <h4 className="text-dark dark:text-white mb-3 text-start text-md font-bold">
               {t("service-title-3")}
               </h4>
-              <p className="text-body-color text-justify dark:text-slate-200">
+              <p className="text-body-color text-start text-sm dark:text-slate-200">
               {t("service-body-3")}
               </p>
               <span className="bg-primary absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>

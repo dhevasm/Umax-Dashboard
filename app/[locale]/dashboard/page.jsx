@@ -75,8 +75,6 @@ function Dashboard() {
             Swal.fire('Authentication failed', 'Token Expired', 'error').then(() => {
                 localStorage.removeItem('jwtToken');
                 localStorage.removeItem('tenantId');
-                localStorage.removeItem('roles');
-                localStorage.removeItem('name');
                 localStorage.removeItem('lang');
                 router.push('/en/login')
             })

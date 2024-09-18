@@ -143,7 +143,8 @@ const CreateClient = ({ isOpen, onClose, refresh }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50 px-3 sm:px-4 md:p-0 xl:px-5">
-            <div className="bg-white dark:bg-gray-800 rounded-md sm:rounded-md md:rounded-lg xl:rounded-lg shadow-lg p-4 sm:p-4 md:p-6 xl:p-6 w-full max-w-2xl transform transition-transform duration-300 scale-100 overflow-y-auto">
+            <div className='fixed top-0 left-0 w-screen h-screen z-40' onClick={onClose}></div>
+            <div className="bg-white dark:bg-gray-800 rounded-md sm:rounded-md md:rounded-lg xl:rounded-lg shadow-lg p-4 sm:p-4 md:p-6 xl:p-6 w-full max-w-2xl transform transition-transform duration-300 scale-100 overflow-y-auto z-50">
                 <div className="sticky top-0 bg-white dark:bg-gray-800 pb-4 mb-4 border-b flex justify-between items-center z-10">
                     <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-300">
                         {t('new-client')}
@@ -167,7 +168,7 @@ const CreateClient = ({ isOpen, onClose, refresh }) => {
 
                             <DetailItem label={t('city')} value={formik.values.city} error={formik.errors.city} touched={formik.touched.city} id="city" type="select" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaCity} t={t} holder={t('holder-city')} Country={null} City={City} />
 
-                            <DetailItem label={t('contact')} value={formik.values.contact} error={formik.errors.contact} touched={formik.touched.contact} id="contact" type="text" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaPhone} t={t} holder={t('holder-contact')} Country={null} City={null} />
+                            <DetailItem label={t('contact')} value={formik.values.contact} error={formik.errors.contact} touched={formik.touched.contact} id="contact" type="number" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaPhone} t={t} holder={t('holder-contact')} Country={null} City={null} />
 
                             <DetailItem label={t('status')} value={formik.values.status} error={formik.errors.status} touched={formik.touched.status} id="status" type="select" handleChange={formik.handleChange} handleBlur={formik.handleBlur} icon={FaInfoCircle} t={t} holder={t('select-status')} Country={null} City={null} />
                         </div>
@@ -197,7 +198,7 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, handleBl
                             <option value="" disabled hidden>{holder}</option>
                             {
                                 Country.length > 0 && Country.map((item, index) => (
-                                    <option key={index} value={item.country}>{item.country}</option>
+                                    <option key={index} value={item.country} className='text-black dark:text-white bg-white dark:bg-slate-800'>{item.country}</option>
                                 ))
                             }
                         </select>
@@ -209,7 +210,7 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, handleBl
                             <option disabled hidden value={""} >Please Select City</option>
                             {
                                 City.length > 0 && City.map((item, index) => (
-                                    <option key={index} value={item}>{item}</option>
+                                    <option key={index} value={item} className='text-black dark:text-white bg-white dark:bg-slate-800' >{item}</option>
                                 ))
                             }
                         </select>
@@ -219,13 +220,13 @@ const DetailItem = ({ label, value, icon: Icon, id, type, handleChange, handleBl
                     <>
                         <select id={id} value={value} onChange={handleChange} onBlur={handleBlur} className='bg-transparent border-b-2 border-gray-300 rounded-sm p-2 w-full focus:outline-none focus:border-b-blue-500 dark:border-gray-600 dark:text-gray-300'>
                             <option value="" disabled hidden>{holder}</option>
-                            <option value="1">{t('active')}</option>
-                            <option value="2">{t('deactive')}</option>
+                            <option value="1" className='text-black dark:text-white bg-white dark:bg-slate-800'>{t('active')}</option>
+                            <option value="2" className='text-black dark:text-white bg-white dark:bg-slate-800'>{t('deactive')}</option>
                         </select>
                         <span className='text-sm text-red-600'>{error && touched ? error : ''}</span>
                     </>
                 )
-            ) : 
+            ) :     
                 type === 'textarea' ? (
                     <>
                         <textarea id={id} value={value} onChange={handleChange} onBlur={handleBlur} className='bg-transparent border-b-2 border-gray-300 rounded-sm p-2 w-full focus:outline-none focus:border-b-blue-500 dark:border-gray-600 dark:text-gray-300' placeholder={holder} />

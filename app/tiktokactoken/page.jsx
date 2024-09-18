@@ -63,7 +63,7 @@ const Page = () => {
             )}
           </div>
         ) : (
-          <p className="text-center">Access token tidak tersedia.</p>
+          <p className="text-center">Getting Access Token...</p>
         )}
       </div>
     </div>

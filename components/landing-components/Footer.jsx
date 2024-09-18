@@ -15,12 +15,12 @@ const Footer = () => {
                 <div className="flex flex-wrap justify-center -mx-4">
                     <div className="w-full px-4 sm:w-2/3 lg:w-4/12 2xl:w-3/12">
                         <div className="w-full mb-10">
-                            <a href="" className="mb-6  max-w-[160px] flex gap-3 items-center">
-                                <Image src={"/assets/iconBlue.png"} alt="logo" className="max-w-full bg-white p-3 rounded-full" width={58} height={58}/>
+                            <Link href="https://www.nobox.ai/" className="mb-6  max-w-[160px] flex gap-3 items-center">
+                                <Image src={"/assets/nobox.png"} alt="logo" className="max-w-full bg-white p-3 rounded-full" width={58} height={58}/>
                                 <h1 className='text-white font-bold text-xl text-nowrap'>
-                                UMAX Dasboard
+                                Nobox Analytics
                                 </h1>
-                            </a>
+                            </Link>
                             <p className="text-base mb-7 text-white/70">
                                 We create digital experiences for brands and companies by using
                                 technology.
@@ -46,7 +46,7 @@ const Footer = () => {
                     </div>
                     <div className="w-full px-4 sm:w-1/2 lg:w-2/12 2xl:w-2/12">
                         <div className="w-full mb-10">
-                            <h4 className="text-lg font-semibold text-white mb-9">Umax</h4>
+                            <h4 className="text-lg font-semibold text-white mb-9">Nobox Analytics</h4>
                             <ul>
                                 <li>
                                     <Link href={"https://umax.co.id/about"} className="inline-block text-base leading-loose text-white/70 hover:text-white mb-2">
@@ -132,7 +132,7 @@ const Footer = () => {
                     <div className="w-full px-4 text-center sm:w-auto">
                         <p className="text-base text-white/70">
                             &copy; 
-                            {new Date().getFullYear()} Umax Dashboard. All Rights Reserved.
+                            {new Date().getFullYear()} Nobox Analytics. All Rights Reserved.
                         </p>
                     </div>
                     <div className="w-full px-4 text-center sm:w-auto">

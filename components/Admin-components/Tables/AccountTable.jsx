@@ -52,6 +52,7 @@ export default function AccountTable() {
   const [crudLoading, setCrudLoading] = useState(false);
   const [showModalOauth, setShowModalOauth] = useState(false);
   const Router = useRouter();
+  const [loadingAccount, setloadingAccount] = useState(false);
 
   function LoadingCrud() {
     return (
@@ -723,8 +724,6 @@ export default function AccountTable() {
     getaccount();
   };
 
-
-
   const getFacebookToken = () => {
     const clientId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
     const redirectUrl = `https://umax-dashboard.vercel.app/fbactoken/`;
@@ -756,27 +755,27 @@ export default function AccountTable() {
     const responseType = "token"; // response_type should be "code"
     const accessType = "online"; // To request a refresh token
     const prompt = "consent"; // To force showing the consent screen every time
-  
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+
+    const authUrl =
+      `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${encodeURIComponent(clientId)}&` +
       `redirect_uri=${encodeURIComponent(redirectUrl)}&` +
       `scope=${encodeURIComponent(scope)}&` +
       `response_type=${encodeURIComponent(responseType)}&` +
       `access_type=${encodeURIComponent(accessType)}&` +
       `prompt=${encodeURIComponent(prompt)}`;
-  
+
     const width = 600;
     const height = 600;
     const left = window.innerWidth / 2 - width / 2;
     const top = window.innerHeight / 2 - height / 2;
-  
+
     window.open(
       authUrl,
       "GetGoogleAdsAccessToken",
       `width=${width},height=${height},top=${top},left=${left}`
     );
   };
-
 
   const getTikTokToken = () => {
     const clientId = process.env.NEXT_PUBLIC_TIKTOK_CLIENT_ID;
@@ -795,16 +794,23 @@ export default function AccountTable() {
       "TikTokLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
-};
+  };
 
-const [adsAccountList, setAdsAccountList] = useState([]);
+  const [adsAccountList, setAdsAccountList] = useState([]);
 
-const getAdsAccountList = async (accessToken) => {
-  const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/ads/meta?access_token=${accessToken}`,
-  );
-  setAdsAccountList(response.data);
-}
+  const getAdsAccountList = async (accessToken) => {
+    try {
+      setloadingAccount(true);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/ads/meta?access_token=${accessToken}`
+      );
+      setAdsAccountList(response.data);
+      setloadingAccount(false);
+    } catch (error) {
+      setloadingAccount(false);
+      toastr.error("Access Token Invalid", "Error");
+    }
+  };
 
   return (
     <>
@@ -831,7 +837,6 @@ const getAdsAccountList = async (accessToken) => {
               <FaTable className="text-blue-200" size={18} />
               {/* <ModalHowToUse/> */}
             </h1>
-            
           </div>
           {/* Header end */}
 
@@ -1282,9 +1287,7 @@ const getAdsAccountList = async (accessToken) => {
                       ""
                     )}
                   </div>
-                  <div
-                    className={`col-span-1`}
-                  >
+                  <div className={`col-span-1`}>
                     <label
                       htmlFor="email"
                       className="flex mb-2 text-sm font-normal"
@@ -1454,96 +1457,134 @@ const getAdsAccountList = async (accessToken) => {
                       placeholder="Enter notes here"
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      
                     ></textarea>
                   </div>
                   <div className="col-span-1">
-                    <label htmlFor="acttoken" className="flex mb-2 text-sm font-normal">
-                      Akun Iklan
+                    <label
+                      htmlFor="acttoken"
+                      className="flex mb-2 text-sm font-normal"
+                    >
+                      {t("ad-account")}
                       <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
                         *
-                        </div>
-                      </label>
-                      <select name="acttoken" id="acttoken" className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${
+                      </div>
+                    </label>
+                    <select
+                      name="acttoken"
+                      id="acttoken"
+                      className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${
                         values.platform
                           ? "text-black dark:text-white"
                           : "text-[#858c96]"
                       }`}
-                      defaultValue={""}>
-                        
-                        {
-                          adsAccountList.length > 0 ? adsAccountList.map((account, index) => (
-                            <option key={index} value={account.id}>{account.id} | {account.name}</option>
-                          )) : <option value="" disabled hidden>Masukkan Access token dulu</option>
-                        }
-                      </select>
-                      <button type="button" className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-2 text-white py-2 px-4 rounded-[3px] text-center" onClick={() => getAdsAccountList(values.password)} >Dapatkan List akun</button>
+                      defaultValue={""}
+                    >
+                      {adsAccountList.length > 0 ? (
+                        adsAccountList.map((account, index) => (
+                          <option key={index} value={account.id}>
+                            {account.name}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="" disabled hidden>
+                          {t("token-first")}
+                        </option>
+                      )}
+                    </select>
+                    <button
+                      type="button"
+                      className="w-full disabled:cursor-not-allowed disabled:bg-slate-500 text-sm  disabled:border-none hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-2 text-white py-2 px-4 rounded-[3px] text-center"
+                      onClick={() => getAdsAccountList(values.password)}
+                    >
+                      {loadingAccount ? (
+                        <div className="flex justify-center items-center">
+                          <div className="relative">
+                            <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
+                          </div>
+                        </div>
+                      ) : (
+                        t("get-account")
+                      )}
+                    </button>
                   </div>
                   <div className="col-span-2" ref={passwordInput}>
-                        <label
-                          htmlFor="password"
-                          className="flex mb-2 text-sm font-normal"
-                        >
-                          Access Token
-                          <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
-                            *
-                          </div>
-                          {
-                            modeModal === "Edit" && (
-                              <div className="ms-2">
-                                {document.getElementById("status")?.checked ? "(Active)" : "(Expired)"}
-                              </div>
-                            )
-                          }
-                          
-                        </label>
-                        <div className="relative">
-                          <textarea
-                            type="text"
-                            name="password"
-                            id="password"
-                            className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 "
-                            placeholder={"access token"}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            required
-                          />
-                        </div>
-                        {touched.password && error.password ? (
-                          <p className="text-red-500 dark:text-red-600 text-sm">
-                            {error.password}
-                          </p>
-                        ) : (
-                          ""
-                        )}
-                          {
-                            values.platform == 1 ? (
-                              <div className="flex flex-col md:flex-row md:gap-2">
-                                <div className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getFacebookToken}>{t("get-token")}</div>
-                                <div className="w-full md:w-1/2">
-                                  <FacebookgetActoken/>
-                                </div>
-                              </div>
-                            ) : values.platform == 2 ? (
-                              <div className="flex flex-col md:flex-row md:gap-2">
-                                <div className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getGoogleAdsToken}>{t("get-token")}</div>
-                                <div className="w-full md:w-1/2">
-                                  <GooglegetActoken/>
-                                </div>
-                              </div>
-                            ) : values.platform == 3 ? (
-                              <div className="flex flex-col md:flex-row md:gap-2">
-                                <div className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center" onClick={getTikTokToken}>{t("get-token")}</div>
-                                <div className="w-full md:w-1/2">
-                                  <TiktokgetActoken/>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="w-full hover:cursor-not-allowed bg-slate-500 border border-slate-600 mt-5 text-white py-2 px-4 rounded-[3px] text-center">{t("Select-platform-first")}</div>
-                            )
-                          } 
-                          
+                    <label
+                      htmlFor="password"
+                      className="flex mb-2 text-sm font-normal"
+                    >
+                      Access Token
+                      <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
+                        *
                       </div>
+                      {modeModal === "Edit" && (
+                        <div className="ms-2">
+                          {document.getElementById("status")?.checked
+                            ? "(Active)"
+                            : "(Expired)"}
+                        </div>
+                      )}
+                    </label>
+                    <div className="relative">
+                      <textarea
+                        type="text"
+                        name="password"
+                        id="password"
+                        className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 "
+                        placeholder={"access token"}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        required
+                      />
+                    </div>
+                    {touched.password && error.password ? (
+                      <p className="text-red-500 dark:text-red-600 text-sm">
+                        {error.password}
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                    {values.platform == 1 ? (
+                      <div className="flex flex-col md:flex-row md:gap-2">
+                        <div
+                          className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center"
+                          onClick={getFacebookToken}
+                        >
+                          {t("get-token")}
+                        </div>
+                        <div className="w-full md:w-1/2">
+                          <FacebookgetActoken />
+                        </div>
+                      </div>
+                    ) : values.platform == 2 ? (
+                      <div className="flex flex-col md:flex-row md:gap-2">
+                        <div
+                          className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center"
+                          onClick={getGoogleAdsToken}
+                        >
+                          {t("get-token")}
+                        </div>
+                        <div className="w-full md:w-1/2">
+                          <GooglegetActoken />
+                        </div>
+                      </div>
+                    ) : values.platform == 3 ? (
+                      <div className="flex flex-col md:flex-row md:gap-2">
+                        <div
+                          className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center"
+                          onClick={getTikTokToken}
+                        >
+                          {t("get-token")}
+                        </div>
+                        <div className="w-full md:w-1/2">
+                          <TiktokgetActoken />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-full hover:cursor-not-allowed bg-slate-500 border border-slate-600 mt-5 text-white py-2 px-4 rounded-[3px] text-center">
+                        {t("Select-platform-first")}
+                      </div>
+                    )}
+                  </div>
 
                   <div className="flex items-center hidden">
                     <label

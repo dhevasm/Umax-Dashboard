@@ -27,7 +27,8 @@ const AccountDetail = ({ isOpen, onClose, data }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50 px-3 sm:px-4 md:p-0 xl:px-5 transition-all duration-300 ease-in-out">
-            <div className="rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-lg sm:max-w-2xl bg-white dark:bg-gray-800 transform transition-transform duration-300 scale-100 max-h-[90vh] overflow-hidden">
+            <div className='fixed top-0 left-0 w-screen h-screen z-40' onClick={onClose}></div>
+            <div className="rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-lg sm:max-w-2xl bg-white dark:bg-gray-800 transform transition-transform duration-300 scale-100 max-h-[90vh] overflow-hidden z-50">
                 
                 {/* Sticky Header */}
                 <div className="sticky top-0 bg-white dark:bg-gray-800 z-10 border-b pb-2 sm:pb-4 mb-4">

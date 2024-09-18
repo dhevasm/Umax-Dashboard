@@ -25,6 +25,18 @@ const PricingSection = () => {
   });
   const [loading, setLoading] = useState(false)
 
+
+  // Modal Check ORder id
+  const [isOpen, setIsOpen] = useState(false);
+  const [orderId, setOrderId] = useState('');
+  const [isloading, setIsLoading] = useState(false)
+
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // end Modal Check Order id
+
   const handleChange = (event) => {
       const { name, value } = event.target;
       setFormValues({
@@ -38,7 +50,7 @@ const PricingSection = () => {
     setLoading(true)
       let price = [
         0,
-        3200000,
+        300000,
         4000000
       ]
 
@@ -93,6 +105,7 @@ const PricingSection = () => {
     }).toString();
 
     try {
+      setIsLoading(true)
       const response = await fetch(`${url}/token-from-order`, {
         method: 'POST',
         headers: {
@@ -100,11 +113,17 @@ const PricingSection = () => {
         },
         body: formData,
       });
+      
 
       if (!response.ok) {
+        setIsLoading(false)
         const errorData = await response.json();
         console.error('Server Error:', errorData);
-        alert('Order id not found!');
+        Swal.fire({
+          title: "Error!",
+          text: "Order id not found!",
+          icon: "error",
+        })
         return;
       }
 
@@ -117,9 +136,17 @@ const PricingSection = () => {
       }else{
         console.log("unknown order id")
       }
+
+      setIsLoading(false)
+
     } catch (error) {
+      setIsLoading(false)
       console.error('Network Error:', error);
-      alert('Network error occurred. Please try again.');
+      Swal.fire({
+        title: "Error!",
+        text: "Network Error",
+        icon: "error"
+      })
     }
   }
 
@@ -195,13 +222,6 @@ const PricingSection = () => {
   
         onApprove: function (data, actions) {
           return actions.order.capture().then(function (orderData) {
-            // Full available details
-            // console.log(
-            //   "Capture result",
-            //   orderData["id"],
-            //   JSON.stringify(orderData, null, 2)
-            // );
-
             const formData = new FormData()
             formData.append("id", orderData["id"])
             formData.append("price", price)
@@ -222,11 +242,6 @@ const PricingSection = () => {
                   element.innerHTML = `<h3>Thank you for your payment! <br> Save your order id : ${response.data.order_id} <br><a class='text-blue-500 underline' href='/en/tenant-register?order_id=${response.data.order_id}'>Click me to register new tenant</a></h3>`;
               }
             })
-  
-            // Show a success message within this page, for example:
-            
-  
-            // Or go to another URL:  actions.redirect('thank_you.html');
           });
         },
   
@@ -256,22 +271,23 @@ const PricingSection = () => {
                 {t('pricing-desc')}
                 <br />
                 <br />
-                {t('have-an-order-id')} <a onClick={() => {
-                  const order_id = prompt("Enter your order ID");
-                  uncompletedpayment(order_id)
-                }} className="text-blue-500 underline hover:cursor-pointer">{t('click-me')}</a>
+                {t('have-an-order-id')}
+
+                <a 
+                onClick={toggleModal}
+                 className="text-blue-500 underline ms-1 hover:cursor-pointer">{t('click-me')}</a>
               </p>
             </div>
           </div>
         </div>
         
         <div className="flex flex-wrap justify-center -mx-4">
-          <div className="w-full px-4 md:w-1/2 lg:w-1/2">
-            <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
+          <div className="w-full px-4 md:w-1/3 lg:w-1/3">
+            <div className="relative h-[700px] z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
               <span className="block mb-3 text-lg font-semibold text-blue-600">
                 {t('free-trial')}
               </span>
-              <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
+              <h2 className="mb-5 text-[40px] font-bold text-dark dark:text-white">
                 <span>{t('free')}</span>
               </h2>
               <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
@@ -296,11 +312,11 @@ const PricingSection = () => {
                   {t('maximum')} 2 {t('campaigns-per-account')}
                 </p>
                 <p className="text-base text-body-color dark:text-gray-300">
-                  {t('maximum')} 6 {t('metrics-per-company')}
+                  {t('unlimited-metrics')}
                 </p>
-                <p className="text-base text-body-color dark:text-gray-300">
+                {/* <p className="text-base text-body-color dark:text-gray-300">
                   {t('unlimited-clients')}
-                </p>
+                </p> */}
               </div>
               <a
                 onClick={(e) => {
@@ -386,13 +402,13 @@ const PricingSection = () => {
               </div>
             </div>
           </div>
-          <div className="w-full px-4 md:w-1/2 lg:w-1/2">
-            <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
+          <div className="w-full px-4  md:w-1/3 lg:w-1/3">
+            <div className="relative h-[700px] z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
               <span className="block mb-3 text-lg font-semibold text-blue-600">
                 {t('business')}
               </span>
-              <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
-                <span>$199</span>
+              <h2 className="mb-5 text-[37px] font-bold text-dark dark:text-white">
+                <span>{t('plan-1-price')}</span>
                 <span className="text-base font-medium text-body-color dark:text-gray-300">
                   / {t('year')}
                 </span>
@@ -423,9 +439,9 @@ const PricingSection = () => {
                 <p className="text-base text-body-color dark:text-gray-300">
                 {t('unlimited-metrics')}
                 </p>
-                <p className="text-base text-body-color dark:text-gray-300">
+                {/* <p className="text-base text-body-color dark:text-gray-300">
                   {t('unlimited-clients')}
-                </p>
+                </p> */}
               </div>
               <a
                 onClick={() => openModal(2)}
@@ -479,97 +495,6 @@ const PricingSection = () => {
               </div>
             </div>
           </div>
-          {/* <div className="w-full px-4 md:w-1/2 lg:w-1/3">
-            <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke dark:border-gray-600 bg-white dark:bg-slate-800 py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-[50px]">
-              <span className="block mb-3 text-lg font-semibold text-blue-600">
-                Coming Soon
-              </span>
-              <h2 className="mb-5 text-[42px] font-bold text-dark dark:text-white">
-                <span>$256</span>
-                <span className="text-base font-medium text-body-color dark:text-gray-300">
-                  / year
-                </span>
-              </h2>
-              <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
-                Coming soon
-              </p>
-              <div className="mb-9 flex flex-col gap-[14px]">
-                <p className="text-base text-body-color dark:text-gray-300">
-                  Unlimited Users
-                </p>
-                <p className="text-base text-body-color dark:text-gray-300">
-                  All UI components
-                </p>
-                <p className="text-base text-body-color dark:text-gray-300">
-                  Lifetime access
-                </p>
-                <p className="text-base text-body-color dark:text-gray-300">
-                  Free updates
-                </p>
-                <p className="text-base text-body-color dark:text-gray-300">
-                  Use on Unlimited project
-                </p>
-                <p className="text-base text-body-color dark:text-gray-300">
-                  12 Months support
-                </p>
-              </div>
-              <a
-                onClick={() => openModal(3)}
-                className="hover:cursor-pointer block w-full p-3 text-base dark:text-white font-medium text-center text-white transition rounded-md bg-blue-600 hover:bg-opacity-90"
-              >
-                Choose Professional
-              </a>
-
-              <div>
-                <span className="absolute right-0 top-7 z-[-1]">
-                  <svg
-                    width="77"
-                    height="172"
-                    viewBox="0 0 77 172"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="86" cy="86" r="86" fill="url(#paint0_linear)" />
-                    <defs>
-                      <linearGradient
-                        id="paint0_linear"
-                        x1="86"
-                        y1="0"
-                        x2="86"
-                        y2="172"
-                        gradientUnits="userSpaceOnUse"
-                      >
-                        <stop stopColor="#3056D3" stopOpacity="0.09" />
-                        <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </span>
-                <span className="absolute right-4 top-4 z-[-1]">
-                <svg
-                  width="51"
-                  height="50"
-                  viewBox="0 0 51 50"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M45.9473 17.2656H41.2598V8.125C41.2598 5.46875 39.1504 3.35938 36.4941 3.35938H10.7129C8.05664 3.35938 5.94727 5.46875 5.94727 8.125V21.7969C5.47852 22.1875 5.08789 22.7344 4.85352 23.4375L1.96289 37.5C1.80664 38.2813 2.04102 39.1406 2.58789 39.7656C3.05664 40.3906 3.83789 40.7031 4.61914 40.7031H29.7754V43.4375C29.7754 45.2344 31.2598 46.7188 33.0566 46.7188H45.9473C47.7441 46.7188 49.2285 45.2344 49.2285 43.4375V20.5469C49.2285 18.75 47.7441 17.2656 45.9473 17.2656ZM5.63477 37.1875L8.21289 24.7656H8.60352H29.8535V37.1875H5.63477ZM29.7754 20.5469V21.25H9.46289V8.125C9.46289 7.42187 10.0098 6.875 10.7129 6.875H36.4941C37.1973 6.875 37.7441 7.42187 37.7441 8.125V17.2656H33.0566C31.2598 17.2656 29.7754 18.75 29.7754 20.5469ZM45.7129 43.125H33.291V20.7812H45.7129V43.125Z"
-                    fill="#3758F9"
-                  />
-                  <path
-                    d="M37.7441 26.7969H41.6504C42.5879 26.7969 43.4473 26.0156 43.4473 25C43.4473 24.0625 42.666 23.2031 41.6504 23.2031H37.7441C36.8066 23.2031 35.9473 23.9844 35.9473 25C35.9473 25.9375 36.7285 26.7969 37.7441 26.7969Z"
-                    fill="#3758F9"
-                  />
-                  <path
-                    d="M39.541 38.9063C39.4629 38.9063 39.3066 38.9844 39.2285 38.9844C39.1504 39.0625 38.9941 39.0625 38.916 39.1406C38.8379 39.2188 38.7598 39.2969 38.6816 39.375C38.3691 39.6875 38.1348 40.1563 38.1348 40.625C38.1348 41.0938 38.291 41.5625 38.6816 41.875C38.7598 41.9531 38.8379 42.0313 38.916 42.1094C38.9941 42.1875 39.1504 42.2656 39.2285 42.2656C39.3066 42.3438 39.4629 42.3438 39.541 42.3438C39.6191 42.3438 39.7754 42.3438 39.8535 42.3438C40.3223 42.3438 40.791 42.1875 41.1035 41.7969C41.416 41.4844 41.6504 41.0156 41.6504 40.5469C41.6504 40.0781 41.4941 39.6094 41.1035 39.2969C40.7129 38.9844 40.0879 38.8281 39.541 38.9063Z"
-                    fill="#3758F9"
-                  />
-                </svg>
-                </span>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
             {/* Modal */}
@@ -671,6 +596,47 @@ const PricingSection = () => {
                 </div>
               </div>
             )}
+
+{isOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="fixed top-0 left-0 w-screen h-screen z-40" onClick={toggleModal}></div>
+          <div className="bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 w-full max-w-md z-50">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">Check Your Order</h3>
+              <button
+                onClick={toggleModal}
+                className="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white"
+              >
+                &#x2715;
+              </button>
+            </div>
+            <p className="mb-4 text-gray-600 dark:text-gray-400">
+              Please enter your Order ID below to check the status of your order.
+            </p>
+            <input
+              type="text"
+              placeholder="Enter Order ID"
+              value={orderId}
+              onChange={(e) => setOrderId(e.target.value)}
+              className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded w-full py-2 px-3 mb-4"
+            />
+            <button
+              className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+              onClick={() => {
+                uncompletedpayment(orderId)
+              }}
+            >
+              {
+                isloading ? <div className="flex justify-center items-center">
+                <div className="relative">
+                  <div className="w-6 h-6 border-4 border-white rounded-full border-t-transparent animate-spin"></div>
+                </div>
+              </div> : 'Check Order'
+              }
+            </button>
+          </div>
+        </div>
+      )}
 
     </section>
     // ====== Pricing Section End ======

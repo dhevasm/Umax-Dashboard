@@ -26,6 +26,7 @@ const Page = () => {
       } else {
         console.error('Error retrieving long-lived token');
       }
+      
     } catch (error) {
       console.error('Error exchanging token: ', error);
     }
@@ -83,7 +84,7 @@ const Page = () => {
             )}
           </div>
         ) : (
-          <p className="text-center">Access token tidak tersedia.</p>
+          <p className="text-center">Getting Access Token...</p>
         )}
       </div>
     </div>

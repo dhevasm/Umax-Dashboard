@@ -126,9 +126,6 @@ function AdminNavbar({ userData }) {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem("jwtToken");
-        localStorage.removeItem("tenantId");
-        localStorage.removeItem("roles");
-        localStorage.removeItem("name");
         localStorage.removeItem("lang");
         Router.push(`/`);
       }
@@ -573,7 +570,7 @@ function AdminNavbar({ userData }) {
     <>
       <nav
         ref={printRef}
-        className="w-full fixed z-20 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center"
+        className="w-full fixed z-30 h-[80px] shadow-md bg-white text-black dark:bg-slate-800 dark:text-white flex justify-between items-center"
       >
         <div className="flex h-full">
           <div
@@ -584,9 +581,9 @@ function AdminNavbar({ userData }) {
             <Image
               src={`/assets/${isDarkMode ? "logo-white.png" : "logo.png"}`}
               alt="Logo"
-              className="w-[150px] h-10 decoration-white mx-5 mt-2"
-              width={100}
-              height={40}
+              className="decoration-white mx-5 mt-2"
+              width={120}
+              height={120}
               priority
             />
           </div>

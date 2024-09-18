@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; // Import Yup for validation
 import Swal from 'sweetalert2';
@@ -28,6 +28,21 @@ const Page = () => {
             .oneOf([Yup.ref('new_password'), null], t('password-match'))
             .required(t('password-confirmation-required'))
     });
+
+    useEffect(() => {
+        if(!searchParams.get('token')){
+            Swal.fire({
+                icon: 'error',
+                text: 'invalid token',
+                confirmButtonColor: '#FF5252',
+                confirmButtonText: t('ok'),
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.push('/');
+                }
+            });
+        }
+    }, [searchParams])
 
     const formik = useFormik({
         initialValues: {
@@ -105,7 +120,8 @@ const Page = () => {
                 <form
                     onSubmit={formik.handleSubmit}
                     className="w-full p-6 bg-white rounded-lg shadow-lg border-2 relative"
-                >
+                    >
+                    <h1 className='font-semibold text-lg text-blue-500 ms-1'>Reset Password</h1>
                     <PasswordField
                         id="new_password"
                         name="new_password"
@@ -118,7 +134,7 @@ const Page = () => {
                     <PasswordField
                         id="konfirmasi_password"
                         name="konfirmasi_password"
-                        placeholder={t('konfirmasi-password-placeholder')}
+                        placeholder={t('confirm-password-placeholder')}
                         formik={formik}
                         showPassword={showKonfirmasiPassword}
                         setShowPassword={setShowKonfirmasiPassword}
@@ -126,7 +142,7 @@ const Page = () => {
 
                     <button
                         type="submit"
-                        className="w-full h-12 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5 flex items-center justify-center text-lg"
+                        className="w-full h-12 rounded-md bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5 flex items-center justify-center text-lg"
                     >
                         {loading ? <LoadingCircle /> : t('submit')}
                     </button>

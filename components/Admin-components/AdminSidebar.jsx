@@ -82,9 +82,6 @@ export default function AdminSidebar() {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem('jwtToken');
-                localStorage.removeItem('tenantId');
-                localStorage.removeItem('roles');
-                localStorage.removeItem('name');
                 localStorage.removeItem('lang');
                 Router.push(`/`);
 
@@ -172,7 +169,7 @@ export default function AdminSidebar() {
     ];
 
     return (
-        <div className="fixed z-10 bg-white dark:bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
+        <div className="fixed z-20 bg-white dark:bg-slate-800 w-[300px] h-screen text-white transition-transform pe-5" ref={sideBar}>
             <style>
                 {
                     `

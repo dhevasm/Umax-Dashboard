@@ -129,9 +129,9 @@ const Page = () => {
         }
 
         localStorage.setItem("jwtToken", Token);
-        localStorage.setItem("tenantId", tenantID);
-        localStorage.setItem("roles", roles);
-        localStorage.setItem("name", name);
+        // localStorage.setItem("tenantId", tenantID);
+        // localStorage.setItem("roles", roles);
+        // localStorage.setItem("name", name);
 
         getUserData(roles);
       } catch (error) {
@@ -201,10 +201,11 @@ const Page = () => {
               placeholder="Email"
               className="w-full h-12 rounded-lg pl-5 border border-blue mt-2 focus:outline-none focus:ring-1"
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.email}
               required
             />
-            {formik.errors.email && <div className="text-red-500">{formik.errors.email}</div>}
+            {formik.touched.email && formik.errors.email ? <div className="text-red-500">{formik.errors.email}</div> : ""}
 
             <div className="relative">
               <input
@@ -215,9 +216,10 @@ const Page = () => {
                 className="w-full h-12 rounded-lg pl-5 border border-blue mt-2 focus:outline-none focus:ring-1"
                 onChange={formik.handleChange}
                 value={formik.values.password}
+                onBlur={formik.handleBlur}
                 required
               />
-              {formik.errors.password && <div className="text-red-500">{formik.errors.password}</div>}
+              {formik.touched.password && formik.errors.password ? <div className="text-red-500">{formik.errors.password}</div> : ""}
 
               <div
                 className="absolute top-4 right-3 cursor-pointer"

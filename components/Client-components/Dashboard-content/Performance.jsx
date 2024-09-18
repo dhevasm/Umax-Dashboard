@@ -172,7 +172,7 @@ export default function Performance({ id, spent, atc }) {
                 {/* Content */}
                 <div className="w-full mt-3">
                     {/* Infocard & Chart */}
-                    <div className={`flex ${isWideScreen ? 'flex-row' : 'flex-col'} justify-between gap-5`}>
+                    <div className={`flex ${isWideScreen ? 'flex-row' : 'flex-col-reverse'} justify-between gap-5`}>
                     {/* Infocard */}
                     <div className={`${isWideScreen ? 'w-[40%]' : 'w-full'} flex flex-col gap-8`}>
                         {id === ''

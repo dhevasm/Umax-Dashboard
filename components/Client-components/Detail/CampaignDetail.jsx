@@ -26,7 +26,8 @@ const CampaignDetail = ({ isOpen, onClose, data }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50 px-3 sm:px-4 md:p-0 xl:px-5">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-100">
+            <div className='fixed top-0 left-0 w-screen h-screen z-40' onClick={onClose}></div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-100 z-50">
                 <div className="sticky top-0 bg-white dark:bg-gray-800 p-6 border-b flex justify-between items-center z-10">
                     <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         {t('details-of')} <span className='text-blue-600 font-semibold'>{data.name}</span>

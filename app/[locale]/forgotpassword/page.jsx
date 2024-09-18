@@ -96,7 +96,7 @@ const ForgotPassword = () => {
 
                         <button
                             type="submit"
-                            className="w-full h-10 rounded-full bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5 flex items-center justify-center"
+                            className="w-full h-10 rounded-md bg-[#3D5FD9] text-[#F5F7FF] hover:bg-[#2347C5] mt-5 flex items-center justify-center"
                         >
                             {loading ? <LoadingCircle /> : t('submit')}
                         </button>

@@ -113,8 +113,8 @@ const Navbar = () => {
                   src={`/assets/${isDark ? 'logo-white.png' : 'logo.png'}`}
                   alt="Logo"
                   className="decoration-white mr-1 mt-2"
-                  width={140}
-                  height={70}
+                  width={120}
+                  height={120}
                 />
               </a>
             </div>

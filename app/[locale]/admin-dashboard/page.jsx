@@ -116,27 +116,25 @@ function AdminDashboard() {
     useEffect(() => {
         if (typeof window !== "undefined") {
             const token = localStorage.getItem('jwtToken')
-            const role = localStorage.getItem('roles')
-            if (!token) {
-                Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
-                    router.push('/en/login')
-                })
-            } else if (role !== 'admin' && role !== 'sadmin') {
-                Swal.fire('Authorization failed', 'Request Denied', 'error').then(() => {
-                    router.push(`/${localStorage.getItem('lang')}/dashboard`)
-                })
-            } else if(isTokenExpired(token)) {
-                Swal.fire('Authentication failed', 'Token Expired', 'error').then(() => {
-                    localStorage.removeItem('jwtToken');
-                    localStorage.removeItem('tenantId');
-                    localStorage.removeItem('roles');
-                    localStorage.removeItem('name');
-                    localStorage.removeItem('lang');
-                    router.push('/en/login')
-                })
+            if(userData.length > 0){
+                if (!token) {
+                    Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
+                        router.push('/en/login')
+                    })
+                } else if (userData.roles !== 'admin' && userData.roles !== 'sadmin') {
+                    Swal.fire('Authorization failed', 'Request Denied', 'error').then(() => {
+                        router.push(`/${localStorage.getItem('lang')}/dashboard`)
+                    })
+                } else if(isTokenExpired(token)) {
+                    Swal.fire('Authentication failed', 'Token Expired', 'error').then(() => {
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('lang');
+                        router.push('/en/login')
+                    })
+                }
             }
         }
-    }, [router]);
+    }, [userData.roles]);
 
     return(
         <>

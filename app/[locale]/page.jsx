@@ -28,7 +28,7 @@ const page = () => {
       <Navbar />
       <Hero/>
       <Service />
-      <VideoSection />
+      {/* <VideoSection /> */}
       <PricingSection />
       {/* <Team /> */}
       {/* <Faq /> */}

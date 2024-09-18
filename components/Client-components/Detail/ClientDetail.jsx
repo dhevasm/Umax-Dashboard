@@ -143,7 +143,8 @@ const ClientDetail = ({ isOpen, onClose, data, deleteClient, refresh }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50 px-3 sm:px-4 md:p-0 xl:px-5">
-            <div className="bg-white dark:bg-gray-800 rounded-md sm:rounded-md md:rounded-lg xl:rounded-lg shadow-lg p-4 sm:p-4 md:p-6 xl:p-6 w-full max-w-2xl transform transition-transform duration-300 scale-100 overflow-y-auto">
+            <div className='fixed top-0 left-0 w-screen h-screen z-40' onClick={onClose}></div>
+            <div className="bg-white dark:bg-gray-800 rounded-md sm:rounded-md md:rounded-lg xl:rounded-lg shadow-lg p-4 sm:p-4 md:p-6 xl:p-6 w-full max-w-2xl transform transition-transform duration-300 scale-100 overflow-y-auto z-50">
                 <div className="sticky top-0 bg-white dark:bg-gray-800 pb-4 mb-4 border-b flex justify-between items-center z-10">
                     <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-300">
                         {`${t('details-of')} ${data?.name}`}
