@@ -79,7 +79,7 @@ const Page = () => {
           router.push(`/${language}/admin-dashboard`);
           break;
         case 'staff':
-          router.push(`/${language}/campaigns`);
+          router.push(`/${language}/dashboard`);
           break;
         default:
           router.push(`/${language}/dashboard`);
@@ -129,9 +129,6 @@ const Page = () => {
         }
 
         localStorage.setItem("jwtToken", Token);
-        // localStorage.setItem("tenantId", tenantID);
-        // localStorage.setItem("roles", roles);
-        // localStorage.setItem("name", name);
 
         getUserData(roles);
       } catch (error) {

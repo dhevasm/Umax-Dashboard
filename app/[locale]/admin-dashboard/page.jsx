@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
 import AdminProfile from "@/components/Admin-components/AdminProfile"
+import { jwtDecode } from "jwt-decode"
 
 // Dynamically import components
 const AdminNavbar = dynamic(() => import("@/components/Admin-components/AdminNavbar"))
@@ -116,25 +117,28 @@ function AdminDashboard() {
     useEffect(() => {
         if (typeof window !== "undefined") {
             const token = localStorage.getItem('jwtToken')
-            if(userData.length > 0){
-                if (!token) {
-                    Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
-                        router.push('/en/login')
-                    })
-                } else if (userData.roles !== 'admin' && userData.roles !== 'sadmin') {
-                    Swal.fire('Authorization failed', 'Request Denied', 'error').then(() => {
-                        router.push(`/${localStorage.getItem('lang')}/dashboard`)
-                    })
-                } else if(isTokenExpired(token)) {
-                    Swal.fire('Authentication failed', 'Token Expired', 'error').then(() => {
-                        localStorage.removeItem('jwtToken');
-                        localStorage.removeItem('lang');
-                        router.push('/en/login')
-                    })
-                }
+            let data;
+            if(token){
+                data = jwtDecode(token)
+            }
+
+            if (!token) {
+                Swal.fire('Authentication failed', 'You Must Login First', 'error').then(() => {
+                    router.push('/en/login')
+                })
+            } else if (data.roles !== 'admin' && data.roles !== 'sadmin') {
+                Swal.fire('Authorization failed', 'Request Denied', 'error').then(() => {
+                    router.push(`/${localStorage.getItem('lang')}/dashboard`)
+                })
+            } else if(isTokenExpired(token)) {
+                Swal.fire('Authentication failed', 'Token Expired', 'error').then(() => {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('lang');
+                    router.push('/en/login')
+                })
             }
         }
-    }, [userData.roles]);
+    }, [router]);
 
     return(
         <>
