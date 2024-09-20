@@ -26,7 +26,7 @@ export default async function LocaleLayout({
         <link rel="icon" href="../assets/icon.png" />
       </head>
       <body>
-      <script src={`https://sandbox.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`} async></script>
+      {/* <script src={`https://sandbox.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`} async></script> */}
       {/* <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID" ></script> */}
       <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY} async></script>
         <NextIntlClientProvider messages={messages}>

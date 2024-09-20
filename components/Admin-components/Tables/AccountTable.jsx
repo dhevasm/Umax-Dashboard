@@ -9,7 +9,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { IconContext } from "react-icons";
 import { AiOutlineFilePdf } from "react-icons/ai";
-import { FaFileExcel, FaTable, FaTrash } from "react-icons/fa";
+import { FaFileExcel, FaQuestion, FaTable, FaTrash } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
@@ -135,6 +135,12 @@ export default function AccountTable() {
     if (touched.platform && values.platform === "") {
       errors.platform = t("platform-error");
     }
+    if (touched.accessToken && values.accessToken === "") {
+      errors.accessToken = "Access token required";
+    }
+    if (touched.actToken && values.actToken === "") {
+      errors.actToken = "Ad Account required";
+    }
 
     setError(errors);
     setIsvalid(Object.keys(errors).length === 0);
@@ -182,7 +188,10 @@ export default function AccountTable() {
         document.getElementById("client").value = filteredaccount[0].client_id;
         document.getElementById("platform").value = filteredaccount[0].platform;
         document.getElementById("email").value = filteredaccount[0].email;
-        document.getElementById("password").value = filteredaccount[0].password;
+        // document.getElementById("password").value = filteredaccount[0].password;
+        document.getElementById("accessToken").value =
+          filteredaccount[0].accessToken;
+        document.getElementById("actToken").value = filteredaccount[0].actToken;
         document.getElementById("status").checked =
           filteredaccount[0].status == 1 ? true : false;
         // passwordInput.current.classList.add("hidden")
@@ -208,7 +217,9 @@ export default function AccountTable() {
       document.getElementById("email").value = null;
       document.getElementById("client").value = "";
       document.getElementById("platform").value = "";
-      document.getElementById("password").value = "";
+      // document.getElementById("password").value = "";
+      document.getElementById("accessToken").value = "";
+      document.getElementById("actToken").value = "";
       // passwordInput.current.classList.remove("hidden")
       // passwordverifyInput.current.classList.remove("hidden")
       document.getElementById("notes").value = "";
@@ -229,6 +240,8 @@ export default function AccountTable() {
       passwordverify: "",
       client: "",
       platform: "",
+      accessToken: "",
+      actToken: "",
     });
     setError({
       name: "",
@@ -237,6 +250,8 @@ export default function AccountTable() {
       passwordverify: "",
       client: "",
       platform: "",
+      accessToken: "",
+      actToken: "",
     });
     setTouched({
       name: false,
@@ -245,6 +260,8 @@ export default function AccountTable() {
       passwordverify: false,
       client: false,
       platform: false,
+      accessToken: false,
+      actToken: false,
     });
     // Close the modal
     addModal.current.classList.add("hidden");
@@ -396,28 +413,30 @@ export default function AccountTable() {
     getaccount();
   }, []);
 
-  useEffect(() => {}, [account]);
-
   async function createAccount() {
     if (isvalid) {
       const name = document.getElementById("name").value;
       const client = document.getElementById("client").value;
       const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      // const password = document.getElementById("password").value;
       const platform = document.getElementById("platform").value;
       const status = document.getElementById("status").checked ? 1 : 2;
       let notes = document.getElementById("notes").value;
       if (notes == "") {
         notes = "empty";
       }
+      const accessToken = document.getElementById("accessToken").value;
+      const actToken = document.getElementById("actToken").value;
 
       const formData = new FormData();
       formData.append("username", name);
       formData.append("client_id", client);
       formData.append("email", email);
       formData.append("platform", platform);
-      formData.append("password", password);
-      formData.append("confirm_password", password);
+      formData.append("access_token", accessToken);
+      formData.append("act_token", actToken);
+      formData.append("password", "password123");
+      formData.append("confirm_password", "password123");
       formData.append("status", status);
       formData.append("notes", notes);
 
@@ -478,11 +497,16 @@ export default function AccountTable() {
           notes = "empty";
         }
 
+        const accessToken = document.getElementById("accessToken").value;
+        const actToken = document.getElementById("actToken").value;
+
         const formData = new FormData();
         formData.append("username", name);
         formData.append("client_id", client);
         formData.append("email", email);
         formData.append("platform", platform);
+        formData.append("access_token", accessToken);
+        formData.append("act_token", actToken);
         // formData.append('password', password);
         // formData.append('confirm_password', passwordverify);
         formData.append("status", status);
@@ -534,7 +558,7 @@ export default function AccountTable() {
 
   useEffect(() => {
     if (client.length > 0 && userData.roles == "admin") {
-      handleGetClientList(localStorage.getItem("tenantId"));
+      handleGetClientList(userData.tenant_id);
     }
   }, [client]);
 
@@ -832,7 +856,7 @@ export default function AccountTable() {
         </div>
         <div className="w-full h-fit mb-5 rounded-md shadow-md">
           {/* Header */}
-          <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
+          <div className="w-full h-12 bg-[#175FBE] dark:bg-slate-700 flex items-center rounded-t-md">
             <h1 className="flex gap-2 p-4 items-center w-full justify-between text">
               <FaTable className="text-blue-200" size={18} />
               {/* <ModalHowToUse/> */}
@@ -1239,7 +1263,9 @@ export default function AccountTable() {
             {/* <!-- Modal header --> */}
             <div className="fixed z-50 w-full max-w-2xl flex items-center justify-between p-4 md:p-5 border-b bg-white dark:bg-[#243040] dark:border-[#314051] text-black dark:text-white">
               <h3 className="text-2xl font-semibold">
-                {`${modeModal} ${t("accounts")}`}
+                {`${modeModal === "Create" ? t("add") : "Edit"} ${t(
+                  "accounts"
+                )}`}
               </h3>
               <button
                 type="button"
@@ -1317,7 +1343,7 @@ export default function AccountTable() {
                   </div>
 
                   {userData.roles == "sadmin" && (
-                    <div className="col-span-1" ref={tenantInput}>
+                    <div className="col-span-2" ref={tenantInput}>
                       <label
                         htmlFor="tenant"
                         className="block mb-2 text-sm font-normal "
@@ -1366,7 +1392,6 @@ export default function AccountTable() {
                     <select
                       id="client"
                       name="client"
-                      required
                       className={`bg-white ${
                         values.client
                           ? "text-black dark:text-white"
@@ -1375,6 +1400,7 @@ export default function AccountTable() {
                       defaultValue={""}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      required
                     >
                       <option value="" disabled hidden>
                         {t("select-client")}
@@ -1445,23 +1471,58 @@ export default function AccountTable() {
                       ""
                     )}
                   </div>
+                  <div className="col-span-1" ref={passwordInput}>
+                    <div className="flex items-center justify-between">
+                      <label
+                        htmlFor="password"
+                        className="flex mb-2 text-sm font-normal"
+                      >
+                        Access Token
+                        <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
+                          *
+                        </div>
+                        {modeModal === "Edit" && (
+                          <div className="ms-2">
+                            {document.getElementById("status")?.checked
+                              ? "(Active)"
+                              : "(Expired)"}
+                          </div>
+                        )}
+                      </label>
+                      {values.platform == "1" ? (
+                        <FacebookgetActoken />
+                      ) : values.platform == "2" ? (
+                        <GooglegetActoken />
+                      ) : values.platform == "3" ? (
+                        <TiktokgetActoken />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="relative">
+                      <textarea
+                        type="text"
+                        name="accessToken"
+                        id="accessToken"
+                        className="bg-white h-[100px] dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 "
+                        placeholder={"access token"}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        required
+                      />
+                    </div>
+                    {touched.accessToken && error.accessToken ? (
+                      <p className="text-red-500 dark:text-red-600 text-sm">
+                        {error.accessToken}
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </div>
 
                   <div className="col-span-1">
-                    <label htmlFor="notes" className="mb-2 text-sm font-normal">
-                      Notes
-                    </label>
-                    <textarea
-                      id="notes"
-                      name="notes"
-                      className="bg-white h-[100px] border dark:bg-[#1d2a3a] dark:border-[#314051] placeholder-[#858c96] border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
-                      placeholder="Enter notes here"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    ></textarea>
-                  </div>
-                  <div className="col-span-1">
                     <label
-                      htmlFor="acttoken"
+                      htmlFor="actToken"
                       className="flex mb-2 text-sm font-normal"
                     >
                       {t("ad-account")}
@@ -1470,14 +1531,17 @@ export default function AccountTable() {
                       </div>
                     </label>
                     <select
-                      name="acttoken"
-                      id="acttoken"
+                      name="actToken"
+                      id="actToken"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                       className={`bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-primary-500 focus:border-[#3c54d9] outline-none block w-full p-2.5 ${
                         values.platform
                           ? "text-black dark:text-white"
                           : "text-[#858c96]"
                       }`}
                       defaultValue={""}
+                      required
                     >
                       {adsAccountList.length > 0 ? (
                         adsAccountList.map((account, index) => (
@@ -1494,7 +1558,7 @@ export default function AccountTable() {
                     <button
                       type="button"
                       className="w-full disabled:cursor-not-allowed disabled:bg-slate-500 text-sm  disabled:border-none hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-2 text-white py-2 px-4 rounded-[3px] text-center"
-                      onClick={() => getAdsAccountList(values.password)}
+                      onClick={() => getAdsAccountList(values.accessToken)}
                     >
                       {loadingAccount ? (
                         <div className="flex justify-center items-center">
@@ -1507,85 +1571,21 @@ export default function AccountTable() {
                       )}
                     </button>
                   </div>
-                  <div className="col-span-2" ref={passwordInput}>
-                    <label
-                      htmlFor="password"
-                      className="flex mb-2 text-sm font-normal"
-                    >
-                      Access Token
-                      <div className="text-red-500 dark:text-red-600 ml-[1.5px]">
-                        *
-                      </div>
-                      {modeModal === "Edit" && (
-                        <div className="ms-2">
-                          {document.getElementById("status")?.checked
-                            ? "(Active)"
-                            : "(Expired)"}
-                        </div>
-                      )}
-                    </label>
-                    <div className="relative">
-                      <textarea
-                        type="text"
-                        name="password"
-                        id="password"
-                        className="bg-white dark:bg-[#1d2a3a] border border-gray-200 dark:border-[#314051] placeholder-[#858c96]  text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5 "
-                        placeholder={"access token"}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        required
-                      />
-                    </div>
-                    {touched.password && error.password ? (
-                      <p className="text-red-500 dark:text-red-600 text-sm">
-                        {error.password}
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    {values.platform == 1 ? (
-                      <div className="flex flex-col md:flex-row md:gap-2">
-                        <div
-                          className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center"
-                          onClick={getFacebookToken}
-                        >
-                          {t("get-token")}
-                        </div>
-                        <div className="w-full md:w-1/2">
-                          <FacebookgetActoken />
-                        </div>
-                      </div>
-                    ) : values.platform == 2 ? (
-                      <div className="flex flex-col md:flex-row md:gap-2">
-                        <div
-                          className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center"
-                          onClick={getGoogleAdsToken}
-                        >
-                          {t("get-token")}
-                        </div>
-                        <div className="w-full md:w-1/2">
-                          <GooglegetActoken />
-                        </div>
-                      </div>
-                    ) : values.platform == 3 ? (
-                      <div className="flex flex-col md:flex-row md:gap-2">
-                        <div
-                          className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center"
-                          onClick={getTikTokToken}
-                        >
-                          {t("get-token")}
-                        </div>
-                        <div className="w-full md:w-1/2">
-                          <TiktokgetActoken />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="w-full hover:cursor-not-allowed bg-slate-500 border border-slate-600 mt-5 text-white py-2 px-4 rounded-[3px] text-center">
-                        {t("Select-platform-first")}
-                      </div>
-                    )}
-                  </div>
 
+                  <div className="col-span-2">
+                    <label htmlFor="notes" className="mb-2 text-sm font-normal">
+                      Notes
+                    </label>
+                    <textarea
+                      id="notes"
+                      name="notes"
+                      className="bg-white border dark:bg-[#1d2a3a] dark:border-[#314051] placeholder-[#858c96] border-gray-200 text-sm rounded-[3px] focus:ring-[#3c54d9] focus:border-[#3c54d9] outline-none block w-full p-2.5"
+                      placeholder="Enter notes here"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    ></textarea>
+                  </div>
+                  {/* status toggle */}
                   <div className="flex items-center hidden">
                     <label
                       htmlFor="status"
@@ -1603,32 +1603,66 @@ export default function AccountTable() {
                       <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4  rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 dark:border-none after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#3b50df]"></div>
                     </label>
                   </div>
-                </div>
-                {modeModal === "Edit" ? (
-                  <div className="flex gap-3">
-                    <button
-                      type="submit"
-                      className="w-full bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap"
-                      disabled={crudLoading}
-                    >
-                      {crudLoading ? <LoadingCrud /> : t("save")}
-                    </button>
-                    <div
-                      className="w-full text-center hover:cursor-pointer bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap"
-                      onClick={() => handleDelete(EditaccountId)}
-                    >
-                      {t("delete")}
-                    </div>
+                  {/* end status toggle */}
+
+                  <div className="col-span-2 flex flex-col md:flex-row gap-2 items-center mt-5">
+                    {values.platform == "1" ? (
+                      <div
+                        className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-2 px-4 rounded-[3px] text-center"
+                        onClick={getFacebookToken}
+                      >
+                        {t("get-token")}
+                      </div>
+                    ) : values.platform == "2" ? (
+                      <div
+                        className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-2 px-4 rounded-[3px] text-center"
+                        onClick={getGoogleAdsToken}
+                      >
+                        {t("get-token")}
+                      </div>
+                    ) : values.platform == "3" ? (
+                      <div
+                        className="w-full md:w-1/2 hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-2 px-4 rounded-[3px] text-center"
+                        onClick={getTikTokToken}
+                      >
+                        {t("get-token")}
+                      </div>
+                    ) : (
+                      <div className="relative group w-1/2 hover:cursor-not-allowed bg-slate-500 border-none opacity-70 border-slate-600 text-white py-2 px-4 rounded-[3px] text-center">
+                        {t("get-token")}
+
+                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max bg-black text-white text-sm py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          {t("Select-platform-first")}
+                        </div>
+                      </div>
+                    )}
+                    {modeModal === "Edit" ? (
+                      <div className="flex w-full items-center gap-2">
+                        <button
+                          type="submit"
+                          className="w-3/4 bg-[#3b50df] hover:bg-blue-600 border border-indigo-700 text-white py-2 px-4 rounded text-nowrap"
+                          disabled={crudLoading}
+                        >
+                          {crudLoading ? <LoadingCrud /> : t("save")}
+                        </button>
+                        <div
+                          className="w-1/4 flex gap-2 items-center justify-center text-center hover:cursor-pointer bg-indigo-700 hover:bg-indigo-600 border border-indigo-800 text-white py-2 px-4 rounded text-nowrap"
+                          onClick={() => handleDelete(EditaccountId)}
+                        >
+                          <FaTrash /> {t("delete")}
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="w-1/2 bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-2 px-4 rounded-[3px]"
+                        disabled={crudLoading}
+                      >
+                        {crudLoading ? <LoadingCrud /> : t("submit")}
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <button
-                    type="submit"
-                    className="w-full bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 text-white py-2 px-4 rounded-[3px]"
-                    disabled={crudLoading}
-                  >
-                    {crudLoading ? <LoadingCrud /> : t("submit")}
-                  </button>
-                )}
+                </div>
               </form>
             </div>
           </div>

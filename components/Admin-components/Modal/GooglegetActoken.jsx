@@ -45,8 +45,8 @@ function GooglegetActoken() {
   
     return (
       <div>
-        <button type="button" onClick={openModal} className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center">{t("how-to")}</button>
-  
+        {/* <button type="button" onClick={openModal} className="w-full hover:cursor-pointer bg-[#3b50df] hover:bg-blue-700 border border-indigo-700 mt-5 text-white py-2 px-4 rounded-[3px] text-center">{t("how-to")}</button> */}
+        <FaQuestion onClick={openModal} className="text-blue-500 hover:cursor-pointer hover:text-blue-600 text-sm"/>
         {/* Modal */}
         {isOpen && (
           <>

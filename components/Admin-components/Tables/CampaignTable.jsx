@@ -461,7 +461,6 @@ export default function CampaignTable() {
       });
   }
 
-  useEffect(() => {}, [campaigns]);
 
   async function createCampaign() {
     if (isvalid) {
@@ -597,7 +596,7 @@ export default function CampaignTable() {
 
   useEffect(() => {
     if (account.length > 0 && userData.roles == "admin") {
-      handleGetAccountList(localStorage.getItem("tenantId"));
+      handleGetAccountList(userData.tenant_id);
     }
   }, [account]);
 
@@ -973,7 +972,7 @@ export default function CampaignTable() {
 
         <div className="w-full h-fit mb-5 rounded-md shadow-md">
           {/* Header */}
-          <div className="w-full h-12 bg-[#3c50e0] flex items-center rounded-t-md">
+          <div className="w-full h-12 bg-[#175FBE] dark:bg-slate-700 flex items-center rounded-t-md">
             <h1 className="flex gap-2 p-4 items-center text">
               <FaTable className="text-blue-200" size={18} />
               <p className="text-white text-md font-semibold"></p>

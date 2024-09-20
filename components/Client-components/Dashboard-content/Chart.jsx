@@ -25,35 +25,6 @@ const Chart = ({ campaignID, time }) => {
             });
         };
 
-        const generateCategories = () => {
-            const categories = [];
-            const currentDate = new Date();
-
-            if (selected === "week") {
-                for (let i = 0; i < 7; i++) {
-                    const newDate = new Date(currentDate);
-                    newDate.setDate(currentDate.getDate() - i);
-                    categories.push(formatDate(newDate));
-                }
-            } else if (selected === "month") {
-                for (let i = 0; i < 30; i++) {
-                    const newDate = new Date(currentDate);
-                    newDate.setDate(currentDate.getDate() - i);
-                    categories.push(formatDate(newDate));
-                }
-            } else if (selected === "year") {
-                for (let i = 0; i < 12; i++) {
-                    const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1, 0);
-                    categories.push(formatDate(newDate));
-                }
-                categories.reverse(); // Untuk mengurutkan dari Januari hingga Desember
-            }
-
-            setCategory(categories.reverse()); // Membalik urutan agar dari tanggal awal sampai akhir
-        };
-
-        generateCategories();
-
         const getMetricByCampaign = async () => {
             if (!campaignID) {
                 return;
@@ -62,11 +33,11 @@ const Chart = ({ campaignID, time }) => {
             try {
                 const token = localStorage.getItem("jwtToken");
                 if (selected === "week") {
-                    chartUrl = `${umaxUrl}/last-week?campaign_id=${campaignID}&tenantId=${localStorage.getItem("tenantId")}`;
+                    chartUrl = `${umaxUrl}/last-week?campaign_id=${campaignID}`;
                 } else if (selected === "month") {
-                    chartUrl = `${umaxUrl}/last-month?campaign_id=${campaignID}&tenantId=${localStorage.getItem("tenantId")}`;
+                    chartUrl = `${umaxUrl}/last-month?campaign_id=${campaignID}`;
                 } else {
-                    chartUrl = `${umaxUrl}/last-year?campaign_id=${campaignID}&tenantId=${localStorage.getItem("tenantId")}`;
+                    chartUrl = `${umaxUrl}/last-year?campaign_id=${campaignID}`;
                 }
                 const response = await axios.get(chartUrl, {
                     headers: {
@@ -99,11 +70,9 @@ const Chart = ({ campaignID, time }) => {
                 data: data.map((obj) => ((parseFloat(obj.ctr.replace(/[^0-9.]/g, "")) / 100 * parseFloat(obj.amountspent.replace(/[^0-9.]/g, "")))).toFixed(2)).reverse(),
             },
         ],
-        categories: category,
     };
 
     const options = {
-        
         chart: {
             type: "area",
             height: 500,
@@ -115,7 +84,7 @@ const Chart = ({ campaignID, time }) => {
             curve: "smooth",
         },
         xaxis: {
-            categories: category,
+            categories: time =="week" || time == "month" ? data.map((obj) => dateconvert(obj.timestamp_update)).reverse() : data.map((obj) => obj.month).reverse(),
             labels: {
                 style: {
                     colors: '#64748b',
@@ -139,6 +108,34 @@ const Chart = ({ campaignID, time }) => {
             colors: ["#FF5733", "#33FF57", "#3357FF"], // Customize marker colors based on series
         },
     };
+
+    function dateconvert(date) {
+        let [day, month, year, hour] = date.split(" ");
+        let months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Agu",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        let monthIndex = months.indexOf(month) + 1;
+        if (monthIndex < 10) {
+          monthIndex = "0" + monthIndex;
+        }
+        if (day < 10) {
+          day = "0" + day;
+        }
+        hour = hour.slice(0, -3);
+        hour = hour.replace(".", ":");
+        return `${day}/${monthIndex}/${year}`;
+      }
 
     return (
         <div className="text-black">

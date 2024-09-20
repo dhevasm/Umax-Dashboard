@@ -361,7 +361,7 @@
 
   "admin-tenants": {
     "title": "TENANTS",
-    "tenants": "Tenants",
+    "tenants": "Tenant",
     "dashboard": "Dashboard",
     "company": "Company",
     "email": "Email",
@@ -414,7 +414,7 @@
 
   "admin-users": {
     "title": "USERS",
-    "users": "Users",
+    "users": "User",
     "dashboard": "Dashboard",
     "search": "Search",
     "name": "Name",
@@ -443,7 +443,7 @@
 
   "admin-campaigns": {
     "title": "CAMPAIGNS",
-    "campaigns": "Campaigns",
+    "campaigns": "Campaign",
     "dashboard": "Dashboard",
     "search": "Search",
     "name": "Name",
@@ -480,7 +480,7 @@
 
   "admin-accounts": {
       "title": "ACCOUNTS",
-      "accounts": "Accounts",
+      "accounts": "Account",
       "dashboard": "Dashboard",
       "search": "Search",
       "username": "Username",
@@ -515,7 +515,8 @@
       "get-token": "Get access token",
       "token-first" : "Get access token first",
       "ad-account" : "Ad Account",
-      "get-account" : "Get Account List"
+      "get-account" : "Get Account List",
+      "add" : "Add"
     },
 
   "admin-clients": {

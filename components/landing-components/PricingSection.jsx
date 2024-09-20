@@ -290,7 +290,7 @@ const PricingSection = () => {
               <h2 className="mb-5 text-[40px] font-bold text-dark dark:text-white">
                 <span>{t('free')}</span>
               </h2>
-              <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
+              <p className="pb-8 mb-8 h-[120px] text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
               {t('free-desc')}
               </p>
               <div className="mb-9 flex flex-col gap-[14px]">
@@ -413,7 +413,7 @@ const PricingSection = () => {
                   / {t('year')}
                 </span>
               </h2>
-              <p className="pb-8 mb-8 text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
+              <p className="pb-8 mb-8 h-[120px] text-base border-b border-stroke dark:border-gray-600 text-body-color dark:text-gray-300">
 
               {t('business-desc')}
               </p>
@@ -561,8 +561,8 @@ const PricingSection = () => {
                           </label>
                         </div> 
                         <div className="flex items-center gap-2">
-                          <input className="hidden" type="radio" id="paypal" name="method" value="paypal" onChange={handleChange}/>
-                          <label htmlFor="paypal" className={`flex hover:cursor-pointer items-center gap-2 px-3 md:px-10 border rounded-sm border-slate-300 dark:border-slate-700 ${formValues.method == "paypal" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
+                          <input className="hidden" disabled type="radio" id="paypal" name="method" value="paypal" onChange={handleChange}/>
+                          <label htmlFor="paypal" className={`flex hover:cursor-not-allowed items-center gap-2 px-3 md:px-10 border rounded-sm border-slate-300 dark:border-slate-700 ${formValues.method == "paypal" ? "bg-slate-200 dark:bg-slate-700" : "" }`}>
                             <Image src={"/assets/Paypal.png"} alt="Paypal" width={400} height={160} className="w-40 h-16 object-contain" />
                           </label>
                         </div>

@@ -513,7 +513,8 @@
     "get-token": "Dapatkan Token Akses",
     "token-first" : "Dapatkan Akses Token dahulu",
     "ad-account" : "Akun Iklan",
-    "get-account" : "Dapatkan List Akun"
+    "get-account" : "Dapatkan List Akun",
+      "add" : "Tambah"
   },
 
   "admin-clients": {

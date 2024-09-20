@@ -98,7 +98,7 @@ export default function Navbar() {
 
     useEffect(() => {
         fetchUser();
-    });
+    }, []);
 
     const handleClick = (link) => {
         setActiveLink(link);

@@ -582,8 +582,8 @@ function AdminNavbar({ userData }) {
               src={`/assets/${isDarkMode ? "logo-white.png" : "logo.png"}`}
               alt="Logo"
               className="decoration-white mx-5 mt-2"
-              width={120}
-              height={120}
+              width={150}
+              height={150}
               priority
             />
           </div>

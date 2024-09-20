@@ -1,44 +1,57 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios'; // Import axios to handle the token exchange
 
 const Page = () => {
   const router = useRouter();
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [loading, setLoading] = useState(true); // Add a loading state
+  const [error, setError] = useState(null);
 
-  // Function to parse the URL hash and extract the access token
-  const extractTokenFromHash = () => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash;
-      if (hash) {
-        const params = new URLSearchParams(hash.substring(1));
-        const token = params.get('access_token');
-        const tokenType = params.get('token_type');
-        const expiresIn = params.get('expires_in');
-        const scope = params.get('scope');
+  // Function to exchange the authorization code for access and refresh tokens
+  const exchangeCodeForToken = async (code) => {
+    try {
+      const response = await axios.post('https://oauth2.googleapis.com/token', new URLSearchParams({
+        code,
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Replace with your Google client_id
+        client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET, // Replace with your Google client_secret
+        redirect_uri: 'http://127.0.0.1:51659/authorize/', // Replace with your redirect URI
+        grant_type: 'authorization_code',
+      }), { 
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
 
-        if (token) {
-          setAccessToken(token);
-          // You can store or handle the token here as needed
-          console.log('Access Token:', token);
-          // Optionally, handle the refresh token or other parameters if needed
-        } else {
-          console.error('Access token not found in URL');
-        }
-      }
+      const { access_token, refresh_token, expires_in } = response.data;
+
+      // Store the tokens
+      setAccessToken(access_token);
+      setRefreshToken(refresh_token);
+      console.log('Access Token:', access_token);
+      console.log('Refresh Token:', refresh_token);
+      setLoading(false); // Stop loading when tokens are set
+
+    } catch (error) {
+      console.error('Error exchanging code for access token:', error);
+      setError('Failed to exchange code for access token');
+      setLoading(false); // Stop loading even on error
     }
   };
 
   useEffect(() => {
-    extractTokenFromHash();
-
     if (router.isReady) {
       const { code } = router.query;
+
       if (code) {
-        // You might want to exchange the authorization code for tokens if needed
-        // Implement token exchange logic here if necessary
+        // Exchange authorization code for access token
+        exchangeCodeForToken(code);
+      } else {
+        setLoading(false); // Stop loading if no code found
+        setError('Authorization code not found in URL');
       }
     }
   }, [router.isReady]);
@@ -51,6 +64,14 @@ const Page = () => {
       });
     }
   };
+
+  if (loading) {
+    return <p className="text-center">Getting Access Token....</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-danger">{error}</p>;
+  }
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
@@ -65,14 +86,14 @@ const Page = () => {
               onClick={() => copyToClipboard(accessToken)}
               className="btn btn-primary btn-block"
             >
-              {copySuccess ? 'Copied!' : 'Copy Access Token'}
+              {copySuccess ? 'Copied!' : 'Copy Access Token' }
             </button>
             {copySuccess && (
               <p className="text-success mt-2">Token copied to clipboard!</p>
             )}
           </div>
         ) : (
-          <p className="text-center">Getting Access Token....</p>
+          <p className="text-center">Access token not available</p>
         )}
       </div>
     </div>
